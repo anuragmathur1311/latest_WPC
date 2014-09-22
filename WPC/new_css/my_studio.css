@@ -15,7 +15,15 @@ body {
 .modal-lg {
     width: 80%;
   }
-  
+
+.modal-xlg {
+    width: 90%;
+  }
+
+.modal-mlg {
+    width: 50%;
+  }
+
 .photo_insights .h1 {
 	font-size:40px;
 }
@@ -27,6 +35,40 @@ body {
   -webkit-box-shadow: 3px 3px 3px #7C7C7C;
     box-shadow: 3px 3px 3px #7C7C7C;
 }
+
+.padding-bottom {
+  margin-bottom: 10px;
+}
+.change_color {
+  color: gray;
+}
+
+.message{
+    display:none;
+    color:#fff;
+    background:green;
+    position:absolute;
+    top:10px;
+    padding:4px 4px 4px 4px;
+    border-radius: 5px;
+    opacity: 0.8;
+    margin-bottom: 0px;
+}
+
+.photographer_options:hover + .message{
+    display:block;
+    z-index:10;
+}
+
+.profile-img {
+  border-radius: 150px;
+  -webkit-border-radius: 150px;
+  -moz-border-radius: 150px;
+  background: url(http://link-to-your/image.jpg) no-repeat;
+  box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+  -webkit-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+  -moz-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+  }
 
 .center_img {
   z-index: 50;
@@ -771,6 +813,64 @@ i.scroll:hover {
 
 .navbar-transparent {
   background: rgba(0, 0, 0, .3);
-  width:350px;
+  width:100%;
   filter: alpha(opacity=60); /* For IE8 and earlier */
+}
+
+.thumbnail {
+    position:relative;
+    overflow:hidden;
+}
+
+.pad10 {
+    margin-bottom: 10px;}
+ 
+.caption {
+    position:absolute;
+    top:0;
+    right:0;
+    background:rgba(90, 90, 90, 0.75);
+ width: 100%;
+  height: 100%;
+
+    display: none;
+    text-align: left;
+    color:#fff !important;
+    z-index:2;
+}
+
+
+.caption-inner {
+display: table;
+width: 100%;
+height: 100%;
+}
+.caption-content {
+display: table-cell;
+vertical-align: middle;
+}
+
+.fileinput-button {
+  position: relative;
+  overflow: hidden;
+}
+.fileinput-button input {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 0;
+  opacity: 0;
+  -ms-filter: 'alpha(opacity=0)';
+  font-size: 200px;
+  direction: ltr;
+  cursor: pointer;
+}
+
+/* Fixes for IE < 8 */
+@media screen\9 {
+  .fileinput-button input {
+    filter: alpha(opacity=0);
+    font-size: 100%;
+    height: 100%;
+  }
 }

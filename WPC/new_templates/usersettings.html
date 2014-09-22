@@ -426,7 +426,7 @@
                 <div class="">
                 <p>Photography Interests</p>
                    <select name="photo_interests" size="10" style="width: 130px;" multiple>
-                      <option value="Fashion">Action/Sports</option>
+                      <option value="Action">Action/Sports</option>
                       <option value="Advertising">Advertising</option>
                       <option value="Aerial">Aerial</option>
                       <option value="Architectural">Architectural</option>
@@ -440,7 +440,6 @@
                       <option value="Macro">Macro/Micro</option>
                       <option value="Medical">Medical</option>
                       <option value="Nude">Nude/Erotic</option>
-                      <option value="Paparazzi">Paparazzi</option>
                       <option value="Photojournalism">Photojournalism</option>
                       <option value="Scientific">Scientific</option>
                       <option value="Street">Street</option>
@@ -608,7 +607,7 @@ function f(){
                 picReader.addEventListener("load",function(event){
 	                var picFile = event.target;
                     var div = document.createElement("div");
-                    div.innerHTML = "<br><div class='col-xs-3'><img class='img-circle' src='" + picFile.result + "' height='100px' alt='"+file_name[w]+"'><h4 style='color:black;'>"+file_name_size[w]+"</h4><h5 class='form-signin-heading padding_bottom'>Update Photo Details</h5><input type='text' id='picCaption' name='caption' class='form-control padding_bottom' placeholder='Caption' value="+file_name[w]+" autofocus><input type='text' id='picLocation' name='location' class='form-control padding_bottom' placeholder='Location' autofocus><textarea type='textarea' id='picDescription' name='description' class='form-control padding_bottom' placeholder='Description'></textarea></div>";
+                    div.innerHTML = "<br><div class='col-xs-3'><img class='profile-img' src='" + picFile.result + "' height='100px' alt='"+file_name[w]+"'><h4 style='color:black;'>"+file_name_size[w]+"</h4><h5 class='form-signin-heading padding_bottom'>Update Photo Details</h5><input type='text' id='picCaption' name='caption' class='form-control padding_bottom' placeholder='Caption' value="+file_name[w]+" autofocus><input type='text' id='picLocation' name='location' class='form-control padding_bottom' placeholder='Location' autofocus><textarea type='textarea' id='picDescription' name='description' class='form-control padding_bottom' placeholder='Description'></textarea></div>";
                     w++;
                     output.insertBefore(div,null);            
                 });

@@ -1355,3 +1355,70 @@ h3 {
     color: white;
     font-size: 30px;
 }
+
+.fa-Sports:before {
+  content: "\f11b";
+}
+.fa-Advertising:before {
+  content: "\f108";
+}
+.fa-Aerial:before {
+  content: "\f0c2";
+}
+.fa-Architectural:before {
+  content: "\f0f7";
+}
+.fa-Astronomical:before {
+  content: "\f186";
+}
+.fa-Music:before {
+  content: "\f001";
+}
+.fa-Event:before {
+  content: "\f008";
+}
+.fa-Family:before {
+  content: "\f0c0";
+}
+.fa-Fashion:before {
+  content: "\f182";
+}
+.fa-Food:before {
+  content: "\f0f5";
+}
+.fa-Landscape:before {
+  content: "\f041";
+}
+.fa-Macro:before {
+  content: "\f097";
+}
+.fa-Medical:before {
+  content: "\f0f1";
+}
+.fa-Nude:before {
+  content: "\f05e";
+}
+.fa-Photojournalism:before {
+  content: "\f02d";
+}
+.fa-Scientific:before {
+  content: "\f076";
+}
+.fa-Street:before {
+  content: "\f018";
+}
+.fa-Travel:before {
+  content: "\f072";
+}
+.fa-Underwater:before {
+  content: "\f000";
+}
+.fa-Vehicle:before{
+  content: "\f085";
+}
+.fa-Wedding:before {
+  content: "\f08a";
+}
+.fa-Wildlife:before {
+  content: "\f188";
+}

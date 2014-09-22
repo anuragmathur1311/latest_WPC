@@ -32,7 +32,7 @@ def update_user_profile_photo(photo_key, user):
 		user.avatar = "/photo/" + photo_key
 	return user
 
-def update_social_profiles(facebook, youtube, google_plus, twitter, pinterest, website, user):
+def update_social_profiles(facebook, youtube, google_plus, twitter, pinterest, tumblr, website, user):
 	if facebook:
 		user.facebook=facebook
 	if youtube:
@@ -43,6 +43,8 @@ def update_social_profiles(facebook, youtube, google_plus, twitter, pinterest, w
 		user.twitter=twitter
 	if pinterest:
 		user.pinterest=pinterest
+	if tumblr:
+		user.tumblr=tumblr
 	if website:
 		user.website=website
 	return user

@@ -26,10 +26,11 @@
 
 {%block pageContent%}
     <!-- Full Page Image Header Area -->
-    <div id="top" class="header" style="background: url(/images/Artists_2.jpg) no-repeat center center fixed;background-size: cover;">
+    <div id="top" class="header" style="background: url(/images/img_1.jpg) no-repeat center center fixed;background-size: cover;z-index:1;">
     
         <div class="transbox_right">
             <ul class="list-inline">
+                <a data-toggle="modal" data-target=".social_profiles"><i style="font-size:20px;" class="fa fa-plus"></i></a>
                 {%if user.website%}
                   <a href="{{user.website}}"><img src="/images/WPC_app_icon.jpg" alt="Profile Image" width="60px"><br><br><br><a>
                 {%else%}
@@ -50,47 +51,53 @@
                 {%if user.google_plus%}
                   <li color="white"><a href="{{user.google_plus}}"><i class="fa fa-google-plus fa-3x" style="color:white;"></i></a></li>
                 {% endif %}
+                {%if user.tumblr%}
+                  <li color="white"><a href="{{user.tumblr}}"><i class="fa fa-tumblr fa-3x" style="color:white;"></i></a></li>
+                {% endif %}
             </ul>
 			{%if me%}
             <a href="/usersettings#social_profiles"><span class="glyphicon glyphicon-cog"></span></a>
 			{% endif %}
         </div>
         <div class="vert-text">
-            <img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="90px"><br>
-            <a href="/usersettings#portfolio"><span class="glyphicon glyphicon-cog"></span></a>
-            <h3 style="margin-top:0px;"><em>Welcome!</em> {{user.name}}</h3>
-            <a href="#map_canvas"><img src="/fonts/Flags/{{user.country}}.png" alt="country" width="40px"></a><br>
-			{%if me%}
-				<a href="/usersettings#user_settings"><span class="glyphicon glyphicon-cog"></span></a>
-			{% endif %}
-            <br>  
-            <a href="https://www.facebook.com"><i class="fa fa-star" style="color:gold;"></i><i class="fa fa-star" style="color:gold;"></i><i class="fa fa-star" style="color:gold;"></i><i class="fa fa-star" style="color:gold;"></i><i class="fa fa-star" style="color:white;"></i></a>
-            <h2><em>{{user.wpc_score}}</em></h2>
-			 {%if user.wpc_score<=5000%}
-				<button type="submit" class="btn btn-danger">Beginner Photographer</button><br>
-			{%elif user.wpc_score>5000 or user.wpc_score<=10000%}
-				<button type="submit" class="btn btn-danger">Amateur Photographer</button><br>
-			{%elif user.wpc_score>10000 or user.wpc_score<=20000%}
-				<button type="submit" class="btn btn-danger">Semi-Pro Photographer</button><br>
-			{%elif user.wpc_score>20000 or user.wpc_score<=25000%}
-				<button type="submit" class="btn btn-danger">Professional Photographer</button><br>
-			{%elif user.wpc_score>25000%}
-				<button type="submit" class="btn btn-danger">Master Photographer</button><br>
-			{% endif %}
-			{%if me != user%}
-				<br><button type="submit" class="btn btn-xs btn-info"><span style="color:white;" class="glyphicon glyphicon-pushpin"></span> Follow</button><br>
-			{% endif %}
-            <div class="camera">
-                <img src="/fonts/Cameras/Nikon D80.png" alt="camera" width="80px"><h4 style="color:white;">Nikon D80<h4>
-				{%if me%}
-                <a href="/usersettings#my_gear"><span class="glyphicon glyphicon-cog"></span></a>
-				{% endif %}
-            </div>
-            <div class="col-xs-4 col-xs-offset-5 lenses_center">
-                <div class="col-xs-2"><img src="/fonts/Lenses/Nikkor 18-55mm.png" alt="camera" width="60px"><h6 style="color:white;">Nikkor 18-55mm<h5></div>
-                <div class="col-xs-2"><img src="/fonts/Lenses/AF-S-VR-Zoom-NIKKOR-55-200mm-f-4-5.6G.png" alt="camera" width="60px"><h6 style="color:white;">Nikkor 55-200mm<h6></div>
-                <div class="col-xs-2"><img src="/fonts/Lenses/af-nikkor-50mm-f-1-80_front.png" alt="camera" width="60px"><h6 style="color:white;">Nikkor 50mm 1.8d<h6></div>
-          </div>
+                  <!--<a href="" class="photographer_options"><img src="/images/image-2.jpg" alt="Profile Image" class="profile-img" width="90px"></a><p class="message">Hello</p><br>-->
+                  <img src="/images/image-2.jpg" alt="Profile Image" class="profile-img" width="90px"><br>
+                  <a data-toggle="modal" data-target=".profile_image" style="color:white;"><i style="font-size:20px;" class="fa fa-plus"></i>Change Profile Image</a>
+                  <a href="/usersettings#portfolio"><span class="glyphicon glyphicon-cog"></span></a>
+                  <h3 style="margin-top:0px;"><em>Welcome!</em> {{user.name}}</h3>
+                  <a href="#map_canvas"><img src="/fonts/Flags/{{user.country}}.png" alt="country" width="40px"></a><br>
+            			{%if me%}
+            				<a href="/usersettings#user_settings"><span class="glyphicon glyphicon-cog"></span></a>
+            			{% endif %}
+                  <br>  
+                  <a href="https://www.facebook.com"><i class="fa fa-star" style="color:gold;"></i><i class="fa fa-star" style="color:gold;"></i><i class="fa fa-star" style="color:gold;"></i><i class="fa fa-star" style="color:gold;"></i><i class="fa fa-star" style="color:white;"></i></a>
+                  <h2><em>{{user.wpc_score}}</em></h2>
+            			 {%if user.wpc_score<=5000%}
+            				<button type="submit" class="btn btn-danger">Beginner Photographer</button><br>
+            			{%elif user.wpc_score>5000 or user.wpc_score<=10000%}
+            				<button type="submit" class="btn btn-danger">Amateur Photographer</button><br>
+            			{%elif user.wpc_score>10000 or user.wpc_score<=20000%}
+            				<button type="submit" class="btn btn-danger">Semi-Pro Photographer</button><br>
+            			{%elif user.wpc_score>20000 or user.wpc_score<=25000%}
+            				<button type="submit" class="btn btn-danger">Professional Photographer</button><br>
+            			{%elif user.wpc_score>25000%}
+            				<button type="submit" class="btn btn-danger">Master Photographer</button><br>
+            			{% endif %}
+            			{%if me != user%}
+            				<br><button type="submit" class="btn btn-xs btn-info"><span style="color:white;" class="glyphicon glyphicon-pushpin"></span> Follow</button><br>
+            			{% endif %}
+                  <div class="camera">
+                      <img src="/fonts/Cameras/Nikon D80.png" alt="camera" width="80px"><h4 style="color:white;">Nikon D80<h4>
+              				{%if me%}
+                          <a href="/usersettings#my_gear"><span class="glyphicon glyphicon-cog"></span></a>
+              				{% endif %}
+                  </div>
+                  <div class="col-xs-4 col-xs-offset-5 lenses_center">
+                      <div class="col-xs-2"><img src="/fonts/Lenses/Nikkor 18-55mm.png" alt="camera" width="60px"><h6 style="color:white;">Nikkor 18-55mm<h5></div>
+                      <div class="col-xs-2"><img src="/fonts/Lenses/AF-S-VR-Zoom-NIKKOR-55-200mm-f-4-5.6G.png" alt="camera" width="60px"><h6 style="color:white;">Nikkor 55-200mm<h6></div>
+                      <div class="col-xs-2"><img src="/fonts/Lenses/af-nikkor-50mm-f-1-80_front.png" alt="camera" width="60px"><h6 style="color:white;">Nikkor 50mm 1.8d<h6></div>
+                      <a data-toggle="modal" data-target=".cover_image_1" style="color:white;"><i style="font-size:20px;" class="fa fa-plus"></i>Change Cover Image 1</a>
+                </div>
         </div>
         <div class="transbox_left">
             <h1>{{user.awards}}<h1><h2>awards</h2>
@@ -100,25 +107,30 @@
             <h1>{{user.profile_views}}<h1><h2>profile views</h2>
             <a href="/{{user.key.id()}}/photos"><h1>{{photos.count()}}<h1><h2>photos</h2></a>
         </div>
-
     </div>
-    <!-- /Full Page Image Header Area -->
-
+          <!-- /Full Page Image Header Area -->
         <!-- Call to Action -->
     <div id= "my_portfolios" class="call-to-action">
+        
         <div class="container">
             <div class="row">
-				<div class="col-md-3 text-center">
-					<a href="/{{user.key.id()}}/user_blogs"><h3>My Blogs</h3></a>
-				</div>
-				<div class="col-md-3 text-center">
-					<h3>My Questions</h3>
-				</div>
-				<div class="col-md-3 text-center">
-					<a href="/{{user.key.id()}}/user_groups"><h3>My Groups</h3></a>
-				</div>
-                <div class="col-md-3 text-center">
-                    <a data-toggle="modal" data-target=".my_portfolios"><h3>My Portfolios</h3></a>
+                <div class="col-md-2 text-center">
+                  <a href="#my_photos"><h3>About</h3></a>
+                </div>
+                <div class="col-md-2 text-center">
+                  <a href="#my_photos"><h3>Photos</h3></a>
+                </div>
+        				<div class="col-md-2 text-center">
+        					<a href="/{{user.key.id()}}/blogs"><h3>Blogs</h3></a>
+        				</div>
+        				<div class="col-md-2 text-center">
+        					<h3>Questions</h3>
+        				</div>
+        				<div class="col-md-2 text-center">
+        					<a href="/{{user.key.id()}}/user_groups"><h3>Groups</h3></a>
+        				</div>
+                <div class="col-md-2 text-center">
+                    <a data-toggle="modal" data-target=".my_portfolios"><h3>Portfolios</h3></a>
                 </div>
             </div>
         </div>
@@ -126,148 +138,56 @@
 	<br>
     <!-- /Call to Action -->
 
-	<div class="modal fade my_portfolios" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-            <h4 class="modal-title">My Portfolios</h4>
-          </div>
-			<div class="col-md-3">
-			  <a href=""><h4>All Photos</h4>	
-			  <img src="http://localhost:8080/servephoto/dO70iCYthqnzzeuJcQVpdw==" alt="Profile Image" class="img-rounded" width="140px"></a><br>
-				<div class="button-container post-action padding_top">
-					<form method="post">
-						<input type="hidden" name="actionType" value="delete">
-						<input type="hidden" name="photoKey" value="">
-						<button class="btn btn-primary btn-xs" type="submit" value="Delete"><span class="glyphicon glyphicon-trash" style="color:white;"></span></button>
-					</form>
-					<form method="post">
-						<input type="hidden" name="actionType" value="share">
-						<input type="hidden" name="photoKey" value="">
-						<button class="btn btn-primary btn-xs" type="submit" value="Delete"><i class="fa fa-share fa-1x"></i></button>
-					</form>
-					<form method="post">
-						<input type="hidden" name="actionType" value="download">
-						<input type="hidden" name="photoKey" value="">
-						<button class="btn btn-primary btn-xs" type="submit" value="Delete"><i class="fa fa-download fa-1x"></i></button>
-					</form>
-				</div>
-			</div>
-			<div class="col-md-3">
-			  <a href=""><h4>All Photos</h4>	
-			  <img src="http://localhost:8080/servephoto/dO70iCYthqnzzeuJcQVpdw==" alt="Profile Image" class="img-rounded" width="140px"></a><br>
-				<div class="button-container post-action padding_top">
-					<form method="post">
-						<input type="hidden" name="actionType" value="delete">
-						<input type="hidden" name="photoKey" value="">
-						<button class="btn btn-primary btn-xs" type="submit" value="Delete"><span class="glyphicon glyphicon-trash" style="color:white;"></span></button>
-					</form>
-					<form method="post">
-						<input type="hidden" name="actionType" value="share">
-						<input type="hidden" name="photoKey" value="">
-						<button class="btn btn-primary btn-xs" type="submit" value="Delete"><i class="fa fa-share fa-1x"></i></button>
-					</form>
-					<form method="post">
-						<input type="hidden" name="actionType" value="download">
-						<input type="hidden" name="photoKey" value="">
-						<button class="btn btn-primary btn-xs" type="submit" value="Delete"><i class="fa fa-download fa-1x"></i></button>
-					</form>
-				</div>
-			</div>
-			<div class="col-md-3">
-			  <a href=""><h4>All Photos</h4>	
-			  <img src="http://localhost:8080/servephoto/dO70iCYthqnzzeuJcQVpdw==" alt="Profile Image" class="img-rounded" width="140px"></a><br>
-				<div class="button-container post-action padding_top">
-					<form method="post">
-						<input type="hidden" name="actionType" value="delete">
-						<input type="hidden" name="photoKey" value="">
-						<button class="btn btn-primary btn-xs" type="submit" value="Delete"><span class="glyphicon glyphicon-trash" style="color:white;"></span></button>
-					</form>
-					<form method="post">
-						<input type="hidden" name="actionType" value="share">
-						<input type="hidden" name="photoKey" value="">
-						<button class="btn btn-primary btn-xs" type="submit" value="Delete"><i class="fa fa-share fa-1x"></i></button>
-					</form>
-					<form method="post">
-						<input type="hidden" name="actionType" value="download">
-						<input type="hidden" name="photoKey" value="">
-						<button class="btn btn-primary btn-xs" type="submit" value="Delete"><i class="fa fa-download fa-1x"></i></button>
-					</form>
-				</div>
-			</div>
-			<div class="col-md-3">
-			  <a href=""><h4>All Photos</h4>	
-			  <img src="http://localhost:8080/servephoto/dO70iCYthqnzzeuJcQVpdw==" alt="Profile Image" class="img-rounded" width="140px"></a><br>
-				<div class="button-container post-action padding_top">
-					<form method="post">
-						<input type="hidden" name="actionType" value="delete">
-						<input type="hidden" name="photoKey" value="">
-						<button class="btn btn-primary btn-xs" type="submit" value="Delete"><span class="glyphicon glyphicon-trash" style="color:white;"></span></button>
-					</form>
-					<form method="post">
-						<input type="hidden" name="actionType" value="share">
-						<input type="hidden" name="photoKey" value="">
-						<button class="btn btn-primary btn-xs" type="submit" value="Delete"><i class="fa fa-share fa-1x"></i></button>
-					</form>
-					<form method="post">
-						<input type="hidden" name="actionType" value="download">
-						<input type="hidden" name="photoKey" value="">
-						<button class="btn btn-primary btn-xs" type="submit" value="Delete"><i class="fa fa-download fa-1x"></i></button>
-					</form>
-				</div>
-			</div>
-          <div class="modal-footer">
-          </div>
-        </div>
-      </div>
-    </div>
-	
     <!-- Callout -->
-    <div class="callout" style="background: url(/images/into_the_storm.jpg) no-repeat center center fixed;background-size: cover;">
+    <div class="callout" id="callout" style="background: url(/images/img_2.jpg) no-repeat center center fixed;background-size: cover;z-index:2;">
         <div class="vert-text">
             <div class="row">
                 <div class="col-md-4 col-md-offset-4 text-center">
+                  {%if me%}
+                    <h3>Photography Interests <a data-toggle="modal" data-target=".photography_interests"><i style="font-size:20px;" class="fa fa-plus"></i></a></h3>
+                  {%else%}
                     <h3>Photography Interests</h3>
+                  {% endif %}
                     <hr>
                 </div>
             </div>
-            <div class="row">
+            <div class="row text-center">
                 <div class="col-lg-2 col-md-2 text-center">
                     <div class="service-item">
-                        <i class="service-icon fa fa-plane"></i>
+                        <i class="service-icon fa fa-Travel"></i>
                         <h4>Travel</h4>
                     </div>
                 </div>
                 <div class="col-lg-2 col-md-2 text-center">
                     <div class="service-item">
-                        <i class="service-icon fa fa-bug"></i>
-                        <h4>WildLife Photography</h4>
+                        <i class="service-icon fa fa-Wildlife"></i>
+                        <h4>Wildlife</h4>
                     </div>
                 </div>
                 <div class="col-lg-2 col-md-2 text-center">
                     <div class="service-item">
-                        <i class="service-icon fa fa-female"></i>
-                        <h4>Fashion Photography</h4>
+                        <i class="service-icon fa fa-Fashion"></i>
+                        <h4>Fashion</h4>
                     </div>
                 </div>
                 <div class="col-lg-2 col-md-2 text-center">
                     <div class="service-item">
-                        <i class="service-icon fa fa-music"></i>
+                        <i class="service-icon fa fa-Music"></i>
                         <h4>Music</h4>
                     </div>
                 </div>
                 <div class="col-lg-2 col-md-2 text-center">
                     <div class="service-item">
-                        <i class="service-icon fa fa-book"></i>
-                        <h4>Documentary</h4>
+                        <i class="service-icon fa fa-Photojournalism"></i>
+                        <h4>Photojournalism</h4>
                     </div>
                 </div>
                 <div class="col-lg-2 col-md-2 text-center">
                     <div class="service-item">
-                        <i class="service-icon fa fa-road"></i>
+                        <i class="service-icon fa fa-Street"></i>
                         <h4>Street</h4>
                     </div>
+                    <a data-toggle="modal" data-target=".cover_image_2" style="color:white;"><i style="font-size:20px;" class="fa fa-plus"></i>Change Cover Image 2</a>
                 </div>
             </div>
         </div>
@@ -382,7 +302,445 @@
 			{%block backtotop%}
 				<p class="pull-right back-to-top"><a href="#">Back to top</a></p>
 				<p>&copy; 2014 World Photographer's Club &middot; <a href="#">Privacy</a> &middot; <a href="#"> Terms </a>&middot; <a href="#"> Contact Us</a></p>
-			{%endblock%}			
+			{%endblock%}
+
+  <div class="modal fade my_portfolios" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title">My Portfolios</h4>
+          </div>
+      <div class="col-md-3">
+        <a href=""><h4>All Photos</h4>  
+        <img src="http://localhost:8080/servephoto/Usy_-HJCX6Qwl0nIayd47g==" alt="Profile Image" class="img-rounded" width="140px"></a><br>
+        <div class="button-container post-action padding_top">
+          <form method="post">
+            <input type="hidden" name="actionType" value="delete">
+            <input type="hidden" name="photoKey" value="">
+            <button class="btn btn-primary btn-xs" type="submit" value="Delete"><span class="glyphicon glyphicon-trash" style="color:white;"></span></button>
+          </form>
+          <form method="post">
+            <input type="hidden" name="actionType" value="share">
+            <input type="hidden" name="photoKey" value="">
+            <button class="btn btn-primary btn-xs" type="submit" value="Delete"><i class="fa fa-share fa-1x"></i></button>
+          </form>
+          <form method="post">
+            <input type="hidden" name="actionType" value="download">
+            <input type="hidden" name="photoKey" value="">
+            <button class="btn btn-primary btn-xs" type="submit" value="Delete"><i class="fa fa-download fa-1x"></i></button>
+          </form>
+        </div>
+      </div>
+          <div class="modal-footer">
+          </div>
+        </div>
+      </div>
+    </div>
+
+      <div class="modal fade social_profiles" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title">Add/Update Social Profiles</h4>
+          </div>
+                <form role="form" method="post">
+                  <input type="hidden" name="formType" value="social_profiles">
+                    <div class="col-md-4 col-md-offset-1">
+                        <p><i class="fa fa-facebook fa-3x" style="color:black;"></i></p><input type="text" name="facebook" class="form-control" placeholder="Enter Facebook Profile's Complete Link" value=""><br>
+                        <p><i class="fa fa-youtube fa-3x" style="color:black;"></i></p><input type="text" name="youtube" class="form-control" placeholder="Enter Youtube Channel's Complete Link" value=""><br>
+                        <p><i class="fa fa-google-plus fa-3x" style="color:black;"></i></p><input type="text" name="google_plus" class="form-control" placeholder="Enter Google Plus Profile's Complete Link" value=""><br>
+                       <p><i class="fa fa-external-link-square fa-3x" style="color:black;"></i></p><input type="text" name="website" class="form-control" placeholder="Enter Complete Link of your Own Website" value="">
+                        <p >Select Personal Logo/Watermark</p>
+                        <div class="column fileupload-buttonbar">
+                            <span class="btn btn-xs btn-info fileinput-button">
+                              <i class="glyphicon glyphicon-plus"></i>
+                              <span style="color:white;">Select Image</span>
+                              <input type="file" id="myFile3" name="logo" onchange="myFunction3()">
+                            </span>
+                            <div class="container row" id="thumb_img3"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-md-offset-1">
+                        <p><i class="fa fa-twitter fa-3x" style="color:black;"></i></p><input type="text" name="twitter" class="form-control" placeholder="Enter Twitter Profile Complete Link" value=""><br>
+                        <p><i class="fa fa-pinterest fa-3x" style="color:black;"></i></p><input type="text" name="pinterest" class="form-control" placeholder="Enter Pinterest Pinboard's Complete Link" value=""><br>
+                         <p><i class="fa fa-tumblr fa-3x" style="color:black;"></i></p><input type="text" name="pinterest" class="form-control" placeholder="Enter Tumblr's Complete Link" value=""><br>
+                        
+                    </div>
+                </form>
+          <div class="modal-footer">
+          </div>
+          <hr>
+            <button class="btn btn-xs btn-success padding-bottom" type="submit">Update Profile</button>
+        </div>
+      </div>
+    </div>
+
+      <div class="modal fade profile_image" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-mlg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title">Add Profile Image</h4>
+          </div>
+          <form role="form" method="post" action="{{uploadUrl}}">
+                <input type="hidden" name="formType" value="profile_image">
+
+                <div class="col-sm-4 col-sm-offset-4">
+
+                  <p >Select Profile Image</p>
+                  <div class="column fileupload-buttonbar">
+                      <span class="btn btn-xs btn-info fileinput-button" data-toggle="modal" data-target="#select_profile_photo">
+                        <i class="glyphicon glyphicon-plus"></i>
+                        <span style="color:white;">Select Image</span>
+                      </span>
+                      <span class="btn btn-xs btn-info fileinput-button">
+                        <i class="glyphicon glyphicon-plus"></i>
+                        <span style="color:white;">Upload Image</span>
+                        <input type="file" id="myFile" name="avatar" onchange="myFunction()">
+                      </span>
+                      <div class="container row" id="thumb_img"></div>
+                      <div id="profile_image_input"></div>
+                  </div>
+                </div>
+              </form>
+          <div class="modal-footer">
+          </div>
+          <hr>
+            <button class="btn btn-xs btn-success padding-bottom" type="submit">Update Profile</button>
+        </div>
+      </div>
+    </div>
+  <div class="modal fade bs-example-modal-lg" id="select_profile_photo" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+          <h4 class="modal-title">Select and Add Photo</h4>
+        </div>
+              <div class="col-lg-12 col-sm-12 col-xs-12" id="photo_select" align="center">
+                <div class="thumb_imgs">
+                      {%for p in photos%}
+                              <a onclick="change_main_image1('/servephoto/{{p.blobKey}}');" href="javascript:void(0);"><img src="/servephoto/{{p.blobKey}}" height="100px" alt="photo"></a>
+                      {%endfor%}
+                </div><br>
+                <div id="main_img1" class=""></div>
+              </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-xs btn-primary close" data-dismiss="modal">Select and Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script type="text/javascript">
+function change_main_image1(img_key) {
+    document.getElementById("main_img1").innerHTML = "<img alt='' src='"+img_key+"' height='100%' class='img_display'/>";
+    document.getElementById("profile_image_input").innerHTML = "<input type='hidden' name='profile_image' value='"+img_key+"'>";
+} 
+</script>
+
+      <div class="modal fade cover_image_1" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-mlg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title">Add Cover Images</h4>
+          </div>
+          <form role="form" method="post" action="{{uploadUrl}}">
+                <input type="hidden" name="formType" value="cover_image_1">
+
+                <div class="col-sm-4 col-sm-offset-4">
+                  <p>Select Cover Image 1</p>
+                  <div class="column fileupload-buttonbar">
+                      <span class="btn btn-xs btn-info fileinput-button" data-toggle="modal" data-target="#select_cover_photo_1">
+                        <i class="glyphicon glyphicon-plus"></i>
+                        <span style="color:white;">Select Image</span>
+                      </span>
+                      <span class="btn btn-xs btn-info fileinput-button">
+                        <i class="glyphicon glyphicon-plus"></i>
+                        <span style="color:white;">Upload Image</span>
+                        <input type="file" id="myFile1" name="bkg_img_1" onchange="myFunction1()">
+                      </span>
+                       <div class="container row" id="thumb_img1"></div>
+                       <div id="cover_image_1_input"></div>
+                  </div>
+                </div>
+              
+              </form>
+          <div class="modal-footer">
+          </div>
+          <hr>
+            <button class="btn btn-xs btn-success padding-bottom" type="submit">Update Profile</button>
+        </div>
+      </div>
+    </div>
+  <div class="modal fade bs-example-modal-lg" id="select_cover_photo_1" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+          <h4 class="modal-title">Select and Add Photo</h4>
+        </div>
+              <div class="col-lg-12 col-sm-12 col-xs-12" id="photo_select" align="center">
+                <div class="thumb_imgs">
+                      {%for p in photos%}
+                              <a onclick="change_main_image2('/servephoto/{{p.blobKey}}');" href="javascript:void(0);"><img src="/servephoto/{{p.blobKey}}" height="100px" alt="photo"></a>
+                      {%endfor%}
+                </div><br>
+                <div id="main_img2" class=""></div>
+              </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-xs btn-primary close" data-dismiss="modal">Select and Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script type="text/javascript">
+function change_main_image2(img_key) {
+    document.getElementById("main_img2").innerHTML = "<img alt='' src='"+img_key+"' height='100%' class='img_display'/>";
+    document.getElementById("cover_image_1_input").innerHTML = "<input type='hidden' name='cover_image_1' value='"+img_key+"'>";
+} 
+</script>
+
+    <div class="modal fade cover_image_2" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-mlg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title">Add Cover Images</h4>
+          </div>
+          <form role="form" method="post" action="{{uploadUrl}}">
+                <input type="hidden" name="formType" value="cover_image_2">
+
+                <div class="col-sm-4 col-sm-offset-4">
+                  <p>Select Cover Image 2</p>
+                  <div class="column fileupload-buttonbar">
+                      <span class="btn btn-xs btn-info fileinput-button" data-toggle="modal" data-target="#select_cover_photo_2">
+                        <i class="glyphicon glyphicon-plus"></i>
+                        <span style="color:white;">Select Image</span>
+                      </span>
+                      <span class="btn btn-xs btn-info fileinput-button">
+                        <i class="glyphicon glyphicon-plus"></i>
+                        <span style="color:white;">Upload Image</span>
+                        <input type="file" id="myFile2" name="bkg_img_2" onchange="myFunction2()">
+                      </span>
+                       <div class="container row" id="thumb_img2"></div>
+                       <div id="cover_image_1_input"></div>
+                  </div>
+                </div>
+              
+              </form>
+          <div class="modal-footer">
+          </div>
+          <hr>
+            <button class="btn btn-xs btn-success padding-bottom" type="submit">Update Profile</button>
+        </div>
+      </div>
+    </div>
+  <div class="modal fade bs-example-modal-lg" id="select_cover_photo_2" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+          <h4 class="modal-title">Select and Add Photo</h4>
+        </div>
+              <div class="col-lg-12 col-sm-12 col-xs-12" id="photo_select" align="center">
+                <div class="thumb_imgs">
+                      {%for p in photos%}
+                              <a onclick="change_main_image3('/servephoto/{{p.blobKey}}');" href="javascript:void(0);"><img src="/servephoto/{{p.blobKey}}" height="100px" alt="photo"></a>
+                      {%endfor%}
+                </div><br>
+                <div id="main_img3" class=""></div>
+              </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-xs btn-primary close" data-dismiss="modal">Select and Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script type="text/javascript">
+function change_main_image3(img_key) {
+    document.getElementById("main_img3").innerHTML = "<img alt='' src='"+img_key+"' height='100%' class='img_display'/>";
+    document.getElementById("cover_image_2_input").innerHTML = "<input type='hidden' name='cover_image_2' value='"+img_key+"'>";
+} 
+</script>
+
+  <div class="modal fade photography_interests" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title">Select Photography Interests</h4>
+          </div>
+          <form role="form" method="post">
+                  <input type="hidden" name="formType" value="photography_types">
+            <div class="col-lg-2 col-md-2 text-center">
+                <div class="service-item change_color">
+                    <div onclick="change_color_n_add_input(this, 'sports')"><i class="service-icon fa fa-Sports"></i>
+                    <h4>Action/Sports</h4></div>
+                    <div id="sports"></div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-2 text-center">
+                <div class="service-item change_color" >
+                    <div onclick="change_color_n_add_input(this, 'advertising')"><i class="service-icon fa fa-Advertising"></i>
+                    <h4>Advertising</h4></div>
+                    <div id="advertising"></div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-2 text-center">
+                <div class="service-item change_color">
+                    <div onclick="change_color_n_add_input(this, 'aerial')"><i class="service-icon fa fa-Aerial"></i>
+                    <h4>Aerial</h4></div>
+                    <div id="aerial"></div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-2 text-center">
+                <div class="service-item change_color">
+                    <div onclick="change_color_n_add_input(this, 'architectural')"><i class="service-icon fa fa-Architectural"></i>
+                    <h4>Architectural</h4></div>
+                    <div id="architectural"></div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-2 text-center">
+                <div class="service-item change_color">
+                    <div onclick="change_color_n_add_input(this, 'astronomical')"><i class="service-icon fa fa-Astronomical"></i>
+                    <h4>Astronomical</h4></div>
+                    <div id="astronomical"></div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-2 text-center">
+                <div class="service-item change_color">
+                    <div onclick="change_color_n_add_input(this, 'music')"><i class="service-icon fa fa-Music"></i>
+                    <h4>Concert/Music</h4></div>
+                    <div id="music"></div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-2 text-center">
+                <div class="service-item change_color">
+                    <div onclick="change_color_n_add_input(this, 'event')"><i class="service-icon fa fa-Event"></i>
+                    <h4>Event</h4></div>
+                    <div id="event"></div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-2 text-center">
+                <div class="service-item change_color">
+                    <div onclick="change_color_n_add_input(this, 'family')"><i class="service-icon fa fa-Family"></i>
+                    <h4>Family</h4></div>
+                    <div id="family"></div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-2 text-center">
+                <div class="service-item change_color">
+                    <div onclick="change_color_n_add_input(this, 'fashion')"><i class="service-icon fa fa-Fashion"></i>
+                    <h4>Fashion</h4></div>
+                    <div id="fashion"></div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-2 text-center">
+                <div class="service-item change_color">
+                    <div onclick="change_color_n_add_input(this, 'food')"><i class="service-icon fa fa-Food"></i>
+                    <h4>Food</h4></div>
+                    <div id="food"></div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-2 text-center">
+                <div class="service-item change_color">
+                    <div onclick="change_color_n_add_input(this, 'landscape')"><i class="service-icon fa fa-Landscape"></i>
+                    <h4>Landscape</h4></div>
+                    <div id="landscape"></div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-2 text-center">
+                <div class="service-item change_color">
+                    <div onclick="change_color_n_add_input(this, 'macro')"><i class="service-icon fa fa-Macro"></i>
+                    <h4>Macro</h4></div>
+                    <div id="macro"></div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-2 text-center">
+                <div class="service-item change_color">
+                    <div onclick="change_color_n_add_input(this, 'medical')"><i class="service-icon fa fa-Medical"></i>
+                    <h4>Medical</h4></div>
+                    <div id="medical"></div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-2 text-center">
+                <div class="service-item change_color">
+                    <div onclick="change_color_n_add_input(this, 'nude')"><i class="service-icon fa fa-Nude"></i>
+                    <h4>Nude/Erotic</h4></div>
+                    <div id="nude"></div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-2 text-center">
+                <div class="service-item change_color">
+                    <div onclick="change_color_n_add_input(this, 'photojournalism')"><i class="service-icon fa fa-Photojournalism"></i>
+                    <h4>Photojournalism</h4></div>
+                    <div id="photojournalism"></div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-2 text-center">
+                <div class="service-item change_color">
+                    <div onclick="change_color_n_add_input(this, 'scientific')"><i class="service-icon fa fa-Scientific"></i>
+                    <h4>Scientific</h4></div>
+                    <div id="scientific"></div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-2 text-center">
+                <div class="service-item change_color">
+                    <div onclick="change_color_n_add_input(this, 'street')"><i class="service-icon fa fa-Street"></i>
+                    <h4>Street</h4></div>
+                    <div id="street"></div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-2 text-center">
+                <div class="service-item change_color">
+                    <div onclick="change_color_n_add_input(this, 'travel')"><i class="service-icon fa fa-Travel"></i>
+                    <h4>Travel</h4></div>
+                    <div id="travel"></div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-2 text-center">
+                <div class="service-item change_color">
+                    <div onclick="change_color_n_add_input(this, 'underwater')"><i class="service-icon fa fa-Underwater"></i>
+                    <h4>Underwater</h4></div>
+                    <div id="underwater"></div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-2 text-center">
+                <div class="service-item change_color">
+                    <div onclick="change_color_n_add_input(this, 'vehicle')"><i class="service-icon fa fa-Vehicle"></i>
+                    <h4>Vehicles</h4></div>
+                    <div id="vehicle"></div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-2 text-center">
+                <div class="service-item change_color">
+                    <div onclick="change_color_n_add_input(this, 'wedding')"><i class="service-icon fa fa-Wedding"></i>
+                    <h4>Weddings</h4></div>
+                    <div id="wedding"></div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-2 text-center">
+                <div class="service-item change_color">
+                    <div onclick="change_color_n_add_input(this, 'wildlife')"><i class="service-icon fa fa-Wildlife"></i>
+                    <h4>Wildlife</h4></div>
+                    <div id="wildlife"></div>
+                </div>
+            </div>
+          <div class="modal-footer">
+          </div>
+          <div class="photography_interest_inputs">
+          </div>
+          <button class="btn btn-xs btn-success padding-bottom" type="submit">Update Profile</button>
+        </form>
+        </div>
+      </div>
+    </div>
 {%endblock%}
 
 {%block javaScripts%}
@@ -390,6 +748,18 @@
 <script src="https://maps.googleapis.com/maps/api/js"></script>
 <script src="/js/jquery-1.10.2.js"></script>
 <script src="/js/bootstrap.js"></script>
+<script>
+  function change_color_n_add_input(element, type) {
+    
+    if (element.style.color == "blue") {
+        element.style.color = 'gray';
+        document.getElementById(type).innerHTML = "<input type='hidden' name='photoTypeDelete' value='"+type+"'>";
+    } else {
+      element.style.color = 'blue';
+      document.getElementById(type).innerHTML = "<input type='hidden' name='photoType' value='"+type+"'>";
+    }
+  }
+</script>
     <script>
       function initialize() {
         var map_canvas = document.getElementById('map_canvas');
@@ -461,5 +831,234 @@ function change_main_image(img_key, img_link) {
     //document.getElementById("main_img").innerHTML = "<img alt='' src='"+img_key+"' class='img_display'/>";
 	document.getElementById("main_img").innerHTML = "<a href='"+img_link+"'><img alt='' src='"+img_key+"' class='img_display'/></a>";
 } 
+</script>
+<script>
+function f(){  
+    //Check File API support
+
+  //<label for="files">Select multiple files: </label>
+  //<input id="files" type="file" multiple/>
+  //<output id="result" />
+    if(window.File && window.FileList && window.FileReader)
+    {
+        var filesInput = document.getElementById("myFile");
+        filesInput.addEventListener("change", function(event){
+            var files = event.target.files; //FileList object
+            var output = document.getElementById("thumb_img");
+            var num_files = files.length;
+            var txt = "";
+            var file_name_size = [];
+            var file_name = [];
+            var total_size = 0;
+            for(var i = 0; i< files.length; i++)
+            {
+              txt = "";
+                var file = files[i];
+                if ('name' in files[i]) {
+                    txt += "" + files[i].name + "<br>";
+                }
+                if ('size' in files[i]) {
+                    //txt += "Size: " + file.size/1000000 + " Mbytes <br>";
+                    txt += "Size: " + Math.ceil((files[i].size/1000000) * 100)/100 + " Mbytes <br>";
+                }
+                //Only pics
+                file_name_size.push(txt);
+                file_name.push(files[i].name)
+                total_size = total_size + Math.ceil((files[i].size/1000000) * 100)/100;
+                if(!file.type.match('image'))
+                  continue;
+                var picReader = new FileReader();
+                var w = 0;
+                picReader.addEventListener("load",function(event){
+                  var picFile = event.target;
+                    var div = document.createElement("div");
+                    div.innerHTML = "<br><div class='col-xs-3'><img class='profile-img' src='" + picFile.result + "' height='100px' alt='"+file_name[w]+"'><h4 style='color:black;'>"+file_name_size[w]+"</h4><h5 class='form-signin-heading padding_bottom'>Update Photo Details</h5><input type='text' id='picCaption' name='caption' class='form-control padding_bottom' placeholder='Caption' value="+file_name[w]+" autofocus><input type='text' id='picLocation' name='location' class='form-control padding_bottom' placeholder='Location' autofocus><textarea type='textarea' id='picDescription' name='description' class='form-control padding_bottom' placeholder='Description'></textarea></div>";
+                    w++;
+                    output.insertBefore(div,null);            
+                });
+                 //Read the image
+                picReader.readAsDataURL(file);
+            }    
+            document.getElementById("num_photos").innerHTML = "Uploaded 0/"+num_files+" Photos, Total Size = "+total_size+"Mbytes";                         
+        });
+    }
+    else
+    {
+        console.log("Your browser does not support File API");
+    }
+}
+
+function f1(){  
+    //Check File API support
+
+  //<label for="files">Select multiple files: </label>
+  //<input id="files" type="file" multiple/>
+  //<output id="result" />
+    if(window.File && window.FileList && window.FileReader)
+    {
+        var filesInput = document.getElementById("myFile1");
+        filesInput.addEventListener("change", function(event){
+            var files = event.target.files; //FileList object
+            var output = document.getElementById("thumb_img1");
+            var num_files = files.length;
+            var txt = "";
+            var file_name_size = [];
+            var file_name = [];
+            var total_size = 0;
+            for(var i = 0; i< files.length; i++)
+            {
+              txt = "";
+                var file = files[i];
+                if ('name' in files[i]) {
+                    txt += "" + files[i].name + "<br>";
+                }
+                if ('size' in files[i]) {
+                    //txt += "Size: " + file.size/1000000 + " Mbytes <br>";
+                    txt += "Size: " + Math.ceil((files[i].size/1000000) * 100)/100 + " Mbytes <br>";
+                }
+                //Only pics
+                file_name_size.push(txt);
+                file_name.push(files[i].name)
+                total_size = total_size + Math.ceil((files[i].size/1000000) * 100)/100;
+                if(!file.type.match('image'))
+                  continue;
+                var picReader = new FileReader();
+                var w = 0;
+                picReader.addEventListener("load",function(event){
+                  var picFile = event.target;
+                    var div = document.createElement("div");
+                    div.innerHTML = "<br><div class='col-xs-3'><img class='img-rounded' src='" + picFile.result + "' height='100px' alt='"+file_name[w]+"'><h4 style='color:black;'>"+file_name_size[w]+"</h4><h5 class='form-signin-heading padding_bottom'>Update Photo Details</h5><input type='text' id='picCaption' name='caption' class='form-control padding_bottom' placeholder='Caption' value="+file_name[w]+" autofocus><input type='text' id='picLocation' name='location' class='form-control padding_bottom' placeholder='Location' autofocus><textarea type='textarea' id='picDescription' name='description' class='form-control padding_bottom' placeholder='Description'></textarea></div>";
+                    w++;
+                    output.insertBefore(div,null);            
+                });
+                 //Read the image
+                picReader.readAsDataURL(file);
+            }    
+            document.getElementById("num_photos").innerHTML = "Uploaded 0/"+num_files+" Photos, Total Size = "+total_size+"Mbytes";                         
+        });
+    }
+    else
+    {
+        console.log("Your browser does not support File API");
+    }
+}
+
+function f2(){  
+    //Check File API support
+
+  //<label for="files">Select multiple files: </label>
+  //<input id="files" type="file" multiple/>
+  //<output id="result" />
+    if(window.File && window.FileList && window.FileReader)
+    {
+        var filesInput = document.getElementById("myFile2");
+        filesInput.addEventListener("change", function(event){
+            var files = event.target.files; //FileList object
+            var output = document.getElementById("thumb_img2");
+            var num_files = files.length;
+            var txt = "";
+            var file_name_size = [];
+            var file_name = [];
+            var total_size = 0;
+            for(var i = 0; i< files.length; i++)
+            {
+              txt = "";
+                var file = files[i];
+                if ('name' in files[i]) {
+                    txt += "" + files[i].name + "<br>";
+                }
+                if ('size' in files[i]) {
+                    //txt += "Size: " + file.size/1000000 + " Mbytes <br>";
+                    txt += "Size: " + Math.ceil((files[i].size/1000000) * 100)/100 + " Mbytes <br>";
+                }
+                //Only pics
+                file_name_size.push(txt);
+                file_name.push(files[i].name)
+                total_size = total_size + Math.ceil((files[i].size/1000000) * 100)/100;
+                if(!file.type.match('image'))
+                  continue;
+                var picReader = new FileReader();
+                var w = 0;
+                picReader.addEventListener("load",function(event){
+                  var picFile = event.target;
+                    var div = document.createElement("div");
+                    div.innerHTML = "<br><div class='col-xs-3'><img class='img-rounded' src='" + picFile.result + "' height='100px' alt='"+file_name[w]+"'><h4 style='color:black;'>"+file_name_size[w]+"</h4><h5 class='form-signin-heading padding_bottom'>Update Photo Details</h5><input type='text' id='picCaption' name='caption' class='form-control padding_bottom' placeholder='Caption' value="+file_name[w]+" autofocus><input type='text' id='picLocation' name='location' class='form-control padding_bottom' placeholder='Location' autofocus><textarea type='textarea' id='picDescription' name='description' class='form-control padding_bottom' placeholder='Description'></textarea></div>";
+                    w++;
+                    output.insertBefore(div,null);            
+                });
+                 //Read the image
+                picReader.readAsDataURL(file);
+            }    
+            document.getElementById("num_photos").innerHTML = "Uploaded 0/"+num_files+" Photos, Total Size = "+total_size+"Mbytes";                         
+        });
+    }
+    else
+    {
+        console.log("Your browser does not support File API");
+    }
+}
+
+function f3(){  
+    //Check File API support
+
+  //<label for="files">Select multiple files: </label>
+  //<input id="files" type="file" multiple/>
+  //<output id="result" />
+    if(window.File && window.FileList && window.FileReader)
+    {
+        var filesInput = document.getElementById("myFile3");
+        filesInput.addEventListener("change", function(event){
+            var files = event.target.files; //FileList object
+            var output = document.getElementById("thumb_img3");
+            var num_files = files.length;
+            var txt = "";
+            var file_name_size = [];
+            var file_name = [];
+            var total_size = 0;
+            for(var i = 0; i< files.length; i++)
+            {
+              txt = "";
+                var file = files[i];
+                if ('name' in files[i]) {
+                    txt += "" + files[i].name + "<br>";
+                }
+                if ('size' in files[i]) {
+                    //txt += "Size: " + file.size/1000000 + " Mbytes <br>";
+                    txt += "Size: " + Math.ceil((files[i].size/1000000) * 100)/100 + " Mbytes <br>";
+                }
+                //Only pics
+                file_name_size.push(txt);
+                file_name.push(files[i].name)
+                total_size = total_size + Math.ceil((files[i].size/1000000) * 100)/100;
+                if(!file.type.match('image'))
+                  continue;
+                var picReader = new FileReader();
+                var w = 0;
+                picReader.addEventListener("load",function(event){
+                  var picFile = event.target;
+                    var div = document.createElement("div");
+                    div.innerHTML = "<br><div class='col-xs-3'><img class='img-rounded' src='" + picFile.result + "' height='100px' alt='"+file_name[w]+"'><h4 style='color:black;'>"+file_name_size[w]+"</h4><h5 class='form-signin-heading padding_bottom'>Update Photo Details</h5><input type='text' id='picCaption' name='caption' class='form-control padding_bottom' placeholder='Caption' value="+file_name[w]+" autofocus><input type='text' id='picLocation' name='location' class='form-control padding_bottom' placeholder='Location' autofocus><textarea type='textarea' id='picDescription' name='description' class='form-control padding_bottom' placeholder='Description'></textarea></div>";
+                    w++;
+                    output.insertBefore(div,null);            
+                });
+                 //Read the image
+                picReader.readAsDataURL(file);
+            }    
+            document.getElementById("num_photos").innerHTML = "Uploaded 0/"+num_files+" Photos, Total Size = "+total_size+"Mbytes";                         
+        });
+    }
+    else
+    {
+        console.log("Your browser does not support File API");
+    }
+}
+
+function start() {
+  f();
+  f1();
+  f2();
+  f3();
+}
+window.onload = start;
 </script>
 {%endblock%}

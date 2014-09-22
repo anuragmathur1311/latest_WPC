@@ -109,6 +109,7 @@ class UserSettingsHandler(blobstore_handlers.BlobstoreUploadHandler, PageHandler
 			google_plus = self.request.get('google_plus')
 			twitter = self.request.get('twitter')
 			pinterest = self.request.get('pinterest')
+			tumblr = self.request.get('tumblr')
 			website = self.request.get('website')
 			city = self.request.get('city')
 			phone_num = self.request.get('phone_num')
@@ -119,7 +120,7 @@ class UserSettingsHandler(blobstore_handlers.BlobstoreUploadHandler, PageHandler
 			user = update_user_name(name, user)
 			user = update_user_alt_email(alt_email, user)
 			user = update_user_country(country, user)
-			user = update_social_profiles(facebook, youtube, google_plus, twitter, pinterest, website, user)
+			user = update_social_profiles(facebook, youtube, google_plus, twitter, pinterest, tumblr, website, user)
 			user.put()
 			self.redirect('/usersettings')
 		else:
@@ -168,7 +169,6 @@ class SearchResultsHandler(PageHandler):           ## TODO
 
 class ForumHandler(PageHandler):    ## TODO
 	def get(self):
-		self.redirect('/photos')
 		if not self.user:
 			templateVals = {'me': ""}
 			self.render('forum.html', **templateVals)
@@ -369,13 +369,6 @@ class PhotosHandler(PageHandler):
 			templateVals = {'me': self.user}
 			self.render('photos.html', **templateVals)
 
-class ForumHandler(PageHandler):
-	def get(self):
-		if not self.user:
-			templateVals = {'me': ""}
-			self.render('forum.html', **templateVals)
-		else:
-			self.redirect('/')
 
 class BlogNewHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler):
 	def get(self):
