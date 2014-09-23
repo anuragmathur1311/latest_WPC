@@ -220,76 +220,152 @@
 		<!-- /.carousel -->
 
 		{%block pageContent%}
-		<!-- Marketing messaging and featurettes
+    		<!-- Marketing messaging and featurettes
 		================================================== -->
 		<!-- Wrap the rest of the page in another container to center all the content. -->
-		<br><br>
-		<div class="container marketing">
-
 			<!-- Three columns of text below the carousel -->
-			<div class="row">
+			{%if not me%}
+			<div class="row col-md-8 col-md-offset-2" style="text-align:center;">
 				<div class="col-lg-4">
-					<img class="img-circle" src="/js/holder.js/140x140" alt="Generic placeholder image">
-					<h2>Heading</h2>
-					<p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna.</p>
-					<p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+					<img class="img-circle" src="/js/holder.js/140x140/sky/text:Get Inspired" alt="Generic placeholder image">
+					<h2>Get Inspired</h2>
+					<p>Browse thousands of photographs and connect with inspiring photographers.</p>
 				</div><!-- /.col-lg-4 -->
 				<div class="col-lg-4">
-					<img class="img-circle" data-src="/js/holder.js/140x140" alt="Generic placeholder image">
-					<h2>Heading</h2>
-					<p>Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cras mattis consectetur purus sit amet fermentum. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh.</p>
-					<p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+					<img class="img-circle" data-src="/js/holder.js/140x140/sky/text:Find" alt="Generic placeholder image">
+					<h2>Find Photographers</h2>
+					<p>Find photographers with similar interests, passions and help each other.</p>
 				</div><!-- /.col-lg-4 -->
 				<div class="col-lg-4">
-					<img class="img-circle" data-src="/js/holder.js/140x140" alt="Generic placeholder image">
-					<h2>Heading</h2>
-					<p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-					<p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+					<img class="img-circle" data-src="/js/holder.js/140x140/sky/text:Explore" alt="Generic placeholder image">
+					<h2>Explore the world of photography</h2>
+					<p>With a simple tap of a button (EXPLORE) browse random pages of photographs, photographers profile, blogs, groups and forum questions</p>
 				</div><!-- /.col-lg-4 -->
 			</div><!-- /.row -->
-
-
-			<!-- START THE FEATURETTES -->
-
-			<hr class="featurette-divider">
-
-			<div class="row featurette">
-				<div class="col-md-7">
-					<h2 class="featurette-heading">First featurette heading. <span class="text-muted">It'll blow your mind.</span></h2>
-					<p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
-				</div>
-				<div class="col-md-5">
-					<img class="featurette-image img-responsive" data-src="/js/holder.js/500x500/auto" alt="Generic placeholder image">
-				</div>
+			<div class="col-md-12">
+				<hr>
+			</div>
+			{%endif%}
+			<div class="row">
+				
+			</div>
+			<h1 style="text-align:center;">Latest Articles</h1>
+			<div class="col-md-12">
+				<hr>
 			</div>
 
-			<hr class="featurette-divider">
-
-			<div class="row featurette">
-				<div class="col-md-5">
-					<img class="featurette-image img-responsive" data-src="/js/holder.js/500x500/auto" alt="Generic placeholder image">
+			<div class="col-md-10">
+				<div class="col-md-10">
+					<div class="col-md-8">
+						<h2>Music and Photography</h2>
+					</div>
+					<div class="col-md-3 col-md-offset-1">
+						<a class="navbar-brand" href="#" style="color:blue"><img src="/images/image-2.jpg" alt="Profile Image" class="profile-img" width="20px"> Anurag Mathur</a>
+					</div>
+					<img src="/images/Artists_2.jpg" alt="First slide" width="100%"/>
+					<div style="margin-top:2px;">
+						<button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-picture" style="color:white;"></span></button>
+						<button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-thumbs-up" style="color:white;"></span></button>
+						<button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-plus-sign" style="color:white;"></span></button>
+						<button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-pushpin" style="color:white;"></span></button>
+					</div>
+					<p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
 				</div>
-				<div class="col-md-7">
-					<h2 class="featurette-heading">Oh yeah, it's that good. <span class="text-muted">See for yourself.</span></h2>
+				
+				<div class="col-md-10">
+					<div class="col-sm-8">
+					<h2>Music and Photography</h2>
+					</div>
+					<div class="col-sm-3 col-sm-offset-1">
+					<a class="navbar-brand" href="#" style="color:blue"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="20px"> Anurag Mathur</a>
+					</div>
+					<img src="/images/Artist_1.jpg" alt="First slide" width="100%"/>
+					<div style="margin-top:2px;">
+						<button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-picture" style="color:white;"></span></button>
+						<button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-thumbs-up" style="color:white;"></span></button>
+						<button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-plus-sign" style="color:white;"></span></button>
+						<button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-pushpin" style="color:white;"></span></button>
+					</div>
+					<p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
+				</div>
+				
+				<div class="col-md-10">
+					<div class="col-sm-8">
+					<h2>Music and Photography</h2>
+					</div>
+					<div class="col-sm-3 col-sm-offset-1">
+					<a class="navbar-brand" href="#" style="color:blue"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="20px"> Anurag Mathur</a>
+					</div>
+					<img src="/images/faith_disrupted.jpg" alt="First slide" width="100%"/>
+					<div style="margin-top:2px;">
+						<button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-picture" style="color:white;"></span></button>
+						<button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-thumbs-up" style="color:white;"></span></button>
+						<button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-plus-sign" style="color:white;"></span></button>
+						<button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-pushpin" style="color:white;"></span></button>
+					</div>
+					<p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
+				</div>
+				
+				<div class="col-md-10">
+					<div class="col-sm-8">
+					<h2>Music and Photography</h2>
+					</div>
+					<div class="col-sm-3 col-sm-offset-1">
+					<a class="navbar-brand" href="#" style="color:blue"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="20px"> Anurag Mathur</a>
+					</div>
+					<img src="/images/Reflections.jpg" alt="First slide" width="100%"/>
+					<div style="margin-top:2px;">
+						<button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-picture" style="color:white;"></span></button>
+						<button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-thumbs-up" style="color:white;"></span></button>
+						<button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-plus-sign" style="color:white;"></span></button>
+						<button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-pushpin" style="color:white;"></span></button>
+					</div>
 					<p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
 				</div>
 			</div>
+			<div class="col-md-2">
+				<p>Ads</p>
+				<img src="/images/img_2.jpg" class="img-responsive">
+				<p><a href="my_studio.html" style="color:black;"></a></p>
 
-			<hr class="featurette-divider">
+				<img src="/images/img_2.jpg" class="img-responsive">
+				<p><a href="my_studio.html" style="color:black;"></a></p>
 
-			<div class="row featurette">
-				<div class="col-md-7">
-					<h2 class="featurette-heading">And lastly, this one. <span class="text-muted">Checkmate.</span></h2>
-					<p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
-				</div>
-				<div class="col-md-5">
-					<img class="featurette-image img-responsive" data-src="/js/holder.js/500x500/auto" alt="Generic placeholder image">
-				</div>
+				<img src="/images/img_2.jpg" class="img-responsive">
+				<p><a href="my_studio.html" style="color:black;"></a></p>
+
+				<hr>
+
+				<p>Trending Photographers</p>
+				<img src="/images/img_2.jpg" class="profile-img" width="100px">
+				<p><a href="my_studio.html" style="color:black;"></a></p>
+
+				<img src="/images/img_2.jpg" class="profile-img" width="100px">
+				<p><a href="my_studio.html" style="color:black;"></a></p>
+
+				<img src="/images/img_2.jpg" class="profile-img" width="100px">
+				<p><a href="my_studio.html" style="color:black;"></a></p>
+
+				<p>Top Photos</p>
+				<img src="/images/img_1.jpg" class="img-responsive">
+				<p><a href="my_studio.html" style="color:black;"></a></p>
+
+				<img src="/images/img_1.jpg" class="img-responsive">
+				<p><a href="my_studio.html" style="color:black;"></a></p>
+
+				<img src="/images/img_1.jpg" class="img-responsive">
+				<p><a href="my_studio.html" style="color:black;"></a></p>
+
+				<p>Trending Blogs</p>
+				<img src="/images/img_3.jpg" class="img-responsive">
+				<p><a href="my_studio.html" style="color:black;"></a></p>
+
+				<img src="/images/img_3.jpg" class="img-responsive">
+				<p><a href="my_studio.html" style="color:black;"></a></p>
+
+				<img src="/images/img_3.jpg" class="img-responsive">
+				<p><a href="my_studio.html" style="color:black;"></a></p>
 			</div>
-
-			<hr class="featurette-divider">
-
-			<!-- /END THE FEATURETTES -->
 			{%endblock%}
 			{%block footer%}
 			<!-- FOOTER -->
