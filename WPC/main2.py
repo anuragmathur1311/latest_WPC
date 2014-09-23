@@ -89,6 +89,18 @@ class MainHandler(PageHandler):
 		else:
 			self.render('index_user.html', me=self.user)
 
+class UserHomeHandler(PageHandler):
+	def get(self, resource):
+		#userid = str(urllib.unquote(resource))
+		userid = resource
+		user = User.get_by_id(userid)
+		if user:
+			templateVals = {'me': self.user}
+			templateVals['user'] = user
+			self.render('user_home.html', **templateVals)
+		else:
+			self.redirect('/')
+
 class UserSettingsHandler(blobstore_handlers.BlobstoreUploadHandler, PageHandler):
 	def get(self):
 		if self.user:
@@ -754,6 +766,7 @@ app = webapp2.WSGIApplication([
 			('/uploadphoto', PhotoUploadHandler),
 			('/servephoto/([^/]+)', PhotoServeHandler),
 			('/([^/]+)/photos', UserPhotosHandler),
+			('/([^/]+)/home', UserHomeHandler),
 			('/([^/]+)/blogs', UserBlogsHandler),
 			('/([^/]+)', UserStudioHandler),
 			('/([^.]+)', DefaultHandler)

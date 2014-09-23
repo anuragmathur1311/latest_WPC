@@ -9,7 +9,7 @@ Home | WPC
 {%block userNavLinks%}
 	<ul class="nav navbar-nav navbar-right" style="text-align:left;">
 		<li><a class="" href="/{{me.key.id()}}" style="color:yellow;font-size:20px;" ><em>{{me.name}}</em></a></li>
-		<li><a href="/"><span class="glyphicon glyphicon-home"></span></a></li>
+		<li><a href="/{{me.key.id()}}/home"><span class="glyphicon glyphicon-home"></span></a></li>
 		<li><a href="/{{me.key.id()}}/photos"><span class="glyphicon glyphicon-picture"></span></a></li>
 		  <li>
 			  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-plus"></span><b class="caret"></b></a>
@@ -186,128 +186,154 @@ Home | WPC
         </div>
       </div>
     </div>
- <div class="container" id="main">
-      <h1>My Feed</h1>
 
-  
-  <div class="row">
-      <div class="col-sm-3 col-xs-6">
-        <div class="card">
-              <div class="panel-thumbnail"><img src="/images/Artist_1.jpg" class="img-responsive"></div>
-              <p><a href="my_studio.html" style="color:black;"></a></p>
-              <button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-picture" style="color:white;"></span></button>
-              <button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-thumbs-up" style="color:white;"></span></button>
-              <button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-plus-sign" style="color:white;"></span></button>
-              <button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-pushpin" style="color:white;"></span></button>
-              <div class="panel-body">
-              <p class="lead">Photographer added new Photos</p>
-              <a><h5 style="color:black;">Go to Photographer Photos</h5></a>
-          </div>
-        </div>
-        <hr class="horizontal-line">
-        <div class="card">
-              <div class="panel-thumbnail"><img src="/images/AnuragMathur.jpg" class="img-responsive"></div>
-              <p><a href="my_studio.html" style="color:black;"></a></p>
-              <button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-picture" style="color:white;"></span></button>
-              <button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-thumbs-up" style="color:white;"></span></button>
-              <button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-plus-sign" style="color:white;"></span></button>
-              <button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-pushpin" style="color:white;"></span></button>
-              <div class="panel-body">
-              <p class="lead">Your photo is used by Photographer in his blog/forum/group XYZ</p>
-              <input type="text" class="form-control" placeholder="Add a comment..">
-          </div>
-        </div>
-        <hr class="horizontal-line">
-      </div><!--/col-->
-      
-      <div class="col-sm-3 col-xs-6">
-        <div class="card">
-              <div class="panel-thumbnail"><img src="/images/Artists_2.jpg" class="img-responsive"></div>
-              <p><a href="my_studio.html" style="color:black;"></a></p>
-              <button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-picture" style="color:white;"></span></button>
-              <button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-thumbs-up" style="color:white;"></span></button>
-              <button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-plus-sign" style="color:white;"></span></button>
-              <button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-pushpin" style="color:white;"></span></button>
-              <div class="panel-body">
-              <p class="lead">Photographer Commented on your photo</p>
-              <input type="text" class="form-control" placeholder="Reply..">
-              </div>
-        </div>
-        <hr class="horizontal-line">
-        <div class="card">
-              <div class="panel-thumbnail"><img src="/images/Brooklyn_Bridge.jpg" class="img-responsive"></div>
-              <p><a href="my_studio.html" style="color:black;"></a></p>
-              <button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-picture" style="color:white;"></span></button>
-              <button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-thumbs-up" style="color:white;"></span></button>
-              <button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-plus-sign" style="color:white;"></span></button>
-              <button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-pushpin" style="color:white;"></span></button>
-              <div class="panel-body">
-              <p class="lead">Photographer has sent you a private message</p>
-              <h4><em>Hi ! How are you??</em></h4>
-              <input type="text" class="form-control" placeholder="Reply..">
-          </div>
-        </div>
-        <hr class="horizontal-line">
-      </div><!--/col-->
-      
-      <div class="col-sm-3 col-xs-6">
-        <div class="card">
-              <div class="panel-thumbnail"><img src="/images/DSC_1556.jpg" class="img-responsive"></div>
-              <p><a href="my_studio.html" style="color:black;"></a></p>
-              <button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-picture" style="color:white;"></span></button>
-              <button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-thumbs-up" style="color:white;"></span></button>
-              <button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-plus-sign" style="color:white;"></span></button>
-              <button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-pushpin" style="color:white;"></span></button>
-              <div class="panel-body">
-              <p class="lead">Photographer added you to his ideabook</p>
-              <input type="text" class="form-control" placeholder="Send a private message..">
-          </div>
-        </div>
-        <hr class="horizontal-line">
-      </div><!--/col-->  
+    		<!-- Marketing messaging and featurettes
+		================================================== -->
+		<!-- Wrap the rest of the page in another container to center all the content. -->
+			<!-- Three columns of text below the carousel -->
+			{%if not me%}
+			<div class="row col-md-8 col-md-offset-2" style="text-align:center;">
+				<div class="col-lg-4">
+					<img class="img-circle" src="/js/holder.js/140x140" alt="Generic placeholder image">
+					<h2>Heading</h2>
+					<p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna.</p>
+					<p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+				</div><!-- /.col-lg-4 -->
+				<div class="col-lg-4">
+					<img class="img-circle" data-src="/js/holder.js/140x140" alt="Generic placeholder image">
+					<h2>Heading</h2>
+					<p>Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cras mattis consectetur purus sit amet fermentum. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh.</p>
+					<p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+				</div><!-- /.col-lg-4 -->
+				<div class="col-lg-4">
+					<img class="img-circle" data-src="/js/holder.js/140x140" alt="Generic placeholder image">
+					<h2>Heading</h2>
+					<p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+					<p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+				</div><!-- /.col-lg-4 -->
+			</div><!-- /.row -->
+			<div class="col-md-12">
+				<hr>
+			</div>
+			{%endif%}
 
-      <div class="col-sm-3 col-xs-6">
-        <p>Ads</p>
-        <div class="panel panel-default">
-              <div class="panel-thumbnail"><img src="/images/img_2.jpg" class="img-responsive"></div>
-              <p><a href="my_studio.html" style="color:black;"></a></p>
-        </div>
+			<h1 style="text-align:center;">Latest Articles</h1>
+			<div class="col-md-12">
+				<hr>
+			</div>
 
-        <div class="panel panel-default">
-              <div class="panel-thumbnail"><img src="/images/img_2.jpg" class="img-responsive"></div>
-              <p><a href="my_studio.html" style="color:black;"></a></p>
-        </div>
+			<div class="col-md-10">
+				<div class="col-md-10">
+					<div class="col-md-6">
+						<h2>Music and Photography</h2>
+					</div>
+					<div class="col-md-5 col-md-offset-1">
+						<a class="navbar-brand" href="#" style="color:blue"><img src="/images/image-2.jpg" alt="Profile Image" class="profile-img" width="20px"> Anurag Mathur</a>
+					</div>
+					<img src="/images/Artists_2.jpg" alt="First slide" width="100%"/>
+					<div style="margin-top:2px;">
+						<button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-picture" style="color:white;"></span></button>
+						<button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-thumbs-up" style="color:white;"></span></button>
+						<button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-plus-sign" style="color:white;"></span></button>
+						<button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-pushpin" style="color:white;"></span></button>
+					</div>
+					<p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
+				</div>
+				
+				<div class="col-md-10">
+					<div class="col-sm-8">
+					<h2>Music and Photography</h2>
+					</div>
+					<div class="col-sm-3 col-sm-offset-1">
+					<a class="navbar-brand" href="#" style="color:blue"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="20px"> Anurag Mathur</a>
+					</div>
+					<img src="/images/Artist_1.jpg" alt="First slide" width="100%"/>
+					<div style="margin-top:2px;">
+						<button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-picture" style="color:white;"></span></button>
+						<button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-thumbs-up" style="color:white;"></span></button>
+						<button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-plus-sign" style="color:white;"></span></button>
+						<button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-pushpin" style="color:white;"></span></button>
+					</div>
+					<p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
+				</div>
+				
+				<div class="col-md-10">
+					<div class="col-sm-8">
+					<h2>Music and Photography</h2>
+					</div>
+					<div class="col-sm-3 col-sm-offset-1">
+					<a class="navbar-brand" href="#" style="color:blue"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="20px"> Anurag Mathur</a>
+					</div>
+					<img src="/images/faith_disrupted.jpg" alt="First slide" width="100%"/>
+					<div style="margin-top:2px;">
+						<button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-picture" style="color:white;"></span></button>
+						<button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-thumbs-up" style="color:white;"></span></button>
+						<button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-plus-sign" style="color:white;"></span></button>
+						<button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-pushpin" style="color:white;"></span></button>
+					</div>
+					<p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
+				</div>
+				
+				<div class="col-md-10">
+					<div class="col-sm-8">
+					<h2>Music and Photography</h2>
+					</div>
+					<div class="col-sm-3 col-sm-offset-1">
+					<a class="navbar-brand" href="#" style="color:blue"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="20px"> Anurag Mathur</a>
+					</div>
+					<img src="/images/Reflections.jpg" alt="First slide" width="100%"/>
+					<div style="margin-top:2px;">
+						<button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-picture" style="color:white;"></span></button>
+						<button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-thumbs-up" style="color:white;"></span></button>
+						<button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-plus-sign" style="color:white;"></span></button>
+						<button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-pushpin" style="color:white;"></span></button>
+					</div>
+					<p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
+				</div>
+			</div>
+			<div class="col-md-2">
+				<p>Ads</p>
+				<img src="/images/img_2.jpg" class="img-responsive">
+				<p><a href="my_studio.html" style="color:black;"></a></p>
 
-        <div class="panel panel-default">
-              <div class="panel-thumbnail"><img src="/images/img_2.jpg" class="img-responsive"></div>
-              <p><a href="my_studio.html" style="color:black;"></a></p>
-        </div>
-        <hr class="horizontal-line">
+				<img src="/images/img_2.jpg" class="img-responsive">
+				<p><a href="my_studio.html" style="color:black;"></a></p>
 
-        <p>Suggestions</p>
-        <div class="panel panel-default">
-              <div class="panel-thumbnail"><img src="/images/img_2.jpg" class="img-responsive"></div>
-              <p><a href="my_studio.html" style="color:black;"></a></p>
-        </div>
+				<img src="/images/img_2.jpg" class="img-responsive">
+				<p><a href="my_studio.html" style="color:black;"></a></p>
 
-        <div class="panel panel-default">
-              <div class="panel-thumbnail"><img src="/images/img_2.jpg" class="img-responsive"></div>
-              <p><a href="my_studio.html" style="color:black;"></a></p>
-        </div>
+				<hr>
 
-        <div class="panel panel-default">
-              <div class="panel-thumbnail"><img src="/images/img_2.jpg" class="img-responsive"></div>
-              <p><a href="my_studio.html" style="color:black;"></a></p>
-        </div>
-        <hr class="horizontal-line">
-      </div><!--/col-->  
-    </div>
+				<p>Trending Photographers</p>
+				<img src="/images/img_2.jpg" class="profile-img" width="100px">
+				<p><a href="my_studio.html" style="color:black;"></a></p>
 
-    <div class="text-center">
-      <button type="button" class="btn btn-info btn-sm"> Load More</button>
-    </div> <br>
-  </div>
-</div><!--/main-->
+				<img src="/images/img_2.jpg" class="profile-img" width="100px">
+				<p><a href="my_studio.html" style="color:black;"></a></p>
+
+				<img src="/images/img_2.jpg" class="profile-img" width="100px">
+				<p><a href="my_studio.html" style="color:black;"></a></p>
+
+				<p>Top Photos</p>
+				<img src="/images/img_1.jpg" class="img-responsive">
+				<p><a href="my_studio.html" style="color:black;"></a></p>
+
+				<img src="/images/img_1.jpg" class="img-responsive">
+				<p><a href="my_studio.html" style="color:black;"></a></p>
+
+				<img src="/images/img_1.jpg" class="img-responsive">
+				<p><a href="my_studio.html" style="color:black;"></a></p>
+
+				<p>Trending Blogs</p>
+				<img src="/images/img_3.jpg" class="img-responsive">
+				<p><a href="my_studio.html" style="color:black;"></a></p>
+
+				<img src="/images/img_3.jpg" class="img-responsive">
+				<p><a href="my_studio.html" style="color:black;"></a></p>
+
+				<img src="/images/img_3.jpg" class="img-responsive">
+				<p><a href="my_studio.html" style="color:black;"></a></p>
+			</div>
 
 {%endblock%}
 		
