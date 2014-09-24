@@ -101,6 +101,13 @@ class UserHomeHandler(PageHandler):
 		else:
 			self.redirect('/')
 
+class UserAboutHandler(PageHandler):
+	def get(self):
+		if not self.user:
+			self.render('/')
+		else:
+			self.render('user_about.html', me=self.user)
+
 class UserSettingsHandler(blobstore_handlers.BlobstoreUploadHandler, PageHandler):
 	def get(self):
 		if self.user:
@@ -755,6 +762,7 @@ app = webapp2.WSGIApplication([
 			('/groups' , GroupsHandler),
 			('/photos' , PhotosHandler),
 			('/blog' , BlogsHandler),
+			('/about', UserAboutHandler),
 			('/group/([^/]+)', GroupPermpageHandler),
 			('/photo/([^/]+)', PhotoPermpageHandler),
 			('/blog/([^/]+)', BlogPermpageHandler),

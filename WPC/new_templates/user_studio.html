@@ -86,18 +86,6 @@
             			{%if me != user%}
             				<br><button type="submit" class="btn btn-xs btn-info"><span style="color:white;" class="glyphicon glyphicon-pushpin"></span> Follow</button><br>
             			{% endif %}
-                  <div class="camera">
-                      <img src="/fonts/Cameras/Nikon D80.png" alt="camera" width="80px"><h4 style="color:white;">Nikon D80<h4>
-              				{%if me%}
-                          <a href="/usersettings#my_gear"><span class="glyphicon glyphicon-cog"></span></a>
-              				{% endif %}
-                  </div>
-                  <div class="col-xs-4 col-xs-offset-5 lenses_center">
-                      <div class="col-xs-2"><img src="/fonts/Lenses/Nikkor 18-55mm.png" alt="camera" width="60px"><h6 style="color:white;">Nikkor 18-55mm<h5></div>
-                      <div class="col-xs-2"><img src="/fonts/Lenses/AF-S-VR-Zoom-NIKKOR-55-200mm-f-4-5.6G.png" alt="camera" width="60px"><h6 style="color:white;">Nikkor 55-200mm<h6></div>
-                      <div class="col-xs-2"><img src="/fonts/Lenses/af-nikkor-50mm-f-1-80_front.png" alt="camera" width="60px"><h6 style="color:white;">Nikkor 50mm 1.8d<h6></div>
-                      <a data-toggle="modal" data-target=".cover_image_1" style="color:white;"><i style="font-size:20px;" class="fa fa-plus"></i>Change Cover Image 1</a>
-                </div>
         </div>
         <div class="transbox_left">
             <h1>{{user.awards}}<h1><h2>awards</h2>
@@ -112,25 +100,30 @@
         <!-- Call to Action -->
     <div id= "my_portfolios" class="call-to-action">
         
-        <div class="container">
+        <div class="container_user">
             <div class="row">
-                <div class="col-md-2 text-center">
-                  <a href="#my_photos"><h3>About</h3></a>
+                <div class="col-md-2" style="margin-top:-30px;height:50px;z-index:3;">
+                    <img src="/images/image-2.jpg" alt="Profile Image" class="profile-img" height="150px">
                 </div>
-                <div class="col-md-2 text-center">
-                  <a href="#my_photos"><h3>Photos</h3></a>
-                </div>
-        				<div class="col-md-2 text-center">
-        					<a href="/{{user.key.id()}}/blogs"><h3>Blogs</h3></a>
-        				</div>
-        				<div class="col-md-2 text-center">
-        					<h3>Questions</h3>
-        				</div>
-        				<div class="col-md-2 text-center">
-        					<a href="/{{user.key.id()}}/user_groups"><h3>Groups</h3></a>
-        				</div>
-                <div class="col-md-2 text-center">
-                    <a data-toggle="modal" data-target=".my_portfolios"><h3>Portfolios</h3></a>
+                <div class="col-md-10" style="margin:0px;">
+                    <div class="col-md-2 text-center">
+                      <a href="/about"><h3>About</h3></a>
+                    </div>
+                    <div class="col-md-2 text-center">
+                      <a href="#my_photos"><h3>Photos</h3></a>
+                    </div>
+            				<div class="col-md-2 text-center">
+            					<a href="/{{user.key.id()}}/blogs"><h3>Blogs</h3></a>
+            				</div>
+            				<div class="col-md-2 text-center">
+            					<h3>Questions</h3>
+            				</div>
+            				<div class="col-md-2 text-center">
+            					<a href="/{{user.key.id()}}/user_groups"><h3>Groups</h3></a>
+            				</div>
+                    <div class="col-md-2 text-center">
+                        <a data-toggle="modal" data-target=".my_portfolios"><h3>Portfolios</h3></a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1058,6 +1051,8 @@ function start() {
   f1();
   f2();
   f3();
+  var height = document.documentElement.clientHeight;
+    window.scrollBy(0, Math.floor(0.6 * height));
 }
 window.onload = start;
 </script>
