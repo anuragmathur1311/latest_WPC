@@ -1,0 +1,115 @@
+{%if me%}
+		{%extends "index_user.html"%}
+{%else%}
+		{%extends "index.html"%}
+{%endif%}
+
+{%block title%}
+{{me.name}} | WPC
+{%endblock%}
+
+{%block styleSheets%}
+<!-- Bootstrap core CSS -->
+<link href="/css/bootstrap.css" rel="stylesheet">
+<!-- Add custom CSS here -->
+<link href="/css/my_studio.css" rel="stylesheet">
+<link href="/css/font.css" rel="stylesheet">
+<link href="/css/camera_lenses.css" rel="stylesheet">
+
+{%endblock%}
+
+{%block carousel%}
+{%endblock%}
+
+{%block signup_links%}  
+{%endblock%}
+
+{%block pageContent%}
+        <!-- Call to Action -->
+    <br><br>
+    <div class="row">
+        <div class="col-md-4" style="margin-top:0px">
+          <div class="col-md-4">
+            <img src="/images/image-2.jpg" alt="Profile Image" class="profile-img" height="150px">
+          </div>
+          <div class="col-md-4" style="margin-top:0px">
+            <h2><a class="" href="/{{me.key.id()}}" style="color:blue;font-size:20px;" ><em>{{me.name}}</em></a></h2>
+            <a href="#map_canvas"><img src="/fonts/Flags/{{me.country}}.png" alt="country" width="40px"></a><br>
+            <a href=""><i class="fa fa-star" style="color:gold;"></i><i class="fa fa-star" style="color:gold;"></i><i class="fa fa-star" style="color:gold;"></i><i class="fa fa-star" style="color:gold;"></i><i class="fa fa-star" style="color:gray;"></i></a>
+            <h2 style="margin-top:0px"><em>{{me.wpc_score}}</em></h2>
+             {%if me.wpc_score<=5000%}
+              <button type="submit" class="btn btn-danger">Beginner Photographer</button><br>
+            {%elif me.wpc_score>5000 or me.wpc_score<=10000%}
+              <button type="submit" class="btn btn-danger">Amateur Photographer</button><br>
+            {%elif me.wpc_score>10000 or me.wpc_score<=20000%}
+              <button type="submit" class="btn btn-danger">Semi-Pro Photographer</button><br>
+            {%elif me.wpc_score>20000 or me.wpc_score<=25000%}
+              <button type="submit" class="btn btn-danger">Professional Photographer</button><br>
+            {%elif me.wpc_score>25000%}
+              <button type="submit" class="btn btn-danger">Master Photographer</button><br>
+            {% endif %}
+            </div>
+        </div>
+        <div class="col-md-8">
+          <div class="col-md-2">
+            <h1 style="color:black">10</h1>
+            <h3 style="color:blue"><em>views</em><h3>
+          </div>
+          <div class="col-md-2">
+            <h1 style="color:black">10</h1>
+            <h3 style="color:blue"><em>followers</em><h3>
+          </div>
+          <div class="col-md-2">
+            <h1 style="color:black">10</h1>
+            <h3 style="color:blue"><em>following</em><h3>
+          </div>
+          <div class="col-md-2">
+            <h1 style="color:black">10</h1>
+            <h3 style="color:blue"><em>awards</em><h3>
+          </div>
+          <div class="col-md-2">
+            <h1 style="color:black">10</h1>
+            <h3 style="color:blue"><em>shares</em><h3>
+          </div>
+          <div class="col-md-2">
+            <h1 style="color:black">10</h1>
+            <h3 style="color:blue"><em>photos</em><h3>
+          </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <h1 style="margin-top:0px">Status</h1>
+        <div class="col-md-4" style="margin-top:0px">
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <h1 style="margin-top:0px">My Gear</h1>
+        <div class="camera">
+                      <img src="/fonts/Cameras/Nikon D80.png" alt="camera" width="80px"><h4 style="color:white;">Nikon D80<h4>
+                      {%if me%}
+                          <a href="/usersettings#my_gear"><span class="glyphicon glyphicon-cog"></span></a>
+                      {% endif %}
+                  </div>
+        <div class="col-xs-4 col-xs-offset-5 lenses_center">
+              <div class="col-xs-2"><img src="/fonts/Lenses/Nikkor 18-55mm.png" alt="camera" width="60px"><h6 style="color:white;">Nikkor 18-55mm<h5></div>
+              <div class="col-xs-2"><img src="/fonts/Lenses/AF-S-VR-Zoom-NIKKOR-55-200mm-f-4-5.6G.png" alt="camera" width="60px"><h6 style="color:white;">Nikkor 55-200mm<h6></div>
+              <div class="col-xs-2"><img src="/fonts/Lenses/af-nikkor-50mm-f-1-80_front.png" alt="camera" width="60px"><h6 style="color:white;">Nikkor 50mm 1.8d<h6></div>
+              <a data-toggle="modal" data-target=".cover_image_1" style="color:white;"><i style="font-size:20px;" class="fa fa-plus"></i>Change Cover Image 1</a>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <h1 style="margin-top:0px">Contact Info</h1>
+        <iframe
+          width="100%"
+          height="300"
+          frameborder="0" style="border:0"
+          src="https://www.google.com/maps/embed/v1/search?key=AIzaSyA98__FHcA4bnhiXVRNPHswC6VNnVfiKnc&q={{me.city}}+{{me.country}}">
+        </iframe>
+    </div>
+{%endblock%}
+
+{%block javaScripts%}
+{%endblock%}

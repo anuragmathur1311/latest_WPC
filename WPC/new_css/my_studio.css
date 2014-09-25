@@ -443,7 +443,7 @@ my_photo_body{padding-top:50px}
 .call-to-action {
   color: #ffffff;
   background: white;
-  padding: 5px 0;
+  padding: 0px 0;
 }
 
 .call-to-action .btn {
@@ -872,5 +872,28 @@ vertical-align: middle;
     filter: alpha(opacity=0);
     font-size: 100%;
     height: 100%;
+  }
+}
+
+.padding-left {
+  margin-left: 10px;
+}
+
+@media (min-width: 768px) {
+  .container_user {
+    width: 100%;
+    height: 50px;
+  }
+}
+@media (min-width: 992px) {
+  .container_user {
+    width: 100%;
+    height: 50px;
+  }
+}
+@media (min-width: 1330px) {
+  .container_user {
+    width: 100%;
+    height: 50px;
   }
 }
