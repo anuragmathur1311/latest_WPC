@@ -91,6 +91,11 @@ def create_mystorybook(parent_key):
 	sbookKey = sbook.put()
 	return sbook
 
+def delete_group(group_key, user_key):
+	if user_key == group_key.parent():
+		group_key.delete()
+	return
+
 def delete_blog(blog_key, user_key):
 	if user_key == blog_key.parent():
 		blog_key.delete()

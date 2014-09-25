@@ -32,6 +32,8 @@ import utils
 
 template_dir = os.path.join(os.path.dirname(__file__), "new_templates")
 jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir), autoescape = True)
+jinja_env.globals['get_serving_url'] = images.get_serving_url
+jinja_env.globals['len'] = len
 
 class PageHandler(webapp2.RequestHandler):
 	def get(self):
@@ -90,13 +92,10 @@ class MainHandler(PageHandler):
 			self.render('index_user.html', me=self.user)
 
 class UserHomeHandler(PageHandler):
-	def get(self, resource):
+	def get(self):
 		#userid = str(urllib.unquote(resource))
-		userid = resource
-		user = User.get_by_id(userid)
-		if user:
+		if self.user:
 			templateVals = {'me': self.user}
-			templateVals['user'] = user
 			self.render('user_home.html', **templateVals)
 		else:
 			self.redirect('/')
@@ -138,24 +137,9 @@ class UserSettingsHandler(blobstore_handlers.BlobstoreUploadHandler, PageHandler
 		else:
 			self.redirect('/')
 			
-class UserGroupsHandler(PageHandler):
-	def get(self, resource):
-		userid = resource
-		user = User.get_by_id(userid)
-		templateVals = {'me': self.user}
-		if user:
-			if self.user:
-				if self.user == user:
-					templateVals['user'] = self.user
-				else:
-					templateVals['user'] = user
-			else:
-				templateVals['user'] = user
-			groups = Group.of_ancestor(user.key)
-			templateVals['groups'] = groups
-			self.render('user_groups.html', **templateVals)
-		else:
-			self.redirect('/')
+class ExploreHandler(PageHandler):               ## TODO
+	def post(self):
+		self.redirect('/')
 
 class SearchResultsHandler(PageHandler):           ## TODO
 	def get(self):
@@ -182,7 +166,6 @@ class SearchResultsHandler(PageHandler):           ## TODO
 class ForumHandler(PageHandler):    ## TODO
 	def get(self):
 		if not self.user:
-			templateVals = {'me': ""}
 			self.render('forum.html', **templateVals)
 		else:
 			templateVals = {'me': self.user}
@@ -205,38 +188,34 @@ class ForumHandler(PageHandler):    ## TODO
 class GroupsHandler(PageHandler):
 	def get(self):
 		if not self.user:
-			templateVals = {'me': ""}
 			self.render('groups.html', **templateVals)
 		else:
 			templateVals = {'me': self.user}
+			mygroups = [grpKey.get() for grpKey in self.user.groups]
+			templateVals['mygroups'] = mygroups
 			self.render('groups.html', **templateVals)
+
+class PhotosHandler(PageHandler):
+	def get(self):
+		if not self.user:
+			self.render('photos.html', **templateVals)
+		else:
+			templateVals = {'me': self.user}
+			myphotos = Picture.of_ancestor(self.user.key)
+			templateVals['myphotos'] = myphotos
+			self.render('photos.html', **templateVals)
 
 class BlogsHandler(PageHandler):
 	def get(self):
 		if not self.user:
-			templateVals = {'me': ""}
 			self.render('blogs.html', **templateVals)
 		else:
 			templateVals = {'me': self.user}
-			blogs = Blog.of_ancestor(self.user.key)
-			templateVals['blogs'] = blogs	
+			myblogs = Blog.of_ancestor(self.user.key)
+			templateVals['myblogs'] = myblogs	
 			self.render('blogs.html', **templateVals)
 
-	def post(self):
-		if self.user:
-			title = self.request.get('title')
-			content = self.request.get('content')
-			if title and content:
-				create_blog(title, content, self.user.key)
-				self.redirect('/%s/blogs' % self.user.key.id())
-			else:
-				errorMsg = "Please enter both title and content!"
-				templateVals = {'me': self.user, 'title': title, 'content': content, 'submitError': errorMsg}
-				self.render('blogs.html', **templateVals)
-		else:
-			self.redirect('/')
-
-class UserStudioHandler(PageHandler):
+class UserStudioHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler):
 	def get(self, resource):
 		#userid = str(urllib.unquote(resource))
 		userid = resource
@@ -245,18 +224,61 @@ class UserStudioHandler(PageHandler):
 			templateVals = {'me': self.user}
 			templateVals['user'] = user
 			photos = Picture.of_ancestor(user.key)
-			templateVals['photos'] = photos	
+			templateVals['photos'] = photos
+			uploadUrl = blobstore.create_upload_url('/resource')
+			templateVals['uploadUrl'] = uploadUrl
 			self.render('user_studio.html', **templateVals)
 		else:
 			self.redirect('/')
-			
+
+	def post(self, resource):
+		userid = resource
+		user = User.get_by_id(userid)
+		if self.user == user:
+			form = self.request.get('formType')
+			action = self.request.get('actionType')
+			if form == "profile_image":
+				if action == "select":
+					user.avatar = self.request.get('photoKey')
+				elif action == "upload":
+					uploads = self.get_uplaods('profile_image')
+					blobInfo = uploads[0]
+					photo = create_picture(blobInfo.key(), None, None, None, self.user.key)
+					user.avatar = photo.key
+				elif action == "remove":
+					user.avatar = None
+			elif form == "cover_image1":
+				if action == "select":
+					user.cover1 = self.request.get('photoKey')
+				elif action == "upload":
+					uploads = self.get_uplaods('cover_image1')
+					blobInfo = uploads[0]
+					photo = create_picture(blobInfo.key(), None, None, None, self.user.key)
+					user.cover1 = photo.key
+				elif action == "remove":
+					user.cover1 = None
+			elif form == "cover_image2":
+				if action == "select":
+					user.cover2 = self.request.get('photoKey')
+				elif action == "upload":
+					uploads = self.get_uplaods('cover_image2')
+					blobInfo = uploads[0]
+					photo = create_picture(blobInfo.key(), None, None, None, self.user.key)
+					user.cover2 = photo.key
+				elif action == "remove":
+					user.cover2 = None
+			else:
+				self.redirect('/' + resource)
+			user.put()
+		else:
+			self.redirect('/' + resource)
 
 class UserPhotosHandler(PageHandler):
 	def get(self, resource):
 		userid = resource
 		user = User.get_by_id(userid)
-		templateVals = {'me': self.user}
 		if user:
+			templateVals = {'me': self.user}
 			templateVals['user'] = user
 			photos = Picture.of_ancestor(user.key)
 			templateVals['photos'] = photos
@@ -272,7 +294,7 @@ class UserPhotosHandler(PageHandler):
 			photoKey = get_key_urlunsafe(self.request.get('photoKey'))
 			if action == "delete":
 				delete_photo(photoKey, self.user.key)
-				self.redirect('/%s/photos' % self.user.key.id())
+				self.redirect('/%s/photos' % resource)
 			elif action == "edit":
 				self.redirect('/editphoto/%s' % photoKey.urlsafe())
 		else:
@@ -282,8 +304,8 @@ class UserBlogsHandler(PageHandler):
 	def get(self, resource):
 		userid = resource
 		user = User.get_by_id(userid)
-		templateVals = {'me': self.user}
 		if user:
+			templateVals = {'me': self.user}
 			templateVals['user'] = user
 			blogs = Blog.of_ancestor(user.key)
 			templateVals['blogs'] = blogs
@@ -291,10 +313,26 @@ class UserBlogsHandler(PageHandler):
 		else:
 			self.redirect('/')
 
+	def post(self, resource):
+		userid = resource
+		user = User.get_by_id(userid)
+		if self.user == user:
+			action = self.request.get('actionType')
+			blogKey = get_key_urlunsafe(self.request.get('blogKey'))
+			if action == "delete":
+				delete_blog(blogKey, self.user.key)
+				self.redirect('/%s/blogs' % resource)
+			elif action == "edit":
+				self.redirect('/editblog/%s' % blogKey.urlsafe())
+		else:
+			self.redirect('/')
+
 class GroupNewHandler(PageHandler ,blobstore_handlers.BlobstoreUploadHandler):
 	def get(self):
 		if self.user:
 			templateVals = {'me': self.user}
+			photos = Picture.of_ancestor(self.user.key)
+			templateVals['photos'] = photos
 			uploadUrl = blobstore.create_upload_url('/newgroup')
 			templateVals['uploadUrl'] = uploadUrl
 			self.render('new_group.html', **templateVals)
@@ -303,22 +341,24 @@ class GroupNewHandler(PageHandler ,blobstore_handlers.BlobstoreUploadHandler):
 
 	def post(self):
 		if self.user:
-			input_type = self.request.get('inputType')
+			action = self.request.get('actionType')
 			name = self.request.get('name')
 			description = self.request.get('description')
-			if input_type == "select_photo":
-				cover_img = self.request.get('cover_img')
-			elif input_type == "upload_photo":
+			if action == "select":
+				cover = self.request.get('cover_image')
+			elif action == "upload":
 				uploads = self.get_uploads('cover_photo')
 				blobInfo = uploads[0]
 				photo = create_picture(blobInfo.key(), None, None, None, self.user.key)
-				cover_img = '/servephoto/{0}'.format(photo.blobKey)
-			if name and description:
-				group = create_group(name, description, cover_img, self.user.key)
+				cover = '/servephoto/{0}'.format(photo.blobKey)
+			if name:
+				group = create_group(name, description, cover, self.user.key)
 				self.redirect('/group/%s' % group.key.urlsafe())
 			else:
-				errorMsg = "Please enter both name and description!"
+				errorMsg = "Please enter group's name!"
 				templateVals = {'me': self.user, 'name': name, 'description': description, 'submitError': errorMsg}
+				photos = Picture.of_ancestor(self.user.key)
+				templateVals['photos'] = photos
 				self.render('new_group.html', **templateVals)
 		else:
 			self.redirect('/')
@@ -327,9 +367,31 @@ class PhotoNewHandler(PageHandler):
 	def get(self):
 		if self.user:
 			templateVals = {'me': self.user}
-			uploadUrl = blobstore.create_upload_url('/uploadphoto')
+			uploadUrl = blobstore.create_upload_url('/newphoto')
 			templateVals['uploadUrl'] = uploadUrl
 			self.render('upload_photo.html', **templateVals)
+		else:
+			self.redirect('/')
+
+	def post(self):
+		if self.user:
+			uploads = self.get_uploads('files')
+			captionList = self.request.get_all('caption')
+			descriptionList = self.request.get_all('description')
+			locationList = self.request.get_all('location')
+			if len(uploads)>0:
+				for i in range(len(uploads)):
+					blobInfo = uploads[i]
+					caption = captionList[i]
+					description = descriptionList[i]
+					location = locationList[i]
+					photo = create_picture(blobInfo.key(), caption, description, location, self.user.key)
+				self.redirect('/%s/photos' % self.user.key.id())
+			else:
+				uploadUrl = blobstore.create_upload_url('/newphoto')
+				errorMsg = "Please choose a photo!"
+				templateVals = {'me': self.user, 'uploadUrl': uploadUrl, 'submitError': errorMsg}
+				self.render('upload_photo.html', **templateVals)
 		else:
 			self.redirect('/')
 
@@ -372,15 +434,6 @@ class PhotoEditHandler(PageHandler):
 			photo.put()
 			self.redirect('/%s/photos' % self.user.key.id())
 
-class PhotosHandler(PageHandler):
-	def get(self):
-		if not self.user:
-			templateVals = {'me': ""}
-			self.render('photos.html', **templateVals)
-		else:
-			templateVals = {'me': self.user}
-			self.render('photos.html', **templateVals)
-
 
 class BlogNewHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler):
 	def get(self):
@@ -396,18 +449,18 @@ class BlogNewHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler):
 
 	def post(self):
 		if self.user:
-			input_type = self.request.get('inputType')
+			action = self.request.get('actionType')
 			title = self.request.get('title')
 			content = self.request.get('content')
-			if input_type == "select_photo":
-				cover_img = self.request.get('cover_img')
-			elif input_type == "upload_photo":
+			if action == "select":
+				cover = self.request.get('cover_image')
+			elif action == "upload":
 				uploads = self.get_uploads('cover_photo')
 				blobInfo = uploads[0]
 				photo = create_picture(blobInfo.key(), None, None, None, self.user.key)
-				cover_img = '/servephoto/{0}'.format(photo.blobKey)
+				cover = '/servephoto/{0}'.format(photo.blobKey)
 			if title and content:
-				blog = create_blog(title, content, cover_img, self.user.key)
+				blog = create_blog(title, content, cover, self.user.key)
 				self.redirect('/blog/%s' % blog.key.urlsafe())
 			else:
 				errorMsg = "Please enter both title and content!"
@@ -451,45 +504,41 @@ class BlogEditHandler(PageHandler):
 class GroupPermpageHandler(PageHandler):
 	def get(self, resource):
 		groupKey = get_key_urlunsafe(resource)
-		if groupKey:
+		group = groupKey.get()
+		if group:
 			templateVals = {'me': self.user}
-			templateVals['group'] = groupKey.get()
+			templateVals['group'] = group
 			self.render('groupperm.html', **templateVals)
 		else:
 			self.redirect('/')
 
 	def post(self, resource):       ## FIXME
-		blogKey = get_key_urlunsafe(resource)
-		if blogKey:
-			action = self.request.get('actionType')
-			if action == "delete":
-				delete_blog(blogKey, self.user.key)
-				self.redirect('/%s/blogs' % self.user.key.id())
-			elif action == "edit":
-				self.redirect('/editgroup/%s' % resource)
+		groupKey = get_key_urlunsafe(resource)
+		action = self.request.get('actionType')
+		if action == "delete":
+			delete_group(groupKey, self.user.key)
+			self.redirect('/%s' % self.user.key.id())
+		elif action == "edit":
+			self.redirect('/editgroup/%s' % resource)
 
 class PhotoPermpageHandler(PageHandler):
 	def get(self, resource):
 		photoKey = get_key_urlunsafe(resource)
-		if photoKey:
+		photo = photoKey.get()
+		if photo:
+			templateVals = {'me': self.user}
 			userKey = photoKey.parent()
 			user = userKey.get()
-			templateVals = {'me': self.user}
+			templateVals['user'] = user
 			if self.user:
-				if self.user == user:
-					templateVals['user'] = self.user
-				else:
-					photo = photoKey.get()
+				if self.user != user:
 					photo.viewed += 1
 					photo.put()
-					templateVals['user'] = user
 			else:
-				photo = photoKey.get()
 				photo.viewed += 1
 				photo.put()
-				templateVals['user'] = user
 			templateVals['photos'] = Picture.of_ancestor(userKey)
-			templateVals['photo'] = photoKey.get()
+			templateVals['photo'] = photo
 			self.render('photoperm.html', **templateVals)
 		else:
 			self.redirect('/')
@@ -531,24 +580,20 @@ class PhotoPermpageHandler(PageHandler):
 class BlogPermpageHandler(PageHandler):
 	def get(self, resource):
 		blogKey = get_key_urlunsafe(resource)
-		if blogKey:
+		blog = blogKey.get()
+		if blog:
+			templateVals = {'me': self.user}
 			userKey = blogKey.parent()
 			user = userKey.get()
-			templateVals = {'me': self.user}
+			templateVals['user'] = user
 			if self.user:
-				if self.user == user:
-					templateVals['user'] = self.user
-				else:
-					blog = blogKey.get()
+				if self.user != user:
 					blog.viewed += 1
 					blog.put()
-					templateVals['user'] = user
 			else:
-				blog = blogKey.get()
 				blog.viewed += 1
 				blog.put()
-				templateVals['user'] = user
-			templateVals['blog'] = blogKey.get()
+			templateVals['blog'] = blog
 			self.render('blogperm.html', **templateVals)
 		else:
 			self.redirect('/')
@@ -571,117 +616,11 @@ class BlogPermpageHandler(PageHandler):
 		else:
 			self.redirect('/')
 
-class PhotoUploadHandler(blobstore_handlers.BlobstoreUploadHandler, PageHandler):
-	def post(self):
-		if self.user:
-			uploads = self.get_uploads('files')
-			captionList = self.request.get_all('caption')
-			descriptionList = self.request.get_all('description')
-			locationList = self.request.get_all('location')
-			if len(uploads)>0:
-				for i in range(len(uploads)):
-					blobInfo = uploads[i]
-					caption = captionList[i]
-					description = descriptionList[i]
-					location = locationList[i]
-					photo = create_picture(blobInfo.key(), caption, description, location, self.user.key)
-				self.redirect('/%s/photos' % self.user.key.id())
-			else:
-				uploadUrl = blobstore.create_upload_url('/uploadphoto')
-				errorMsg = "Please choose a photo!"
-				templateVals = {'me': self.user, 'uploadUrl': uploadUrl, 'submitError': errorMsg}
-				self.render('upload_photo.html', **templateVals)
-		else:
-			self.redirect('/')
-
 class PhotoServeHandler(blobstore_handlers.BlobstoreDownloadHandler):
 	def get(self, resource):
 		resource = str(urllib.unquote(resource))
 		blobInfo = blobstore.BlobInfo.get(resource)
 		self.send_blob(blobInfo)
-
-class PopUpPhotoNewHandler(PageHandler):
-	def get(self):
-		if self.user:
-			uploadUrl = blobstore.create_upload_url('/popupuploadphoto')
-			templateVals = {'me': self.user, 'uploadUrl': uploadUrl, 'upload_done': 0}
-			self.render('upload_popup_photo.html', **templateVals)
-		else:
-			self.redirect('/')
-
-class PopUpPhotoUploadHandler(blobstore_handlers.BlobstoreUploadHandler, PageHandler):
-	def post(self):
-		if self.user:
-			uploads = self.get_uploads('files')
-			captionList = self.request.get_all('caption')
-			descriptionList = self.request.get_all('description')
-			locationList = self.request.get_all('location')
-			if len(uploads)>0:
-				for i in range(len(uploads)):
-					blobInfo = uploads[i]
-					caption = ""
-					description = ""
-					location = ""
-					photo = create_picture(blobInfo.key(), caption, description, location, self.user.key)
-				blobInfo = uploads[0]
-				templateVals = {'me': self.user, 'upload_done': 1 ,'coverphoto': blobInfo.key()}
-				self.render('upload_popup_photo.html', **templateVals)
-				#self.redirect('/%s/photos' % self.user.key.id())
-			else:
-				uploadUrl = blobstore.create_upload_url('/uploadphoto')
-				errorMsg = "Please choose a photo!"
-				templateVals = {'me': self.user, 'uploadUrl': uploadUrl, 'submitError': errorMsg}
-				self.render('upload_photo.html', **templateVals)
-		else:
-			self.redirect('/')
-
-
-class BlogServeHandler(blobstore_handlers.BlobstoreDownloadHandler):
-	def get(self, resource):
-		resource = str(urllib.unquote(resource))
-		blobInfo = blobstore.BlobInfo.get(resource)
-		self.send_blob(blobInfo)
-
-class UserPhotosPopUpHandler(PageHandler):
-	def get(self, resource):
-		userid = resource
-		user = User.get_by_id(userid)
-		templateVals = {'me': self.user}
-		if user:
-			if self.user:
-				if self.user == user:
-					templateVals['user'] = self.user
-				else:
-					templateVals['user'] = user
-			else:
-				templateVals['user'] = user
-			photos = Picture.of_ancestor(user.key)
-			templateVals['photos'] = photos
-			self.render('popup_user_photos.html', **templateVals)
-		else:
-			self.redirect('/')
-			
-	def post(self, resource):
-		userid = resource
-		user = User.get_by_id(userid)
-		logging.info(userid)
-		logging.info(user)
-		if user:
-			if self.user:
-				if self.user == user:
-					action = self.request.get('actionType')
-					photoKey = get_key_urlunsafe(self.request.get('photoKey'))
-					if action == "delete":
-						delete_photo(photoKey, self.user.key)
-						self.redirect('/%s/photos' % self.user.key.id())
-					elif action == "edit":
-						self.redirect('/editphoto/%s' % photoKey.urlsafe())
-				else:
-					self.redirect('/')
-			else:
-				self.redirect('/')
-		else:
-			self.redirect('/')
 
 class SigninHandler(PageHandler):
 	def get(self):
@@ -749,12 +688,14 @@ app = webapp2.WSGIApplication([
 			('/signup', SignupHandler),
 			('/login', LoginHandler),
 			('/logout', LogoutHandler),
-			('/usersettings', UserSettingsHandler),
-			('/search', SearchResultsHandler),
-			('/forum', ForumHandler),
 			('/groups' , GroupsHandler),
 			('/photos' , PhotosHandler),
-			('/blog' , BlogsHandler),
+			('/blogs' , BlogsHandler),
+			('/forum', ForumHandler),
+			('/explore', ExploreHandler),
+			('/search', SearchResultsHandler),
+			('/settings', UserSettingsHandler),
+			('/home', UserHomeHandler),
 			('/group/([^/]+)', GroupPermpageHandler),
 			('/photo/([^/]+)', PhotoPermpageHandler),
 			('/blog/([^/]+)', BlogPermpageHandler),
@@ -763,10 +704,8 @@ app = webapp2.WSGIApplication([
 			('/newgroup', GroupNewHandler),
 			('/newphoto', PhotoNewHandler),
 			('/newblog', BlogNewHandler),
-			('/uploadphoto', PhotoUploadHandler),
 			('/servephoto/([^/]+)', PhotoServeHandler),
 			('/([^/]+)/photos', UserPhotosHandler),
-			('/([^/]+)/home', UserHomeHandler),
 			('/([^/]+)/blogs', UserBlogsHandler),
 			('/([^/]+)', UserStudioHandler),
 			('/([^.]+)', DefaultHandler)
