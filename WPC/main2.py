@@ -100,13 +100,6 @@ class UserHomeHandler(PageHandler):
 		else:
 			self.redirect('/')
 
-class UserAboutHandler(PageHandler):
-	def get(self):
-		if not self.user:
-			self.render('/')
-		else:
-			self.render('user_about.html', me=self.user)
-
 class UserSettingsHandler(blobstore_handlers.BlobstoreUploadHandler, PageHandler):
 	def get(self):
 		if self.user:
@@ -279,6 +272,17 @@ class UserStudioHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler):
 			user.put()
 		else:
 			self.redirect('/' + resource)
+
+class UserAboutHandler(PageHandler):
+	def get(self, resource):
+		userid = resource
+		user = User.get_by_id(userid)
+		if user:
+			templateVals = {'me': self.user}
+			templateVals['user'] = user
+			self.render('user_about.html', **templateVals)
+		else:
+			self.redirect('/')
 
 class UserPhotosHandler(PageHandler):
 	def get(self, resource):
@@ -703,7 +707,6 @@ app = webapp2.WSGIApplication([
 			('/search', SearchResultsHandler),
 			('/settings', UserSettingsHandler),
 			('/home', UserHomeHandler),
-			('/about', UserAboutHandler),
 			('/group/([^/]+)', GroupPermpageHandler),
 			('/photo/([^/]+)', PhotoPermpageHandler),
 			('/blog/([^/]+)', BlogPermpageHandler),
@@ -713,6 +716,7 @@ app = webapp2.WSGIApplication([
 			('/newphoto', PhotoNewHandler),
 			('/newblog', BlogNewHandler),
 			('/servephoto/([^/]+)', PhotoServeHandler),
+			('/([^/]+)/about', UserAboutHandler),
 			('/([^/]+)/photos', UserPhotosHandler),
 			('/([^/]+)/blogs', UserBlogsHandler),
 			('/([^/]+)', UserStudioHandler),
