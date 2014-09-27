@@ -26,74 +26,37 @@
 
 {%block pageContent%}
     <!-- Full Page Image Header Area -->
-    <div id="top" class="header" style="background: url({{user.cover1_url}}) no-repeat center center fixed;background-size: cover;z-index:1;">
     
-        <div class="transbox_right">
-            <ul class="list-inline">
-                <a data-toggle="modal" data-target=".social_profiles"><i style="font-size:20px;" class="fa fa-plus"></i></a>
-                {%if user.website%}
-                  <a href="{{user.website}}"><img src="/images/WPC_app_icon.jpg" alt="Profile Image" width="60px"><br><br><br><a>
-                {%else%}
-                  <img src="/images/WPC_app_icon.jpg" alt="Profile Image" width="60px"><br><br><br>
-                {% endif %}
-                {%if user.facebook%}
-                  <li color="white"><a href="{{user.facebook}}"><i class="fa fa-facebook fa-3x" style="color:white;"></i></a></li><br><br>
-                {% endif %}
-                {%if user.twitter%}
-                  <li color="white"><a href="{{user.twitter}}"><i class="fa fa-twitter fa-3x" style="color:white;"></i></a></li><br><br>
-                {% endif %}
-                {%if user.youtube%}
-                  <li color="white"><a href="{{user.youtube}}"><i class="fa fa-youtube fa-3x" style="color:white;"></i></a></li><br><br>
-                {% endif %}
-                {%if user.pinterest%}
-                  <li color="white"><a href="{{user.pinterest}}"><i class="fa fa-pinterest fa-3x" style="color:white;"></i></a></li><br><br>
-                {% endif %}
-                {%if user.google_plus%}
-                  <li color="white"><a href="{{user.google_plus}}"><i class="fa fa-google-plus fa-3x" style="color:white;"></i></a></li>
-                {% endif %}
-                {%if user.tumblr%}
-                  <li color="white"><a href="{{user.tumblr}}"><i class="fa fa-tumblr fa-3x" style="color:white;"></i></a></li>
-                {% endif %}
-            </ul>
-			{%if me%}
-            <a href="/usersettings#social_profiles"><span class="glyphicon glyphicon-cog"></span></a>
-			{% endif %}
+    <div id="top" class="header" style="background: url({{user.cover1_url}}) no-repeat center center fixed;background-size: cover;z-index:1;">
+        <div class="transbox_top_left">
+          <a data-toggle="modal" data-target=".cover_image_1" style="color:white;"><i style="font-size:20px;" class="fa fa-edit"></i></a>
         </div>
-        <div class="vert-text">
-                  <!--<a href="" class="photographer_options"><img src="/images/image-2.jpg" alt="Profile Image" class="profile-img" width="90px"></a><p class="message">Hello</p><br>-->
-                  <img src="{{user.avatar_url}}" alt="Profile Image" class="profile-img" width="90px"><br>
-                  <a data-toggle="modal" data-target=".profile_image" style="color:white;"><i style="font-size:20px;" class="fa fa-plus"></i>Change Profile Image</a>
-                  <a href="/usersettings#portfolio"><span class="glyphicon glyphicon-cog"></span></a>
-                  <h3 style="margin-top:0px;"><em>Welcome!</em> {{user.name}}</h3>
-                  <a href="#map_canvas"><img src="/fonts/Flags/{{user.country}}.png" alt="country" width="40px"></a><br>
-            			{%if me%}
-            				<a href="/usersettings#user_settings"><span class="glyphicon glyphicon-cog"></span></a>
-            			{% endif %}
-                  <br>  
-                  <a href="https://www.facebook.com"><i class="fa fa-star" style="color:gold;"></i><i class="fa fa-star" style="color:gold;"></i><i class="fa fa-star" style="color:gold;"></i><i class="fa fa-star" style="color:gold;"></i><i class="fa fa-star" style="color:white;"></i></a>
-                  <h2><em>{{user.wpc_score}}</em></h2>
-            			 {%if user.wpc_score<=5000%}
-            				<button type="submit" class="btn btn-danger">Beginner Photographer</button><br>
-            			{%elif user.wpc_score>5000 or user.wpc_score<=10000%}
-            				<button type="submit" class="btn btn-danger">Amateur Photographer</button><br>
-            			{%elif user.wpc_score>10000 or user.wpc_score<=20000%}
-            				<button type="submit" class="btn btn-danger">Semi-Pro Photographer</button><br>
-            			{%elif user.wpc_score>20000 or user.wpc_score<=25000%}
-            				<button type="submit" class="btn btn-danger">Professional Photographer</button><br>
-            			{%elif user.wpc_score>25000%}
-            				<button type="submit" class="btn btn-danger">Master Photographer</button><br>
-            			{% endif %}
-            			{%if me != user%}
-            				<br><button type="submit" class="btn btn-xs btn-info"><span style="color:white;" class="glyphicon glyphicon-pushpin"></span> Follow</button><br>
-            			{% endif %}
-        </div>
-        <div class="transbox_left">
-            <h1>{{len(user.awards)}}<h1><h2>awards</h2>
-            <h1>{{user.profile_shares}}<h1><h2>shares</h2>
-            <h1>{{len(user.followers)}}<h1><h2>followers</h2>
-            <h1>{{len(user.following)}}<h1><h2>following</h2>
-            <h1>{{user.profile_views}}<h1><h2>profile views</h2>
-            <a href="/{{user.key.id()}}/photos"><h1>{{photos.count()}}<h1><h2>photos</h2></a>
+        <div class="transbox_bottom_right">
+            <div class="col-md-2" style="margin:5px;">
+              <h2><img src="{{user.avatar_url}}" alt="Profile Image" class="img-circle" height="150px"><a data-toggle="modal" data-target=".profile_image" style="color:white;"><i style="font-size:20px;" class="fa fa-edit"></i></a><a class="" href="/{{me.key.id()}}" style="color:white;font-size:20px;padding_bottom:2px;" ><em>  {{user.name}} </em></a></h2>
+            </div>
+            <div class="col-md-6" style="margin:0px;left:35%;">
+              <div class="col-md-2" style="margin:5px;">
+                  <h2 style="color:white;">12</h2>
+                  <h4 style="color:yellow;">Followers</h4>
+              </div>
+              <div class="col-md-2" style="margin:5px;">
+                  <h2 style="color:white;">12</h2>
+                  <h4 style="color:yellow;">Following</h4>
+              </div>
+              <div class="col-md-2" style="margin:5px;">
+                  <h2 style="color:white;">{{photos.count()}}</h2>
+                  <h4 style="color:yellow;">Photos</h4>
+              </div>
+              <div class="col-md-2" style="margin:5px;">
+                  <h2 style="color:white;">12</h2>
+                  <h4 style="color:yellow;">Awards</h4>
+              </div>
+              <div class="col-md-2" style="margin:15px;">
+                  <a href="{{user.website}}"><img src="/images/WPC_app_icon.jpg" alt="Profile Image" width="60px"><br><a>
+              </div>
+            </div>
+
         </div>
     </div>
           <!-- /Full Page Image Header Area -->
@@ -102,12 +65,23 @@
         
         <div class="container_user">
             <div class="row">
+              <!--
                 <div class="col-md-2" style="margin-top:-30px;height:50px;z-index:3;">
-                    <img src="{{user.avatar_url}}" alt="Profile Image" class="profile-img" height="150px">
+                    <img src="/images/image-2.jpg" alt="Profile Image" class="profile-img" height="150px">
+                </div>-->
+                <div class="col-md-1" style="margin:5px;">
+                  {%if not me%}
+                  <button type="button" class="btn btn-info btn-lg photographer_options"><span class="glyphicon glyphicon-pushpin" style="color:white;"></span> Follow</button>
+                  {%endif%}
                 </div>
-                <div class="col-md-10" style="margin:0px;">
+                <div class="col-md-1" style="margin:5px;">
+                  {%if not me%}
+                  <button type="button" class="btn btn-info btn-lg photographer_options"><i class="fa fa-trophy"></i> Award</button>
+                  {%endif%}
+                </div>
+                <div class="col-md-9 col-md-offset-1" style="margin:0px;">
                     <div class="col-md-2 text-center">
-                      <a href="/{{user.key.id()}}/about"><h3>About</h3></a>
+                      <a href="/{{me.key.id()}}/about"><h3>About</h3></a>
                     </div>
                     <div class="col-md-2 text-center">
                       <a href="/{{user.key.id()}}/photos"><h3>Photos</h3></a>
@@ -121,9 +95,11 @@
             				<div class="col-md-2 text-center">
             					<a href="/{{user.key.id()}}/groups"><h3>Groups</h3></a>
             				</div>
+                    {%if me%}
                     <div class="col-md-2 text-center">
                         <a data-toggle="modal" data-target=".my_portfolios"><h3>Portfolios</h3></a>
                     </div>
+                    {%endif%}
                 </div>
             </div>
         </div>
@@ -135,9 +111,12 @@
     <div class="callout" id="callout" style="background: url({{user.cover2_url}}) no-repeat center center fixed;background-size: cover;z-index:2;">
         <div class="vert-text">
             <div class="row">
-                <div class="col-md-4 col-md-offset-4 text-center">
+                <div class="col-md-1" style="margin:0px;">
+                  <a data-toggle="modal" data-target=".cover_image_2"><i style="font-size:20px;color:white;" class="fa fa-edit"></i></a>
+                </div>
+                <div class="col-md-4 col-md-offset-3 text-center">
                   {%if me%}
-                    <h3>Photography Interests <a data-toggle="modal" data-target=".photography_interests"><i style="font-size:20px;" class="fa fa-plus"></i></a></h3>
+                    <h3>Photography Interests <a data-toggle="modal" data-target=".photography_interests"><i style="font-size:20px;color:whi" class="fa fa-edit"></i></a></h3>
                   {%else%}
                     <h3>Photography Interests</h3>
                   {% endif %}
@@ -180,7 +159,6 @@
                         <i class="service-icon fa fa-Street"></i>
                         <h4>Street</h4>
                     </div>
-                    <a data-toggle="modal" data-target=".cover_image_2" style="color:white;"><i style="font-size:20px;" class="fa fa-plus"></i>Change Cover Image 2</a>
                 </div>
             </div>
         </div>
@@ -264,15 +242,6 @@
             </div>
         </div>
     </div>
-    <!-- /Intro -->
-
-    <!-- Map -->
-	<iframe
-	  width="100%"
-	  height="300"
-	  frameborder="0" style="border:0"
-	  src="https://www.google.com/maps/embed/v1/search?key=AIzaSyA98__FHcA4bnhiXVRNPHswC6VNnVfiKnc&q={{user.city}}+{{user.country}}">
-	</iframe>
     <!-- /Map -->
     {%block footer%}
     {%endblock%}
@@ -327,45 +296,6 @@
       </div>
           <div class="modal-footer">
           </div>
-        </div>
-      </div>
-    </div>
-
-      <div class="modal fade social_profiles" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-            <h4 class="modal-title">Add/Update Social Profiles</h4>
-          </div>
-                <form role="form" method="post">
-                  <input type="hidden" name="formType" value="social_profiles">
-                    <div class="col-md-4 col-md-offset-1">
-                        <p><i class="fa fa-facebook fa-3x" style="color:black;"></i></p><input type="text" name="facebook" class="form-control" placeholder="Enter Facebook Profile's Complete Link" value=""><br>
-                        <p><i class="fa fa-youtube fa-3x" style="color:black;"></i></p><input type="text" name="youtube" class="form-control" placeholder="Enter Youtube Channel's Complete Link" value=""><br>
-                        <p><i class="fa fa-google-plus fa-3x" style="color:black;"></i></p><input type="text" name="google_plus" class="form-control" placeholder="Enter Google Plus Profile's Complete Link" value=""><br>
-                       <p><i class="fa fa-external-link-square fa-3x" style="color:black;"></i></p><input type="text" name="website" class="form-control" placeholder="Enter Complete Link of your Own Website" value="">
-                        <p >Select Personal Logo/Watermark</p>
-                        <div class="column fileupload-buttonbar">
-                            <span class="btn btn-xs btn-info fileinput-button">
-                              <i class="glyphicon glyphicon-plus"></i>
-                              <span style="color:white;">Select Image</span>
-                              <input type="file" id="myFile3" name="logo" onchange="myFunction3()">
-                            </span>
-                            <div class="container row" id="thumb_img3"></div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 col-md-offset-1">
-                        <p><i class="fa fa-twitter fa-3x" style="color:black;"></i></p><input type="text" name="twitter" class="form-control" placeholder="Enter Twitter Profile Complete Link" value=""><br>
-                        <p><i class="fa fa-pinterest fa-3x" style="color:black;"></i></p><input type="text" name="pinterest" class="form-control" placeholder="Enter Pinterest Pinboard's Complete Link" value=""><br>
-                         <p><i class="fa fa-tumblr fa-3x" style="color:black;"></i></p><input type="text" name="pinterest" class="form-control" placeholder="Enter Tumblr's Complete Link" value=""><br>
-                        
-                    </div>
-                </form>
-          <div class="modal-footer">
-          </div>
-          <hr>
-            <button class="btn btn-xs btn-success padding-bottom" type="submit">Update Profile</button>
         </div>
       </div>
     </div>
