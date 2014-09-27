@@ -225,6 +225,8 @@ class UserStudioHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler):
 			templateVals['user'] = user
 			photos = Picture.of_ancestor(user.key)
 			templateVals['photos'] = photos
+			blogs = Blog.of_ancestor(user.key)
+			templateVals['blogs'] = blogs
 			uploadUrl = blobstore.create_upload_url('/resource')
 			templateVals['uploadUrl'] = uploadUrl
 			self.render('user_studio.html', **templateVals)

@@ -31,8 +31,8 @@
           <a data-toggle="modal" data-target=".cover_image_1" style="color:white;"><i style="font-size:20px;" class="fa fa-edit"></i></a>
         </div>
         <div class="transbox_bottom_right">
-            <div class="col-md-2" style="margin:5px;">
-              <h2><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" height="50px"><a data-toggle="modal" data-target=".profile_image" style="color:white;"><i style="font-size:20px;" class="fa fa-edit"></i></a><a class="" href="/{{me.key.id()}}" style="color:white;font-size:20px;padding_bottom:2px;" ><em>  {{user.name}} </em></a></h2>
+            <div class="col-md-2" style="margin:0px;">
+              <h2 style="margin:0px;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" height="100px"><a data-toggle="modal" data-target=".profile_image" style="color:white;"><i style="font-size:20px;" class="fa fa-edit"></i></a><a class="" href="/{{me.key.id()}}" style="color:white;font-size:20px;padding_bottom:2px;" ><em>  {{user.name}} </em></a></h2>
             </div>
             <div class="col-md-6" style="margin:0px;left:35%;">
               <div class="col-md-2" style="margin:5px;">
@@ -74,7 +74,7 @@
                 </div>
                 <div class="col-md-1" style="margin:5px;">
                   {%if not me%}
-                  <button type="button" class="btn btn-info btn-lg photographer_options"><i class="fa fa-trophy"></i> Award</button>
+                  <button type="button" class="btn btn-info btn-lg photographer_options"><i class="fa fa-envelope"></i> Message</button>
                   {%endif%}
                 </div>
                 <div class="col-md-9 col-md-offset-1" style="margin:0px;">
@@ -114,7 +114,7 @@
                 </div>
                 <div class="col-md-4 col-md-offset-3 text-center">
                   {%if me%}
-                    <h3>Photography Interests <a data-toggle="modal" data-target=".photography_interests"><i style="font-size:20px;color:whi" class="fa fa-edit"></i></a></h3>
+                    <h3>Photography Interests <a data-toggle="modal" data-target=".photography_interests"><i style="font-size:20px;color:white" class="fa fa-edit"></i></a></h3>
                   {%else%}
                     <h3>Photography Interests</h3>
                   {% endif %}
@@ -164,6 +164,7 @@
     <!-- /Callout -->
 
     <br>
+    
     <!-- Portfolio -->
     <div id="my_photos" class="portfolio main1">
         <nav class="navbar" role="navigation">
@@ -176,7 +177,7 @@
                       <span class="icon-bar"></span>
                       <span class="icon-bar"></span>
                   </button>
-                  <a class="navbar-brand" href="/{{user.key.id()}}/photos" style="font-family:verdana;color:Blue;font-size:30px;"> My Photos<br><h6>Open in seperate window</h6></a>
+                  <a class="navbar-brand" href="/{{user.key.id()}}/photos" style="font-family:verdana;color:Blue;font-size:30px;"> Photos</a>
 
               </div>
 
@@ -225,8 +226,77 @@
         </div>
     </div>
     <!-- /Portfolio -->
+    <div id="about" class="intro">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3 text-center">
+                    <h2></h2>
+                    <p class="lead">Place for Ads <br><a target="_blank" href="http://www.worldphotographersclub.com/">worldphotographersclub</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
     <br>
+    <div id="" class="portfolio main1">
+        <nav class="navbar" role="navigation">
+          <div class="container-fluid">
+              <!-- Brand and toggle get grouped for better mobile display -->
+              <div class="navbar-header">
+                  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                      <span class="sr-only">Toggle navigation</span>
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                  </button>
+                  <a class="navbar-brand" href="/{{user.key.id()}}/photos" style="font-family:verdana;color:Blue;font-size:30px;"> Blogs</a>
 
+              </div>
+
+              <!-- Collect the nav links, forms, and other content for toggling -->
+              <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                  <ul class="nav navbar-nav">
+                    <li class="dropdown">
+                      <a href="#" class="dropdown-toggle" data-toggle="dropdown">Search Blogs <b class="caret"></b></a>
+                      <ul class="dropdown-menu">
+                        <li>
+                          <form class="navbar-form navbar-left" role="search" action="photos.html">
+                            <div class="form-group">
+                              <input type="text" class="form-control" placeholder="Find Photos">
+                            </div>
+                          </form>                        
+                        </li>
+                      </ul>
+                   </li>
+                    <li class="dropdown">
+                      <a href="#" class="dropdown-toggle" data-toggle="dropdown">Filter<b class="caret"></b></a>
+                      <ul class="dropdown-menu">
+                        <li><a href="#">Most Viewed</a></li>
+                        <li><a href="#">Most Liked</a></li>
+                        <li><a href="#">Most Commented</a></li>
+                        <li><a href="#">Most Shared</a></li>
+                        <li><a href="#">Most Pinned</a></li>
+                        <li><a href="#">Tags</a></li>
+                      </ul>
+                    </li>
+                  </ul>   
+              </div><!-- /.navbar-collapse -->
+          </div><!-- /.container-fluid -->
+      </nav>
+      <div class="thumb_imgs">
+                {%for b in blogs%}
+                  
+                <a href="/blog/{{b.key.urlsafe()}}"><h3>{{b.title}}</h3>  
+                <img src="{{b.cover_photo}}" alt="Profile Image" class="img-rounded" width="300px">
+                <a href=""><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5></a>
+                    <div style="width: 400px; height:100px; overflow: hidden;"><p>{{b.content | safe }}</p></div>
+                
+                <hr class="horizontal-line">
+                  
+                {% endfor %}
+      </div>
+    </div>
+    <!-- /Portfolio -->
+    <br>
 
 
         <!-- Intro -->
