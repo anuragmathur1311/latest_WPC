@@ -26,7 +26,7 @@
 
 {%block pageContent%}
     <!-- Full Page Image Header Area -->
-    <div id="top" class="header" style="background: url(/images/img_1.jpg) no-repeat center center fixed;background-size: cover;z-index:1;">
+    <div id="top" class="header" style="background: url({{user.cover1_url}}) no-repeat center center fixed;background-size: cover;z-index:1;">
     
         <div class="transbox_right">
             <ul class="list-inline">
@@ -61,7 +61,7 @@
         </div>
         <div class="vert-text">
                   <!--<a href="" class="photographer_options"><img src="/images/image-2.jpg" alt="Profile Image" class="profile-img" width="90px"></a><p class="message">Hello</p><br>-->
-                  <img src="/images/image-2.jpg" alt="Profile Image" class="profile-img" width="90px"><br>
+                  <img src="{{user.avatar_url}}" alt="Profile Image" class="profile-img" width="90px"><br>
                   <a data-toggle="modal" data-target=".profile_image" style="color:white;"><i style="font-size:20px;" class="fa fa-plus"></i>Change Profile Image</a>
                   <a href="/usersettings#portfolio"><span class="glyphicon glyphicon-cog"></span></a>
                   <h3 style="margin-top:0px;"><em>Welcome!</em> {{user.name}}</h3>
@@ -88,10 +88,10 @@
             			{% endif %}
         </div>
         <div class="transbox_left">
-            <h1>{{user.awards}}<h1><h2>awards</h2>
+            <h1>{{len(user.awards)}}<h1><h2>awards</h2>
             <h1>{{user.profile_shares}}<h1><h2>shares</h2>
-            <h1>{{user.followers}}<h1><h2>followers</h2>
-            <h1>{{user.following}}<h1><h2>following</h2>
+            <h1>{{len(user.followers)}}<h1><h2>followers</h2>
+            <h1>{{len(user.following)}}<h1><h2>following</h2>
             <h1>{{user.profile_views}}<h1><h2>profile views</h2>
             <a href="/{{user.key.id()}}/photos"><h1>{{photos.count()}}<h1><h2>photos</h2></a>
         </div>
@@ -103,14 +103,14 @@
         <div class="container_user">
             <div class="row">
                 <div class="col-md-2" style="margin-top:-30px;height:50px;z-index:3;">
-                    <img src="/images/image-2.jpg" alt="Profile Image" class="profile-img" height="150px">
+                    <img src="{{user.avatar_url}}" alt="Profile Image" class="profile-img" height="150px">
                 </div>
                 <div class="col-md-10" style="margin:0px;">
                     <div class="col-md-2 text-center">
-                      <a href="/about"><h3>About</h3></a>
+                      <a href="/{{user.key.id()}}/about"><h3>About</h3></a>
                     </div>
                     <div class="col-md-2 text-center">
-                      <a href="#my_photos"><h3>Photos</h3></a>
+                      <a href="/{{user.key.id()}}/photos"><h3>Photos</h3></a>
                     </div>
             				<div class="col-md-2 text-center">
             					<a href="/{{user.key.id()}}/blogs"><h3>Blogs</h3></a>
@@ -119,7 +119,7 @@
             					<h3>Questions</h3>
             				</div>
             				<div class="col-md-2 text-center">
-            					<a href="/{{user.key.id()}}/user_groups"><h3>Groups</h3></a>
+            					<a href="/{{user.key.id()}}/groups"><h3>Groups</h3></a>
             				</div>
                     <div class="col-md-2 text-center">
                         <a data-toggle="modal" data-target=".my_portfolios"><h3>Portfolios</h3></a>
@@ -132,7 +132,7 @@
     <!-- /Call to Action -->
 
     <!-- Callout -->
-    <div class="callout" id="callout" style="background: url(/images/img_2.jpg) no-repeat center center fixed;background-size: cover;z-index:2;">
+    <div class="callout" id="callout" style="background: url({{user.cover2_url}}) no-repeat center center fixed;background-size: cover;z-index:2;">
         <div class="vert-text">
             <div class="row">
                 <div class="col-md-4 col-md-offset-4 text-center">
@@ -200,7 +200,7 @@
                       <span class="icon-bar"></span>
                       <span class="icon-bar"></span>
                   </button>
-                  <a class="navbar-brand" href="/{{user.key.id()}}/photos" style="font-family:verdana;color:Blue;font-size:30px;"> My Photos<br><h6>Open in seperate window</h6></a>
+                  <a class="navbar-brand" href="/{{user.key.id()}}/photos" style="font-family:verdana;color:Blue;font-size:30px;"> My Photos</a>
 
               </div>
 
@@ -236,16 +236,16 @@
       </nav>
       <div class="thumb_imgs">
             {%for p in photos%}
-                    <a onclick="change_main_image('/servephoto/{{p.blobKey}}', '/photo/{{p.key.urlsafe()}}');" href="javascript:void(0);"><img src="/servephoto/{{p.blobKey}}" height="100px" alt="photo"></a>
+                    <a onclick="change_main_image('/photo/{{p.key.urlsafe()}}', '{{get_serving_url(p.blobKey)}}');" href="javascript:void(0);"><img src="{{get_serving_url(p.blobKey)}}" height="100px" alt="photo"></a>
             {%endfor%}
       </div>
       <br>      
         <div id="main_img" class="main_img">
-            {%for p in photos%}
-                {% if loop.index <= 1 %}
-                    <a href="/photo/{{p.key.urlsafe()}}"><img alt="" src="/servephoto/{{p.blobKey}}" class="img_display"/></a>
-                 {% endif %}
-            {%endfor%}
+          {% set plist = photos.fetch(1) %}
+          {% if len(plist) == 1 %}
+            {% set p = plist[0] %}
+            <a href="/photo/{{p.key.urlsafe()}}"><img alt="" src="{{get_serving_url(p.blobKey)}}" class="img_display"/></a>
+          {% endif %}
         </div>
     </div>
     <!-- /Portfolio -->
@@ -377,9 +377,10 @@
             <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
             <h4 class="modal-title">Add Profile Image</h4>
           </div>
-          <form role="form" method="post" action="{{uploadUrl}}">
+          <form role="form" method="post" action="{{uploadUrl}}" enctype="multipart/form-data">
                 <input type="hidden" name="formType" value="profile_image">
-
+                <input type="hidden" id="avatar_actionType" name="actionType" value="">
+                <input type="hidden" id="userid" name="user" value="{{user.key.id()}}">
                 <div class="col-sm-4 col-sm-offset-4">
 
                   <p >Select Profile Image</p>
@@ -387,21 +388,21 @@
                       <span class="btn btn-xs btn-info fileinput-button" data-toggle="modal" data-target="#select_profile_photo">
                         <i class="glyphicon glyphicon-plus"></i>
                         <span style="color:white;">Select Image</span>
+                        <input type="hidden" id="avatarKey" name="avatarKey" value="">
                       </span>
                       <span class="btn btn-xs btn-info fileinput-button">
                         <i class="glyphicon glyphicon-plus"></i>
                         <span style="color:white;">Upload Image</span>
-                        <input type="file" id="myFile" name="avatar" onchange="myFunction()">
+                        <input type="file" id="myFile" name="avatarFile" onchange="myFunction()">
                       </span>
                       <div class="container row" id="thumb_img"></div>
-                      <div id="profile_image_input"></div>
                   </div>
                 </div>
+                <hr>
+                <button class="btn btn-xs btn-success padding-bottom" type="submit">Update Profile</button>
               </form>
           <div class="modal-footer">
           </div>
-          <hr>
-            <button class="btn btn-xs btn-success padding-bottom" type="submit">Update Profile</button>
         </div>
       </div>
     </div>
@@ -415,7 +416,7 @@
               <div class="col-lg-12 col-sm-12 col-xs-12" id="photo_select" align="center">
                 <div class="thumb_imgs">
                       {%for p in photos%}
-                              <a onclick="change_main_image1('/servephoto/{{p.blobKey}}');" href="javascript:void(0);"><img src="/servephoto/{{p.blobKey}}" height="100px" alt="photo"></a>
+                        <a onclick="select_avatar('{{p.key.urlsafe()}}', '{{get_serving_url(p.blobKey)}}');" href="javascript:void(0);"><img src="{{get_serving_url(p.blobKey)}}" height="100px" alt="photo"></a>
                       {%endfor%}
                 </div><br>
                 <div id="main_img1" class=""></div>
@@ -428,10 +429,12 @@
   </div>
 
 <script type="text/javascript">
-function change_main_image1(img_key) {
-    document.getElementById("main_img1").innerHTML = "<img alt='' src='"+img_key+"' height='100%' class='img_display'/>";
-    document.getElementById("profile_image_input").innerHTML = "<input type='hidden' name='profile_image' value='"+img_key+"'>";
-} 
+function select_avatar(img_key, img_src) {
+    document.getElementById("main_img1").innerHTML = "<img alt='' src='"+img_src+"' height='100%' class='img_display'/>";
+    document.getElementById("avatarKey").value = img_key;
+    document.getElementById("avatar_actionType") = "select";
+}
+
 </script>
 
       <div class="modal fade cover_image_1" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
@@ -442,22 +445,22 @@ function change_main_image1(img_key) {
             <h4 class="modal-title">Add Cover Images</h4>
           </div>
           <form role="form" method="post" action="{{uploadUrl}}">
-                <input type="hidden" name="formType" value="cover_image_1">
-
+                <input type="hidden" name="formType" value="cover_image1">
+                <input type="hidden" id="cover1_actionType" name="actionType" value="">
                 <div class="col-sm-4 col-sm-offset-4">
                   <p>Select Cover Image 1</p>
                   <div class="column fileupload-buttonbar">
                       <span class="btn btn-xs btn-info fileinput-button" data-toggle="modal" data-target="#select_cover_photo_1">
                         <i class="glyphicon glyphicon-plus"></i>
                         <span style="color:white;">Select Image</span>
+                        <input type="hidden" id="cover1Key" name="cover1" value="">
                       </span>
                       <span class="btn btn-xs btn-info fileinput-button">
                         <i class="glyphicon glyphicon-plus"></i>
                         <span style="color:white;">Upload Image</span>
-                        <input type="file" id="myFile1" name="bkg_img_1" onchange="myFunction1()">
+                        <input type="file" id="myFile1" name="cover1" onchange="myFunction1()">
                       </span>
                        <div class="container row" id="thumb_img1"></div>
-                       <div id="cover_image_1_input"></div>
                   </div>
                 </div>
               
@@ -479,7 +482,7 @@ function change_main_image1(img_key) {
               <div class="col-lg-12 col-sm-12 col-xs-12" id="photo_select" align="center">
                 <div class="thumb_imgs">
                       {%for p in photos%}
-                              <a onclick="change_main_image2('/servephoto/{{p.blobKey}}');" href="javascript:void(0);"><img src="/servephoto/{{p.blobKey}}" height="100px" alt="photo"></a>
+                        <a onclick="select_cover1({{p.key.urlsafe()}}, '{{get_serving_url(p.blobKey)}}');" href="javascript:void(0);"><img src="{{get_serving_url(p.blobKey)}}" height="100px" alt="photo"></a>
                       {%endfor%}
                 </div><br>
                 <div id="main_img2" class=""></div>
@@ -492,10 +495,10 @@ function change_main_image1(img_key) {
   </div>
 
 <script type="text/javascript">
-function change_main_image2(img_key) {
-    document.getElementById("main_img2").innerHTML = "<img alt='' src='"+img_key+"' height='100%' class='img_display'/>";
-    document.getElementById("cover_image_1_input").innerHTML = "<input type='hidden' name='cover_image_1' value='"+img_key+"'>";
-} 
+function select_cover1(img_key, img_src) {
+    document.getElementById("main_img2").innerHTML = "<img alt='' src='"+img_src+"' height='100%' class='img_display'/>";
+    document.getElementById("cover1Key").value = img_key;
+    document.getElementById("cover1_actionType") = "select";
 </script>
 
     <div class="modal fade cover_image_2" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
@@ -506,19 +509,20 @@ function change_main_image2(img_key) {
             <h4 class="modal-title">Add Cover Images</h4>
           </div>
           <form role="form" method="post" action="{{uploadUrl}}">
-                <input type="hidden" name="formType" value="cover_image_2">
-
+                <input type="hidden" name="formType" value="cover_image2">
+                <input type="hidden" id="cover2_actionType" name="actionType" value="">
                 <div class="col-sm-4 col-sm-offset-4">
                   <p>Select Cover Image 2</p>
                   <div class="column fileupload-buttonbar">
                       <span class="btn btn-xs btn-info fileinput-button" data-toggle="modal" data-target="#select_cover_photo_2">
                         <i class="glyphicon glyphicon-plus"></i>
                         <span style="color:white;">Select Image</span>
+                        <input type="hidden" id="cover2Key" name="cover2" value="">
                       </span>
                       <span class="btn btn-xs btn-info fileinput-button">
                         <i class="glyphicon glyphicon-plus"></i>
                         <span style="color:white;">Upload Image</span>
-                        <input type="file" id="myFile2" name="bkg_img_2" onchange="myFunction2()">
+                        <input type="file" id="myFile2" name="cover2" onchange="myFunction2()">
                       </span>
                        <div class="container row" id="thumb_img2"></div>
                        <div id="cover_image_1_input"></div>
@@ -543,7 +547,7 @@ function change_main_image2(img_key) {
               <div class="col-lg-12 col-sm-12 col-xs-12" id="photo_select" align="center">
                 <div class="thumb_imgs">
                       {%for p in photos%}
-                              <a onclick="change_main_image3('/servephoto/{{p.blobKey}}');" href="javascript:void(0);"><img src="/servephoto/{{p.blobKey}}" height="100px" alt="photo"></a>
+                        <a onclick="select_cover2({{p.key.urlsafe()}}, '{{get_serving_url(p.blobKey)}}');" href="javascript:void(0);"><img src="{{get_serving_url(p.blobKey)}}" height="100px" alt="photo"></a>
                       {%endfor%}
                 </div><br>
                 <div id="main_img3" class=""></div>
@@ -556,9 +560,10 @@ function change_main_image2(img_key) {
   </div>
 
 <script type="text/javascript">
-function change_main_image3(img_key) {
-    document.getElementById("main_img3").innerHTML = "<img alt='' src='"+img_key+"' height='100%' class='img_display'/>";
-    document.getElementById("cover_image_2_input").innerHTML = "<input type='hidden' name='cover_image_2' value='"+img_key+"'>";
+function select_cover2(img_key, img_src) {
+    document.getElementById("main_img3").innerHTML = "<img alt='' src='"+img_src+"' height='100%' class='img_display'/>";
+    document.getElementById("cover2Key").value = img_key;
+    document.getElementById("cover2_actionType") = "select";
 } 
 </script>
 
@@ -820,9 +825,9 @@ function change_main_image3(img_key) {
       });
     </script>
 <script type="text/javascript">
-function change_main_image(img_key, img_link) {
+function change_main_image(img_link, img_src) {
     //document.getElementById("main_img").innerHTML = "<img alt='' src='"+img_key+"' class='img_display'/>";
-	document.getElementById("main_img").innerHTML = "<a href='"+img_link+"'><img alt='' src='"+img_key+"' class='img_display'/></a>";
+	document.getElementById("main_img").innerHTML = "<a href='"+img_link+"'><img alt='' src='"+img_src+"' class='img_display'/></a>";
 } 
 </script>
 <script>

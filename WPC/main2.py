@@ -26,7 +26,7 @@ from datahandle import *
 from google.appengine.ext import blobstore
 from google.appengine.ext.webapp import blobstore_handlers
 from google.appengine.api import images
-from google.appengine.ext import db
+from google.appengine.ext import ndb
 
 import utils
 
@@ -34,6 +34,7 @@ template_dir = os.path.join(os.path.dirname(__file__), "new_templates")
 jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir), autoescape = True)
 jinja_env.globals['get_serving_url'] = images.get_serving_url
 jinja_env.globals['len'] = len
+jinja_env.globals['eval'] = eval
 
 class PageHandler(webapp2.RequestHandler):
 	def get(self):
@@ -225,23 +226,26 @@ class UserStudioHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler):
 			templateVals['user'] = user
 			photos = Picture.of_ancestor(user.key)
 			templateVals['photos'] = photos
-			uploadUrl = blobstore.create_upload_url('/resource')
+			uploadUrl = blobstore.create_upload_url('/edituser')
 			templateVals['uploadUrl'] = uploadUrl
 			self.render('user_studio.html', **templateVals)
 		else:
 			self.redirect('/')
 
-	def post(self, resource):
-		userid = resource
+class UserEditHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler):
+	def post(self):
+		userid = self.request.get('user')
 		user = User.get_by_id(userid)
-		if self.user == user:
+		print "HERE"
+		if user and self.user == user:
 			form = self.request.get('formType')
 			action = self.request.get('actionType')
+			print form + " : " + action
 			if form == "profile_image":
 				if action == "select":
-					user.avatar = self.request.get('photoKey')
+					user.avatar = get_key_urlunsafe(self.request.get('avatarKey'))
 				elif action == "upload":
-					uploads = self.get_uplaods('profile_image')
+					uploads = self.get_uplaods('avatarFile')
 					blobInfo = uploads[0]
 					photo = create_picture(blobInfo.key(), None, None, None, self.user.key)
 					user.avatar = photo.key
@@ -249,9 +253,9 @@ class UserStudioHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler):
 					user.avatar = None
 			elif form == "cover_image1":
 				if action == "select":
-					user.cover1 = self.request.get('photoKey')
+					user.cover1 = self.request.get('cover1')
 				elif action == "upload":
-					uploads = self.get_uplaods('cover_image1')
+					uploads = self.get_uplaods('cover1')
 					blobInfo = uploads[0]
 					photo = create_picture(blobInfo.key(), None, None, None, self.user.key)
 					user.cover1 = photo.key
@@ -259,19 +263,21 @@ class UserStudioHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler):
 					user.cover1 = None
 			elif form == "cover_image2":
 				if action == "select":
-					user.cover2 = self.request.get('photoKey')
+					user.cover2 = self.request.get('cover2')
 				elif action == "upload":
-					uploads = self.get_uplaods('cover_image2')
+					uploads = self.get_uplaods('cover2')
 					blobInfo = uploads[0]
 					photo = create_picture(blobInfo.key(), None, None, None, self.user.key)
 					user.cover2 = photo.key
 				elif action == "remove":
 					user.cover2 = None
 			else:
-				self.redirect('/' + resource)
+				self.redirect('/' + userid)
 			user.put()
+			self.redirect('/' + userid)
 		else:
-			self.redirect('/' + resource)
+			print "OH NO!"
+			self.redirect('/')
 
 class UserAboutHandler(PageHandler):
 	def get(self, resource):
@@ -361,7 +367,7 @@ class GroupNewHandler(PageHandler ,blobstore_handlers.BlobstoreUploadHandler):
 				uploads = self.get_uploads('cover_photo')
 				blobInfo = uploads[0]
 				photo = create_picture(blobInfo.key(), None, None, None, self.user.key)
-				cover = '/servephoto/{0}'.format(photo.blobKey)
+				cover = images.get_serving_url(photo.blobKey)
 			if name:
 				group = create_group(name, description, cover, self.user.key)
 				self.redirect('/group/%s' % group.key.urlsafe())
@@ -374,7 +380,7 @@ class GroupNewHandler(PageHandler ,blobstore_handlers.BlobstoreUploadHandler):
 		else:
 			self.redirect('/')
 
-class PhotoNewHandler(PageHandler):
+class PhotoNewHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler):
 	def get(self):
 		if self.user:
 			templateVals = {'me': self.user}
@@ -390,6 +396,7 @@ class PhotoNewHandler(PageHandler):
 			captionList = self.request.get_all('caption')
 			descriptionList = self.request.get_all('description')
 			locationList = self.request.get_all('location')
+			print self.request
 			if len(uploads)>0:
 				for i in range(len(uploads)):
 					blobInfo = uploads[i]
@@ -469,7 +476,7 @@ class BlogNewHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler):
 				uploads = self.get_uploads('cover_photo')
 				blobInfo = uploads[0]
 				photo = create_picture(blobInfo.key(), None, None, None, self.user.key)
-				cover = '/servephoto/{0}'.format(photo.blobKey)
+				cover = images.get_serving_url(photo.blobKey)
 			if title and content:
 				blog = create_blog(title, content, cover, self.user.key)
 				self.redirect('/blog/%s' % blog.key.urlsafe())
@@ -712,6 +719,7 @@ app = webapp2.WSGIApplication([
 			('/blog/([^/]+)', BlogPermpageHandler),
 			('/editphoto/([^/]+)', PhotoEditHandler),
 			('/editblog/([^/]+)', BlogEditHandler),
+			('/edituser', UserEditHandler),
 			('/newgroup', GroupNewHandler),
 			('/newphoto', PhotoNewHandler),
 			('/newblog', BlogNewHandler),

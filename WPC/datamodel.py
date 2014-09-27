@@ -1,4 +1,5 @@
 from google.appengine.ext import ndb
+from google.appengine.api import images
 
 class User(ndb.Model):
 	name = ndb.StringProperty(required=True)
@@ -27,8 +28,34 @@ class User(ndb.Model):
 	awards = ndb.StringProperty(repeated=True)
 	profile_shares = ndb.IntegerProperty(default=0)
 	profile_views = ndb.IntegerProperty(default=0)
+	favourites = ndb.KeyProperty(repeated=True)
+	interests = ndb.KeyProperty(kind='Tag', repeated=True)
+	storybook = ndb.KeyProperty(kind='Story', repeated=True)
+	notifications = ndb.KeyProperty(kind='Story', repeated=True)
 	
-	
+	@property
+	def avatar_url(self):
+		if self.avatar is None:
+			return "/images/default_avatar.png"
+		else:
+			avatar_photo = self.avatar.get()
+			return images.get_serving_url(avatar_photo.blobKey)
+
+	@property
+	def cover1_url(self):
+		if self.cover1 is None:
+			return "/images/default_user_cover.jpg"
+		else:
+			cover1_photo = self.cover1.get()
+			return images.get_serving_url(cover1_photo.blobKey)
+
+	@property
+	def cover2_url(self):
+		if self.cover1 is None:
+			return "/images/default_user_cover.jpg"
+		else:
+			cover2_photo = self.cover2.get()
+			return images.get_serving_url(cover2_photo.blobKey)
 
 class Group(ndb.Model): # Parent=User (Admin)
 	name = ndb.StringProperty(required=True)
@@ -52,30 +79,6 @@ class Album(Itembook): # Parent=User
 
 class Diary(Itembook): # Parent=User
 	entries = ndb.KeyProperty(kind='Blog', repeated=True)
-
-class Favoritebook(ndb.Model): # Parent=User
-	entries = ndb.KeyProperty(repeated=True)
-	updated = ndb.DateTimeProperty(auto_now=True)
-
-	@classmethod
-	def of_ancestor(cls, ancestor_key):
-		return cls.query(ancestor=ancestor_key).order(-cls.updated)
-
-class Storybook(ndb.Model): # Parent=User
-	stories = ndb.KeyProperty(kind='Story', repeated=True)
-	updated = ndb.DateTimeProperty(auto_now=True)
-
-	@classmethod
-	def of_ancestor(cls, ancestor_key):
-		return cls.query(ancestor=ancestor_key).order(-cls.updated)
-
-class MyStorybook(ndb.Model): # Parent=User
-	stories = ndb.KeyProperty(kind='Story', repeated=True)
-	updated = ndb.DateTimeProperty(auto_now=True)
-
-	@classmethod
-	def of_ancestor(cls, ancestor_key):
-		return cls.query(ancestor=ancestor_key).order(-cls.updated)
 
 class Post(ndb.Model):
 	created = ndb.DateTimeProperty(auto_now_add=True)
@@ -111,7 +114,14 @@ class Picture(Item): # Parent=User
 class Blog(Item): # Parent=User
 	title = ndb.StringProperty(required=True)
 	content = ndb.TextProperty(required=True)
-	cover_photo = ndb.StringProperty()
+	cover = ndb.StringProperty()
+
+	@property
+	def cover_url(self):
+		if self.cover is None:
+			return "/images/default_blog_cover.jpg"
+		else:
+			return self.cover
 
 class Question(Post): # Parent=User
 	content = ndb.StringProperty(required=True)
@@ -129,3 +139,8 @@ class Story(ndb.Model): # Parent=User
 	caption = ndb.StringProperty(required=True)
 	created = ndb.DateTimeProperty(auto_now=True)
 	itemKey = ndb.KeyProperty(required=True)
+
+class Tag(ndb.Model):
+	name = ndb.StringProperty(required=True)
+	items = ndb.KeyProperty(repeated=True)
+

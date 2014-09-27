@@ -78,7 +78,7 @@
               <div class="col-lg-12 col-sm-12 col-xs-12" id="photo_select" align="center">
                 <div class="thumb_imgs">
                       {%for p in photos%}
-                              <a onclick="change_main_image('/servephoto/{{p.blobKey}}');" href="javascript:void(0);"><img src="/servephoto/{{p.blobKey}}" height="100px" alt="photo"></a>
+                              <a onclick="change_main_image('{{get_serving_url(p.blobKey)}}');" href="javascript:void(0);"><img src="{{get_serving_url(p.blobKey)}}" height="100px" alt="photo"></a>
                       {%endfor%}
                 </div><br>
                 <div id="main_img" class=""></div>
@@ -92,13 +92,13 @@
 <script type="text/javascript">
 function change_main_image(img_key) {
     document.getElementById("main_img").innerHTML = "<img alt='' src='"+img_key+"' height='100%' class='img_display'/>";
-    document.getElementById("group_cover_image").innerHTML = "<input type='hidden' name='cover_img' value='"+img_key+"'><input type='hidden' name='inputType' value='select_photo'>";
+    document.getElementById("group_cover_image").innerHTML = "<input type='hidden' name='cover_image' value='"+img_key+"'><input type='hidden' name='actionType' value='select'>";
 	document.getElementById("thumb_img1").innerHTML = "<div class='col-lg-4'><img class='img-rounded' src='" + img_key + "' height='140px' alt='"+img_key+"'></div>";
 } 
 </script>
 <script type="text/javascript">
 function back_to_image_selector() {
-    document.getElementById("photo_select").innerHTML = "{%for p in photos%}<div class='col-xs-3'><a onclick='change_main_image('/servephoto/{{p.blobKey}}');' href='javascript:void(0);'><img src='/servephoto/{{p.blobKey}}' height='100px' alt='photo'></a></div>{%endfor%}";
+    document.getElementById("photo_select").innerHTML = "{%for p in photos%}<div class='col-xs-3'><a onclick='change_main_image('{{get_serving_url(p.blobKey)}}');' href='javascript:void(0);'><img src='{{get_serving_url(p.blobKey)}}' height='100px' alt='photo'></a></div>{%endfor%}";
 } 
 </script>
 <script>
@@ -141,7 +141,7 @@ window.onload = function(){
                 picReader.addEventListener("load",function(event){
                   var picFile = event.target;
                     var div = document.createElement("div");
-                    div.innerHTML = "<div class='col-lg-4'><img class='img-rounded' src='" + picFile.result + "' height='140px' alt='"+file_name[w]+"'><h4 style='color:black;'>"+file_name_size[w]+"</h4></div><input type='hidden' name='inputType' value='upload_photo'>";
+                    div.innerHTML = "<div class='col-lg-4'><img class='img-rounded' src='" + picFile.result + "' height='140px' alt='"+file_name[w]+"'><h4 style='color:black;'>"+file_name_size[w]+"</h4></div><input type='hidden' name='actionType' value='upload'>";
                     w++;
                     output.insertBefore(div,null);            
                 });

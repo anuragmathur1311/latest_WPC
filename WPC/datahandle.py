@@ -7,9 +7,6 @@ def create_user(email, name, password):
 	user = User(id=email, name=name, email=email, score=0)
 	user.passwordHash = utils.hash_password(email, password)
 	userKey = user.put()
-	fbook = create_favoritebook(userKey)
-	sbook = create_storybook(userKey)
-	mysbook = create_mystorybook(userKey)
 	return user
 
 def update_user_name(name, user):
@@ -50,7 +47,7 @@ def update_social_profiles(facebook, youtube, google_plus, twitter, pinterest, t
 	return user
 
 def create_blog(title, content, cover_photo, parent_key):
-	blog = Blog(title=title, content=content, cover_photo=cover_photo, parent=parent_key)
+	blog = Blog(title=title, content=content, cover=cover_photo, parent=parent_key)
 	blogKey = blog.put()
 	return blog
 
@@ -75,21 +72,6 @@ def add_member(grpKey, userKey):
 	user.groups.append(grpKey)
 	grpKey = grp.put()
 	userKey = user.put()
-
-def create_favoritebook(parent_key):
-	fbook = Favoritebook(parent=parent_key)
-	fbookKey = fbook.put()
-	return fbook
-
-def create_storybook(parent_key):
-	sbook = Storybook(parent=parent_key)
-	sbookKey = sbook.put()
-	return sbook
-
-def create_mystorybook(parent_key):
-	sbook = MyStorybook(parent=parent_key)
-	sbookKey = sbook.put()
-	return sbook
 
 def delete_group(group_key, user_key):
 	if user_key == group_key.parent():
