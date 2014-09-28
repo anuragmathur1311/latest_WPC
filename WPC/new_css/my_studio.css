@@ -61,13 +61,17 @@ body {
 }
 
 .profile-img {
+  width:175px;
+  height:175px;
+  padding-left: 20px;
   border-radius: 150px;
   -webkit-border-radius: 150px;
   -moz-border-radius: 150px;
-  background: url(http://link-to-your/image.jpg) no-repeat;
-  box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+  box-shadow: 0 0 8px rgba(0, 0, 3, .8);
   -webkit-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
   -moz-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+  text-align:center;
+  overflow:scroll;
   }
 
 .center_img {
@@ -233,11 +237,11 @@ body {
   opacity: 1.0;
 }
 
-.transbox_top_left {
+.transbox_top_right {
     width: 50px;
     height: 50px;
     top: 60px;
-    left: 5px;
+    right: 5px;
     background-color: transparent;
     opacity: 1.0;
     filter: alpha(opacity=60); /* For IE8 and earlier */
@@ -665,6 +669,15 @@ i.scroll:hover {
 
 .thumb_imgs {
     height:100px;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    white-space: nowrap;
+    paddign-left:2px;
+    padding-right: 2px;
+}
+
+.thumb_blogs {
+    height:200px;
     overflow-x: scroll;
     overflow-y: hidden;
     white-space: nowrap;
