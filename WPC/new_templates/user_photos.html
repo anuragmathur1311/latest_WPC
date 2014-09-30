@@ -14,55 +14,55 @@ My Photos | WPC
 {%block signup_links%}  
  {%endblock%} 
   <br><br>
-      <div id="photos" class="portfolio main">
+    <div id="photos" class="portfolio main">
         <div class="row">
-          <div class="col-md-2 col-sm-6"><a class="navbar-brand" href="my_photos.html" style="font-family:verdana;color:black;font-size:30px;"> My Photos</a></div>
-
-    <!-- Collect the nav links, forms, and other content for toggling -->
-          <div class="col-md-1 col-sm-6">
-            <div class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Search My Photos</a>
-              <ul class="dropdown-menu">
-                <li>
-                  <form class="navbar-form navbar-left" role="search" action="photos.html">
-                    <div class="form-group">
-                      <input type="text" class="form-control" placeholder="Find Photos">
-                    </div>
-                  </form>                        
-                </li>
-              </ul>
-           </div>
-         </div>
-         <div class="col-md-1 col-sm-6">
-          <div class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Filter<b class="caret"></b></a>
-            <ul class="dropdown-menu">
-              <li><a href="#">Most Viewed</a></li>
-              <li><a href="#">Most Liked</a></li>
-              <li><a href="#">Most Commented</a></li>
-              <li><a href="#">Most Shared</a></li>
-              <li><a href="#">Most Pinned</a></li>
-              <li><a href="#">Tags</a></li>
-            </ul>
-          </div>
-        </div>
-        <div class="col-md-3 col-md-offset-1 col-sm-6 col-sm-offset-1">
-        <ul class="nav navbar-nav navbar-right" style="margin-right:20px;">                    
-            <li>My Albums</li><br>
-			<div class="all_albums">
-			</div>
-        </ul>
-        </div>
-        <div class="col-md-3">
-        <ul class="nav navbar-nav navbar-right"  style="margin-right:20px;">                    
-            <li>My Tags</li><br>
-			<div class="all_tags">
-			</div>
-        </ul>
-      </div>
-    </div>
-  </div>
-  <hr class="horizontal-line">
+        	<div class="col-md-2">
+          		<a class="navbar-brand" href="my_photos.html" style="font-family:verdana;color:black;font-size:30px;"> My Photos</a>
+          	</div>
+          	<div class="col-md-1">
+            	<div class="dropdown">
+              		<a href="#" class="dropdown-toggle" data-toggle="dropdown">Search My Photos</a>
+              		<ul class="dropdown-menu">
+                		<li>
+                  			<form class="navbar-form navbar-left" role="search" action="photos.html">
+                    			<div class="form-group">
+                      				<input type="text" class="form-control" placeholder="Find Photos">
+                    			</div>
+                  			</form>                        
+                		</li>
+              		</ul>
+           		</div>
+         	</div>
+        	<div class="col-md-1">
+	            <div class="dropdown">
+	            	<a href="#" class="dropdown-toggle" data-toggle="dropdown">Filter<b class="caret"></b></a>
+		            <ul class="dropdown-menu">
+		              <li><a href="#">Most Viewed</a></li>
+		              <li><a href="#">Most Liked</a></li>
+		              <li><a href="#">Most Commented</a></li>
+		              <li><a href="#">Most Shared</a></li>
+		              <li><a href="#">Most Pinned</a></li>
+		              <li><a href="#">Tags</a></li>
+		            </ul>
+	          	</div>
+        	</div>
+        	<div class="col-md-4">
+		        <ul class="nav navbar-nav navbar-right" style="margin-right:20px;">                    
+		            <li>My Albums</li><br>
+					<div class="all_albums">
+					</div>
+		        </ul>
+       		</div>
+	        <div class="col-md-4">
+		        <ul class="nav navbar-nav navbar-right"  style="margin-right:20px;">                    
+		            <li>My Tags</li><br>
+					<div class="all_tags">
+					</div>
+		        </ul>
+      		</div>
+    	</div>
+  	</div>
+	<hr class="horizontal-line">
 	<div class="transbox_right_permapage">
 		<ul class="list-inline">
 			{%if me.website%}
@@ -95,12 +95,12 @@ My Photos | WPC
 					<a href="/photo/{{p.key.urlsafe()}}"><img src="/servephoto/{{p.blobKey}}" height="140px" id="temp1" alt="photo"></a>
 					{%for tags in p.tags%}
 						<script>
-								$( ".all_tags" ).append( "<button type='' onclick='filter_photos()' class='btn btn-warning btn-xs padding-top'>{{tags}}</button>");
+								$( ".all_tags" ).append( "<button type='' onclick='filter_photos()' class='btn btn-warning btn-xs margin-top margin_tag_albums'>{{tags}}</button>");
 						</script>
 					{%endfor%}
 					{%for albums in p.albums%}
 						<script>
-								$( ".all_albums" ).append( "<button type='' onclick='filter_photos()' class='btn btn-danger btn-xs padding-top'>{{albums}}</button>");
+								$( ".all_albums" ).append( "<button type='' onclick='filter_photos()' class='btn btn-danger btn-xs margin-top margin_tag_albums'>{{albums}}</button>");
 						</script>
 					{%endfor%}
 					<br>

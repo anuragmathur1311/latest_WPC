@@ -234,6 +234,24 @@ class UserStudioHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler):
 		else:
 			self.redirect('/')
 
+class UserIdeabookHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler):
+	def get(self, resource):
+		#userid = str(urllib.unquote(resource))
+		userid = resource
+		user = User.get_by_id(userid)
+		if user:
+			templateVals = {'me': self.user}
+			templateVals['user'] = user
+			photos = Picture.of_ancestor(user.key)
+			templateVals['photos'] = photos
+			blogs = Blog.of_ancestor(user.key)
+			templateVals['blogs'] = blogs
+			uploadUrl = blobstore.create_upload_url('/resource')
+			templateVals['uploadUrl'] = uploadUrl
+			self.render('user_ideabook.html', **templateVals)
+		else:
+			self.redirect('/')
+
 class UserEditHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler):
 	def post(self):
 		userid = self.request.get('user')
@@ -729,6 +747,7 @@ app = webapp2.WSGIApplication([
 			('/([^/]+)/about', UserAboutHandler),
 			('/([^/]+)/photos', UserPhotosHandler),
 			('/([^/]+)/blogs', UserBlogsHandler),
+			('/([^/]+)/ideabook', UserIdeabookHandler),
 			('/([^/]+)', UserStudioHandler),
 			('/([^.]+)', DefaultHandler)
 			], debug=True)

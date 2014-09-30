@@ -110,6 +110,10 @@
                     <div class="col-md-2 text-center">
                         <a data-toggle="modal" data-target=".my_portfolios"><h3>Portfolios</h3></a>
                     </div>
+                    {%else%}
+                    <div class="col-md-2 text-center">
+                        <a data-toggle="modal" data-target=".my_portfolios"><h3>Ideabook</h3></a>
+                    </div>
                     {%endif%}
                 </div>
             </div>
@@ -182,7 +186,7 @@
     <br>
     
     <!-- Portfolio -->
-    <div id="my_photos" class="portfolio main1">
+    <div id="my_photos" class="portfolio main">
         <nav class="navbar" role="navigation">
           <div class="container-fluid">
               <!-- Brand and toggle get grouped for better mobile display -->
@@ -241,19 +245,9 @@
 
         </div>
     </div>
-    <!-- /Portfolio -->
-    <div id="about" class="intro">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6 col-md-offset-3 text-center">
-                    <h2></h2>
-                    <p class="lead">Place for Ads <br><a target="_blank" href="http://www.worldphotographersclub.com/">worldphotographersclub</a></p>
-                </div>
-            </div>
-        </div>
-    </div>
-    <br>
-    <div id="my_blogs" class="portfolio main1">
+
+    <hr>
+    <div id="my_blogs" class="portfolio main">
         <nav class="navbar" role="navigation">
           <div class="container-fluid">
               <!-- Brand and toggle get grouped for better mobile display -->
@@ -298,32 +292,44 @@
               </div><!-- /.navbar-collapse -->
           </div><!-- /.container-fluid -->
       </nav>
-      <div class="thumb_blogs" style="margin-botton:20px;">
-                {%for b in blogs%}
-                <div class="col-md-2 col-sm-2 col-xs-2" style="margin:0px;margin-left:5px;">
-                  <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;">{{b.title}}</h3>  
-                  <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="100%"></a>
+      <div class="thumb_blogs" style="margin:0px 0px;">
+          {%for b in blogs%}
+              {%if loop.index % 4 == 1%}
+                <div class="col-md-3 col-sm-4 col-xs-6" style="margin:0px;">
+                      <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
+                      <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="300px"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5></a>
+                      <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
                 </div>
-                {% endfor %}
+              {%endif%}
+              {%if loop.index % 4 == 2%}
+                <div class="col-md-3 col-sm-4 col-xs-6" style="margin:0px;">
+                      <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
+                      <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="300px"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5></a>
+                      <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
+                </div>
+              {%endif%}
+              {%if loop.index % 4 == 3%}
+                <div class="col-md-3 col-sm-4 col-xs-6" style="margin:0px;">
+                     <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
+                      <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="300px"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5></a>
+                      <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
+                </div>
+              {%endif%}
+              {%if loop.index % 4 == 0%}
+                <div class="col-md-3 col-sm-4 col-xs-6" style="margin:0px;">
+                      <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
+                      <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="300px"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5></a>
+                      <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
+                </div>
+                <div class="row"></div>
+              {%endif%}
+          {% endfor %}
       </div>
     </div>
     <!-- /Portfolio -->
-    <br>
+    <div class="col-md-12"><hr></div>
 
-
-        <!-- Intro -->
-    <div id="about" class="intro">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6 col-md-offset-3 text-center">
-                    <h2></h2>
-                    <p class="lead">Place for Ads <br><a target="_blank" href="http://www.worldphotographersclub.com/">worldphotographersclub</a></p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="my_groups" class="portfolio main1">
+    <div id="my_groups" class="portfolio main">
         <nav class="navbar" role="navigation">
           <div class="container-fluid">
               <!-- Brand and toggle get grouped for better mobile display -->
@@ -368,13 +374,38 @@
               </div><!-- /.navbar-collapse -->
           </div><!-- /.container-fluid -->
       </nav>
-      <div class="thumb_blogs" style="margin-botton:20px;">
-                {%for b in blogs%}
-                <div class="col-md-2 col-sm-2 col-xs-2" style="margin:0px;margin-left:5px;">
-                  <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;">{{b.title}}</h3>  
-                  <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="100%"></a>
+      <div class="thumb_groups" style="margin-botton:20px;">
+          {%for b in blogs%}
+              {%if loop.index % 4 == 1%}
+                <div class="col-md-3 col-sm-4 col-xs-6" style="margin:0px;">
+                      <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
+                      <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="300px"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5></a>
+                      <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
                 </div>
-                {% endfor %}
+              {%endif%}
+              {%if loop.index % 4 == 2%}
+                <div class="col-md-3 col-sm-4 col-xs-6" style="margin:0px;">
+                      <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
+                      <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="300px"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5></a>
+                      <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
+                </div>
+              {%endif%}
+              {%if loop.index % 4 == 3%}
+                <div class="col-md-3 col-sm-4 col-xs-6" style="margin:0px;">
+                     <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
+                      <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="300px"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5></a>
+                      <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
+                </div>
+              {%endif%}
+              {%if loop.index % 4 == 0%}
+                <div class="col-md-3 col-sm-4 col-xs-6" style="margin:0px;">
+                      <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
+                      <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="300px"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5></a>
+                      <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
+                </div>
+                <div class="row"></div>
+              {%endif%}
+          {% endfor %}
       </div>
     </div>
     <!-- /Portfolio -->

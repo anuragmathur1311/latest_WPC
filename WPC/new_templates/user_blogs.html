@@ -29,20 +29,33 @@
   	<div class="col-md-10 col-md-offset-1" id="blogs_section">
 	    <div id="myblogs">
       {%if me%}
-	  {%for b in blogs%}
-	  <div class="col-md-4 col-sm-6">
-        
-        
-		  <a href="/blog/{{b.key.urlsafe()}}"><h3>{{b.title}}</h3>	
-		  <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="300px">
-		  <h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5></a>
-          <div style="width: 100%; height:100px; overflow: hidden;"><p>{{b.content | safe }}</p></div>...
-		  
-		  <hr class="horizontal-line">
-        
-       
-		</div>
-		 {% endfor %}
+          {%for b in blogs%}
+              {%if loop.index % 3 == 1%}
+                <div class="col-md-4 col-sm-4 col-xs-6" style="margin:0px;">
+                      <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
+                      <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="300px"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5></a>
+                      <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
+                      <hr class="horizontal-line">
+                </div>
+              {%endif%}
+              {%if loop.index % 3 == 2%}
+                <div class="col-md-4 col-sm-4 col-xs-6" style="margin:0px;">
+                      <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
+                      <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="300px"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5></a> 
+                       <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
+                       <hr class="horizontal-line">
+                </div>
+              {%endif%}
+              {%if loop.index % 3 == 0%}
+                <div class="col-md-4 col-sm-4 col-xs-6" style="margin:0px;">
+                      <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
+                      <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="300px"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5></a> 
+                      <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
+                       <hr class="horizontal-line">
+                </div>
+                <div class="row"></div>
+              {%endif%}
+          {% endfor %}
       {%endif%}
     </div>
 {%endblock%}
