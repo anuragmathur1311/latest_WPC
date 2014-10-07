@@ -24,9 +24,9 @@
 {%endblock%}
 
 {%block pageContent%}
-<h1> {{me.name}}<em> Groups</em>  {%if not me%}<a href="/signin"><button class="btn btn-xs btn-danger" type="button"><i class="fa fa-register" style="color:white;"></i>  Register with WPC</button></a>{%endif%}</h1>
+<h1> {{me.name}}<em> Q&As</em>  {%if not me%}<a href="/signin"><button class="btn btn-xs btn-danger" type="button"><i class="fa fa-register" style="color:white;"></i>  Register with WPC</button></a>{%endif%}</h1>
 <hr>
-<h2>Admin Groups</h2>
+<h2>My Questions</h2>
   	<div class="col-md-12" id="blogs_section">
 	    <div id="myblogs">
 		{%if me%}
@@ -41,7 +41,7 @@
 		{%endif%}
     </div>
     <hr>
-<h2>Member Groups</h2>
+<h2>My Answers</h2>
   	<div class="col-md-12" id="blogs_section">
 	    <div id="myblogs">
 		{%if me%}

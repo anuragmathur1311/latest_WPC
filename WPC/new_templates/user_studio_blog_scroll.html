@@ -28,54 +28,45 @@
     <!-- Full Page Image Header Area -->
     
     <div id="top" class="header" style="background: url({{user.cover1_url}}) no-repeat center center fixed;background-size: cover;z-index:1;">
-      <div class="transbox_top_right">
-        <a data-toggle="modal" data-target=".cover_image_1" style="color:white;"><i style="font-size:20px;" class="fa fa-edit"></i></a>
-      </div>
-      <div class="transbox_bottom_right">
-        <div class="col-md-12" style="margin:0px;">
-          <div class="col-md-2" style="margin-top:-50px;height:50px;z-index:3;left:5px;">
-            <div class="profile-img">
-              <img src="{{user.avatar_url}}" alt="Profile Image" style="margin-left:-25px;margin-top:0px;" width="200px">
-            </div>
-          </div>
-          <div class="col-md-2" style="margin:-5px;left:12%;">
-            <h2><a class="" href="/{{me.key.id()}}" style="color:white;font-size:20px;padding_bottom:2px;" ><em>  {{user.name}} </em></a></h2>
-            <img src="/fonts/Flags/{{me.country}}.png" alt="country" width="30px"/>
-          </div>
-          <div class="col-md-4" style="margin:30px;">
-              <a href="/{{me.key.id()}}/about" style="color:white;"><button type="button" style="margin:5px;" class="btn btn-info btn-sm photographer_options"><i class="fa fa-key"></i></button></a>
-              <button type="button" class="btn btn-info btn-sm photographer_options"><span class="glyphicon glyphicon-pushpin" style="color:white;"></span></button>
-              <button type="button" style="margin:5px;" class="btn btn-info btn-sm photographer_options"><i class="fa fa-envelope"></i></button>
-              <button type="button" style="margin:5px;" class="btn btn-info btn-sm photographer_options"><i class="fa fa-share"></i></button>
-              <button type="button" style="margin:5px;" class="btn btn-info btn-sm photographer_options"><i class="fa fa-trophy"></i></button>
-           </div>
-          <div class="col-md-5" style="margin:0px;">
-            <div class="col-md-2" style="margin:0px;">
-              <h2 style="color:white;">{{user.followers.len}}</h2>
-              <h4 style="color:yellow;">Followers</h4>
-            </div>
-            <div class="col-md-2" style="margin:0px;">
-              <h2 style="color:white;">{{user.following.len}}</h2>
-              <h4 style="color:yellow;">Following</h4>
-            </div>
-            <div class="col-md-2" style="margin:0px;">
-              <h2 style="color:white;">{{photos.count()}}</h2>
-              <h4 style="color:yellow;">Photos</h4>
-            </div>
-            <div class="col-md-2" style="margin:0px;">
-              <h2 style="color:white;">{{user.awards.len}}</h2>
-              <h4 style="color:yellow;">Awards</h4>
-            </div>
-            <div class="col-md-2" style="margin:15px;">
-              <a href="{{user.website}}"><img src="/images/WPC_app_icon.jpg" alt="Profile Image" width="60px"><br></a>
-            </div>
-          </div>        
+        <div class="transbox_top_right">
+          <a data-toggle="modal" data-target=".cover_image_1" style="color:white;"><i style="font-size:20px;" class="fa fa-edit"></i></a>
         </div>
-      </div>
+        <div class="transbox_bottom_right">
+          <div class="col-md-2" style="margin:-5px;">
+              <h2><a class="" href="/{{me.key.id()}}" style="color:white;font-size:20px;padding_bottom:2px;" ><em>  {{user.name}} </em></a></h2>
+            </div>
+            <div class="col-md-2" style="margin:5px;">
+                  <button type="button" class="btn btn-info btn-sm photographer_options"><span class="glyphicon glyphicon-pushpin" style="color:white;"></span></button>
+                  <button type="button" style="margin:5px;" class="btn btn-info btn-sm photographer_options"><i class="fa fa-envelope"></i></button>
+                  <button type="button" style="margin:5px;" class="btn btn-info btn-sm photographer_options"><i class="fa fa-share"></i></button>
+                  <button type="button" style="margin:5px;" class="btn btn-info btn-sm photographer_options"><i class="fa fa-trophy"></i></button>
+            </div>          
+            <div class="col-md-6" style="margin:0px;left:20%;">
+              <div class="col-md-2" style="margin:5px;">
+                  <h2 style="color:white;">12</h2>
+                  <h4 style="color:yellow;">Followers</h4>
+              </div>
+              <div class="col-md-2" style="margin:5px;">
+                  <h2 style="color:white;">12</h2>
+                  <h4 style="color:yellow;">Following</h4>
+              </div>
+              <div class="col-md-2" style="margin:5px;">
+                  <h2 style="color:white;">{{photos.count()}}</h2>
+                  <h4 style="color:yellow;">Photos</h4>
+              </div>
+              <div class="col-md-2" style="margin:5px;">
+                  <h2 style="color:white;">12</h2>
+                  <h4 style="color:yellow;">Awards</h4>
+              </div>
+              <div class="col-md-2" style="margin:15px;">
+                  <a href="{{user.website}}"><img src="/images/WPC_app_icon.jpg" alt="Profile Image" width="60px"><br><a>
+              </div>
+            </div>
+
+        </div>
     </div>
           <!-- /Full Page Image Header Area -->
         <!-- Call to Action -->
-        <!--
     <div id= "my_portfolios" class="call-to-action">
         
         <div class="container_user">
@@ -85,39 +76,44 @@
                         <img src="{{user.avatar_url}}" alt="Profile Image" style="margin-left:-25px;margin-top:0px;" width="200px">
                     </div>
                 </div>
-                <div class="col-md-2 col-md-offset-3">
-                  <a href="/{{me.key.id()}}/about"><h3>About</h3></a>
+                <div class="col-md-2">
                 </div>
-                <div class="col-md-1" style="margin:5px;">
-                    <h2 style="color:black;">12</h2>
-                    <h4 style="color:blue;">Followers</h4>
-                </div>
-                <div class="col-md-1" style="margin:5px;">
-                    <h2 style="color:black;">12</h2>
-                    <h4 style="color:blue;">Following</h4>
-                </div>
-                <div class="col-md-1" style="margin:5px;">
-                    <h2 style="color:black;">{{photos.count()}}</h2>
-                    <h4 style="color:blue;">Photos</h4>
-                </div>
-                <div class="col-md-1" style="margin:5px;">
-                    <h2 style="color:black;">12</h2>
-                    <h4 style="color:blue;">Awards</h4>
-                </div>
-                <div class="col-md-2" style="margin:15px;">
-                    <a href="{{user.website}}"><img src="/images/WPC_app_icon.jpg" alt="Profile Image" width="60px"><br><a>
+                <div class="col-md-9 col-md-offset-1" style="margin:0px;">
+                    <div class="col-md-2 text-center">
+                      <a href="/{{me.key.id()}}/about"><h3>About</h3></a>
+                    </div>
+                    <div class="col-md-2 text-center">
+                      <a href="#my_photos"><h3>Photos</h3></a>
+                    </div>
+                    <div class="col-md-2 text-center">
+                      <a href="#my_blogs"><h3>Blogs</h3></a>
+                    </div>
+                    <div class="col-md-2 text-center">
+                      <h3>Questions</h3>
+                    </div>
+                    <div class="col-md-2 text-center">
+                      <a href="#my_groups"><h3>Groups</h3></a>
+                    </div>
+                    {%if me%}
+                    <div class="col-md-2 text-center">
+                        <a data-toggle="modal" data-target=".my_portfolios"><h3>Portfolios</h3></a>
+                    </div>
+                    {%else%}
+                    <div class="col-md-2 text-center">
+                        <a data-toggle="modal" data-target=".my_portfolios"><h3>Ideabook</h3></a>
+                    </div>
+                    {%endif%}
                 </div>
             </div>
         </div>
     </div>
   <br>
--->
     <!-- /Call to Action -->
 
     <!-- Callout -->
     <div class="callout" id="callout" style="background: url({{user.cover2_url}}) no-repeat center center fixed;background-size: cover;z-index:2;">
         <div class="vert-text">
-            <div class="row col-md-12" style="margin:0px;">
+            <div class="row col-md-12">
               <div class="col-md-1">
                 <a data-toggle="modal" data-target=".profile_image" style="color:white;z-index:4;"><i style="font-size:20px;" class="fa fa-edit"></i></a>
               </div>
@@ -177,257 +173,233 @@
 
     <br>
 
-  <ul class="nav nav-pills nav-justified" role="tablist" id="ideabook_list">
-    <li class="active"><a onclick="photos();" href="javascript:void(0);"><h4>Photos</h4></a></li>
-    <li><a onclick="portfolios();" href="javascript:void(0);"><h4>Portfolios</h4></a></li>
-    <li><a onclick="blogs();" href="javascript:void(0);"><h4>Blogs</h4></a></li>
-    <li><a onclick="groups();" href="javascript:void(0);"><h4>Groups</h4></a></li>
-    <li><a onclick="questions();" href="javascript:void(0);"><h4>Questions</h3></a></li>
-  </ul>
-  <div class="row" style="margin-top:20px;z-index:1;"> 
-    <div class="container">
-      <div id="my_ideas">
-      {%for p in photos%}
-        <div class="col-md-3 col-sm-3 col-xs-12" style="overflow:hidden;" align="center">
-          <a onclick="photos_thumbs('/photo/{{p.key.urlsafe()}}', '{{get_serving_url(p.blobKey,size=100)}}');" href="javascript:void(0);"><img src="{{get_serving_url(p.blobKey,size=100)}}" height="140px" id="temp1" alt="photo"></a>
-          <br>
-          
-          <div class="button-container post-action padding_top" style="margin-bottom:10px">
-            <p>{{p.likes}} <i class="fa fa-thumbs-o-up fa-1x"></i> | {{p.viewed}} <i class="fa fa-eye fa-1x"></i></p>
-            <form method="post">
-              <input type="hidden" name="actionType" value="edit">
-              <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
-              <button class="btn btn-primary btn-xs" type="submit" value="Edit"><span class="glyphicon glyphicon-edit" style="color:white;"></span></button>
-            </form>
-            <form method="post">
-              <input type="hidden" name="actionType" value="delete">
-              <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
-              <button class="btn btn-primary btn-xs" type="submit" value="Delete"><span class="glyphicon glyphicon-trash" style="color:white;"></span></button>
-            </form>
-            <form method="post">
-              <input type="hidden" name="actionType" value="add">
-              <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
-              <button class="btn btn-primary btn-xs" type="submit" value="Delete"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
-            </form>
-            <form method="post">
-              <input type="hidden" name="actionType" value="share">
-              <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
-              <button class="btn btn-primary btn-xs" type="submit" value="Delete"><i class="fa fa-share fa-1x"></i></button>
-            </form>
-            <form method="post">
-              <input type="hidden" name="actionType" value="download">
-              <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
-              <button class="btn btn-primary btn-xs" type="submit" value="Delete"><i class="fa fa-download fa-1x"></i></button>
-            </form>
-          </div>
-        </div>
-      {%endfor%}
-    </div>
-    </div>
-  </div>
-  <div style="display:none">
-    <div id="photos_thumb_views">
-    <div class="portfolio main">
+    <!-- Portfolio -->
+    <div id="my_photos" class="portfolio main">
         <nav class="navbar" role="navigation">
           <div class="container-fluid">
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav">
-                  <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Search Photos <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                      <li>
-                        <form class="navbar-form navbar-left" role="search" action="photos.html">
-                          <div class="form-group">
-                            <input type="text" class="form-control" placeholder="Find Photos">
-                          </div>
-                        </form>                        
-                      </li>
-                    </ul>
-                 </li>
-                  <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Filter<b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                      <li><a href="#">Most Viewed</a></li>
-                      <li><a href="#">Most Liked</a></li>
-                      <li><a href="#">Most Commented</a></li>
-                      <li><a href="#">Most Shared</a></li>
-                      <li><a href="#">Most Pinned</a></li>
-                      <li><a href="#">Tags</a></li>
-                    </ul>
-                  </li>
-                </ul>   
-            </div><!-- /.navbar-collapse -->
+              <!-- Brand and toggle get grouped for better mobile display -->
+              <div class="navbar-header">
+                  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                      <span class="sr-only">Toggle navigation</span>
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                  </button>
+                  <a class="navbar-brand" href="/{{user.key.id()}}/photos" style="font-family:verdana;color:Blue;font-size:30px;"> Photos</a>
+              </div>
+
+              <!-- Collect the nav links, forms, and other content for toggling -->
+              <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                  <ul class="nav navbar-nav">
+                    <li class="dropdown">
+                      <a href="#" class="dropdown-toggle" data-toggle="dropdown">Search Photos <b class="caret"></b></a>
+                      <ul class="dropdown-menu">
+                        <li>
+                          <form class="navbar-form navbar-left" role="search" action="photos.html">
+                            <div class="form-group">
+                              <input type="text" class="form-control" placeholder="Find Photos">
+                            </div>
+                          </form>                        
+                        </li>
+                      </ul>
+                   </li>
+                    <li class="dropdown">
+                      <a href="#" class="dropdown-toggle" data-toggle="dropdown">Filter<b class="caret"></b></a>
+                      <ul class="dropdown-menu">
+                        <li><a href="#">Most Viewed</a></li>
+                        <li><a href="#">Most Liked</a></li>
+                        <li><a href="#">Most Commented</a></li>
+                        <li><a href="#">Most Shared</a></li>
+                        <li><a href="#">Most Pinned</a></li>
+                        <li><a href="#">Tags</a></li>
+                      </ul>
+                    </li>
+                  </ul>   
+              </div><!-- /.navbar-collapse -->
           </div><!-- /.container-fluid -->
       </nav>
       <div class="thumb_imgs">
             {%for p in photos%}
-                    <a onclick="change_main_image_thumb('/photo/{{p.key.urlsafe()}}', '{{get_serving_url(p.blobKey,size=100)}}');" href="javascript:void(0);"><img src="{{get_serving_url(p.blobKey)}}" height="100px" alt="photo"></a>
+                    <a onclick="change_main_image('/photo/{{p.key.urlsafe()}}', '{{get_serving_url(p.blobKey)}}');" href="javascript:void(0);"><img src="{{get_serving_url(p.blobKey)}}" height="100px" alt="photo"></a>
             {%endfor%}
       </div>
       <br>      
-        <div id="main_img_thumb" class="main_img"></div>
-    </div>
-  </div>
-</div>
-  <div style="display:none;">
-  <div id="blogs"> 
-      <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
-      {%for b in blogs%}
-      {%if loop.index % 4 == 1%}
-              <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
-              <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5></a>
-              <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
-              <hr>
-      {%endif%}
-      {% endfor %}
-      </div>
-      <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
-      {%for b in blogs%}
-      {%if loop.index % 4 == 2%}
-              <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
-              <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5></a>
-              <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
-              <hr>
-      {%endif%}
-      {% endfor %}
-      </div>
-      <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
-      {%for b in blogs%}
-      {%if loop.index % 4 == 3%}
-              <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
-              <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5></a>
-              <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
-              <hr>
-      {%endif%}
-      {% endfor %}
-      </div>
-      <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
-      {%for b in blogs%}
-      {%if loop.index % 4 == 0%}
-              <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
-              <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5></a>
-              <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
-              <hr>
-      {%endif%}
-      {% endfor %}
-      </div>
-  </div>
-</div>
-<div style="display:none;">
-  <div id="portfolios">
-      <div class="col-md-3">
-        <a href="/{{me.key.id()}}/portfolio"><h4>All Photos</h4>  
-        <img src="http://localhost:8080/servephoto/Usy_-HJCX6Qwl0nIayd47g==" alt="Profile Image" class="img-rounded" width="140px"></a><br>
-          <div class="button-container post-action padding_top">
-            <form method="post">
-              <input type="hidden" name="actionType" value="edit">
-              <input type="hidden" name="photoKey" value="">
-              <button class="btn btn-primary btn-xs" disabled="disabled" type="submit" value="Edit"><span class="glyphicon glyphicon-edit" style="color:white;"></span></button>
-            </form>
-            <form method="post">
-              <input type="hidden" name="actionType" value="delete">
-              <input type="hidden" name="photoKey" value="">
-              <button class="btn btn-primary btn-xs" disabled="disabled" type="submit" value="Delete"><span class="glyphicon glyphicon-trash" style="color:white;"></span></button>
-            </form>
-            <form method="post">
-              <input type="hidden" name="actionType" value="share">
-              <input type="hidden" name="photoKey" value="">
-              <button class="btn btn-primary btn-xs" type="submit" value="Delete"><i class="fa fa-share fa-1x"></i></button>
-            </form>
-            <form method="post">
-              <input type="hidden" name="actionType" value="download">
-              <input type="hidden" name="photoKey" value="">
-              <button class="btn btn-primary btn-xs" type="submit" value="Delete"><i class="fa fa-download fa-1x"></i></button>
-            </form>
-          </div>
-      </div>
-  </div>
-</div>
-<div style="display:none;">
-  <div id="groups">
-    <h2>You have not created or you are not a member of any groups</h2>
-  </div>
-</div>
-<div style="display:none;">
-  <div id="questions">
-    <h2>You have not asked or answered any questions yet</h2>
-  </div>
-</div>
-<div style="display:none;">
-  <div id="photos">
-    <br>
-      {%for p in photos%}
-        <div class="col-md-3 col-sm-3 col-xs-4" style="overflow:hidden;" align="center">
-          <a onclick="photos_thumbs('/photo/{{p.key.urlsafe()}}', '{{get_serving_url(p.blobKey,size=100)}}');" href="javascript:void(0);"><img src="{{get_serving_url(p.blobKey,size=100)}}" height="140px" id="temp1" alt="photo"></a>
-          <br>
-          
-          <div class="button-container post-action padding_top" style="margin-bottom:10px">
-            <p>{{p.likes}} <i class="fa fa-thumbs-o-up fa-1x"></i> | {{p.viewed}} <i class="fa fa-eye fa-1x"></i></p>
-            <form method="post">
-              <input type="hidden" name="actionType" value="edit">
-              <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
-              <button class="btn btn-primary btn-xs" type="submit" value="Edit"><span class="glyphicon glyphicon-edit" style="color:white;"></span></button>
-            </form>
-            <form method="post">
-              <input type="hidden" name="actionType" value="delete">
-              <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
-              <button class="btn btn-primary btn-xs" type="submit" value="Delete"><span class="glyphicon glyphicon-trash" style="color:white;"></span></button>
-            </form>
-            <form method="post">
-              <input type="hidden" name="actionType" value="add">
-              <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
-              <button class="btn btn-primary btn-xs" type="submit" value="Delete"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
-            </form>
-            <form method="post">
-              <input type="hidden" name="actionType" value="share">
-              <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
-              <button class="btn btn-primary btn-xs" type="submit" value="Delete"><i class="fa fa-share fa-1x"></i></button>
-            </form>
-            <form method="post">
-              <input type="hidden" name="actionType" value="download">
-              <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
-              <button class="btn btn-primary btn-xs" type="submit" value="Delete"><i class="fa fa-download fa-1x"></i></button>
-            </form>
-          </div>
+      <!-- {% set plist = photos.fetch(1) %}
+          {% if len(plist) == 1 %}
+            {% set p = plist[0] %}
+            <a href="/photo/{{p.key.urlsafe()}}"><img alt="" src="{{get_serving_url(p.blobKey)}}" class="img_display"/></a>
+          {% endif %}-->
+        <div id="main_img" class="main_img">
+
         </div>
-      {%endfor%}
-  </div>
-</div>
+    </div>
 
-<script>
-  function blogs() {
-    $( "#my_ideas" ).load( "/{{me.key.id()}} #blogs" );
-    document.getElementById("ideabook_list").innerHTML = "<li><a onclick='photos();' href='javascript:void(0);'><h4>Photos</h4></a></li><li><a onclick='portfolios();' href='javascript:void(0);'><h4>Portfolios</h4></a></li><li class='active'><a onclick='blogs();' href='javascript:void(0);'><h4>Blogs</h4></a></li><li><a onclick='groups();' href='javascript:void(0);'><h4>Groups</h4></a></li><li><a onclick='questions();' href='javascript:void(0);'><h4>Questions</h4></a></li>";
-  }
+    <hr>
+    <div id="my_blogs" class="portfolio main">
+        <nav class="navbar" role="navigation">
+          <div class="container-fluid">
+              <!-- Brand and toggle get grouped for better mobile display -->
+              <div class="navbar-header">
+                  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                      <span class="sr-only">Toggle navigation</span>
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                  </button>
+                  <a class="navbar-brand" href="/{{user.key.id()}}/blogs" style="font-family:verdana;color:Blue;font-size:30px;"> Blogs</a>
 
-  function portfolios() {
-    $( "#my_ideas" ).load( "/{{me.key.id()}} #portfolios" );
-    document.getElementById("ideabook_list").innerHTML = "<li><a onclick='photos();' href='javascript:void(0);'><h4>Photos</h4></a></li><li class='active'><a onclick='portfolios();' href='javascript:void(0);'><h4>Portfolios</h4></a></li><li><a onclick='blogs();' href='javascript:void(0);'><h4>Blogs</h4></a></li><li><a onclick='groups();' href='javascript:void(0);'><h4>Groups</h4></a></li><li><a onclick='questions();' href='javascript:void(0);'><h4>Questions</h4></a></li>";
-  }
+              </div>
 
-  function groups() {
-    $( "#my_ideas" ).load( "/{{me.key.id()}} #groups" );
-    document.getElementById("ideabook_list").innerHTML = "<li><a onclick='photos();' href='javascript:void(0);'><h4>Photos</h4></a></li><li><a onclick='portfolios();' href='javascript:void(0);'><h4>Portfolios</h4></a></li><li><a onclick='blogs();' href='javascript:void(0);'><h4>Blogs</h4></a></li><li class='active'><a onclick='groups();' href='javascript:void(0);'><h4>Groups</h4></a></li><li><a onclick='questions();' href='javascript:void(0);'><h4>Questions</h4></a></li>";
-  }
-    
- function questions() {
-    $( "#my_ideas" ).load( "/{{me.key.id()}} #questions" );
-    document.getElementById("ideabook_list").innerHTML = "<li><a onclick='photos();' href='javascript:void(0);'><h4>Photos</h4></a></li><li><a onclick='portfolios();' href='javascript:void(0);'><h4>Portfolios</h4></a></li><li><a onclick='blogs();' href='javascript:void(0);'><h4>Blogs</h4></a></li><li><a onclick='groups();' href='javascript:void(0);'><h4>Groups</h4></a></li><li class='active'><a onclick='questions();' href='javascript:void(0);'><h4>Questions</h4></a></li>";
-  }
+              <!-- Collect the nav links, forms, and other content for toggling -->
+              <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                  <ul class="nav navbar-nav">
+                    <li class="dropdown">
+                      <a href="#" class="dropdown-toggle" data-toggle="dropdown">Search Blogs <b class="caret"></b></a>
+                      <ul class="dropdown-menu">
+                        <li>
+                          <form class="navbar-form navbar-left" role="search" action="photos.html">
+                            <div class="form-group">
+                              <input type="text" class="form-control" placeholder="Find Photos">
+                            </div>
+                          </form>                        
+                        </li>
+                      </ul>
+                   </li>
+                    <li class="dropdown">
+                      <a href="#" class="dropdown-toggle" data-toggle="dropdown">Filter<b class="caret"></b></a>
+                      <ul class="dropdown-menu">
+                        <li><a href="#">Most Viewed</a></li>
+                        <li><a href="#">Most Liked</a></li>
+                        <li><a href="#">Most Commented</a></li>
+                        <li><a href="#">Most Shared</a></li>
+                        <li><a href="#">Most Pinned</a></li>
+                        <li><a href="#">Tags</a></li>
+                      </ul>
+                    </li>
+                  </ul>   
+              </div><!-- /.navbar-collapse -->
+          </div><!-- /.container-fluid -->
+      </nav>
+      <div class="thumb_blogs" style="margin:0px 0px;">
+          {%for b in blogs%}
+              {%if loop.index % 4 == 1%}
+                <div class="col-md-3 col-sm-4 col-xs-6" style="margin:0px;">
+                      <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
+                      <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5></a>
+                      <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
+                </div>
+              {%endif%}
+              {%if loop.index % 4 == 2%}
+                <div class="col-md-3 col-sm-4 col-xs-6" style="margin:0px;">
+                      <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
+                      <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5></a>
+                      <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
+                </div>
+              {%endif%}
+              {%if loop.index % 4 == 3%}
+                <div class="col-md-3 col-sm-4 col-xs-6" style="margin:0px;">
+                     <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
+                      <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5></a>
+                      <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
+                </div>
+              {%endif%}
+              {%if loop.index % 4 == 0%}
+                <div class="col-md-3 col-sm-4 col-xs-6" style="margin:0px;">
+                      <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
+                      <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5></a>
+                      <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
+                </div>
+                <div class="row"></div>
+              {%endif%}
+          {% endfor %}
+      </div>
+    </div>
+    <!-- /Portfolio -->
+    <div class="col-md-12"><hr></div>
 
-  function photos() {
-   $( "#my_ideas" ).load( "/{{me.key.id()}} #photos" );
-    document.getElementById("ideabook_list").innerHTML = "<li class='active'><a onclick='photos();' href='javascript:void(0);'><h4>Photos</h4></a></li><li><a onclick='portfolios();' href='javascript:void(0);'><h4>Portfolios</h4></a></li><li><a onclick='blogs();' href='javascript:void(0);'><h4>Blogs</h4></a></li><li><a onclick='groups();' href='javascript:void(0);'><h4>Groups</h4></a></li><li><a onclick='questions();' href='javascript:void(0);'><h4>Questions</h4></a></li>";
-  }
-  function photos_thumbs(img_link, img_src) {
-   $( "#my_ideas" ).load( "/{{me.key.id()}} #photos_thumb_views" );
-   document.getElementById("main_img_thumb").innerHTML = "<a href='"+img_link+"'><img alt='' src='"+img_src+"' class='img_display'/></a>";
-  }
-  function change_main_image_thumb(img_link, img_src) {
-    document.getElementById("main_img_thumb").innerHTML = "<a href='"+img_link+"'><img alt='' src='"+img_src+"' class='img_display'/></a>";
-  }
-</script>
- <hr>
+    <div id="my_groups" class="portfolio main">
+        <nav class="navbar" role="navigation">
+          <div class="container-fluid">
+              <!-- Brand and toggle get grouped for better mobile display -->
+              <div class="navbar-header">
+                  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                      <span class="sr-only">Toggle navigation</span>
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                  </button>
+                  <a class="navbar-brand" href="/{{user.key.id()}}/groups" style="font-family:verdana;color:Blue;font-size:30px;"> Groups</a>
+
+              </div>
+
+              <!-- Collect the nav links, forms, and other content for toggling -->
+              <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                  <ul class="nav navbar-nav">
+                    <li class="dropdown">
+                      <a href="#" class="dropdown-toggle" data-toggle="dropdown">Search Groups <b class="caret"></b></a>
+                      <ul class="dropdown-menu">
+                        <li>
+                          <form class="navbar-form navbar-left" role="search" action="photos.html">
+                            <div class="form-group">
+                              <input type="text" class="form-control" placeholder="Find Photos">
+                            </div>
+                          </form>                        
+                        </li>
+                      </ul>
+                   </li>
+                    <li class="dropdown">
+                      <a href="#" class="dropdown-toggle" data-toggle="dropdown">Filter<b class="caret"></b></a>
+                      <ul class="dropdown-menu">
+                        <li><a href="#">Most Viewed</a></li>
+                        <li><a href="#">Most Liked</a></li>
+                        <li><a href="#">Most Commented</a></li>
+                        <li><a href="#">Most Shared</a></li>
+                        <li><a href="#">Most Pinned</a></li>
+                        <li><a href="#">Tags</a></li>
+                      </ul>
+                    </li>
+                  </ul>   
+              </div><!-- /.navbar-collapse -->
+          </div><!-- /.container-fluid -->
+      </nav>
+      <div class="thumb_groups" style="margin-botton:20px;">
+          {%for b in blogs%}
+              {%if loop.index % 4 == 1%}
+                <div class="col-md-3 col-sm-4 col-xs-6" style="margin:0px;">
+                      <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
+                      <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5></a>
+                      <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
+                </div>
+              {%endif%}
+              {%if loop.index % 4 == 2%}
+                <div class="col-md-3 col-sm-4 col-xs-6" style="margin:0px;">
+                      <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
+                      <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5></a>
+                      <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
+                </div>
+              {%endif%}
+              {%if loop.index % 4 == 3%}
+                <div class="col-md-3 col-sm-4 col-xs-6" style="margin:0px;">
+                     <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
+                      <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5></a>
+                      <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
+                </div>
+              {%endif%}
+              {%if loop.index % 4 == 0%}
+                <div class="col-md-3 col-sm-4 col-xs-6" style="margin:0px;">
+                      <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
+                      <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5></a>
+                      <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
+                </div>
+                <div class="row"></div>
+              {%endif%}
+          {% endfor %}
+      </div>
+    </div>
+    <!-- /Portfolio -->
+    <br>
+
+
         <!-- Intro -->
     <div id="about" class="intro">
         <div class="container">
@@ -463,7 +435,39 @@
         <p>&copy; 2014 World Photographer's Club &middot; <a href="#">Privacy</a> &middot; <a href="#"> Terms </a>&middot; <a href="#"> Contact Us</a></p>
       {%endblock%}
 
-
+  <div class="modal fade my_portfolios" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title">My Portfolios</h4>
+          </div>
+      <div class="col-md-3">
+        <a href=""><h4>All Photos</h4>  
+        <img src="http://localhost:8080/servephoto/Usy_-HJCX6Qwl0nIayd47g==" alt="Profile Image" class="img-rounded" width="140px"></a><br>
+        <div class="button-container post-action padding_top">
+          <form method="post">
+            <input type="hidden" name="actionType" value="delete">
+            <input type="hidden" name="photoKey" value="">
+            <button class="btn btn-primary btn-xs" type="submit" value="Delete"><span class="glyphicon glyphicon-trash" style="color:white;"></span></button>
+          </form>
+          <form method="post">
+            <input type="hidden" name="actionType" value="share">
+            <input type="hidden" name="photoKey" value="">
+            <button class="btn btn-primary btn-xs" type="submit" value="Delete"><i class="fa fa-share fa-1x"></i></button>
+          </form>
+          <form method="post">
+            <input type="hidden" name="actionType" value="download">
+            <input type="hidden" name="photoKey" value="">
+            <button class="btn btn-primary btn-xs" type="submit" value="Delete"><i class="fa fa-download fa-1x"></i></button>
+          </form>
+        </div>
+      </div>
+          <div class="modal-footer">
+          </div>
+        </div>
+      </div>
+    </div>
 
       <div class="modal fade profile_image" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
         <form role="form" method="post" action="{{uploadUrl}}" enctype="multipart/form-data">

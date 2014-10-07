@@ -364,6 +364,54 @@ class UserBlogsHandler(PageHandler):
 		else:
 			self.redirect('/')
 
+class UserGroupsHandler(PageHandler):
+	def get(self, resource):
+		userid = resource
+		user = User.get_by_id(userid)
+		if user:
+			templateVals = {'me': self.user}
+			templateVals['user'] = user
+			self.render('user_groups.html', **templateVals)
+		else:
+			self.redirect('/')
+
+class UserQuestionsHandler(PageHandler):
+	def get(self, resource):
+		userid = resource
+		user = User.get_by_id(userid)
+		if user:
+			templateVals = {'me': self.user}
+			templateVals['user'] = user
+			self.render('user_questions.html', **templateVals)
+		else:
+			self.redirect('/')
+
+class PortfolioHandler(PageHandler):
+	def get(self, resource):
+		userid = resource
+		user = User.get_by_id(userid)
+		if user:
+			templateVals = {'me': self.user}
+			templateVals['user'] = user
+			photos = Picture.of_ancestor(self.user.key)
+			templateVals['photos'] = photos
+			self.render('portfolioperm.html', **templateVals)
+		else:
+			self.redirect('/')
+
+class UserPortfolioHandler(PageHandler):
+	def get(self, resource):
+		userid = resource
+		user = User.get_by_id(userid)
+		if user:
+			templateVals = {'me': self.user}
+			templateVals['user'] = user
+			photos = Picture.of_ancestor(self.user.key)
+			templateVals['photos'] = photos
+			self.render('user_portfolios.html', **templateVals)
+		else:
+			self.redirect('/')
+
 class GroupNewHandler(PageHandler ,blobstore_handlers.BlobstoreUploadHandler):
 	def get(self):
 		if self.user:
@@ -397,6 +445,18 @@ class GroupNewHandler(PageHandler ,blobstore_handlers.BlobstoreUploadHandler):
 				photos = Picture.of_ancestor(self.user.key)
 				templateVals['photos'] = photos
 				self.render('new_group.html', **templateVals)
+		else:
+			self.redirect('/')
+
+class PortfolioNewHandler(PageHandler ,blobstore_handlers.BlobstoreUploadHandler):
+	def get(self):
+		if self.user:
+			templateVals = {'me': self.user}
+			photos = Picture.of_ancestor(self.user.key)
+			templateVals['photos'] = photos
+			uploadUrl = blobstore.create_upload_url('/newgroup')
+			templateVals['uploadUrl'] = uploadUrl
+			self.render('new_portfolio.html', **templateVals)
 		else:
 			self.redirect('/')
 
@@ -729,6 +789,7 @@ app = webapp2.WSGIApplication([
 			('/groups' , GroupsHandler),
 			('/photos' , PhotosHandler),
 			('/blogs' , BlogsHandler),
+			('/portfolio' , PortfolioHandler),
 			('/forum', ForumHandler),
 			('/explore', ExploreHandler),
 			('/search', SearchResultsHandler),
@@ -741,12 +802,16 @@ app = webapp2.WSGIApplication([
 			('/editblog/([^/]+)', BlogEditHandler),
 			('/edituser', UserEditHandler),
 			('/newgroup', GroupNewHandler),
+			('/newportfolio', PortfolioNewHandler),
 			('/newphoto', PhotoNewHandler),
 			('/newblog', BlogNewHandler),
 			('/servephoto/([^/]+)', PhotoServeHandler),
 			('/([^/]+)/about', UserAboutHandler),
 			('/([^/]+)/photos', UserPhotosHandler),
 			('/([^/]+)/blogs', UserBlogsHandler),
+			('/([^/]+)/groups', UserGroupsHandler),
+			('/([^/]+)/q&a', UserQuestionsHandler),
+			('/([^/]+)/portfolio', UserPortfolioHandler),
 			('/([^/]+)/ideabook', UserIdeabookHandler),
 			('/([^/]+)', UserStudioHandler),
 			('/([^.]+)', DefaultHandler)
