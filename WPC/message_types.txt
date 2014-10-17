@@ -1,7 +1,7 @@
 Photo
 1) likes from other users - N
-2) comments from other users - M
-3) replies - M
+2) comments from other users - N
+3) replies - N
 4) ratings - N
 5) new photos from followed users - M
 6) added to group - N
@@ -11,8 +11,8 @@ Photo
 	c) used in a forum - M
 	d) added to a group - M
 	e) if shared by other users on email/facebook/google+ - N
-8) award presented - N
-9) added to others ideadbooks - M
+8) award presented - M
+9) added to others ideadbooks - N
 
 Photographer
 1) followed - N

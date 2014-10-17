@@ -184,16 +184,21 @@
     <li><a onclick="groups();" href="javascript:void(0);"><h4>Groups</h4></a></li>
     <li><a onclick="questions();" href="javascript:void(0);"><h4>Questions</h3></a></li>
   </ul>
+  <hr>
+  {% set photo_load_lower_limit = 0 %}
+  {% set photo_load_upper_limit = 12 %}
   <div class="row" style="margin-top:20px;z-index:1;"> 
     <div class="container">
+
       <div id="my_ideas">
       {%for p in photos%}
+        {% if loop.index>photo_load_lower_limit and loop.index <= photo_load_upper_limit %}
         <div class="col-md-3 col-sm-3 col-xs-12" style="overflow:hidden;" align="center">
           <a onclick="photos_thumbs('/photo/{{p.key.urlsafe()}}', '{{get_serving_url(p.blobKey,size=100)}}');" href="javascript:void(0);"><img src="{{get_serving_url(p.blobKey,size=100)}}" height="140px" id="temp1" alt="photo"></a>
           <br>
           
           <div class="button-container post-action padding_top" style="margin-bottom:10px">
-            <p>{{p.likes}} <i class="fa fa-thumbs-o-up fa-1x"></i> | {{p.viewed}} <i class="fa fa-eye fa-1x"></i></p>
+            <p>{{p.likes}} <i class="fa fa-thumbs-o-up fa-1x"></i> | {{p.viewed}}<i class="fa fa-eye fa-1x"></i></p>
             <form method="post">
               <input type="hidden" name="actionType" value="edit">
               <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
@@ -221,9 +226,20 @@
             </form>
           </div>
         </div>
+        {%endif%}
       {%endfor%}
     </div>
+    <div id="additional_loads"></div>
     </div>
+    <ul class="pagination">
+      <li><a href="#">&laquo;</a></li>
+      <li><a href="#">1</a></li>
+      <li><a href="#">2</a></li>
+      <li><a href="#">3</a></li>
+      <li><a href="#">4</a></li>
+      <li><a href="#">5</a></li>
+      <li><a href="#">&raquo;</a></li>
+    </ul>
   </div>
   <div style="display:none">
     <div id="photos_thumb_views">
@@ -314,7 +330,7 @@
   </div>
 </div>
 <div style="display:none;">
-  <div id="portfolios">
+  <div id="portfolios"> 
       <div class="col-md-3">
         <a href="/{{me.key.id()}}/portfolio"><h4>All Photos</h4>  
         <img src="http://localhost:8080/servephoto/Usy_-HJCX6Qwl0nIayd47g==" alt="Profile Image" class="img-rounded" width="140px"></a><br>
@@ -357,12 +373,12 @@
   <div id="photos">
     <br>
       {%for p in photos%}
-        <div class="col-md-3 col-sm-3 col-xs-4" style="overflow:hidden;" align="center">
+        <div class="col-md-3 col-sm-3 col-xs-12" style="overflow:hidden;" align="center">
           <a onclick="photos_thumbs('/photo/{{p.key.urlsafe()}}', '{{get_serving_url(p.blobKey,size=100)}}');" href="javascript:void(0);"><img src="{{get_serving_url(p.blobKey,size=100)}}" height="140px" id="temp1" alt="photo"></a>
           <br>
           
           <div class="button-container post-action padding_top" style="margin-bottom:10px">
-            <p>{{p.likes}} <i class="fa fa-thumbs-o-up fa-1x"></i> | {{p.viewed}} <i class="fa fa-eye fa-1x"></i></p>
+            <p>{{p.likes}} <i class="fa fa-thumbs-o-up fa-1x"></i> | {{p.viewed}}<i class="fa fa-eye fa-1x"></i></p>
             <form method="post">
               <input type="hidden" name="actionType" value="edit">
               <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
@@ -393,7 +409,6 @@
       {%endfor%}
   </div>
 </div>
-
 <script>
   function blogs() {
     $( "#my_ideas" ).load( "/{{me.key.id()}} #blogs" );
@@ -426,6 +441,7 @@
   function change_main_image_thumb(img_link, img_src) {
     document.getElementById("main_img_thumb").innerHTML = "<a href='"+img_link+"'><img alt='' src='"+img_src+"' class='img_display'/></a>";
   }
+
 </script>
  <hr>
         <!-- Intro -->

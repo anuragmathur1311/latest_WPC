@@ -167,6 +167,7 @@ class SearchResultsHandler(PageHandler):           ## TODO
 class ForumHandler(PageHandler):    ## TODO
 	def get(self):
 		if not self.user:
+			templateVals = {'me': ""}
 			self.render('forum.html', **templateVals)
 		else:
 			templateVals = {'me': self.user}
@@ -189,6 +190,7 @@ class ForumHandler(PageHandler):    ## TODO
 class GroupsHandler(PageHandler):
 	def get(self):
 		if not self.user:
+			templateVals = {'me': ""}
 			self.render('groups.html', **templateVals)
 		else:
 			templateVals = {'me': self.user}
@@ -199,6 +201,7 @@ class GroupsHandler(PageHandler):
 class PhotosHandler(PageHandler):
 	def get(self):
 		if not self.user:
+			templateVals = {'me': ""}
 			self.render('photos.html', **templateVals)
 		else:
 			templateVals = {'me': self.user}
@@ -209,6 +212,7 @@ class PhotosHandler(PageHandler):
 class BlogsHandler(PageHandler):
 	def get(self):
 		if not self.user:
+			templateVals = {'me': ""}
 			self.render('blogs.html', **templateVals)
 		else:
 			templateVals = {'me': self.user}
