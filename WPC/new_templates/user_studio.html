@@ -332,7 +332,7 @@
 <div style="display:none;">
   <div id="portfolios"> 
       <div class="col-md-3">
-        <a href="/{{me.key.id()}}/portfolio"><h4>All Photos</h4>  
+        <a href="/portfolio"><h4>All Photos</h4>  
         <img src="http://localhost:8080/servephoto/Usy_-HJCX6Qwl0nIayd47g==" alt="Profile Image" class="img-rounded" width="140px"></a><br>
           <div class="button-container post-action padding_top">
             <form method="post">
@@ -361,7 +361,52 @@
 </div>
 <div style="display:none;">
   <div id="groups">
-    <h2>You have not created or you are not a member of any groups</h2>
+    <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
+      {%for b in user.groups%}
+      {%if loop.index > 0%}
+       <h2>There are no groups that you have created of are a member of</h2>
+       {%endif%}
+       {% endfor %}
+      {%for b in user.groups%}
+      {%if loop.index % 4 == 1%}
+              <a href="/group/{{b.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.get().name}}</h3>
+              <img src="{{b.get().cover_photo}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5></a>
+              <div class="blog_content thumb_blog_content">{{b.get().description}}</div>
+              <hr>
+      {%endif%}
+      {% endfor %}
+      </div>
+      <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
+      {%for b in user.groups%}
+      {%if loop.index % 4 == 2%}
+              <a href="/group/{{b.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.get().name}}</h3>
+              <img src="{{b.get().cover_photo}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5></a>
+              <div class="blog_content thumb_blog_content">{{b.get().description}}</div>
+              <hr>
+      {%endif%}
+      {% endfor %}
+      </div>
+      <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
+      {%for b in user.groups%}
+      {%if loop.index % 4 == 3%}
+              <a href="/group/{{b.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.get().name}}</h3>
+              <img src="{{b.get().cover_photo}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5></a>
+              <div class="blog_content thumb_blog_content">{{b.get().description}}</div>
+              <hr>
+      {%endif%}
+      {% endfor %}
+      </div>
+      <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
+      {%for b in user.groups%}
+      {%if loop.index % 4 == 0%}
+              <a href="/group/{{b.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.get().name}}</h3>
+              <img src="{{b.get().cover_photo}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5></a>
+              <div class="blog_content thumb_blog_content">{{b.get().description}}</div>
+              <hr>
+      {%endif%}
+      {% endfor %}
+      </div>
+   
   </div>
 </div>
 <div style="display:none;">

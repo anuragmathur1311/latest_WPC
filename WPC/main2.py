@@ -391,17 +391,17 @@ class UserQuestionsHandler(PageHandler):
 			self.redirect('/')
 
 class PortfolioHandler(PageHandler):
-	def get(self, resource):
-		userid = resource
-		user = User.get_by_id(userid)
-		if user:
+	def get(self):
+		if not self.user:
+			templateVals = {'me': ""}
+			self.render('photos.html', **templateVals)
+		else:
 			templateVals = {'me': self.user}
 			templateVals['user'] = user
-			photos = Picture.of_ancestor(self.user.key)
-			templateVals['photos'] = photos
+			myphotos = Picture.of_ancestor(self.user.key)
+			templateVals['myphotos'] = myphotos
 			self.render('portfolioperm.html', **templateVals)
-		else:
-			self.redirect('/')
+
 
 class UserPortfolioHandler(PageHandler):
 	def get(self, resource):
@@ -416,41 +416,7 @@ class UserPortfolioHandler(PageHandler):
 		else:
 			self.redirect('/')
 
-class GroupNewHandler(PageHandler ,blobstore_handlers.BlobstoreUploadHandler):
-	def get(self):
-		if self.user:
-			templateVals = {'me': self.user}
-			photos = Picture.of_ancestor(self.user.key)
-			templateVals['photos'] = photos
-			uploadUrl = blobstore.create_upload_url('/newgroup')
-			templateVals['uploadUrl'] = uploadUrl
-			self.render('new_group.html', **templateVals)
-		else:
-			self.redirect('/')
 
-	def post(self):
-		if self.user:
-			action = self.request.get('actionType')
-			name = self.request.get('name')
-			description = self.request.get('description')
-			if action == "select":
-				cover = self.request.get('cover_image')
-			elif action == "upload":
-				uploads = self.get_uploads('cover_photo')
-				blobInfo = uploads[0]
-				photo = create_picture(blobInfo.key(), None, None, None, self.user.key)
-				cover = images.get_serving_url(photo.blobKey)
-			if name:
-				group = create_group(name, description, cover, self.user.key)
-				self.redirect('/group/%s' % group.key.urlsafe())
-			else:
-				errorMsg = "Please enter group's name!"
-				templateVals = {'me': self.user, 'name': name, 'description': description, 'submitError': errorMsg}
-				photos = Picture.of_ancestor(self.user.key)
-				templateVals['photos'] = photos
-				self.render('new_group.html', **templateVals)
-		else:
-			self.redirect('/')
 
 class PortfolioNewHandler(PageHandler ,blobstore_handlers.BlobstoreUploadHandler):
 	def get(self):
@@ -458,8 +424,6 @@ class PortfolioNewHandler(PageHandler ,blobstore_handlers.BlobstoreUploadHandler
 			templateVals = {'me': self.user}
 			photos = Picture.of_ancestor(self.user.key)
 			templateVals['photos'] = photos
-			uploadUrl = blobstore.create_upload_url('/newgroup')
-			templateVals['uploadUrl'] = uploadUrl
 			self.render('new_portfolio.html', **templateVals)
 		else:
 			self.redirect('/')
@@ -536,6 +500,41 @@ class PhotoEditHandler(PageHandler):
 			photo.put()
 			self.redirect('/%s/photos' % self.user.key.id())
 
+class GroupNewHandler(PageHandler ,blobstore_handlers.BlobstoreUploadHandler):
+	def get(self):
+		if self.user:
+			templateVals = {'me': self.user}
+			photos = Picture.of_ancestor(self.user.key)
+			templateVals['photos'] = photos
+			uploadUrl = blobstore.create_upload_url('/newgroup')
+			templateVals['uploadUrl'] = uploadUrl
+			self.render('new_group.html', **templateVals)
+		else:
+			self.redirect('/')
+
+	def post(self):
+		if self.user:
+			action = self.request.get('actionType')
+			name = self.request.get('name')
+			description = self.request.get('description')
+			if action == "select":
+				cover = self.request.get('cover_image')
+			elif action == "upload":
+				uploads = self.get_uploads('cover_photo')
+				blobInfo = uploads[0]
+				photo = create_picture(blobInfo.key(), None, None, None, self.user.key)
+				cover = images.get_serving_url(photo.blobKey)
+			if name:
+				group = create_group(name, description, cover, self.user.key)
+				self.redirect('/group/%s' % group.key.urlsafe())
+			else:
+				errorMsg = "Please enter group's name!"
+				templateVals = {'me': self.user, 'name': name, 'description': description, 'submitError': errorMsg}
+				photos = Picture.of_ancestor(self.user.key)
+				templateVals['photos'] = photos
+				self.render('new_group.html', **templateVals)
+		else:
+			self.redirect('/')
 
 class BlogNewHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler):
 	def get(self):

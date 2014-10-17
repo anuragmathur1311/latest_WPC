@@ -45,7 +45,7 @@
 			  <div class="row">
 				<div class="container" id="thumb_img1"></div>
 			  </div>
-			  <div id="group_cover_image"></div>
+			  <div id="blog_cover_image"></div>
 			  <p></p>
 			  <h3>Write the blog</h3>
 			<textarea class="ckeditor" cols="80" id="editor1" name="content" rows="10">{{content}}</textarea><br>
@@ -92,7 +92,7 @@
 <script type="text/javascript">
 function change_main_image(img_key) {
     document.getElementById("main_img").innerHTML = "<img alt='' src='"+img_key+"' height='100%' class='img_display'/>";
-    document.getElementById("group_cover_image").innerHTML = "<input type='hidden' name='cover_image' value='"+img_key+"'><input type='hidden' name='actionType' value='select'>";
+    document.getElementById("blog_cover_image").innerHTML = "<input type='hidden' name='cover_image' value='"+img_key+"'><input type='hidden' name='actionType' value='select'>";
 	document.getElementById("thumb_img1").innerHTML = "<div class='col-lg-4'><img class='img-rounded' src='" + img_key + "' height='140px' alt='"+img_key+"'></div>";
 } 
 </script>
