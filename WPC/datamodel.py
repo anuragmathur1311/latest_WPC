@@ -44,7 +44,7 @@ class User(ndb.Model):
 	@property
 	def cover1_url(self):
 		if self.cover1 is None:
-			return "/images/default_user_cover1.jpg"
+			return "/images/default_user_cover2.jpg"
 		else:
 			cover1_photo = self.cover1.get()
 			return images.get_serving_url(cover1_photo.blobKey)
