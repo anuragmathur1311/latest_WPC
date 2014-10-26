@@ -3,8 +3,8 @@ from google.appengine.ext import blobstore
 import utils
 import logging
 
-def create_user(email, name, password):
-	user = User(id=email, name=name, email=email, score=0)
+def create_user(email, name, wpc_name, password):
+	user = User(id=wpc_name, name=name, wpc_name=wpc_name, email=email, score=0)
 	user.passwordHash = utils.hash_password(email, password)
 	userKey = user.put()
 	return user

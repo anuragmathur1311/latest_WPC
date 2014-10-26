@@ -3,6 +3,7 @@ from google.appengine.api import images
 
 class User(ndb.Model):
 	name = ndb.StringProperty(required=True)
+	wpc_name = ndb.StringProperty(required=True)
 	email = ndb.StringProperty(required=True)
 	passwordHash = ndb.StringProperty(required=True, indexed=False)
 	city = ndb.StringProperty()
@@ -32,6 +33,7 @@ class User(ndb.Model):
 	interests = ndb.KeyProperty(kind='Tag', repeated=True)
 	storybook = ndb.KeyProperty(kind='Story', repeated=True)
 	notifications = ndb.KeyProperty(kind='Story', repeated=True)
+	photography_interests = ndb.StringProperty(repeated=True)
 	
 	@property
 	def avatar_url(self):
@@ -64,6 +66,16 @@ class Group(ndb.Model): # Parent=User (Admin)
 	created = ndb.DateTimeProperty(auto_now_add=True)
 	description = ndb.TextProperty()
 	cover_photo = ndb.StringProperty()
+
+class Ideabook(ndb.Model):
+	name = ndb.StringProperty(required=True)
+	created = ndb.DateTimeProperty(auto_now_add=True)
+	updated = ndb.DateTimeProperty(auto_now=True)
+	photographers = ndb.KeyProperty(kind='User', repeated=True)
+	photos = ndb.KeyProperty(kind='Picture', repeated=True)
+	blogs = ndb.KeyProperty(kind='Blog', repeated=True)
+	groups = ndb.KeyProperty(kind='Group', repeated=True)
+	questions = ndb.KeyProperty(kind='Questions', repeated=True)
 
 class Itembook(ndb.Model):
 	name = ndb.StringProperty(required=True)

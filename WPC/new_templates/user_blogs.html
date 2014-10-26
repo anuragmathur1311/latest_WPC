@@ -24,8 +24,75 @@
 {%endblock%}
 
 {%block pageContent%}
-<h1> {{me.name}}<em> Blogs</em>  {%if not me%}<a href="/signin"><button class="btn btn-xs btn-danger" type="button"><i class="fa fa-register" style="color:white;"></i>  Register with WPC</button></a>{%endif%}</h1>
-<hr>
+  <div class="row">
+    <div class="col-md-4">
+      <div class="col-md-6">
+        <ul class="list-inline">
+      {%if me.website%}
+        <a href="{{me.website}}"><img src="/images/WPC_app_icon.jpg" alt="Profile Image" width="40px"><a>
+      {%else%}
+        <img src="/images/WPC_app_icon.jpg" alt="Profile Image" width="60px">
+      {% endif %}
+      {%if me.facebook%}
+        <li color="white"><a href="{{me.facebook}}"><i class="fa fa-facebook fa-2x" style="color:black;"></i></a></li>
+      {% endif %}
+      {%if me.twitter%}
+        <li color="white"><a href="{{me.twitter}}"><i class="fa fa-twitter fa-2x" style="color:black;"></i></a></li>
+      {% endif %}
+      {%if me.youtube%}
+        <li color="white"><a href="{{me.youtube}}"><i class="fa fa-youtube fa-2x" style="color:black;"></i></a></li>
+      {% endif %}
+      {%if me.pinterest%}
+        <li color="white"><a href="{{me.pinterest}}"><i class="fa fa-pinterest fa-2x" style="color:black;"></i></a></li>
+      {% endif %}
+      {%if me.google_plus%}
+        <li color="white"><a href="{{me.google_plus}}"><i class="fa fa-google-plus fa-2x" style="color:black;"></i></a></li>
+      {% endif %}
+    </ul>
+    </div>
+    <div class="col-md-6" style="margin:0px;">
+      <div class="col-md-6">
+        <div class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Find Blogs</a>
+              <ul class="dropdown-menu">
+                <li>
+                    <form class="navbar-form navbar-left" role="search" action="photos.html">
+                      <div class="form-group">
+                          <input type="text" class="form-control" placeholder="Find Photos">
+                      </div>
+                    </form>                        
+                </li>
+              </ul>
+          </div>
+          </div>
+          <div class="col-md-6">
+            <div class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Sort<b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li><a href="#">Alphabatically A-Z</a></li>
+                  <li><a href="#">Alphabatically Z-A</a></li>
+                </ul>
+              </div>
+          </div>
+        </div>
+  </div>
+  <div class="col-md-4">
+      <h1> {{me.name}}<em> Blogs</em>  {%if not me%}<a href="/signin"><button class="btn btn-xs btn-danger" type="button"><i class="fa fa-register" style="color:white;"></i>  Register with WPC</button></a>{%endif%}</h1>
+  </div>
+  <div class="col-md-4">
+    <div class="col-md-6">
+    </div>
+    <div class="col-md-6">
+      <div class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><h4>My Tags</h4></a>
+              <ul class="dropdown-menu">
+                <div class="all_tags"></div>
+              </ul>
+          </div>
+    </div>
+  </div>
+</div>
+  <hr style="margin:0px;">
   	<div class="col-md-10 col-md-offset-1" id="blogs_section">
 	    <div id="myblogs">
       {%if me%}

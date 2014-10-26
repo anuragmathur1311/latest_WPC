@@ -92,16 +92,20 @@ My Photos | WPC
 		</div>
 	</div>
 </div>
-  <hr>
+  <hr style="margin:0px;">
 
 	<script src="//code.jquery.com/jquery-1.10.2.js"></script>
 	<div class="row" >
+		{%for p in photos%}
+        {% else %}
+          <div>
+            <h2>No photos in {{user.name}} Portfolio </h2>
+            <a href="/newphoto">Add Photos</a>
+          </div>
+            {%set no_photos = 1%}
+        {% endfor %}
+        {%if no_photos != 1%}
 		  <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
-	      {%for p in photos%}
-	      {%if loop.index == 0%}
-	       <h2>There are no photos in your portfolio yet</h2>
-	       {%endif%}
-	       {% endfor %}
 	      {%for p in photos%}
 	      {%if loop.index % 4 == 1%}
 	              <a href="/photo/{{p.key.urlsafe()}}"><img src="{{get_serving_url(p.blobKey,size=100)}}" width="98%" id="temp1" alt="photo"></a>
@@ -117,34 +121,34 @@ My Photos | WPC
 					{%endfor%}
 					<br>
 					
-					<div class="button-container post-action padding_top padding_bottom">
-						<p>{{p.likes}} <i class="fa fa-thumbs-o-up fa-1x"></i> | {{p.viewed}} <i class="fa fa-eye fa-1x"></i></p>
-						<form method="post">
-							<input type="hidden" name="actionType" value="edit">
-							<input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
-							<button class="btn btn-primary btn-xs" type="submit" value="Edit"><span class="glyphicon glyphicon-edit" style="color:white;"></span></button>
-						</form>
-						<form method="post">
-							<input type="hidden" name="actionType" value="delete">
-							<input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
-							<button class="btn btn-primary btn-xs" type="submit" value="Delete"><span class="glyphicon glyphicon-trash" style="color:white;"></span></button>
-						</form>
-						<form method="post">
-							<input type="hidden" name="actionType" value="add">
-							<input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
-							<button class="btn btn-primary btn-xs" type="submit" value="Delete"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
-						</form>
-						<form method="post">
-							<input type="hidden" name="actionType" value="share">
-							<input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
-							<button class="btn btn-primary btn-xs" type="submit" value="Delete"><i class="fa fa-share fa-1x"></i></button>
-						</form>
-						<form method="post">
-							<input type="hidden" name="actionType" value="download">
-							<input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
-							<button class="btn btn-primary btn-xs" type="submit" value="Delete"><i class="fa fa-download fa-1x"></i></button>
-						</form>
-					</div>
+			          <div class="button-container post-action padding_top padding_bottom">
+			            <p>{{p.likes}} <i class="fa fa-thumbs-o-up fa-1x"></i> | {{p.viewed}} <i class="fa fa-eye fa-1x"></i></p>
+			            <form method="post">
+			              <input type="hidden" name="actionType" value="edit">
+			              <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+			              <button class="btn btn-primary btn-xs" type="submit" title="Edit Image" value="Edit"><span class="glyphicon glyphicon-edit" style="color:white;"></span></button>
+			            </form>
+			            <form method="post">
+			              <input type="hidden" name="actionType" value="delete">
+			              <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+			              <button class="btn btn-primary btn-xs" type="submit" title="Delete Image" value="Delete"><span class="glyphicon glyphicon-trash" style="color:white;"></span></button>
+			            </form>
+			            <form method="post">
+			              <input type="hidden" name="actionType" value="add">
+			              <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+			              <button class="btn btn-primary btn-xs" type="submit" title="Add Image to Ideabook" value="Delete"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
+			            </form>
+			            <form method="post">
+			              <input type="hidden" name="actionType" value="share">
+			              <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+			              <button class="btn btn-primary btn-xs" type="submit" title="Share Image" value="Delete"><i class="fa fa-share fa-1x"></i></button>
+			            </form>
+			            <form method="post">
+			              <input type="hidden" name="actionType" value="download">
+			              <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+			              <button class="btn btn-primary btn-xs" type="submit"title="Download Image"  value="Delete"><i class="fa fa-download fa-1x"></i></button>
+			            </form>
+			          </div>
 	              <hr>
 	      {%endif%}
 	      {% endfor %}
@@ -165,34 +169,34 @@ My Photos | WPC
 					{%endfor%}
 					<br>
 					
-					<div class="button-container post-action padding_top padding_bottom">
-						<p>{{p.likes}} <i class="fa fa-thumbs-o-up fa-1x"></i> | {{p.viewed}} <i class="fa fa-eye fa-1x"></i></p>
-						<form method="post">
-							<input type="hidden" name="actionType" value="edit">
-							<input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
-							<button class="btn btn-primary btn-xs" type="submit" value="Edit"><span class="glyphicon glyphicon-edit" style="color:white;"></span></button>
-						</form>
-						<form method="post">
-							<input type="hidden" name="actionType" value="delete">
-							<input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
-							<button class="btn btn-primary btn-xs" type="submit" value="Delete"><span class="glyphicon glyphicon-trash" style="color:white;"></span></button>
-						</form>
-						<form method="post">
-							<input type="hidden" name="actionType" value="add">
-							<input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
-							<button class="btn btn-primary btn-xs" type="submit" value="Delete"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
-						</form>
-						<form method="post">
-							<input type="hidden" name="actionType" value="share">
-							<input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
-							<button class="btn btn-primary btn-xs" type="submit" value="Delete"><i class="fa fa-share fa-1x"></i></button>
-						</form>
-						<form method="post">
-							<input type="hidden" name="actionType" value="download">
-							<input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
-							<button class="btn btn-primary btn-xs" type="submit" value="Delete"><i class="fa fa-download fa-1x"></i></button>
-						</form>
-					</div>
+			          <div class="button-container post-action padding_top padding_bottom">
+			            <p>{{p.likes}} <i class="fa fa-thumbs-o-up fa-1x"></i> | {{p.viewed}} <i class="fa fa-eye fa-1x"></i></p>
+			            <form method="post">
+			              <input type="hidden" name="actionType" value="edit">
+			              <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+			              <button class="btn btn-primary btn-xs" type="submit" title="Edit Image" value="Edit"><span class="glyphicon glyphicon-edit" style="color:white;"></span></button>
+			            </form>
+			            <form method="post">
+			              <input type="hidden" name="actionType" value="delete">
+			              <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+			              <button class="btn btn-primary btn-xs" type="submit" title="Delete Image" value="Delete"><span class="glyphicon glyphicon-trash" style="color:white;"></span></button>
+			            </form>
+			            <form method="post">
+			              <input type="hidden" name="actionType" value="add">
+			              <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+			              <button class="btn btn-primary btn-xs" type="submit" title="Add Image to Ideabook" value="Delete"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
+			            </form>
+			            <form method="post">
+			              <input type="hidden" name="actionType" value="share">
+			              <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+			              <button class="btn btn-primary btn-xs" type="submit" title="Share Image" value="Delete"><i class="fa fa-share fa-1x"></i></button>
+			            </form>
+			            <form method="post">
+			              <input type="hidden" name="actionType" value="download">
+			              <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+			              <button class="btn btn-primary btn-xs" type="submit"title="Download Image"  value="Delete"><i class="fa fa-download fa-1x"></i></button>
+			            </form>
+			          </div>
 	              <hr>
 	      {%endif%}
 	      {% endfor %}
@@ -213,34 +217,34 @@ My Photos | WPC
 					{%endfor%}
 					<br>
 					
-					<div class="button-container post-action padding_top padding_bottom">
-						<p>{{p.likes}} <i class="fa fa-thumbs-o-up fa-1x"></i> | {{p.viewed}} <i class="fa fa-eye fa-1x"></i></p>
-						<form method="post">
-							<input type="hidden" name="actionType" value="edit">
-							<input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
-							<button class="btn btn-primary btn-xs" type="submit" value="Edit"><span class="glyphicon glyphicon-edit" style="color:white;"></span></button>
-						</form>
-						<form method="post">
-							<input type="hidden" name="actionType" value="delete">
-							<input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
-							<button class="btn btn-primary btn-xs" type="submit" value="Delete"><span class="glyphicon glyphicon-trash" style="color:white;"></span></button>
-						</form>
-						<form method="post">
-							<input type="hidden" name="actionType" value="add">
-							<input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
-							<button class="btn btn-primary btn-xs" type="submit" value="Delete"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
-						</form>
-						<form method="post">
-							<input type="hidden" name="actionType" value="share">
-							<input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
-							<button class="btn btn-primary btn-xs" type="submit" value="Delete"><i class="fa fa-share fa-1x"></i></button>
-						</form>
-						<form method="post">
-							<input type="hidden" name="actionType" value="download">
-							<input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
-							<button class="btn btn-primary btn-xs" type="submit" value="Delete"><i class="fa fa-download fa-1x"></i></button>
-						</form>
-					</div>
+			          <div class="button-container post-action padding_top padding_bottom">
+			            <p>{{p.likes}} <i class="fa fa-thumbs-o-up fa-1x"></i> | {{p.viewed}} <i class="fa fa-eye fa-1x"></i></p>
+			            <form method="post">
+			              <input type="hidden" name="actionType" value="edit">
+			              <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+			              <button class="btn btn-primary btn-xs" type="submit" title="Edit Image" value="Edit"><span class="glyphicon glyphicon-edit" style="color:white;"></span></button>
+			            </form>
+			            <form method="post">
+			              <input type="hidden" name="actionType" value="delete">
+			              <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+			              <button class="btn btn-primary btn-xs" type="submit" title="Delete Image" value="Delete"><span class="glyphicon glyphicon-trash" style="color:white;"></span></button>
+			            </form>
+			            <form method="post">
+			              <input type="hidden" name="actionType" value="add">
+			              <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+			              <button class="btn btn-primary btn-xs" type="submit" title="Add Image to Ideabook" value="Delete"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
+			            </form>
+			            <form method="post">
+			              <input type="hidden" name="actionType" value="share">
+			              <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+			              <button class="btn btn-primary btn-xs" type="submit" title="Share Image" value="Delete"><i class="fa fa-share fa-1x"></i></button>
+			            </form>
+			            <form method="post">
+			              <input type="hidden" name="actionType" value="download">
+			              <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+			              <button class="btn btn-primary btn-xs" type="submit"title="Download Image"  value="Delete"><i class="fa fa-download fa-1x"></i></button>
+			            </form>
+			          </div>
 	              <hr>
 	      {%endif%}
 	      {% endfor %}
@@ -261,38 +265,39 @@ My Photos | WPC
 					{%endfor%}
 					<br>
 					
-					<div class="button-container post-action padding_top padding_bottom">
-						<p>{{p.likes}} <i class="fa fa-thumbs-o-up fa-1x"></i> | {{p.viewed}} <i class="fa fa-eye fa-1x"></i></p>
-						<form method="post">
-							<input type="hidden" name="actionType" value="edit">
-							<input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
-							<button class="btn btn-primary btn-xs" type="submit" value="Edit"><span class="glyphicon glyphicon-edit" style="color:white;"></span></button>
-						</form>
-						<form method="post">
-							<input type="hidden" name="actionType" value="delete">
-							<input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
-							<button class="btn btn-primary btn-xs" type="submit" value="Delete"><span class="glyphicon glyphicon-trash" style="color:white;"></span></button>
-						</form>
-						<form method="post">
-							<input type="hidden" name="actionType" value="add">
-							<input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
-							<button class="btn btn-primary btn-xs" type="submit" value="Delete"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
-						</form>
-						<form method="post">
-							<input type="hidden" name="actionType" value="share">
-							<input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
-							<button class="btn btn-primary btn-xs" type="submit" value="Delete"><i class="fa fa-share fa-1x"></i></button>
-						</form>
-						<form method="post">
-							<input type="hidden" name="actionType" value="download">
-							<input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
-							<button class="btn btn-primary btn-xs" type="submit" value="Delete"><i class="fa fa-download fa-1x"></i></button>
-						</form>
-					</div>
+			          <div class="button-container post-action padding_top padding_bottom">
+			            <p>{{p.likes}} <i class="fa fa-thumbs-o-up fa-1x"></i> | {{p.viewed}} <i class="fa fa-eye fa-1x"></i></p>
+			            <form method="post">
+			              <input type="hidden" name="actionType" value="edit">
+			              <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+			              <button class="btn btn-primary btn-xs" type="submit" title="Edit Image" value="Edit"><span class="glyphicon glyphicon-edit" style="color:white;"></span></button>
+			            </form>
+			            <form method="post">
+			              <input type="hidden" name="actionType" value="delete">
+			              <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+			              <button class="btn btn-primary btn-xs" type="submit" title="Delete Image" value="Delete"><span class="glyphicon glyphicon-trash" style="color:white;"></span></button>
+			            </form>
+			            <form method="post">
+			              <input type="hidden" name="actionType" value="add">
+			              <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+			              <button class="btn btn-primary btn-xs" type="submit" title="Add Image to Ideabook" value="Delete"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
+			            </form>
+			            <form method="post">
+			              <input type="hidden" name="actionType" value="share">
+			              <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+			              <button class="btn btn-primary btn-xs" type="submit" title="Share Image" value="Delete"><i class="fa fa-share fa-1x"></i></button>
+			            </form>
+			            <form method="post">
+			              <input type="hidden" name="actionType" value="download">
+			              <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+			              <button class="btn btn-primary btn-xs" type="submit"title="Download Image"  value="Delete"><i class="fa fa-download fa-1x"></i></button>
+			            </form>
+			          </div>
 	              <hr>
 	      {%endif%}
 	      {% endfor %}
 	      </div>
+	      {%endif%}
 	</div>
 			<!-- FOOTER -->
 			<footer class="footer_new">

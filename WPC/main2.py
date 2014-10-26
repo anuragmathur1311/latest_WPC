@@ -220,23 +220,6 @@ class BlogsHandler(PageHandler):
 			templateVals['myblogs'] = myblogs	
 			self.render('blogs.html', **templateVals)
 
-class UserStudioHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler):
-	def get(self, resource):
-		#userid = str(urllib.unquote(resource))
-		userid = resource
-		user = User.get_by_id(userid)
-		if user:
-			templateVals = {'me': self.user}
-			templateVals['user'] = user
-			photos = Picture.of_ancestor(user.key)
-			templateVals['photos'] = photos
-			blogs = Blog.of_ancestor(user.key)
-			templateVals['blogs'] = blogs
-			uploadUrl = blobstore.create_upload_url('/resource')
-			templateVals['uploadUrl'] = uploadUrl
-			self.render('user_studio.html', **templateVals)
-		else:
-			self.redirect('/')
 
 class UserIdeabookHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler):
 	def get(self, resource):
@@ -256,6 +239,77 @@ class UserIdeabookHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler
 		else:
 			self.redirect('/')
 
+class UserStudioHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler):
+	def get(self, resource):
+		#userid = str(urllib.unquote(resource))
+		userid = resource
+		user = User.get_by_id(userid)
+		if user:
+			templateVals = {'me': self.user}
+			templateVals['user'] = user
+			photos = Picture.of_ancestor(user.key)
+			templateVals['photos'] = photos
+			blogs = Blog.of_ancestor(user.key)
+			templateVals['blogs'] = blogs
+			uploadUrl = blobstore.create_upload_url('/resource')
+			templateVals['uploadUrl'] = uploadUrl
+			self.render('user_studio.html', **templateVals)
+		else:
+			self.redirect('/')
+
+	def post(self, resource):
+		userid = self.request.get('user')
+		user = User.get_by_id(userid)
+		print "HERE"
+		if user and self.user == user:
+			form = self.request.get('formType')
+			action = self.request.get('actionType')
+			print form + " : " + action
+			if form == "profile_image":
+				if action == "select":
+					user.avatar = get_key_urlunsafe(self.request.get('avatarKey'))
+				elif action == "upload":
+					uploads = self.get_uploads('avatarFile')
+					blobInfo = uploads[0]
+					photo = create_picture(blobInfo.key(), None, None, None, self.user.key)
+					user.avatar = photo.key
+				elif action == "remove":
+					user.avatar = None
+			elif form == "cover_image1":
+				if action == "select":
+					user.cover1 = get_key_urlunsafe(self.request.get('cover1Key'))
+				elif action == "upload":
+					uploads = self.get_uploads('cover1')
+					blobInfo = uploads[0]
+					photo = create_picture(blobInfo.key(), None, None, None, self.user.key)
+					user.cover1 = photo.key
+				elif action == "remove":
+					user.cover1 = None
+			elif form == "cover_image2":
+				if action == "select":
+					user.cover2 = get_key_urlunsafe(self.request.get('cover2key'))
+				elif action == "upload":
+					uploads = self.get_uploads('cover2')
+					blobInfo = uploads[0]
+					photo = create_picture(blobInfo.key(), None, None, None, self.user.key)
+					user.cover2 = photo.key
+				elif action == "remove":
+					user.cover2 = None
+			elif form == "photography_types":
+				print "photography_types"
+				photoType = self.request.get_all('photoType')
+				photoTypeDelete = self.request.get_all('photoTypeDelete')
+				user.photography_interests += photoType
+				for i in photoTypeDelete:
+					user.photography_interests.remove(i)
+			else:
+				self.redirect('/' + userid)
+			user.put()
+			self.redirect('/' + userid)
+		else:
+			print "OH NO!"
+			self.redirect('/')
+
 class UserEditHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler):
 	def post(self):
 		userid = self.request.get('user')
@@ -272,7 +326,7 @@ class UserEditHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler):
 					uploads = self.get_uplaods('avatarFile')
 					blobInfo = uploads[0]
 					photo = create_picture(blobInfo.key(), None, None, None, self.user.key)
-					user.avatar = photo.key
+					user.avatar = images.get_serving_url(photo.blobKey)
 				elif action == "remove":
 					user.avatar = None
 			elif form == "cover_image1":
@@ -310,6 +364,8 @@ class UserAboutHandler(PageHandler):
 		if user:
 			templateVals = {'me': self.user}
 			templateVals['user'] = user
+			photos = Picture.of_ancestor(user.key)
+			templateVals['photos'] = photos
 			self.render('user_about.html', **templateVals)
 		else:
 			self.redirect('/')
@@ -734,18 +790,23 @@ class SignupHandler(PageHandler):
 	def post(self):
 	#	try:
 			name = self.request.get('name')
+			wpc_name = self.request.get('wpc_name')
 			email = self.request.get('email')
 			password = self.request.get('password')
 			verifyPassword = self.request.get('verifyPassword')
 			templateVals = {'name': name, 'signupEmail': email}
-			if name and email and password and (verifyPassword == password):
+			if name and wpc_name and email and password and (verifyPassword == password):
 				prevUser = User.get_by_id(email)
+				wpcUser = User.get_by_id(wpc_name)
 				if not prevUser:
-					user = create_user(email, name, password)
-					self.login(user)
-					self.redirect("/")
+					if not wpcUser:
+						user = create_user(email, name, wpc_name, password)
+						self.login(user)
+						self.redirect("/")
+					else:
+						templateVals['signupError'] = "Account already exists for this wpc user name"
 				else:
-					templateVals['signupError'] = "Account already exists for this Email ID!"
+					templateVals['signupError'] = "Account already exists for this Email ID or wpc user name"
 			else:
 				templateVals['signupError'] = "Enter all fields!"
 			self.render('signin.html', **templateVals)
