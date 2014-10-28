@@ -260,7 +260,7 @@ class UserStudioHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler):
 	def post(self, resource):
 		userid = self.request.get('user')
 		user = User.get_by_id(userid)
-		print "HERE"
+		print userid
 		if user and self.user == user:
 			form = self.request.get('formType')
 			action = self.request.get('actionType')
@@ -305,6 +305,30 @@ class UserStudioHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler):
 			else:
 				self.redirect('/' + userid)
 			user.put()
+			self.redirect('/' + userid)
+		elif user != self.user:
+			print "user != self.user"
+			form = self.request.get('formType')
+			action = self.request.get('actionType')
+			if form == "personal_message":
+				message = self.request.get('message')
+			if form == "photography_awards":
+				photoAward = self.request.get_all('photoAward')
+				user.awards += photoAward
+			if form == "follow":
+				user_key = self.request.get('user_key')
+				self_user_key = self.request.get('self_user_key')
+				user_key = [user.key]
+				self_user_key = [self.user.key]
+				print "parulb1" 
+				print user_key
+				print self_user_key
+				user.following += self_user_key
+				self.user.followers += user_key
+			else:
+				self.redirect('/' + userid)
+			user.put()
+			self.user.put()
 			self.redirect('/' + userid)
 		else:
 			print "OH NO!"
