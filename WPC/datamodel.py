@@ -20,6 +20,7 @@ class User(ndb.Model):
 	pinterest = ndb.StringProperty()
 	tumblr = ndb.StringProperty()
 	twitter = ndb.StringProperty()
+	watermark = ndb.KeyProperty(kind='Picture')
 	avatar = ndb.KeyProperty(kind='Picture')
 	cover1 = ndb.KeyProperty(kind='Picture')
 	cover2 = ndb.KeyProperty(kind='Picture')
@@ -53,11 +54,19 @@ class User(ndb.Model):
 
 	@property
 	def cover2_url(self):
-		if self.cover1 is None:
+		if self.cover2 is None:
 			return "/images/default_user_cover2.jpg"
 		else:
 			cover2_photo = self.cover2.get()
 			return images.get_serving_url(cover2_photo.blobKey)
+
+	@property
+	def watermark_url(self):
+		if self.watermark is None:
+			return "/images/default_avatar.png"
+		else:
+			watermark_photo = self.watermark.get()
+			return images.get_serving_url(watermark_photo.blobKey)
 
 class Group(ndb.Model): # Parent=User (Admin)
 	name = ndb.StringProperty(required=True)

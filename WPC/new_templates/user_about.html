@@ -23,7 +23,7 @@
 {%block pageContent%}
       <div class="row">
         <div class="col-md-6 col-sm-12 col-xs-12" style="margin:50px 0px;">
-            <img src="/images/Artist_1.jpg" alt="Profile Image" width="100%">
+            <img src="{{user.avatar_url}}" alt="Profile Image" width="100%">
         </div>
         <div class="col-md-6 col-sm-12 col-xs-12">
             <br>
@@ -118,9 +118,21 @@
             <div class="col-md-12"  style="margin-top:0px">
                 <h2 style="margin-top:0px">Social Profiles <a data-toggle="modal" data-target=".social_profiles"><i style="font-size:20px;" class="fa fa-plus"></i></a></h2>
                 <ul class="list-inline">
-                    {%if user.website%}
-                        <div class="col-md-2 col-sm-2 col-xs-4"><a href="{{user.website}}"><img src="/images/WPC_app_icon.jpg" alt="Profile Image" width="60px"><br></a></div>
-                    {% endif %}
+                    <div class="col-md-2 col-sm-2 col-xs-4">
+                    {%if user.watermark%}
+                        {%if user.website%}
+                            <a href="{{user.website}}"><img src="{{user.watermark_url}}" title="{{user.name}}'s personal website" alt="Profile Image" width="60px"><br></a>
+                        {%else%}
+                            <a href=""><img src="{{user.watermark_url}}" title="{{user.name}}'s personal website" alt="Profile Image" width="60px"><br></a>
+                        {%endif%}  
+                    {%else%}
+                        {%if user.website%}
+                            <a href="{{user.website}}"><h4>{{user.name}} Website</h4></a>
+                        {%else%}
+                            <a href=""><h4>{{user.name}} Website</h4></a>
+                        {%endif%}
+                    {%endif%}
+                    </div>
                     {%if user.facebook%}
                         <div class="col-md-2 col-sm-2 col-xs-4"><li color="white"><a href="{{user.facebook}}"><i class="fa fa-facebook fa-3x" style="color:black;"></i></a></li></div>
                     {% endif %}

@@ -39,6 +39,9 @@
             <div class="profile-img">
               <img src="{{user.avatar_url}}" alt="Profile Image" style="margin-left:-25px;margin-top:0px;" width="200px">
             </div>
+            {%if me == user%}
+            <a data-toggle="modal" data-target=".profile_image" title="Change Portfolio Image" style="color:white;z-index:4;"><i style="font-size:20px;" class="fa fa-edit"></i></a>
+            {%endif%}
           </div>
           <div class="col-md-2 col-sm-2 col-xs-2" style="margin:-5px;left:12%;">
             <h2><a class="" href="/{{user.key.id()}}" style="color:white;font-size:20px;padding_bottom:2px;" ><em>  {{user.name}} </em></a></h2>
@@ -77,7 +80,22 @@
               <h4 style="color:yellow;">Awards</h4></a>
             </div>
             <div class="col-md-2 col-sm-2 col-xs-2" style="margin:15px;">
-              <a href="{{user.website}}"><img src="/images/WPC_app_icon.jpg" title="{{user.name}}'s personal website" alt="Profile Image" width="60px"><br></a>
+              {%if user.watermark%}
+                {%if user.website%}
+                  <a href="{{user.website}}"><img src="{{user.watermark_url}}" title="{{user.name}}'s personal website" alt="Profile Image" width="60px"><br></a>
+                {%else%}
+                  <a href=""><img src="{{user.watermark_url}}" title="{{user.name}}'s personal website" alt="Profile Image" width="60px"><br></a>
+                {%endif%}  
+              {%else%}
+                {%if user.website%}
+                  <a href="{{user.website}}"><h4>{{user.name}} Website</h4></a>
+                {%else%}
+                  <a href=""><h4>{{user.name}} Website</h4></a>
+                {%endif%}
+              {%endif%}
+              {%if me == user%}
+              <a data-toggle="modal" data-target=".watermark_img" title="Add/Change Watermark or Logo Image" style="color:white;"><i style="font-size:15px;" class="fa fa-edit"></i></a>
+              {%endif%}
             </div>
           </div>        
         </div>
@@ -160,7 +178,7 @@
           <form role="form" method="post">
               <div class="modal-footer">
                 <input type="hidden" name="formType" value="follow">
-                <input type="hidden" id="avatar_actionType" name="actionType" value="">
+                <input type="hidden" id="" name="actionType" value="">
                 <input type="hidden" id="userid" name="user" value="{{user.key.id()}}">
                 <input type="hidden" id="userid" name="user_key" value="{{user.key}}">
                 <input type="hidden" id="userid" name="self_user_key" value="{{me.id}}">
@@ -175,9 +193,6 @@
         <div class="vert-text">
             <div class="row col-md-12" style="margin:0px;">
               <div class="col-md-1">
-                {%if me == user%}
-                <a data-toggle="modal" data-target=".profile_image" title="Change Portfolio Image" style="color:white;z-index:4;"><i style="font-size:20px;" class="fa fa-edit"></i></a>
-                {%endif%}
               </div>
                 <div class="col-md-4 col-md-offset-3 text-center">
                   {%if me == user%}
@@ -246,7 +261,8 @@
               <button class="btn btn-primary btn-xs" type="submit" title="Edit Image" value="Edit"><span class="glyphicon glyphicon-edit" style="color:white;"></span></button>
             </form>
             <form method="post">
-              <input type="hidden" name="actionType" value="delete">
+              <input type="hidden" name="formType" value="delete">
+              <input type="hidden" id="actionType" name="actionType" value="">
               <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
               <button class="btn btn-primary btn-xs" type="submit" title="Delete Image" value="Delete"><span class="glyphicon glyphicon-trash" style="color:white;"></span></button>
             </form>
@@ -787,7 +803,7 @@
             <h4 class="modal-title">Send a personal message to {{user.name}}</h4>
           </div>
           <input type="hidden" name="formType" value="personal_message">
-          <input type="hidden" id="avatar_actionType" name="actionType" value="">
+          <input type="hidden" id="" name="actionType" value="">
           <input type="hidden" id="userid" name="user" value="{{user.key.id()}}">
           <div class="modal-footer">
          
@@ -864,6 +880,75 @@ function select_avatar(img_key, img_src) {
     document.getElementById("main_img1").innerHTML = "<img alt='' src='"+img_src+"' height='100%' class='img_display'/>";
     document.getElementById("avatarKey").value = img_key;
     document.getElementById("avatar_actionType").value = "select";
+}
+
+</script>
+
+
+    <div class="modal fade watermark_img" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <form role="form" method="post" action="{{uploadUrl}}" enctype="multipart/form-data">
+      <div class="modal-dialog modal-mlg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title">Add/Change Watermark or Logo Image</h4>
+          </div>
+          
+                <input type="hidden" name="formType" value="watermark_image">
+                <input type="hidden" id="watermark_actionType" name="actionType" value="">
+                <input type="hidden" id="userid" name="user" value="{{user.key.id()}}">
+                <div class="col-sm-4 col-sm-offset-4">
+
+                  <p >Select Watermark Image</p>
+                  <div class="column fileupload-buttonbar">
+                      <span class="btn btn-xs btn-info fileinput-button" data-toggle="modal" data-target="#select_watermark_photo">
+                        <i class="glyphicon glyphicon-plus"></i>
+                        <span style="color:white;">Select Image</span>
+                        <input type="hidden" id="watermark_image_key" name="watermark_image_key" value="">
+                      </span>
+                      <span class="btn btn-xs btn-info fileinput-button">
+                        <i class="glyphicon glyphicon-plus"></i>
+                        <span style="color:white;">Upload Image</span>
+                        <input type="file" id="myFile3" name="watermark_image_file">
+                      </span>
+                      <div class="container row" id="thumb_img3"></div>
+                  </div>
+                </div>
+          <div class="modal-footer">
+          </div>
+          <hr>
+          <button class="btn btn-xs btn-success padding-bottom" type="submit">Update Profile</button>
+        </div>
+      </div>
+       </form>
+    </div>
+  <div class="modal fade bs-example-modal-lg" id="select_watermark_photo" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+          <h4 class="modal-title">Select and Add Watermark Photo</h4>
+        </div>
+              <div class="col-lg-12 col-sm-12 col-xs-12" id="photo_select" align="center">
+                <div class="thumb_imgs">
+                      {%for p in photos%}
+                        <a onclick="select_watermark_photo('{{p.key.urlsafe()}}', '{{get_serving_url(p.blobKey)}}');" href="javascript:void(0);"><img src="{{get_serving_url(p.blobKey)}}" height="100px" alt="photo"></a>
+                      {%endfor%}
+                </div><br>
+                <div id="main_img5" class=""></div>
+              </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-xs btn-primary close" data-dismiss="modal">Select and Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script type="text/javascript">
+function select_watermark_photo(img_key, img_src) {
+    document.getElementById("main_img5").innerHTML = "<img alt='' src='"+img_src+"' height='100%' class='img_display'/>";
+    document.getElementById("watermark_image_key").value = img_key;
+    document.getElementById("watermark_actionType").value = "select";
 }
 
 </script>
@@ -1314,7 +1399,6 @@ function f(){
                  //Read the image
                 picReader.readAsDataURL(file);
             }    
-            document.getElementById("num_photos").innerHTML = "Uploaded 0/"+num_files+" Photos, Total Size = "+total_size+"Mbytes";
                                  
         });
     }
@@ -1370,8 +1454,7 @@ function f1(){
                 });
                  //Read the image
                 picReader.readAsDataURL(file);
-            }    
-            document.getElementById("num_photos").innerHTML = "Uploaded 0/"+num_files+" Photos, Total Size = "+total_size+"Mbytes";                         
+            }                             
         });
     }
     else
@@ -1426,8 +1509,7 @@ function f2(){
                 });
                  //Read the image
                 picReader.readAsDataURL(file);
-            }    
-            document.getElementById("num_photos").innerHTML = "Uploaded 0/"+num_files+" Photos, Total Size = "+total_size+"Mbytes";                         
+            }                             
         });
     }
     else
@@ -1476,13 +1558,13 @@ function f3(){
                   var picFile = event.target;
                     var div = document.createElement("div");
                     div.innerHTML = "<br><div class='col-xs-3'><img class='img-rounded' src='" + picFile.result + "' height='100px' alt='"+file_name[w]+"'><h4 style='color:black;'>"+file_name_size[w]+"</h4><h5 class='form-signin-heading padding_bottom'>Update Photo Details</h5><input type='text' id='picCaption' name='caption' class='form-control padding_bottom' placeholder='Caption' value="+file_name[w]+" autofocus><input type='text' id='picLocation' name='location' class='form-control padding_bottom' placeholder='Location' autofocus><textarea type='textarea' id='picDescription' name='description' class='form-control padding_bottom' placeholder='Description'></textarea></div>";
+                    document.getElementById("watermark_actionType").value = "upload";
                     w++;
                     output.insertBefore(div,null);            
                 });
                  //Read the image
                 picReader.readAsDataURL(file);
-            }    
-            document.getElementById("num_photos").innerHTML = "Uploaded 0/"+num_files+" Photos, Total Size = "+total_size+"Mbytes";                         
+            }                             
         });
     }
     else
@@ -1492,12 +1574,12 @@ function f3(){
 }
 
 function start() {
-    var height = document.documentElement.clientHeight;
-    window.scrollBy(0, Math.floor(0.4 * height));
   f();
   f1();
   f2();
   f3();
+  var height = document.documentElement.clientHeight;
+  window.scrollBy(0, Math.floor(0.4 * height));
 }
 window.onload = start;
 </script>

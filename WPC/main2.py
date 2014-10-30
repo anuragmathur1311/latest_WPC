@@ -295,6 +295,16 @@ class UserStudioHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler):
 					user.cover2 = photo.key
 				elif action == "remove":
 					user.cover2 = None
+			elif form == "watermark_image":
+				if action == "select":
+					user.watermark = get_key_urlunsafe(self.request.get('watermark_image_key'))
+				elif action == "upload":
+					uploads = self.get_uploads('watermark_image_file')
+					blobInfo = uploads[0]
+					photo = create_picture(blobInfo.key(), None, None, None, self.user.key)
+					user.watermark = photo.key
+				elif action == "remove":
+					user.cover1 = None
 			elif form == "photography_types":
 				print "photography_types"
 				photoType = self.request.get_all('photoType')
@@ -302,6 +312,12 @@ class UserStudioHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler):
 				user.photography_interests += photoType
 				for i in photoTypeDelete:
 					user.photography_interests.remove(i)
+			elif form == "delete":
+				photoKey = get_key_urlunsafe(self.request.get('photoKey'))
+				delete_photo(photoKey, self.user.key)
+			elif form == "edit":
+				photoKey = get_key_urlunsafe(self.request.get('photoKey'))
+				self.redirect('/editphoto/%s' % photoKey.urlsafe())
 			else:
 				self.redirect('/' + userid)
 			user.put()
