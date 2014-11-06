@@ -65,6 +65,14 @@ def create_group(name, description, cover_photo, parent_key):
 	userKey = user.put()
 	return grp
 
+def create_portfolio(name, cover1, cover2, resultphotoList, parent_key):
+	portfolio = Portfolio(name=name, cover_photo1=cover1, cover_photo2=cover2, photos=resultphotoList, parent=parent_key)
+	portfolioKey = portfolio.put()
+	user = parent_key.get()
+	user.portfolios.append(portfolioKey)
+	userKey = user.put()
+	return portfolio
+
 def add_member(grpKey, userKey):
 	grp = grpKey.get()
 	user = userKey.get()
@@ -76,6 +84,11 @@ def add_member(grpKey, userKey):
 def delete_group(group_key, user_key):
 	if user_key == group_key.parent():
 		group_key.delete()
+	return
+
+def delete_portfolio(portfolio_key, user_key):
+	if user_key == portfolio_key.parent():
+		portfolio_key.delete()
 	return
 
 def delete_blog(blog_key, user_key):

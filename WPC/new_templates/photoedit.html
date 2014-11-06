@@ -3,30 +3,27 @@
 {%block signup_links%}  
  {%endblock%} 
 {%block pageContent%}
-<form method="post">
+
     <div class="transbox_right_permapage">
         <ul class="list-inline">
-          
-            <input type="hidden" name="actionType" value="delete">
-            <input type="hidden" name="photoKey" value="{{photo.key.urlsafe()}}">
-            <button class="btn btn-success btn-md" type="submit" value="Delete"><i class="fa fa-trash-o fa-2x"></i></button>
+        	<form method="post">
+            	<input type="hidden" name="actionType" value="delete">
+            	<input type="hidden" name="photoKey" value="{{photo.key.urlsafe()}}">
+            	<button class="btn btn-success btn-md" type="submit" value="Delete"><i class="fa fa-trash-o fa-2x"></i></button>
+            </form>
           <br>
 		  <br>
-          
-            <input type="hidden" name="actionType" value="delete">
-            <input type="hidden" name="photoKey" value="{{photo.key.urlsafe()}}">
-            <button class="btn btn-success btn-md" type="submit" value="Delete"><i class="fa fa-crop fa-2x"></i></button>
+		  <form method="post">
+            	<input type="hidden" name="actionType" value="rotate_left">
+            	<input type="hidden" name="photoKey" value="{{photo.key.urlsafe()}}">
+            	<button class="btn btn-success btn-md" type="submit" value=""><i class="fa fa-rotate-left fa-2x"></i></button>
+            </form>
           <br><br>
-          
-            <input type="hidden" name="actionType" value="delete">
-            <input type="hidden" name="photoKey" value="{{photo.key.urlsafe()}}">
-            <button class="btn btn-success btn-md" type="submit" value="Delete"><i class="fa fa-rotate-left fa-2x"></i></button>
-          <br><br>
-         
-            <input type="hidden" name="actionType" value="delete">
-            <input type="hidden" name="photoKey" value="{{photo.key.urlsafe()}}">
-            <button class="btn btn-success btn-md" type="submit" value="Delete"><i class="fa fa-rotate-right fa-2x"></i></button>
-         
+          	<form method="post">
+            	<input type="hidden" name="actionType" value="delete">
+            	<input type="hidden" name="photoKey" value="{{photo.key.urlsafe()}}">
+            	<button class="btn btn-success btn-md" type="submit" value="Delete"><i class="fa fa-rotate-right fa-2x"></i></button>
+            </form>
         </ul>
     </div>
 
@@ -35,6 +32,8 @@
     <a href=""><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}<em></h5></a>
 	</div>
   <hr>
+  <form method="post">
+  	<input type="hidden" name="actionType" value="photo_details">
   <h3 style="color:black;">Edit/Update Photo Details</h3>
   <div class="col-md-4 col-md-offset-1">
       <p>Edit Photo Caption</p>

@@ -27,51 +27,58 @@
   <h1>Create A New Portfolio</h1>
   <hr class="horizontal-line">
    <div class="col-md-7 col-md-offset-1 newblog_text">
+    {%if len(user.portfolios) == 2%}
+      <h3>You have already have 2 portfolios in your profile, you cannot add more</h3>
+    {%else%}
     <form action="{{uploadUrl}}" method="post" enctype="multipart/form-data">
-      <input type="hidden" name="actionType" value="create_group">
       <h3>Add Portfolio Title</h3>
-      <textarea name="name" cols="80" rows="2" placeholder="Title" ></textarea><br>
+      <textarea name="portfolio_title" cols="80" rows="2" placeholder="Title" ></textarea><br>
       
       <h3>Add Portfolio's Cover Photo 1</h3>
-      <span class="btn btn-info btn-sm fileinput-button" data-toggle="modal" data-target="#select_photo">
+      <span class="btn btn-info btn-sm fileinput-button" data-toggle="modal" data-target="#select_cover_photo_1">
         <i class="fa fa-hand-o-up"></i>
         <span style="color:white;">Select Photo</span>
       </span>
       <span class="btn btn-info btn-sm fileinput-button">
         <i class="glyphicon glyphicon-plus"></i>
         <span style="color:white;">Upload Photo</span>
-        <input type="file" id="myFile" name="cover_photo" multiple>
+        <input type="file" id="myFile1" name="cover_image_1_upload" multiple>
       </span>
       <div class="row">
         <div class="container" id="thumb_img1"></div>
       </div>
-      <div id="portfolio_cover_photo_1"></div>
+      <div id="portfolio_cover_photo_1">
+        <input type="hidden" id="cover_image_1_select" name="cover_image_1_select" value="">
+      </div>
 
       <h3>Add Portfolio's Cover Photo 2</h3>
-      <span class="btn btn-info btn-sm fileinput-button" data-toggle="modal" data-target="#select_photo">
+      <span class="btn btn-info btn-sm fileinput-button" data-toggle="modal" data-target="#select_cover_photo_2">
         <i class="fa fa-hand-o-up"></i>
         <span style="color:white;">Select Photo</span>
       </span>
       <span class="btn btn-info btn-sm fileinput-button">
         <i class="glyphicon glyphicon-plus"></i>
         <span style="color:white;">Upload Photo</span>
-        <input type="file" id="myFile" name="cover_photo" multiple>
+        <input type="file" id="myFile2" name="cover_image_2_upload" multiple>
       </span>
       <div class="row">
         <div class="container" id="thumb_img2"></div>
       </div>
-      <div id="portfolio_cover_photo_2"></div>
+      <div id="portfolio_cover_photo_2">
+        <input type="hidden" id="cover_image_2_select" name="cover_image_2_select" value="">
+      </div>
 
       <h3>Add Photos</h3>
       <div class="col-md-8" style="margin:0px;">
         <div class="photo_box">
           {%for p in photos%}
-            <img onclick="change_border_insert_input(this, 'p.blobKey');" src="{{get_serving_url(p.blobKey,size=30)}}" height="50px" style="margin:2px;" id="temp1" alt="photo">
+            <img onclick="change_border_insert_input(this, '{{p.blobKey}}');" src="{{get_serving_url(p.blobKey,size=30)}}" height="50px" style="margin:2px;" id="temp1" alt="photo">
           {%endfor%}
         </div>
+        <p>Select photos to be added to this portfolio, you can add or remove photos later as well</p>
       </div>
-      <div id="selected_photos"></div>
-      <div id="unselected_photos"></div>
+      <div class="selected_photos"></div>
+      <div class="unselected_photos"></div>
       <div class="row"></div>
 
       <h3>Share Portfolio</h3>
@@ -81,6 +88,7 @@
       <label><input type="checkbox" name="remember"> Anybody can comment or post a message groups entities</label><br><br>
       <button class="btn btn-xs btn-success" type="submit">Create Portfolio</button>
     </form>
+    {%endif%}
   </div>
   <div class="col-md-1">
     <div class="vertical-line">&nbsp;</div>
@@ -103,7 +111,7 @@
       </div>
   </div>
 
-  <div class="modal fade bs-example-modal-lg" id="select_photo" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal fade bs-example-modal-lg" id="select_cover_photo_1" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
@@ -113,10 +121,10 @@
               <div class="col-lg-12 col-sm-12 col-xs-12" id="photo_select" align="center">
                 <div class="thumb_imgs">
                       {%for p in photos%}
-                              <a onclick="change_main_image('/servephoto/{{p.blobKey}}');" href="javascript:void(0);"><img src="/servephoto/{{p.blobKey}}" height="100px" alt="photo"></a>
+                        <a onclick="select_cover1('{{p.key.urlsafe()}}', '{{get_serving_url(p.blobKey)}}');" href="javascript:void(0);"><img src="{{get_serving_url(p.blobKey)}}" height="100px" alt="photo"></a>
                       {%endfor%}
                 </div><br>
-                <div id="main_img" class=""></div>
+                <div id="main_img2" class=""></div>
               </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-xs btn-primary close" data-dismiss="modal">Select and Close</button>
@@ -126,30 +134,59 @@
   </div>
 
 <script type="text/javascript">
-function change_main_image(img_key) {
-    document.getElementById("main_img").innerHTML = "<img alt='' src='"+img_key+"' height='100%' class='img_display'/>";
-    document.getElementById("group_cover_image").innerHTML = "<input type='hidden' name='cover_img' value='"+img_key+"'><input type='hidden' name='inputType' value='select_photo'>";
-  document.getElementById("thumb_img1").innerHTML = "<div class='col-lg-4'><img class='img-rounded' src='" + img_key + "' height='140px' alt='"+img_key+"'></div>";
-} 
+function select_cover1(img_key, img_src) {
+    document.getElementById("main_img2").innerHTML = "<img alt='' src='"+img_src+"' height='100%' class='img_display'/>";
+    document.getElementById("cover_image_1_select").value = img_src;
+    document.getElementById("thumb_img1").innerHTML = "<div class='col-lg-4'><img class='img-rounded' src='" + img_src + "' height='140px' alt='"+img_key+"'></div>";
+  }
+</script>
 
+  <div class="modal fade bs-example-modal-lg" id="select_cover_photo_2" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+          <h4 class="modal-title">Select and Add Photo</h4>
+        </div>
+              <div class="col-lg-12 col-sm-12 col-xs-12" id="photo_select" align="center">
+                <div class="thumb_imgs">
+                      {%for p in photos%}
+                        <a onclick="select_cover2('{{p.key.urlsafe()}}', '{{get_serving_url(p.blobKey)}}');" href="javascript:void(0);"><img src="{{get_serving_url(p.blobKey)}}" height="100px" alt="photo"></a>
+                      {%endfor%}
+                </div><br>
+                <div id="main_img3" class=""></div>
+              </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-xs btn-primary close" data-dismiss="modal">Select and Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script type="text/javascript">
+function select_cover2(img_key, img_src) {
+    document.getElementById("main_img3").innerHTML = "<img alt='' src='"+img_src+"' height='100%' class='img_display'/>";
+     document.getElementById("cover_image_2_select").value = img_src;
+    document.getElementById("thumb_img2").innerHTML = "<div class='col-lg-4'><img class='img-rounded' src='" + img_src + "' height='140px' alt='"+img_key+"'></div>";
+} 
+</script>
+
+<script type="text/javascript">
   function change_border_insert_input(element, photo_key) {
     
     if (element.style.border == "") {
         element.style.border = '3px solid blue';
-        document.getElementById('selected_photos').innerHTML = "<input type='hidden' name='photoSelect' value='"+photo_key+"'>";
+        $( ".selected_photos" ).append( "<input type='hidden' name='photoSelect' value='"+photo_key+"'>" );
+        //document.getElementById('selected_photos').innerHTML = "<input type='hidden' name='photoSelect' value='"+photo_key+"'>";
     } else if (element.style.border == "3px solid blue") {
       element.style.border = "";
-      document.getElementById('unselected_photos').innerHTML = "<input type='hidden' name='photoSelectDelete' value='"+photo_key+"'>";
+      $( ".unselected_photos" ).append( "<input type='hidden' name='photoSelectDelete' value='"+photo_key+"'>" );
+      //document.getElementById('unselected_photos').innerHTML = "<input type='hidden' name='photoSelectDelete' value='"+photo_key+"'>";
     }
   }
 </script>
-<script type="text/javascript">
-function back_to_image_selector() {
-    document.getElementById("photo_select").innerHTML = "{%for p in photos%}<div class='col-xs-3'><a onclick='change_main_image('/servephoto/{{p.blobKey}}');' href='javascript:void(0);'><img src='/servephoto/{{p.blobKey}}' height='100px' alt='photo'></a></div>{%endfor%}";
-} 
-</script>
 <script>
-window.onload = function(){  
+function f1(){  
     //Check File API support
 
   //<label for="files">Select multiple files: </label>
@@ -157,7 +194,7 @@ window.onload = function(){
   //<output id="result" />
     if(window.File && window.FileList && window.FileReader)
     {
-        var filesInput = document.getElementById("myFile");
+        var filesInput = document.getElementById("myFile1");
         filesInput.addEventListener("change", function(event){
             var files = event.target.files; //FileList object
             var output = document.getElementById("thumb_img1");
@@ -188,13 +225,13 @@ window.onload = function(){
                 picReader.addEventListener("load",function(event){
                   var picFile = event.target;
                     var div = document.createElement("div");
-                    div.innerHTML = "<div class='col-lg-4'><img class='img-rounded' src='" + picFile.result + "' height='140px' alt='"+file_name[w]+"'><h4 style='color:black;'>"+file_name_size[w]+"</h4></div><input type='hidden' name='inputType' value='upload_photo'>";
+                    div.innerHTML = "<div class='col-lg-4'><img class='img-rounded' src='" + picFile.result + "' height='140px' alt='"+file_name[w]+"'><h4 style='color:black;'>"+file_name_size[w]+"</h4></div>";
                     w++;
                     output.insertBefore(div,null);            
                 });
                  //Read the image
                 picReader.readAsDataURL(file);
-            }                         
+            }                             
         });
     }
     else
@@ -202,6 +239,66 @@ window.onload = function(){
         console.log("Your browser does not support File API");
     }
 }
+
+function f2(){  
+    //Check File API support
+
+  //<label for="files">Select multiple files: </label>
+  //<input id="files" type="file" multiple/>
+  //<output id="result" />
+    if(window.File && window.FileList && window.FileReader)
+    {
+        var filesInput = document.getElementById("myFile2");
+        filesInput.addEventListener("change", function(event){
+            var files = event.target.files; //FileList object
+            var output = document.getElementById("thumb_img2");
+            var num_files = files.length;
+            var txt = "";
+            var file_name_size = [];
+            var file_name = [];
+            var total_size = 0;
+            for(var i = 0; i< files.length; i++)
+            {
+              txt = "";
+                var file = files[i];
+                if ('name' in files[i]) {
+                    txt += "" + files[i].name + "<br>";
+                }
+                if ('size' in files[i]) {
+                    //txt += "Size: " + file.size/1000000 + " Mbytes <br>";
+                    txt += "Size: " + Math.ceil((files[i].size/1000000) * 100)/100 + " Mbytes <br>";
+                }
+                //Only pics
+                file_name_size.push(txt);
+                file_name.push(files[i].name)
+                total_size = total_size + Math.ceil((files[i].size/1000000) * 100)/100;
+                if(!file.type.match('image'))
+                  continue;
+                var picReader = new FileReader();
+                var w = 0;
+                picReader.addEventListener("load",function(event){
+                  var picFile = event.target;
+                    var div = document.createElement("div");
+                    div.innerHTML = "<div class='col-lg-4'><img class='img-rounded' src='" + picFile.result + "' height='140px' alt='"+file_name[w]+"'><h4 style='color:black;'>"+file_name_size[w]+"</h4></div>";
+                    output.insertBefore(div,null);            
+                });
+                 //Read the image
+                picReader.readAsDataURL(file);
+            }                             
+        });
+    }
+    else
+    {
+        console.log("Your browser does not support File API");
+    }
+}
+
+function start() {
+  f1();
+  f2();
+}
+window.onload = start;
 </script>
+
 {%endblock%}
 

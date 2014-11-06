@@ -50,10 +50,7 @@
         </form>
       </div>
 		<div class="col-md-2">
-        <form method="post">
-          <input type="hidden" name="actionType" value="share">
-          <button class="btn btn-success" type="submit" value="share"><i class="fa fa-share fa-2x"></i></button>
-        </form>
+          <button class="btn btn-success" data-toggle="modal" data-target=".share_modal"><i class="fa fa-share fa-2x"></i></button>
       </div>
 	  <div class="col-md-2">
         <form method="post">
@@ -84,10 +81,7 @@
           </form>
 	    </div>
 		<div class="col-md-2">
-        <form method="post">
-          <input type="hidden" name="actionType" value="share">
-          <button class="btn btn-success" type="submit" value="Delete"><i class="fa fa-share fa-2x"></i></button>
-        </form>
+          <button class="btn btn-success" data-toggle="modal" data-target=".share_modal"><i class="fa fa-share fa-2x"></i></button>
       </div>
 	  <div class="col-md-2">
         <form method="post">
@@ -169,40 +163,39 @@
 					{%for tag in photo.tags%}
 						<button class="btn btn-warning btn-xs btn_padding">{{tag}}</button>
 					{%endfor%}
-					<div  class="tag_placement">
-				  </div>
-				  
+					<div class="tag_placement">
+			  		</div>
 					<hr>
-				  <div class="input-group">
-				  {%if me%}
-					<div  class="photo_tags"></div>
-					<input type="text" class="form-control" name="add_tag" id="add_tag" placeholder="Add a Tag">
-					<div class="input-group-btn">
-					  <button type="button" class="btn btn-success" onclick="add_tags()"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
-					</div><!-- /btn-group -->
-				  </div><!-- /input-group -->
-				  {%endif%}
-					<hr>
+			  		<div class="input-group">
+			  			{%if me%}
+							<div class="photo_tags"></div>
+							<input type="text" class="form-control" name="add_tag" id="add_tag" placeholder="Add a Tag">
+							<div class="input-group-btn">
+				  				<button type="button" class="btn btn-success" onclick="add_tags()"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
+							</div><!-- /btn-group -->
+						{%endif%}
+			  		</div><!-- /input-group -->
+				
 					<div class="panel-heading"><h4>Associated Albums</h4></div>
-					{%for album in photo.albums%}
-						<button class="btn btn-danger btn-xs btn_padding">{{album}}</button>
-					{%endfor%}
-					<div  class="album_placement">
-				  </div>
-									  
-					<hr>
-				  <div class="input-group">
-				  {%if me%}
-					<div  class="photo_albums"></div>
-					<input type="text" class="form-control" name="add_album" id="add_album" placeholder="Add Photo to an Album">
-					<div class="input-group-btn">
-					  <button type="button" class="btn btn-success" onclick="add_albums()"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
-					</div><!-- /btn-group -->
-				  </div><!-- /input-group -->
-				  {%endif%}
+						{%for album in photo.albums%}
+							<button class="btn btn-danger btn-xs btn_padding">{{album}}</button>
+						{%endfor%}
+						<div class="album_placement">
+			  		</div>
+								  
+					<div class="row"><hr></div>
+			  			<div class="input-group">
+			  				{%if me%}
+								<div class="photo_albums"></div>
+								<input type="text" class="form-control" name="add_album" id="add_album" placeholder="Add Photo to an Album">
+								<div class="input-group-btn">
+				  					<button type="button" class="btn btn-success" onclick="add_albums()"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
+								</div><!-- /btn-group -->
+							{%endif%}
+			  			</div><!-- /input-group -->
 				</div>
 				{%if me%}
-				<button class="btn btn-xs btn-success" style="margin-bottom:5px;" type="submit">Save Tags & Albums</button>
+					<button class="btn btn-xs btn-success" style="margin-bottom:5px;" type="submit">Save Tags & Albums</button>
 				{%endif%}
 			</div> 
 			<div class="panel panel-default">
@@ -229,8 +222,61 @@
 
 		</form>
 	</div>
+<div id="fb-root"></div>
+<script>
+(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.0";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
+</script>
 
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 
+<!-- Place this tag in your head or just before your close body tag. -->
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+
+<script type="text/javascript">
+(function(d){
+    var f = d.getElementsByTagName('SCRIPT')[0], p = d.createElement('SCRIPT');
+    p.type = 'text/javascript';
+    p.async = true;
+    p.src = '//assets.pinterest.com/js/pinit.js';
+    f.parentNode.insertBefore(p, f);
+}(document));
+</script>
+    <div class="modal fade share_modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title">Share Photo</h4>
+          </div>
+          <form role="form" method="post">
+            <input type="hidden" name="formType" value="share_links">
+            <br>
+                <h4>Link to Photo</h4>
+                <a href="{{get_serving_url(photo.blobKey)}}"><h4 style="color:blue;"><em>{{get_serving_url(photo.blobKey)}}</em></h4></a><br>
+                <p>or</p>
+              <ul class="list-inline">
+                <li><a class="fb-share-button" data-href="https://developers.facebook.com/docs/plugins/" data-layout="button_count" data-width="100"></a></li>
+                <li><a href="https://twitter.com/share" class="twitter-share-button" data-size="large">Tweet</a></li>
+                <li><div class="g-plus" data-action="share" data-height="30"></div></li>
+                 <li><a href="http://www.pinterest.com/pin/create/button/
+                    ?url=http%3A%2F%2Fwww.flickr.com%2Fphotos%2Fkentbrew%2F6851755809%2F
+                    &media=http%3A%2F%2Ffarm8.staticflickr.com%2F7027%2F6851755809_df5b2051c9_z.jpg
+                    &description=Next%20stop%3A%20Pinterest"
+                    data-pin-do="buttonPin"
+                    data-pin-config="above">
+                    <img src="//assets.pinterest.com/images/pidgets/pin_it_button.png" />
+                </a></li>
+              </ul>
+          </form>
+        </div>
+      </div>
+    </div>
 	<footer>
 	<div class="row">
 		<div class="col-md-6 col-md-offset-3 text-center">

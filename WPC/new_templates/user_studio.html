@@ -52,6 +52,7 @@
                <a href="/{{user.key.id()}}/about" style="color:white;"><button type="button" title="About {{user.name}}" style="margin:5px;" class="btn btn-info btn-sm photographer_options"><i class="fa fa-key"></i></button></a>
                <button type="button" title="Share {{user.name}} portfolio" style="margin:5px;" class="btn btn-info btn-sm photographer_options" data-toggle="modal" data-target=".share_modal"><i class="fa fa-share"></i></button>
                <a href="/settings" style="color:white;"><button type="button" title="{{user.name}} Settings" style="margin:5px;" class="btn btn-info btn-sm photographer_options"><span style="color:white;" class="glyphicon glyphicon-cog"></span></button></a>
+               <a href="/signin"><button class="btn btn-sm btn-danger" type="button"><i class="fa fa-register" style="color:white;"></i>  Send for Review</button></a>
             {%else%} 
               <a href="/{{user.key.id()}}/about" style="color:white;"><button type="button" title="About {{user.name}}" style="margin:5px;" class="btn btn-info btn-sm photographer_options"><i class="fa fa-key"></i></button></a>
               <button type="button" title="Add {{user.name}} to Ideabook" class="btn btn-info btn-sm photographer_options" data-toggle="modal" data-target=".follow">
@@ -463,13 +464,9 @@
 </div>
 <div style="display:none;">
   <div id="portfolios"> 
-      <div class="col-md-3">
-        <a href="/portfolio"><h4>All Photos</h4>
-          {%for p in photos%}
-              {% if loop.index == 1 %}
-              <img src="{{get_serving_url(p.blobKey,size=100)}}" alt="Profile Image" class="img-rounded" width="140px"></a><br>
-              {% endif %}
-          {% endfor %}
+      <div class="col-md-4">
+        <a href="/portfolio"><h3 style="color:black">All Photos</h3>
+              <img src="{{user.cover1_url}}" alt="Profile Image" class="img-rounded" width="300px"></a>
           <div class="button-container post-action padding_top">
             <form method="post">
               <input type="hidden" name="actionType" value="edit">
@@ -493,6 +490,34 @@
             </form>
           </div>
       </div>
+      {%for p in user.portfolios%}
+      <div class="col-md-4 col-sm-6">
+        <a href="/portfolio/{{p.urlsafe()}}"><h3 style="color:black">{{p.get().name}}</h3>  
+        <img src="{{get_serving_url(p.get().cover_photo1)}}" alt="Profile Image" class="img-rounded" width="300px"></a>
+          <div class="button-container post-action padding_top">
+            <form method="post">
+              <input type="hidden" name="actionType" value="edit">
+              <input type="hidden" name="photoKey" value="">
+              <button class="btn btn-primary btn-xs" type="submit" value="Edit"><span class="glyphicon glyphicon-edit" style="color:white;"></span></button>
+            </form>
+            <form method="post">
+              <input type="hidden" name="actionType" value="delete">
+              <input type="hidden" name="photoKey" value="">
+              <button class="btn btn-primary btn-xs" type="submit" value="Delete"><span class="glyphicon glyphicon-trash" style="color:white;"></span></button>
+            </form>
+            <form method="post">
+              <input type="hidden" name="actionType" value="share">
+              <input type="hidden" name="photoKey" value="">
+              <button class="btn btn-primary btn-xs" type="submit" value="Delete"><i class="fa fa-share fa-1x"></i></button>
+            </form>
+            <form method="post">
+              <input type="hidden" name="actionType" value="download">
+              <input type="hidden" name="photoKey" value="">
+              <button class="btn btn-primary btn-xs" type="submit" value="Delete"><i class="fa fa-download fa-1x"></i></button>
+            </form>
+          </div>
+      </div>
+      {%endfor%}
   </div>
 </div>
 <div style="display:none;">

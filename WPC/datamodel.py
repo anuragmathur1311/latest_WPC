@@ -12,7 +12,9 @@ class User(ndb.Model):
 	following = ndb.KeyProperty(kind='User', repeated=True)
 	followers = ndb.KeyProperty(kind='User', repeated=True)
 	groups = ndb.KeyProperty(kind='Group', repeated=True)
+	portfolios = ndb.KeyProperty(kind='Portfolio', repeated=True)
 	joined = ndb.DateTimeProperty(auto_now_add=True)
+	status = ndb.StringProperty()
 	website = ndb.StringProperty()
 	facebook = ndb.StringProperty()
 	youtube = ndb.StringProperty()
@@ -75,6 +77,13 @@ class Group(ndb.Model): # Parent=User (Admin)
 	created = ndb.DateTimeProperty(auto_now_add=True)
 	description = ndb.TextProperty()
 	cover_photo = ndb.StringProperty()
+
+class Portfolio(ndb.Model): # Parent=User (Admin)
+	name = ndb.StringProperty(required=True)
+	photos = ndb.StringProperty(repeated=True)
+	created = ndb.DateTimeProperty(auto_now_add=True)
+	cover_photo1 = ndb.StringProperty()
+	cover_photo2 = ndb.StringProperty()
 
 class Ideabook(ndb.Model):
 	name = ndb.StringProperty(required=True)

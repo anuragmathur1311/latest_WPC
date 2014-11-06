@@ -27,9 +27,11 @@
 {%block pageContent%}
     <!-- Full Page Image Header Area -->
     
-    <div id="top" class="header" style="background: url({{user.cover1_url}}) no-repeat center center fixed;background-size: cover;z-index:1;">
+    <div id="top" class="header" style="background: url({{get_serving_url(portfolio.cover_photo1)}}) no-repeat center center fixed;background-size: cover;z-index:1;">
       <div class="transbox_top_right">
-        <a data-toggle="modal" data-target=".cover_image_1" style="color:white;"><i style="font-size:20px;" class="fa fa-edit"></i></a>
+        {%if me == user%}
+        <a data-toggle="modal" data-target=".cover_image_1" title="Change Cover Image 1" style="color:white;"><i style="font-size:20px;" class="fa fa-edit"></i></a>
+        {%endif%}
       </div>
       <div class="transbox_bottom_right">
         <div class="col-md-12" style="margin:0px;">
@@ -39,144 +41,347 @@
             </div>
           </div>
           <div class="col-md-2" style="margin:-5px;left:12%;">
-            <h2><a class="" href="/{{me.key.id()}}" style="color:white;font-size:20px;padding_bottom:2px;" ><em>  {{user.name}} </em></a></h2>
-            <img src="/fonts/Flags/{{me.country}}.png" alt="country" width="30px"/>
+            <h2><a class="" href="/{{user.key.id()}}" style="color:white;font-size:20px;padding_bottom:2px;" ><em>  {{user.name}} </em></a></h2>
+            <img src="/fonts/Flags/{{user.country}}.png" alt="country" width="30px"/>
           </div>
           <div class="col-md-4" style="margin:30px;">
-              <a href="/{{me.key.id()}}/about" style="color:white;"><button type="button" style="margin:5px;" class="btn btn-info btn-sm photographer_options"><i class="fa fa-key"></i></button></a>
-              <button type="button" class="btn btn-info btn-sm photographer_options"><span class="glyphicon glyphicon-pushpin" style="color:white;"></span></button>
-              <button type="button" style="margin:5px;" class="btn btn-info btn-sm photographer_options"><i class="fa fa-envelope"></i></button>
-              <button type="button" style="margin:5px;" class="btn btn-info btn-sm photographer_options"><i class="fa fa-share"></i></button>
-              <button type="button" style="margin:5px;" class="btn btn-info btn-sm photographer_options"><i class="fa fa-trophy"></i></button>
+            {%if me == user%}
+               <a href="/{{user.key.id()}}/about" style="color:white;"><button type="button" title="About {{user.name}}" style="margin:5px;" class="btn btn-info btn-sm photographer_options"><i class="fa fa-key"></i></button></a>
+               <button type="button" title="Share {{portfolio.name}} portfolio" style="margin:5px;" class="btn btn-info btn-sm photographer_options" data-toggle="modal" data-target=".share_modal"><i class="fa fa-share"></i></button>
+               <button type="button" title="Delete {{portfolio.name}} portfolio" style="margin:5px;" class="btn btn-info btn-sm photographer_options" data-toggle="modal" data-target=".delete_modal"><span class="glyphicon glyphicon-trash" style="color:white;"></span></button>
+               <a href="/signin"><button class="btn btn-sm btn-danger" type="button"><i class="fa fa-register" style="color:white;"></i>Send for Review</button></a>
+            {%else%} 
+              <a href="/{{user.key.id()}}/about" style="color:white;"><button type="button" title="About {{user.name}}" style="margin:5px;" class="btn btn-info btn-sm photographer_options"><i class="fa fa-key"></i></button></a>
+              <button type="button" title="Add {{user.name}} to Ideabook" class="btn btn-info btn-sm photographer_options" data-toggle="modal" data-target=".follow">
+                <span class="glyphicon glyphicon-pushpin" style="color:white;"></span>
+              </button>
+              <button type="button" title="Send Private Message to {{user.name}}" style="margin:5px;" class="btn btn-info btn-sm photographer_options" data-toggle="modal" data-target=".personal_message"><i class="fa fa-envelope"></i></button>
+              <button type="button" title="Share {{user.name}} portfolio" style="margin:5px;" class="btn btn-info btn-sm photographer_options" data-toggle="modal" data-target=".share_modal"><i class="fa fa-share"></i></button>
+              <button type="button" title="Give Award to {{user.name}}" style="margin:5px;" class="btn btn-info btn-sm photographer_options" data-toggle="modal" data-target=".photography_awards"><i class="fa fa-trophy"></i></button>
+            {%endif%}
            </div>
           <div class="col-md-5" style="margin:0px;">
-            <div class="col-md-2" style="margin:0px;">
-              <h2 style="color:white;">12</h2>
-              <h4 style="color:yellow;">Followers</h4>
+            <div class="col-md-2 col-sm-2 col-xs-2" style="margin:0px;">
+              <a data-toggle="modal" data-target=".followers"><h2 style="color:white;">{{len(user.followers)}}</h2>
+              <h4 style="color:yellow;">Followers</h4></a>
+            </div>
+            <div class="col-md-2 col-sm-2 col-xs-2" style="margin:0px;">
+              <a data-toggle="modal" data-target=".following"><h2 style="color:white;">{{len(user.following)}}</h2>
+              <h4 style="color:yellow;">Following</h4></a>
             </div>
             <div class="col-md-2" style="margin:0px;">
-              <h2 style="color:white;">12</h2>
-              <h4 style="color:yellow;">Following</h4>
-            </div>
-            <div class="col-md-2" style="margin:0px;">
-              <h2 style="color:white;">{{photos.count()}}</h2>
+              <h2 style="color:white;">{{len(portfolio.photos)}}</h2>
               <h4 style="color:yellow;">Photos</h4>
             </div>
-            <div class="col-md-2" style="margin:0px;">
-              <h2 style="color:white;">12</h2>
-              <h4 style="color:yellow;">Awards</h4>
+            <div class="col-md-2 col-sm-2 col-xs-2" style="margin:0px;">
+              <a data-toggle="modal" data-target=".awards"><h2 style="color:white;">{{len(user.awards)}}</h2>
+              <h4 style="color:yellow;">Awards</h4></a>
             </div>
             <div class="col-md-2" style="margin:15px;">
-              <a href="{{user.website}}"><img src="/images/WPC_app_icon.jpg" alt="Profile Image" width="60px"><br></a>
+                {%if user.watermark%}
+                {%if user.website%}
+                  <a href="{{user.website}}"><img src="{{user.watermark_url}}" title="{{user.name}}'s personal website" alt="Profile Image" width="60px"><br></a>
+                {%else%}
+                  <a href=""><img src="{{user.watermark_url}}" title="{{user.name}}'s personal website" alt="Profile Image" width="60px"><br></a>
+                {%endif%}  
+              {%else%}
+                {%if user.website%}
+                  <a href="{{user.website}}"><h4>{{user.name}} Website</h4></a>
+                {%else%}
+                  <a href=""><h4>{{user.name}} Website</h4></a>
+                {%endif%}
+              {%endif%}
             </div>
           </div>        
         </div>
       </div>
     </div>
+<div id="fb-root"></div>
+<script>
+(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.0";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
+</script>
 
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+<!-- Place this tag in your head or just before your close body tag. -->
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+
+<script type="text/javascript">
+(function(d){
+    var f = d.getElementsByTagName('SCRIPT')[0], p = d.createElement('SCRIPT');
+    p.type = 'text/javascript';
+    p.async = true;
+    p.src = '//assets.pinterest.com/js/pinit.js';
+    f.parentNode.insertBefore(p, f);
+}(document));
+</script>
+    <div class="modal fade share_modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title">Share Profile</h4>
+          </div>
+          <form role="form" method="post">
+            <input type="hidden" name="formType" value="share_links">
+            <br>
+                <h4>Link to Profile</h4>
+                <h4 style="color:blue;"><em>http://www.worldphotographersclub.com/{{user.key.id()}}</em></h4><br>
+                <p>or</p>
+              <ul class="list-inline">
+                <li><a class="fb-share-button" data-href="https://developers.facebook.com/docs/plugins/" data-layout="button_count" data-width="100"></a></li>
+                <li><a href="https://twitter.com/share" class="twitter-share-button" data-size="large">Tweet</a></li>
+                <li><div class="g-plus" data-action="share" data-height="30"></div></li>
+                 <li><a href="http://www.pinterest.com/pin/create/button/
+                    ?url=http%3A%2F%2Fwww.flickr.com%2Fphotos%2Fkentbrew%2F6851755809%2F
+                    &media=http%3A%2F%2Ffarm8.staticflickr.com%2F7027%2F6851755809_df5b2051c9_z.jpg
+                    &description=Next%20stop%3A%20Pinterest"
+                    data-pin-do="buttonPin"
+                    data-pin-config="above">
+                    <img src="//assets.pinterest.com/images/pidgets/pin_it_button.png" />
+                </a></li>
+              </ul>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade delete_modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title">Are you sure you want to delete {{portfolio.name}} portfolio?</h4>
+          </div>
+          <form role="form" method="post">
+              <div class="modal-footer">
+                <input type="hidden" id="" name="actionType" value="delete">
+               <button class="btn btn-primary btn-sm" type="submit" title="Delete Portfolio">Yes</button>
+              </div>
+          </form>
+        </div>
+      </div>
+    </div>
     <!-- Callout -->
-    <div class="callout" id="callout" style="background: url({{user.cover2_url}}) no-repeat center center fixed;background-size: cover;z-index:2;">
+    <div class="callout" id="callout" style="background: url({{get_serving_url(portfolio.cover_photo2)}}) no-repeat center center fixed;background-size: cover;z-index:2;">
         <div class="vert-text">
             <div class="row col-md-12" style="margin:0px;">
               <div class="col-md-1">
-                <a data-toggle="modal" data-target=".profile_image" style="color:white;z-index:4;"><i style="font-size:20px;" class="fa fa-edit"></i></a>
               </div>
                 <div class="col-md-4 col-md-offset-3 text-center">
-                  {%if me%}
-                    <h3>Photography Interests <a data-toggle="modal" data-target=".photography_interests"><i style="font-size:20px;color:white" class="fa fa-edit"></i></a></h3>
-                  {%else%}
                     <h3>Photography Interests</h3>
-                  {% endif %}
                     <hr>
                 </div>
                 <div class="col-md-4" style="margin:0px;text-align:right;right:10px;">
-                  <a data-toggle="modal" data-target=".cover_image_2"><i style="font-size:20px;color:white;" class="fa fa-edit"></i></a>
+                  {%if me == user%}
+                  <a data-toggle="modal" title="Change Cover Image 2" data-target=".cover_image_2"><i style="font-size:20px;color:white;" class="fa fa-edit"></i></a>
+                  {%endif%}
                 </div>
             </div>
             <div class="row text-center">
+              {%for pi in user.photography_interests%}
                 <div class="col-lg-2 col-md-2 text-center">
                     <div class="service-item">
-                        <i class="service-icon fa fa-Travel"></i>
-                        <h4>Travel</h4>
+                        <i class="service-icon fa fa-{{pi}}"></i>
+                        <h4>{{pi}}</h4>
                     </div>
                 </div>
-                <div class="col-lg-2 col-md-2 text-center">
-                    <div class="service-item">
-                        <i class="service-icon fa fa-Wildlife"></i>
-                        <h4>Wildlife</h4>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-2 text-center">
-                    <div class="service-item">
-                        <i class="service-icon fa fa-Fashion"></i>
-                        <h4>Fashion</h4>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-2 text-center">
-                    <div class="service-item">
-                        <i class="service-icon fa fa-Music"></i>
-                        <h4>Music</h4>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-2 text-center">
-                    <div class="service-item">
-                        <i class="service-icon fa fa-Photojournalism"></i>
-                        <h4>Photojournalism</h4>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-2 text-center">
-                    <div class="service-item">
-                        <i class="service-icon fa fa-Street"></i>
-                        <h4>Street</h4>
-                    </div>
-                </div>
+              {%endfor%}
             </div>
         </div>
     </div>
     <!-- /Callout -->
     <br>
-    <h2>All Photos {%if me%}<a href="/signin"><button class="btn btn-sm btn-danger" type="button"><i class="fa fa-register" style="color:white;"></i>  Send for Review</button></a>{%endif%}</h2><hr>
+    <h2>{{portfolio.name}}</h2>{%if me == user%}
+            <a href="/newphoto">Add Photos</a>
+            {%endif%}<hr>
   <div class="row" style="margin-top:20px;z-index:1;"> 
     <div class="container">
       <div id="my_ideas">
-      {%for p in photos%}
-        <div class="col-md-3 col-sm-3 col-xs-4" style="overflow:hidden;" align="center">
-          <a href="/photo/{{p.key.urlsafe()}}"><img src="/servephoto/{{p.blobKey}}" height="140px" id="temp1" alt="photo"></a>
+        {%for p in portfolio.photos%}
+        {% else %}
+          <div>
+            <h2>No photos in {{user.name}} {{portfolio.name}} Portfolio </h2>
+            {%if me == user%}
+            <a href="/newphoto">Add Photos</a>
+            {%endif%}
+          </div>
+            {%set no_photos = 1%}
+        {% endfor %}
+        {%if no_photos != 1%}
+      <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
+        {%for p in portfolio.photos%}
+        {%if loop.index % 4 == 1%}
+                <a href="{{p}}"><img src="{{get_serving_url(p)}}" width="98%" id="temp1" alt="photo"></a>
           <br>
           
-          <div class="button-container post-action padding_top" style="margin-bottom:10px">
+          <div class="button-container post-action padding_top padding_bottom">
             <p>{{p.likes}} <i class="fa fa-thumbs-o-up fa-1x"></i> | {{p.viewed}} <i class="fa fa-eye fa-1x"></i></p>
             <form method="post">
               <input type="hidden" name="actionType" value="edit">
-              <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
-              <button class="btn btn-primary btn-xs" type="submit" value="Edit"><span class="glyphicon glyphicon-edit" style="color:white;"></span></button>
+              <input type="hidden" name="photoKey" value="{{p}}">
+              <button class="btn btn-primary btn-xs" type="submit" title="Edit Image" value="Edit"><span class="glyphicon glyphicon-edit" style="color:white;"></span></button>
             </form>
             <form method="post">
-              <input type="hidden" name="actionType" value="delete">
-              <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
-              <button class="btn btn-primary btn-xs" type="submit" value="Delete"><span class="glyphicon glyphicon-trash" style="color:white;"></span></button>
+              <input type="hidden" name="formType" value="delete">
+              <input type="hidden" id="actionType" name="actionType" value="">
+              <input type="hidden" name="photoKey" value="{{p}}">
+              <button class="btn btn-primary btn-xs" type="submit" title="Delete Image" value="Delete"><span class="glyphicon glyphicon-trash" style="color:white;"></span></button>
             </form>
             <form method="post">
               <input type="hidden" name="actionType" value="add">
-              <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
-              <button class="btn btn-primary btn-xs" type="submit" value="Delete"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
+              <input type="hidden" name="photoKey" value="{{p}}">
+              <button class="btn btn-primary btn-xs" type="submit" title="Add Image to Ideabook" value="Delete"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
             </form>
             <form method="post">
               <input type="hidden" name="actionType" value="share">
-              <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
-              <button class="btn btn-primary btn-xs" type="submit" value="Delete"><i class="fa fa-share fa-1x"></i></button>
+              <input type="hidden" name="photoKey" value="{{p}}">
+              <button class="btn btn-primary btn-xs" type="submit" title="Share Image" value="Delete"><i class="fa fa-share fa-1x"></i></button>
             </form>
             <form method="post">
               <input type="hidden" name="actionType" value="download">
-              <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
-              <button class="btn btn-primary btn-xs" type="submit" value="Delete"><i class="fa fa-download fa-1x"></i></button>
+              <input type="hidden" name="photoKey" value="{{p}}">
+              <button class="btn btn-primary btn-xs" type="submit"title="Download Image"  value="Delete"><i class="fa fa-download fa-1x"></i></button>
             </form>
           </div>
+                <hr>
+        {%endif%}
+        {% endfor %}
         </div>
-      {%endfor%}
+        <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
+        {%for p in portfolio.photos%}
+        {%if loop.index % 4 == 2%}
+                 <a href="{{p}}"><img src="{{get_serving_url(p)}}" width="98%" id="temp1" alt="photo"></a>
+          <br>
+          
+          <div class="button-container post-action padding_top padding_bottom">
+            <p>{{p.likes}} <i class="fa fa-thumbs-o-up fa-1x"></i> | {{p.viewed}} <i class="fa fa-eye fa-1x"></i></p>
+            <form method="post">
+              <input type="hidden" name="actionType" value="edit">
+              <input type="hidden" name="photoKey" value="{{p}}">
+              <button class="btn btn-primary btn-xs" type="submit" title="Edit Image" value="Edit"><span class="glyphicon glyphicon-edit" style="color:white;"></span></button>
+            </form>
+            <form method="post">
+              <input type="hidden" name="actionType" value="delete">
+              <input type="hidden" name="photoKey" value="{{p}}">
+              <button class="btn btn-primary btn-xs" type="submit" title="Delete Image" value="Delete"><span class="glyphicon glyphicon-trash" style="color:white;"></span></button>
+            </form>
+            <form method="post">
+              <input type="hidden" name="actionType" value="add">
+              <input type="hidden" name="photoKey" value="{{p}}">
+              <button class="btn btn-primary btn-xs" type="submit" title="Add Image to Ideabook" value="Delete"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
+            </form>
+            <form method="post">
+              <input type="hidden" name="actionType" value="share">
+              <input type="hidden" name="photoKey" value="{{p}}">
+              <button class="btn btn-primary btn-xs" type="submit" title="Share Image" value="Delete"><i class="fa fa-share fa-1x"></i></button>
+            </form>
+            <form method="post">
+              <input type="hidden" name="actionType" value="download">
+              <input type="hidden" name="photoKey" value="{{p}}">
+              <button class="btn btn-primary btn-xs" type="submit"title="Download Image"  value="Delete"><i class="fa fa-download fa-1x"></i></button>
+            </form>
+          </div>
+                <hr>
+        {%endif%}
+        {% endfor %}
+        </div>
+        <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
+        {%for p in portfolio.photos%}
+        {%if loop.index % 4 == 3%}
+                 <a href="{{p}}"><img src="{{get_serving_url(p)}}" width="98%" id="temp1" alt="photo"></a>
+          <br>
+          
+          <div class="button-container post-action padding_top padding_bottom">
+            <p>{{p.likes}} <i class="fa fa-thumbs-o-up fa-1x"></i> | {{p.viewed}} <i class="fa fa-eye fa-1x"></i></p>
+            <form method="post">
+              <input type="hidden" name="actionType" value="edit">
+              <input type="hidden" name="photoKey" value="{{p}}">
+              <button class="btn btn-primary btn-xs" type="submit" title="Edit Image" value="Edit"><span class="glyphicon glyphicon-edit" style="color:white;"></span></button>
+            </form>
+            <form method="post">
+              <input type="hidden" name="actionType" value="delete">
+              <input type="hidden" name="photoKey" value="{{p}}">
+              <button class="btn btn-primary btn-xs" type="submit" title="Delete Image" value="Delete"><span class="glyphicon glyphicon-trash" style="color:white;"></span></button>
+            </form>
+            <form method="post">
+              <input type="hidden" name="actionType" value="add">
+              <input type="hidden" name="photoKey" value="{{p}}">
+              <button class="btn btn-primary btn-xs" type="submit" title="Add Image to Ideabook" value="Delete"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
+            </form>
+            <form method="post">
+              <input type="hidden" name="actionType" value="share">
+              <input type="hidden" name="photoKey" value="{{p}}">
+              <button class="btn btn-primary btn-xs" type="submit" title="Share Image" value="Delete"><i class="fa fa-share fa-1x"></i></button>
+            </form>
+            <form method="post">
+              <input type="hidden" name="actionType" value="download">
+              <input type="hidden" name="photoKey" value="{{p}}">
+              <button class="btn btn-primary btn-xs" type="submit"title="Download Image"  value="Delete"><i class="fa fa-download fa-1x"></i></button>
+            </form>
+          </div>
+                <hr>
+        {%endif%}
+        {% endfor %}
+        </div>
+        <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
+        {%for p in portfolio. photos%}
+        {%if loop.index % 4 == 0%}
+                 <a href="{{p}}"><img src="{{get_serving_url(p)}}" width="98%" id="temp1" alt="photo"></a>
+          <br>
+          
+          <div class="button-container post-action padding_top padding_bottom">
+            <p>{{p.likes}} <i class="fa fa-thumbs-o-up fa-1x"></i> | {{p.viewed}} <i class="fa fa-eye fa-1x"></i></p>
+            <form method="post">
+              <input type="hidden" name="actionType" value="edit">
+              <input type="hidden" name="photoKey" value="{{p}}">
+              <button class="btn btn-primary btn-xs" type="submit" title="Edit Image" value="Edit"><span class="glyphicon glyphicon-edit" style="color:white;"></span></button>
+            </form>
+            <form method="post">
+              <input type="hidden" name="actionType" value="delete">
+              <input type="hidden" name="photoKey" value="{{p}}">
+              <button class="btn btn-primary btn-xs" type="submit" title="Delete Image" value="Delete"><span class="glyphicon glyphicon-trash" style="color:white;"></span></button>
+            </form>
+            <form method="post">
+              <input type="hidden" name="actionType" value="add">
+              <input type="hidden" name="photoKey" value="{{p}}">
+              <button class="btn btn-primary btn-xs" type="submit" title="Add Image to Ideabook" value="Delete"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
+            </form>
+            <form method="post">
+              <input type="hidden" name="actionType" value="share">
+              <input type="hidden" name="photoKey" value="{{p}}">
+              <button class="btn btn-primary btn-xs" type="submit" title="Share Image" value="Delete"><i class="fa fa-share fa-1x"></i></button>
+            </form>
+            <form method="post">
+              <input type="hidden" name="actionType" value="download">
+              <input type="hidden" name="photoKey" value="{{p}}">
+              <button class="btn btn-primary btn-xs" type="submit"title="Download Image"  value="Delete"><i class="fa fa-download fa-1x"></i></button>
+            </form>
+          </div>
+                <hr>
+        {%endif%}
+        {% endfor %}
+        </div>
+        {%endif%}
     </div>
     </div>
   </div>
+      <div id="about" class="intro">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3 text-center">
+                    <h2></h2>
+                    <p class="lead">Place for Ads <br><a target="_blank" href="http://www.worldphotographersclub.com/">worldphotographersclub</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
 
 {%endblock%}
 

@@ -410,6 +410,46 @@ class UserAboutHandler(PageHandler):
 		else:
 			self.redirect('/')
 
+class UserAboutEditHandler(PageHandler):
+	def get(self, resource):
+		userid = resource
+		user = User.get_by_id(userid)
+		if user:
+			templateVals = {'me': self.user}
+			templateVals['user'] = user
+			photos = Picture.of_ancestor(user.key)
+			templateVals['photos'] = photos
+			self.render('user_about_edit.html', **templateVals)
+		else:
+			self.redirect('/')
+
+	def post(self, resource):
+		userid = resource
+		user = User.get_by_id(userid)
+		if self.user == user:
+			country = self.request.get('country')
+			status = self.request.get('status')
+			facebook = self.request.get('facebook')
+			youtube = self.request.get('youtube')
+			google_plus = self.request.get('google_plus')
+			twitter = self.request.get('twitter')
+			pinterest = self.request.get('pinterest')
+			tumblr = self.request.get('tumblr')
+			website = self.request.get('website')
+			city = self.request.get('city')
+			phone_num = self.request.get('phone_num')
+
+			user.city = city
+			user.phone_num = phone_num
+			user.status = status
+			user = update_user_country(country, user)
+			user = update_social_profiles(facebook, youtube, google_plus, twitter, pinterest, tumblr, website, user)
+			user.put()
+			self.redirect('/%s/about' % self.user.key.id())
+		else:
+			self.redirect('/')
+
+
 class UserPhotosHandler(PageHandler):
 	def get(self, resource):
 		userid = resource
@@ -486,17 +526,26 @@ class UserQuestionsHandler(PageHandler):
 		else:
 			self.redirect('/')
 
-class PortfolioHandler(PageHandler):
-	def get(self):
-		if not self.user:
-			templateVals = {'me': ""}
-			self.render('photos.html', **templateVals)
-		else:
+class PortfolioPermpageHandler(PageHandler):
+	def get(self, resource):
+		portfolioKey = get_key_urlunsafe(resource)
+		portfolio = portfolioKey.get()
+		if portfolio:
+			userKey = portfolioKey.parent()
+			user = userKey.get()
 			templateVals = {'me': self.user}
 			templateVals['user'] = user
-			myphotos = Picture.of_ancestor(self.user.key)
-			templateVals['myphotos'] = myphotos
+			templateVals['portfolio'] = portfolio
 			self.render('portfolioperm.html', **templateVals)
+		else:
+			self.redirect('/')
+
+	def post(self, resource):       ## FIXME
+		portfolioKey = get_key_urlunsafe(resource)
+		action = self.request.get('actionType')
+		if action == "delete":
+			delete_portfolio(portfolioKey, self.user.key)
+			self.redirect('/%s' % self.user.key.id())
 
 
 class UserPortfolioHandler(PageHandler):
@@ -520,7 +569,55 @@ class PortfolioNewHandler(PageHandler ,blobstore_handlers.BlobstoreUploadHandler
 			templateVals = {'me': self.user}
 			photos = Picture.of_ancestor(self.user.key)
 			templateVals['photos'] = photos
+			uploadUrl = blobstore.create_upload_url('/newportfolio')
+			templateVals['uploadUrl'] = uploadUrl
 			self.render('new_portfolio.html', **templateVals)
+		else:
+			self.redirect('/')
+
+	def post(self):
+		if self.user:
+			resultphotoList = []
+			cover1 = None
+			cover2 = None
+			portfolio_title = self.request.get('portfolio_title')
+			cover_image_1_select = self.request.get('cover_image_1_select')
+			cover_image_2_select = self.request.get('cover_image_2_select')
+			cover_image_1_upload = self.get_uploads('cover_image_1_upload')
+			cover_image_2_upload = self.get_uploads('cover_image_2_upload')
+			photoSelect = self.request.get_all('photoSelect')
+			photoSelectDelete = self.request.get_all('photoSelectDelete')
+			resultphotoList += photoSelect
+			for i in photoSelectDelete:
+				resultphotoList.remove(i)
+			print resultphotoList
+			if cover_image_1_select:
+				cover1 = self.request.get('cover_image_1_select')
+			if cover_image_2_select:
+				cover2 = self.request.get('cover_image_2_select')
+			if cover_image_1_upload:
+				blobInfo = cover_image_1_upload[0]
+				photo = create_picture(blobInfo.key(), None, None, None, self.user.key)
+				cover1 = images.get_serving_url(photo.blobKey)
+			if cover_image_2_upload:
+				blobInfo = cover_image_2_upload[0]
+				photo = create_picture(blobInfo.key(), None, None, None, self.user.key)
+				cover2 = images.get_serving_url(photo.blobKey)
+			if cover1 == None:
+				cover1_photo = self.user.cover1.get()
+				cover1 = images.get_serving_url(cover1_photo.blobKey)
+			if cover2 == None:
+				cover2_photo = self.user.cover2.get()
+				cover2 = images.get_serving_url(cover2_photo.blobKey)
+			if portfolio_title:
+				portfolio = create_portfolio(portfolio_title, cover1, cover2, resultphotoList, self.user.key)
+				self.redirect('/portfolio/%s' % portfolio.key.urlsafe())
+			else:
+				errorMsg = "Please enter portfolio's name!"
+				templateVals = {'me': self.user, 'name': name, 'submitError': errorMsg}
+				photos = Picture.of_ancestor(self.user.key)
+				templateVals['photos'] = photos
+				self.render('new_portfolio.html', **templateVals)
 		else:
 			self.redirect('/')
 
@@ -562,7 +659,10 @@ class PhotoEditHandler(PageHandler):
 		photoKey = get_key_urlunsafe(resource)
 		photo = photoKey.get()
 		if self.user and photo and (self.user.key == photoKey.parent()):
-			templateVals = {'me': self.user}	
+			templateVals = {'me': self.user}
+			userKey = photoKey.parent()
+			user = userKey.get()
+			templateVals['user'] = user
 			templateVals['photo'] = photo
 			self.render('photoedit.html', **templateVals)
 		else:
@@ -571,30 +671,40 @@ class PhotoEditHandler(PageHandler):
 	def post(self, resource):
 		photoKey = get_key_urlunsafe(resource)
 		photo = photoKey.get()
+		action = self.request.get('actionType')
 		if self.user and photo and (self.user.key == photoKey.parent()):
-			caption = self.request.get('caption')
-			description = self.request.get('description')
-			location = self.request.get('location')
-			camera = self.request.get('camera')
-			lense = self.request.get('lense')
-			shutter_speed = self.request.get('shutter_speed')
-			aperture = self.request.get('aperture')
-			iso = self.request.get('iso')
-			tagList = self.request.get_all('tags')
-			albumList = self.request.get_all('albums')
-			
-			photo.caption = caption
-			photo.description = description
-			photo.location = location
-			photo.camera = camera
-			photo.lense = lense
-			photo.shutter_speed = shutter_speed
-			photo.aperture = aperture
-			photo.iso = iso
-			photo.tags += tagList
-			photo.albums += albumList
-			photo.put()
-			self.redirect('/%s/photos' % self.user.key.id())
+			if action == "photo_details":
+				caption = self.request.get('caption')
+				description = self.request.get('description')
+				location = self.request.get('location')
+				camera = self.request.get('camera')
+				lense = self.request.get('lense')
+				shutter_speed = self.request.get('shutter_speed')
+				aperture = self.request.get('aperture')
+				iso = self.request.get('iso')
+				tagList = self.request.get_all('tags')
+				albumList = self.request.get_all('albums')
+				
+				photo.caption = caption
+				photo.description = description
+				photo.location = location
+				photo.camera = camera
+				photo.lense = lense
+				photo.shutter_speed = shutter_speed
+				photo.aperture = aperture
+				photo.iso = iso
+				photo.tags += tagList
+				photo.albums += albumList
+				photo.put()
+				self.redirect('/%s/photos' % self.user.key.id())
+			elif action == "delete":
+				delete_photo(photoKey, self.user.key)
+				self.redirect('/%s/photos' % self.user.key.id())
+			elif action == "rotate_left":
+				photo = images.rotate(photoKey, 90)
+				photo.put()
+
+
 
 class GroupNewHandler(PageHandler ,blobstore_handlers.BlobstoreUploadHandler):
 	def get(self):
@@ -893,7 +1003,6 @@ app = webapp2.WSGIApplication([
 			('/groups' , GroupsHandler),
 			('/photos' , PhotosHandler),
 			('/blogs' , BlogsHandler),
-			('/portfolio' , PortfolioHandler),
 			('/forum', ForumHandler),
 			('/explore', ExploreHandler),
 			('/search', SearchResultsHandler),
@@ -902,6 +1011,7 @@ app = webapp2.WSGIApplication([
 			('/group/([^/]+)', GroupPermpageHandler),
 			('/photo/([^/]+)', PhotoPermpageHandler),
 			('/blog/([^/]+)', BlogPermpageHandler),
+			('/portfolio/([^/]+)', PortfolioPermpageHandler),
 			('/editphoto/([^/]+)', PhotoEditHandler),
 			('/editblog/([^/]+)', BlogEditHandler),
 			('/edituser', UserEditHandler),
@@ -911,11 +1021,12 @@ app = webapp2.WSGIApplication([
 			('/newblog', BlogNewHandler),
 			('/servephoto/([^/]+)', PhotoServeHandler),
 			('/([^/]+)/about', UserAboutHandler),
+			('/([^/]+)/editabout', UserAboutEditHandler),
 			('/([^/]+)/photos', UserPhotosHandler),
 			('/([^/]+)/blogs', UserBlogsHandler),
 			('/([^/]+)/groups', UserGroupsHandler),
 			('/([^/]+)/q&a', UserQuestionsHandler),
-			('/([^/]+)/portfolio', UserPortfolioHandler),
+			('/([^/]+)/portfolios', UserPortfolioHandler),
 			('/([^/]+)/ideabook', UserIdeabookHandler),
 			('/([^/]+)', UserStudioHandler),
 			('/([^.]+)', DefaultHandler)

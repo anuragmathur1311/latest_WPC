@@ -1,5 +1,4 @@
 {%extends "user_studio.html"%}
-{%set user = me%}
 {%block title%}
 My Photos | WPC
 {%endblock%}
@@ -18,26 +17,36 @@ My Photos | WPC
   	<div class="col-md-4">
   		<div class="col-md-6">
   		  <ul class="list-inline">
-			{%if me.website%}
-			  <a href="{{me.website}}"><img src="/images/WPC_app_icon.jpg" alt="Profile Image" width="40px"><a>
-			{%else%}
-			  <img src="/images/WPC_app_icon.jpg" alt="Profile Image" width="60px">
-			{% endif %}
-			{%if me.facebook%}
-			  <li color="white"><a href="{{me.facebook}}"><i class="fa fa-facebook fa-2x" style="color:black;"></i></a></li>
-			{% endif %}
-			{%if me.twitter%}
-			  <li color="white"><a href="{{me.twitter}}"><i class="fa fa-twitter fa-2x" style="color:black;"></i></a></li>
-			{% endif %}
-			{%if me.youtube%}
-			  <li color="white"><a href="{{me.youtube}}"><i class="fa fa-youtube fa-2x" style="color:black;"></i></a></li>
-			{% endif %}
-			{%if me.pinterest%}
-			  <li color="white"><a href="{{me.pinterest}}"><i class="fa fa-pinterest fa-2x" style="color:black;"></i></a></li>
-			{% endif %}
-			{%if me.google_plus%}
-			  <li color="white"><a href="{{me.google_plus}}"><i class="fa fa-google-plus fa-2x" style="color:black;"></i></a></li>
-			{% endif %}
+  		  			<div class="col-md-2 col-sm-2 col-xs-4">
+                {%if user.watermark%}
+                    {%if user.website%}
+                        <a href="{{user.website}}"><img src="{{user.watermark_url}}" title="{{user.name}}'s personal website" alt="Profile Image" width="60px"><br></a>
+                    {%else%}
+                        <a href=""><img src="{{user.watermark_url}}" title="{{user.name}}'s personal website" alt="Profile Image" width="60px"><br></a>
+                    {%endif%}  
+                {%else%}
+                    {%if user.website%}
+                        <a href="{{user.website}}"><h5>{{user.name}} Website</h5></a>
+                    {%else%}
+                        <a href=""><h4>{{user.name}} Website</h4></a>
+                    {%endif%}
+                {%endif%}
+                </div>
+                {%if user.facebook%}
+                    <div class="col-md-2 col-sm-2 col-xs-4"><li color="white"><a href="{{user.facebook}}"><i class="fa fa-facebook fa-3x" style="color:black;"></i></a></li></div>
+                {% endif %}
+                {%if user.twitter%}
+                    <div class="col-md-2 col-sm-2 col-xs-4"><li color="white"><a href="{{user.twitter}}"><i class="fa fa-twitter fa-3x" style="color:black;"></i></a></li></div>
+                {% endif %}
+                {%if user.pinterest%}
+                    <div class="col-md-2 col-sm-2 col-xs-4"><li color="white"><a href="{{user.pinterest}}"><i class="fa fa-pinterest fa-3x" style="color:black;"></i></a></li></div>
+                {% endif %}
+                {%if user.google_plus%}
+                    <div class="col-md-2 col-sm-2 col-xs-4"><li color="white"><a href="{{user.google_plus}}"><i class="fa fa-google-plus fa-3x" style="color:black;"></i></a></li></div>
+                {% endif %}
+                {%if user.tumblr%}
+                    <div class="col-md-2 col-sm-2 col-xs-4"><li color="white"><a href="{{user.tumblr}}"><i class="fa fa-tumblr fa-3x" style="color:black;"></i></a></li></div>
+                {% endif %}
 		</ul>
 		</div>
 		<div class="col-md-6" style="margin:0px;">
@@ -71,7 +80,7 @@ My Photos | WPC
         </div>
 	</div>
 	<div class="col-md-4">
-  		<h1> {{me.name}}<em> Photos</em>  {%if not me%}<a href="/signin"><button class="btn btn-xs btn-danger" type="button"><i class="fa fa-register" style="color:white;"></i>  Register with WPC</button></a>{%endif%}</h1>
+  		<h1> {{user.name}}<em> Photos</em>  {%if not me%}<a href="/signin"><button class="btn btn-xs btn-danger" type="button"><i class="fa fa-register" style="color:white;"></i>  Register with WPC</button></a>{%endif%}</h1>
 	</div>
 	<div class="col-md-4">
 		<div class="col-md-6">
@@ -111,18 +120,19 @@ My Photos | WPC
 	              <a href="/photo/{{p.key.urlsafe()}}"><img src="{{get_serving_url(p.blobKey,size=100)}}" width="98%" id="temp1" alt="photo"></a>
 					{%for tags in p.tags%}
 						<script>
-								$( ".all_tags" ).append( "<button type='' onclick='filter_photos()' class='btn btn-warning btn-xs margin-top margin_tag_albums margin-bottom'>{{tags}}</button>");
+							$( ".all_tags" ).append( "<button type='' onclick='filter_photos()' class='btn btn-warning btn-xs margin-top margin_tag_albums margin-bottom'>{{tags}}</button>");
 						</script>
 					{%endfor%}
 					{%for albums in p.albums%}
 						<script>
-								$( ".all_albums" ).append( "<button type='' onclick='filter_photos()' class='btn btn-danger btn-xs margin-top margin_tag_albums margin-bottom'>{{albums}}</button>");
+							$( ".all_albums" ).append( "<button type='' onclick='filter_photos()' class='btn btn-danger btn-xs margin-top margin_tag_albums margin-bottom'>{{albums}}</button>");
 						</script>
 					{%endfor%}
 					<br>
 					
 			          <div class="button-container post-action padding_top padding_bottom">
 			            <p>{{p.likes}} <i class="fa fa-thumbs-o-up fa-1x"></i> | {{p.viewed}} <i class="fa fa-eye fa-1x"></i></p>
+			            {%if me%}
 			            <form method="post">
 			              <input type="hidden" name="actionType" value="edit">
 			              <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
@@ -148,8 +158,20 @@ My Photos | WPC
 			              <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
 			              <button class="btn btn-primary btn-xs" type="submit"title="Download Image"  value="Delete"><i class="fa fa-download fa-1x"></i></button>
 			            </form>
+			            {%else%}
+			            <form method="post">
+				            <input type="hidden" name="actionType" value="like">
+				            <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+				            <button class="btn btn-info btn-xs" type="submit" value="Delete"><i class="fa fa-thumbs-up fa-1x"></i></button>
+				         </form>
+				         <form method="post">
+			              <input type="hidden" name="actionType" value="share">
+			              <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+			              <button class="btn btn-primary btn-xs" type="submit" title="Share Image" value="Delete"><i class="fa fa-share fa-1x"></i></button>
+			            </form>
+			            {%endif%}
 			          </div>
-	              <hr>
+	              
 	      {%endif%}
 	      {% endfor %}
 	      </div>
@@ -171,6 +193,7 @@ My Photos | WPC
 					
 			          <div class="button-container post-action padding_top padding_bottom">
 			            <p>{{p.likes}} <i class="fa fa-thumbs-o-up fa-1x"></i> | {{p.viewed}} <i class="fa fa-eye fa-1x"></i></p>
+			            {%if me%}
 			            <form method="post">
 			              <input type="hidden" name="actionType" value="edit">
 			              <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
@@ -196,8 +219,20 @@ My Photos | WPC
 			              <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
 			              <button class="btn btn-primary btn-xs" type="submit"title="Download Image"  value="Delete"><i class="fa fa-download fa-1x"></i></button>
 			            </form>
+			            {%else%}
+			            <form method="post">
+				            <input type="hidden" name="actionType" value="like">
+				            <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+				            <button class="btn btn-info btn-xs" type="submit" value="Delete"><i class="fa fa-thumbs-up fa-1x"></i></button>
+				         </form>
+				         <form method="post">
+			              <input type="hidden" name="actionType" value="share">
+			              <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+			              <button class="btn btn-primary btn-xs" type="submit" title="Share Image" value="Delete"><i class="fa fa-share fa-1x"></i></button>
+			            </form>
+			            {%endif%}
 			          </div>
-	              <hr>
+	              
 	      {%endif%}
 	      {% endfor %}
 	      </div>
@@ -219,6 +254,7 @@ My Photos | WPC
 					
 			          <div class="button-container post-action padding_top padding_bottom">
 			            <p>{{p.likes}} <i class="fa fa-thumbs-o-up fa-1x"></i> | {{p.viewed}} <i class="fa fa-eye fa-1x"></i></p>
+			            {%if me%}
 			            <form method="post">
 			              <input type="hidden" name="actionType" value="edit">
 			              <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
@@ -244,8 +280,20 @@ My Photos | WPC
 			              <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
 			              <button class="btn btn-primary btn-xs" type="submit"title="Download Image"  value="Delete"><i class="fa fa-download fa-1x"></i></button>
 			            </form>
+			            {%else%}
+			            <form method="post">
+				            <input type="hidden" name="actionType" value="like">
+				            <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+				            <button class="btn btn-info btn-xs" type="submit" value="Delete"><i class="fa fa-thumbs-up fa-1x"></i></button>
+				         </form>
+				         <form method="post">
+			              <input type="hidden" name="actionType" value="share">
+			              <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+			              <button class="btn btn-primary btn-xs" type="submit" title="Share Image" value="Delete"><i class="fa fa-share fa-1x"></i></button>
+			            </form>
+			            {%endif%}
 			          </div>
-	              <hr>
+	              
 	      {%endif%}
 	      {% endfor %}
 	      </div>
@@ -267,6 +315,7 @@ My Photos | WPC
 					
 			          <div class="button-container post-action padding_top padding_bottom">
 			            <p>{{p.likes}} <i class="fa fa-thumbs-o-up fa-1x"></i> | {{p.viewed}} <i class="fa fa-eye fa-1x"></i></p>
+			            {%if me%}
 			            <form method="post">
 			              <input type="hidden" name="actionType" value="edit">
 			              <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
@@ -292,8 +341,20 @@ My Photos | WPC
 			              <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
 			              <button class="btn btn-primary btn-xs" type="submit"title="Download Image"  value="Delete"><i class="fa fa-download fa-1x"></i></button>
 			            </form>
+			            {%else%}
+			            <form method="post">
+				            <input type="hidden" name="actionType" value="like">
+				            <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+				            <button class="btn btn-info btn-xs" type="submit" value="Delete"><i class="fa fa-thumbs-up fa-1x"></i></button>
+				         </form>
+				         <form method="post">
+			              <input type="hidden" name="actionType" value="share">
+			              <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+			              <button class="btn btn-primary btn-xs" type="submit" title="Share Image" value="Delete"><i class="fa fa-share fa-1x"></i></button>
+			            </form>
+			            {%endif%}
 			          </div>
-	              <hr>
+	              
 	      {%endif%}
 	      {% endfor %}
 	      </div>

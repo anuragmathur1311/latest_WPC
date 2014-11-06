@@ -30,7 +30,7 @@
 	    <div id="myblogs">
 			<div class="col-md-4 col-sm-6">
 				<a href=""><h3>All Photos({{photos.count()}})</h3>	
-				<img src="http://localhost:8080/_ah/img/I0ruv9SZ2oW0ZCLYeWSPoQ===s100" alt="Profile Image" class="img-rounded" width="300px"></a>
+				<img src="{{user.cover1_url}}" alt="Profile Image" class="img-rounded" width="300px"></a>
 					<div class="button-container post-action padding_top">
 						<form method="post">
 							<input type="hidden" name="actionType" value="edit">
@@ -54,9 +54,10 @@
 						</form>
 					</div>
 			</div>
+			{%for p in user.portfolios%}
 			<div class="col-md-4 col-sm-6">
-				<a href=""><h3>All Photos({{photos.count()}})</h3>	
-				<img src="http://localhost:8080/_ah/img/I0ruv9SZ2oW0ZCLYeWSPoQ===s100" alt="Profile Image" class="img-rounded" width="300px"></a>
+				<a href="/portfolio/{{p.urlsafe()}}"><h3>{{p.get().name}}</h3>	
+				<img src="{{get_serving_url(p.get().cover_photo1)}}" alt="Profile Image" class="img-rounded" width="300px"></a>
 					<div class="button-container post-action padding_top">
 						<form method="post">
 							<input type="hidden" name="actionType" value="edit">
@@ -80,32 +81,7 @@
 						</form>
 					</div>
 			</div>
-			<div class="col-md-4 col-sm-6">
-				<a href=""><h3>All Photos({{photos.count()}})</h3>	
-				<img src="http://localhost:8080/_ah/img/I0ruv9SZ2oW0ZCLYeWSPoQ===s100" alt="Profile Image" class="img-rounded" width="300px"></a>
-					<div class="button-container post-action padding_top">
-						<form method="post">
-							<input type="hidden" name="actionType" value="edit">
-							<input type="hidden" name="photoKey" value="">
-							<button class="btn btn-primary btn-xs" type="submit" value="Edit"><span class="glyphicon glyphicon-edit" style="color:white;"></span></button>
-						</form>
-						<form method="post">
-							<input type="hidden" name="actionType" value="delete">
-							<input type="hidden" name="photoKey" value="">
-							<button class="btn btn-primary btn-xs" type="submit" value="Delete"><span class="glyphicon glyphicon-trash" style="color:white;"></span></button>
-						</form>
-						<form method="post">
-							<input type="hidden" name="actionType" value="share">
-							<input type="hidden" name="photoKey" value="">
-							<button class="btn btn-primary btn-xs" type="submit" value="Delete"><i class="fa fa-share fa-1x"></i></button>
-						</form>
-						<form method="post">
-							<input type="hidden" name="actionType" value="download">
-							<input type="hidden" name="photoKey" value="">
-							<button class="btn btn-primary btn-xs" type="submit" value="Delete"><i class="fa fa-download fa-1x"></i></button>
-						</form>
-					</div>
-			</div>
+			{%endfor%}
     	</div>
 	</div>
 {%endblock%}
