@@ -466,14 +466,30 @@ class UserPhotosHandler(PageHandler):
 	def post(self, resource):
 		userid = resource
 		user = User.get_by_id(userid)
+		templateVals = {'me': self.user}
+		templateVals['user'] = user
 		if self.user == user:
 			action = self.request.get('actionType')
-			photoKey = get_key_urlunsafe(self.request.get('photoKey'))
 			if action == "delete":
+				photoKey = get_key_urlunsafe(self.request.get('photoKey'))
 				delete_photo(photoKey, self.user.key)
 				self.redirect('/%s/photos' % resource)
 			elif action == "edit":
+				photoKey = get_key_urlunsafe(self.request.get('photoKey'))
 				self.redirect('/editphoto/%s' % photoKey.urlsafe())
+		elif self.user != user:
+			action = self.request.get('actionType')
+			if action == "like":
+				photoKey = get_key_urlunsafe(self.request.get('photoKey'))
+				photo = photoKey.get()
+				photo.likes += 1
+				photo.put()
+				self.redirect('/%s/photos' % resource)
+			if action == "add":
+				photoKey = get_key_urlunsafe(self.request.get('photoKey'))
+				self.user.pinned_photos += photoKey
+				self.user.put()
+				self.redirect('/%s/photos' % resource)
 		else:
 			self.redirect('/')
 
