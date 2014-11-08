@@ -7,19 +7,29 @@
     <div class="transbox_right_permapage">
 			<br>
             <ul class="list-inline">
-                {%if user.website%}
-                  <a href="{{me.website}}"><img src="/images/WPC_app_icon.jpg" alt="Profile Image" width="60px"><br><br><br><a>
+                {%if user.watermark%}
+                        {%if user.website%}
+                            <a href="{{user.website}}"><img src="{{user.watermark_url}}" title="{{user.name}}'s personal website" alt="Profile Image" width="60px"><br></a>
+                        {%else%}
+                            <a href=""><img src="{{user.watermark_url}}" title="{{user.name}}'s personal website" alt="Profile Image" width="60px"><br></a>
+                        {%endif%}
+                        <br><br>  
                 {%else%}
-                  <img src="/images/WPC_app_icon.jpg" alt="Profile Image" width="60px"><br><br><br>
-                {% endif %}
+                        {%if user.website%}
+                            <a href="{{user.website}}"><h4>{{user.name}} Website</h4></a>
+                        {%else%}
+                            <a href=""><h4>{{user.name}} Website</h4></a>
+                        {%endif%}
+                        <br><br>
+                {%endif%}
                 {%if user.facebook%}
                   <li color="white"><a href="{{me.facebook}}"><i class="fa fa-facebook fa-3x" style="color:black;"></i></a></li><br><br>
                 {% endif %}
                 {%if user.twitter%}
                   <li color="white"><a href="{{me.twitter}}"><i class="fa fa-twitter fa-3x" style="color:black;"></i></a></li><br><br>
                 {% endif %}
-                {%if user.youtube%}
-                  <li color="white"><a href="{{me.youtube}}"><i class="fa fa-youtube fa-3x" style="color:black;"></i></a></li><br><br>
+                {%if user.tumblr%}
+                  <li color="white"><a href="{{user.tumblr}}"><i class="fa fa-tumblr fa-3x" style="color:black;"></i></a></li><br><br>
                 {% endif %}
                 {%if user.pinterest%}
                   <li color="white"><a href="{{me.pinterest}}"><i class="fa fa-pinterest fa-3x" style="color:black;"></i></a></li><br><br>
@@ -30,25 +40,43 @@
             </ul>
     </div>
 	<div class="photopermpage col-md-8 col-md-offset-2">
-		<img src="/servephoto/{{photo.blobKey}}" width="100%" alt="photo">
-		<a href=""><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{user.name}}<em></h5></a>
+		<img src="{{get_serving_url(photo.blobKey)}}" width="100%" alt="photo">
+		<a href="/{{user.key.id()}}"><h5 style="color:green;"><img src="{{user.avatar_url}}" alt="Profile Image" class="img-circle" width="45px"> <em>{{user.name}}<em></h5></a>
 	</div>
   
 	<div class="row edit_delete_bottons text-center">
     <div class="col-md-4 col-md-offset-4">
-		{%if not me%}
-		<div class="col-md-2 col-md-offset-1">
+		{%if me == user%}
+		<div class="col-md-2 col-md-offset-2">
+          <form method="post">
+            <input type="hidden" name="actionType" value="edit">
+            <input type="hidden" name="photoKey" value="{{photo.key.urlsafe()}}">
+            <button class="btn btn-success btn-md" type="submit"><i class="fa fa-edit fa-2x"></i></button>
+          </form>
+	    </div>
+	    <div class="col-md-2">
+          <form method="post">
+            <input type="hidden" name="actionType" value="delete">
+            <input type="hidden" name="photoKey" value="{{photo.key.urlsafe()}}">
+            <button class="btn btn-success btn-md" type="submit"><i class="fa fa-trash-o fa-2x"></i></button>
+          </form>
+	    </div>
+		<div class="col-md-2">
+          <button class="btn btn-success" data-toggle="modal" data-target=".share_modal"><i class="fa fa-share fa-2x"></i></button>
+      </div>
+	  <div class="col-md-2">
+        <form method="post">
+          <input type="hidden" name="actionType" value="download">
+          <button class="btn btn-success" type="submit"><i class="fa fa-download fa-2x"></i></button>
+        </form>
+      </div>
+		  {%else%}
+		<div class="col-md-2 col-md-offset-2">
           <form method="post">
             <input type="hidden" name="actionType" value="like">
             <button class="btn btn-info btn-md" type="submit" value="Delete"><i class="fa fa-thumbs-up fa-2x"></i></button>
           </form>
 	    </div>
-		<div class="col-md-2">
-        <form method="post">
-          <input type="hidden" name="actionType" value="share">
-          <button class="btn btn-success btn-lg" type="submit" value="pin"><span class="glyphicon glyphicon-pushpin" style="color:white;"></span></button>
-        </form>
-      </div>
 		<div class="col-md-2">
           <button class="btn btn-success" data-toggle="modal" data-target=".share_modal"><i class="fa fa-share fa-2x"></i></button>
       </div>
@@ -59,51 +87,17 @@
         </form>
       </div>
 	  <div class="col-md-2">
-        <form method="post">
-          <input type="hidden" name="actionType" value="award">
-          <button class="btn btn-success" type="submit" value="Delete"><i class="fa fa-trophy fa-2x"></i></button>
-        </form>
-      </div>
-		{% endif %}
-		  {%if me%}
-		  <div class="col-md-2 col-md-offset-1">
-          <form method="post">
-            <input type="hidden" name="actionType" value="edit">
-            <input type="hidden" name="photoKey" value="{{photo.key.urlsafe()}}">
-            <button class="btn btn-success btn-md" type="submit" value="Edit"><i class="fa fa-edit fa-2x"></i></button>
-          </form>
-	    </div>
-	    <div class="col-md-2">
-          <form method="post">
-            <input type="hidden" name="actionType" value="delete">
-            <input type="hidden" name="photoKey" value="{{photo.key.urlsafe()}}">
-            <button class="btn btn-success btn-md" type="submit" value="Delete"><i class="fa fa-trash-o fa-2x"></i></button>
-          </form>
-	    </div>
-		<div class="col-md-2">
-          <button class="btn btn-success" data-toggle="modal" data-target=".share_modal"><i class="fa fa-share fa-2x"></i></button>
-      </div>
-	  <div class="col-md-2">
-        <form method="post">
-          <input type="hidden" name="actionType" value="download">
-          <button class="btn btn-success" type="submit" value="Delete"><i class="fa fa-download fa-2x"></i></button>
-        </form>
-      </div>
-	  <div class="col-md-2">
-        <form method="post">
-          <input type="hidden" name="actionType" value="download">
-          <button class="btn btn-success" type="submit" value="Delete"><i class="fa fa-plus fa-2x"></i></button>
-        </form>
+          <button class="btn btn-success" data-toggle="modal" data-target=".photography_awards"><i class="fa fa-trophy fa-2x"></i></button>
       </div>
 		 {% endif %}
     </div>
 
 	</div>
-  
+
   <hr>
 	<div class="thumb_imgs">
 	    {%for p in photos%}
-	         <a href="/photo/{{p.key.urlsafe()}}"><img src="/servephoto/{{p.blobKey}}" height="100px" alt="photo"></a>
+	         <a href="/photo/{{p.key.urlsafe()}}"><img src="{{get_serving_url(p.blobKey)}}" height="100px" alt="photo"></a>
 	    {%endfor%}
 	</div>
 	<hr>
@@ -119,7 +113,7 @@
 	            <h1 style="font-size:55px;">10</h1><i class="fa fa-pencil fa-2x"></i><h4 style="color:blue;">comments</h4>
 	        </div><!-- /.col-lg-4 -->
 	        <div class="col-md-2 col-xs-6 btn_padding_right">
-	            <h1 style="font-size:55px;">2</h1><i class="fa fa-trophy fa-2x"></i><h4 style="color:blue;">awards</h4>
+	            <h1 style="font-size:55px;">{{len(photo.awards)}}</h1><i class="fa fa-trophy fa-2x"></i><h4 style="color:blue;">awards</h4>
 	        </div><!-- /.col-lg-4 -->
 	        <div class="col-md-2 col-xs-6 btn_padding_right">
 	            <h1 style="font-size:55px;">{{photo.viewed}}</h1><i class="fa fa-eye fa-2x"></i><h4 style="color:blue;">views</h4>
@@ -130,10 +124,11 @@
 	    </div><!-- /.row -->
 	</div>
 	<hr>
-    <form method="post">
-    <input type="hidden" name="actionType" value="add_comment">
-	<div class="row permapage_container">
+    
+
 		<div class="col-md-6 col-sm-6 permapage_container_inner">
+			<form method="post">
+    		<input type="hidden" name="actionType" value="add_comment">
 			<div class="panel panel-default">
 				<div class="panel-heading"><h4>Comments on this Photo</h4></div><hr>
 				<div class="panel-body">
@@ -145,18 +140,86 @@
 					<hr>
 				  <div class="input-group">
 					<div  class="photo_albums"></div>
-					<input type="text" class="form-control" name="comment" id="comment" placeholder="Add Photo to an Album">
+					<input type="hidden" id="userid" name="user_key" value="{{user.key}}">
+					<input type="text" class="form-control" name="comment" id="comment" placeholder="Add a comment">
 					<div class="input-group-btn">
 					  <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
 					</div><!-- /btn-group -->
 				  </div><!-- /input-group -->
 				</div>
 			</div> 
+			</form>
 		</div>
-		</form>
+		
 		<form method="post">
 		<input type="hidden" name="actionType" value="add_tag_album">
 		<div class="col-md-5 col-sm-6 permapage_container_inner">
+			<div class="panel panel-default">
+				<div class="panel-heading"><h4>Awards</h4></div><hr>
+				<div class="panel-body"  style="margin:0px;">
+					{% set Simply_Awesome_num = 0 %}
+					{% set Jaw_Dropping_num = 0 %}
+					{% set World_Class_num = 0 %}
+					{% set Beautiful_Composition_num = 0 %}
+					{% set Piece_of_Art_num = 0 %}
+					{% set Truly_Inspirational_num = 0 %}
+
+					{%for a in photo.awards%}
+		                    {%if a == 'Simply_Awesome'%}
+		                    	{% set Simply_Awesome_num =  Simply_Awesome_num + 1%}
+		                    {%elif a == 'Jaw_Dropping'%}
+		                    	{% set Jaw_Dropping_num =  Jaw_Dropping_num + 1%}
+		                    {%elif a == 'World_Class'%}
+		                    	{% set World_Class_num =  World_Class_num + 1%}
+		                    {%elif a == 'Beautiful_Composition'%}
+		                    	{% set Beautiful_Composition_num =  Beautiful_Composition_num + 1%}
+		                    {%elif a == 'Piece_of_Art'%}
+		                    	{% set Piece_of_Art_num =  Piece_of_Art_num + 1%}
+		                    {%elif a == 'Truly_Inspirational'%}
+		                    	{% set Truly_Inspirational_num =  Truly_Inspirational_num + 1%}
+		                    {%endif%}
+		                 {%if loop.last%}
+		                 		{%if Simply_Awesome_num > 0%}
+					             <div class="col-md-3 text-center" style="margin:0px;">
+				                    	<div><i  style="color:gold;" class="fa fa-trophy fa-2x"><span class="badge pull-right">{{Simply_Awesome_num}}</span></i>
+				                    	<h5>Simply Awesome</h5></div>
+				                 </div>
+				                 {%endif%}
+				                 {%if Jaw_Dropping_num > 0%}
+				                 <div class="col-md-3 text-center" style="margin:0px;">
+				                    	<div><i  style="color:gold;" class="fa fa-trophy fa-2x"><span class="badge pull-right">{{Jaw_Dropping_num}}</span></i>
+				                    	<h5>Jaw Dropping</h5></div>
+				                 </div>
+				                 {%endif%}
+				                 {%if World_Class_num > 0%}
+				                 <div class="col-md-3 text-center" style="margin:0px;">
+				                    	<div><i  style="color:gold;" class="fa fa-trophy fa-2x"><span class="badge pull-right">{{World_Class_num}}</span></i>
+				                    	<h5>World Class</h5></div>
+				                 </div>
+				                 {%endif%}
+				                 {%if Beautiful_Composition_num > 0%}
+				                 <div class="col-md-3 text-center" style="margin:0px;">
+				                    	<div><i  style="color:gold;" class="fa fa-trophy fa-2x"><span class="badge pull-right">{{Beautiful_Composition_num}}</span></i>
+				                    	<h5>Beautiful Composition</h5></div>
+				                 </div>
+				                 {%endif%}
+				                 {%if Piece_of_Art_num > 0%}
+				                 <div class="col-md-3 text-center" style="margin:0px;">
+				                    	<div><i  style="color:gold;" class="fa fa-trophy fa-2x"><span class="badge pull-right">{{Piece_of_Art_num}}</span></i>
+				                    	<h5>Piece of Art</h5></div>
+				                 </div>
+				                 {%endif%}
+				                 {%if Truly_Inspirational_num > 0%}
+				                 <div class="col-md-3 text-center" style="margin:0px;">
+				                    	<div><i  style="color:gold;" class="fa fa-trophy fa-2x"><span class="badge pull-right">{{Truly_Inspirational_num}}</span></i>
+				                    	<h5>Truly Inspirational</h5></div>
+				                 </div>
+				                 {%endif%}
+		                {%endif%}
+		            {%endfor%}
+				</div>
+
+			</div> 
 			<div class="panel panel-default">
 				<div class="panel-heading"><h4>Associated Tags</h4></div>
 				<div class="panel-body">
@@ -167,7 +230,7 @@
 			  		</div>
 					<hr>
 			  		<div class="input-group">
-			  			{%if me%}
+			  			{%if me == user%}
 							<div class="photo_tags"></div>
 							<input type="text" class="form-control" name="add_tag" id="add_tag" placeholder="Add a Tag">
 							<div class="input-group-btn">
@@ -185,7 +248,7 @@
 								  
 					<div class="row"><hr></div>
 			  			<div class="input-group">
-			  				{%if me%}
+			  				{%if me == user%}
 								<div class="photo_albums"></div>
 								<input type="text" class="form-control" name="add_album" id="add_album" placeholder="Add Photo to an Album">
 								<div class="input-group-btn">
@@ -194,29 +257,37 @@
 							{%endif%}
 			  			</div><!-- /input-group -->
 				</div>
-				{%if me%}
+				{%if me == user%}
 					<button class="btn btn-xs btn-success" style="margin-bottom:5px;" type="submit">Save Tags & Albums</button>
 				{%endif%}
 			</div> 
 			<div class="panel panel-default">
 				<div class="panel-heading"><h4>Camera Details</h4></div><hr>
 				<div class="panel-body">
-					<img src="/fonts/Cam`eras/{{photo.camera}}.png" alt="camera" width="80px"><h4 style="color:black;">{{photo.camera}}<h4>
-					<hr>
-					<img src="/fonts/Lenses/{{photo.lense}}.png" alt="camera" width="80px"><h4 style="color:black;">{{photo.lense}}<h4>
-					<hr>
-					<h4>Shutter Speed : {{photo.shutter_speed}}</h4>
-					<h4>Aperture : {{photo.aperture}}</h4>
-					<h4>ISO : {{photo.iso}}</h4>
+					{%if photo.camera and photo.camera != None%}
+						<img src="/fonts/Cam`eras/{{photo.camera}}.png" alt="camera" width="80px"><h4 style="color:black;">{{photo.camera}}<h4>
+						<hr>
+					{%endif%}
+					{% if photo.lense and photo.lense != None %}
+						<img src="/fonts/Lenses/{{photo.lense}}.png" alt="camera" width="80px"><h4 style="color:black;">{{photo.lense}}<h4>
+						<hr>
+					{%endif%}
+					{%if photo.shutter_speed or photo.aperture or photo.iso%}
+						<h4>Shutter Speed : {{photo.shutter_speed}}</h4>
+						<h4>Aperture : {{photo.aperture}}</h4>
+						<h4>ISO : {{photo.iso}}</h4>
+						<hr>
+					{%endif%}
 				</div>
-				<hr>
+				{%if photo.location%}
 				<div class="panel-heading"><h4>Photo on a Map</h4></div>
 				<iframe
 					  width="100%"
 					  height="300"
 					  frameborder="0" style="border:0"
 					  src="https://www.google.com/maps/embed/v1/search?key=AIzaSyA98__FHcA4bnhiXVRNPHswC6VNnVfiKnc&q={{photo.location}}">
-					</iframe>
+				</iframe>
+				{%endif%}
 			</div> 
 		</div>
 
@@ -277,6 +348,69 @@
         </div>
       </div>
     </div>
+
+     <div class="modal fade photography_awards" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title">Give Photography Awards</h4>
+          </div>
+          <form role="form" method="post">
+            <input type="hidden" name="actionType" value="photography_awards">
+            <input type="hidden" id="userid" name="user" value="{{user.key.id()}}">
+            <div class="col-lg-2 col-md-2 text-center">
+                <div class="service-item change_color">
+                    <div onclick="change_color_n_add_input_awards(this, 'Simply_Awesome')"><i class="service-icon fa fa-trophy"></i>
+                    <h4>Simply Awesome!!!</h4></div>
+                    <div id="Simply_Awesome"></div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-2 text-center">
+                <div class="service-item change_color" >
+                    <div onclick="change_color_n_add_input_awards(this, 'Jaw_Dropping')"><i class="service-icon fa fa-trophy"></i>
+                    <h4>Jaw Dropping!!!</h4></div>
+                    <div id="Jaw_Dropping"></div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-2 text-center">
+                <div class="service-item change_color">
+                    <div onclick="change_color_n_add_input_awards(this, 'World_Class')"><i class="service-icon fa fa-trophy"></i>
+                    <h4>World Class</h4></div>
+                    <div id="World_Class"></div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-2 text-center">
+                <div class="service-item change_color">
+                    <div onclick="change_color_n_add_input_awards(this, 'Beautiful_Composition')"><i class="service-icon fa fa-trophy"></i>
+                    <h4>Beautiful Composition</h4></div>
+                    <div id="Beautiful_Composition"></div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-2 text-center">
+                <div class="service-item change_color">
+                    <div onclick="change_color_n_add_input_awards(this, 'Piece_of_Art')"><i class="service-icon fa fa-trophy"></i>
+                    <h4>Piece of Art</h4></div>
+                    <div id="Piece_of_Art"></div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-2 text-center">
+                <div class="service-item change_color">
+                    <div onclick="change_color_n_add_input_awards(this, 'Truly_Inspirational')"><i class="service-icon fa fa-trophy"></i>
+                    <h4>Truly Inspirational</h4></div>
+                    <div id="Truly_Inspirational"></div>
+                </div>
+            </div>
+          <div class="modal-footer">
+          </div>
+          <div class="photography_awards_inputs">
+          </div>
+          <button class="btn btn-xs btn-success padding-bottom" type="submit">Give Awards</button>
+        </form>
+        </div>
+      </div>
+    </div>
+
 	<footer>
 	<div class="row">
 		<div class="col-md-6 col-md-offset-3 text-center">

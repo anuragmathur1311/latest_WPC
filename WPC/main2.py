@@ -88,9 +88,19 @@ class PageHandler(webapp2.RequestHandler):
 class MainHandler(PageHandler):
 	def get(self):
 		if not self.user:
-			self.render('index.html')
+			templateVals = {'me': ""}
+			qry = Picture.query()
+			qry1 = qry.order(-Picture.viewed)
+			most_viewed = qry1.fetch(100)
+			templateVals['most_viewed'] = most_viewed
+			self.render('index.html', **templateVals)
 		else:
-			self.render('index_user.html', me=self.user)
+			templateVals = {'me': self.user}
+			qry = Picture.query()
+			qry1 = qry.order(-Picture.viewed)
+			most_viewed = qry1.fetch(100)
+			templateVals['most_viewed'] = most_viewed
+			self.render('index.html', **templateVals)
 
 class UserHomeHandler(PageHandler):
 	def get(self):
@@ -202,12 +212,20 @@ class PhotosHandler(PageHandler):
 	def get(self):
 		if not self.user:
 			templateVals = {'me': ""}
-			self.render('photos.html', **templateVals)
 		else:
 			templateVals = {'me': self.user}
-			myphotos = Picture.of_ancestor(self.user.key)
-			templateVals['myphotos'] = myphotos
-			self.render('photos.html', **templateVals)
+		qry = Picture.query()
+		qry1 = qry.order(-Picture.viewed)
+		qry2 = qry.order(-Picture.awards)
+		qry3 = qry.order(-Picture.likes)
+		most_viewed = qry1.fetch(100)
+		top_100 = qry2.fetch(100)
+		most_liked = qry3.fetch(100)
+		print top_100
+		templateVals['top_100'] = top_100
+		templateVals['most_viewed'] = most_viewed
+		templateVals['most_liked'] = most_liked
+		self.render('photos.html', **templateVals)
 
 class BlogsHandler(PageHandler):
 	def get(self):
@@ -336,9 +354,6 @@ class UserStudioHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler):
 				self_user_key = self.request.get('self_user_key')
 				user_key = [user.key]
 				self_user_key = [self.user.key]
-				print "parulb1" 
-				print user_key
-				print self_user_key
 				user.following += self_user_key
 				self.user.followers += user_key
 			else:
@@ -486,9 +501,6 @@ class UserPhotosHandler(PageHandler):
 				photo.put()
 				self.redirect('/%s/photos' % resource)
 			if action == "add":
-				photoKey = get_key_urlunsafe(self.request.get('photoKey'))
-				self.user.pinned_photos += photoKey
-				self.user.put()
 				self.redirect('/%s/photos' % resource)
 		else:
 			self.redirect('/')
@@ -558,10 +570,21 @@ class PortfolioPermpageHandler(PageHandler):
 
 	def post(self, resource):       ## FIXME
 		portfolioKey = get_key_urlunsafe(resource)
+		portfolio = portfolioKey.get()
 		action = self.request.get('actionType')
+		userKey = portfolioKey.parent()
+		user = userKey.get()
+		templateVals = {'me': self.user}
+		templateVals['user'] = user
+		templateVals['portfolio'] = portfolio
 		if action == "delete":
 			delete_portfolio(portfolioKey, self.user.key)
 			self.redirect('/%s' % self.user.key.id())
+		if action == "photography_awards":
+			photoAward = self.request.get_all('photoAward')
+			user.awards += photoAward
+			user.put()
+			self.render('portfolioperm.html', **templateVals)
 
 
 class UserPortfolioHandler(PageHandler):
@@ -871,6 +894,10 @@ class PhotoPermpageHandler(PageHandler):
 		photo = photoKey.get()
 		userKey = photoKey.parent()
 		user = userKey.get()
+		templateVals = {'me': self.user}
+		templateVals['photo'] = photo
+		templateVals['user'] = user
+		templateVals['photos'] = Picture.of_ancestor(userKey)
 		if user and self.user and (self.user == user):
 			action = self.request.get('actionType')
 			if action == "delete":
@@ -878,25 +905,42 @@ class PhotoPermpageHandler(PageHandler):
 				self.redirect('/%s/photos' % self.user.key.id())
 			elif action == "edit":
 				self.redirect('/editphoto/%s' % photoKey.urlsafe())
-			elif action == "like":	
-				photo.likes += 1
-				photo.put()
-				self.redirect('/%s/photos' % self.user.key.id())
 			elif action == "add_comment":
 				comment = []
 				comment.append(self.request.get('comment'))
 				photo.comments = comment
 				photo.put()
-				self.redirect('/%s/photos' % self.user.key.id())
+				self.render('photoperm.html', **templateVals)
 			elif action == "add_tag_album":
 				tagList = self.request.get_all('tags')
 				albumList = self.request.get_all('albums')
-				#photo.tags.append(tagList)
-				#photo.albums.append(albumList)
 				photo.tags += tagList
 				photo.albums += albumList
 				photo.put()
-				self.redirect('/%s/photos' % self.user.key.id())
+				self.render('photoperm.html', **templateVals)
+			elif action == "add_comment":
+				comment = self.request.get('comment')
+				user_key = self.request.get('user_key')
+				photo.comments += comment
+				photo.put()
+				self.render('photoperm.html', **templateVals)
+		elif user != self.user:
+			action = self.request.get('actionType')
+			if action == "like":	
+				photo.likes += 1
+				photo.put()
+				self.render('photoperm.html', **templateVals)
+			elif action == "photography_awards":
+				photoAward = self.request.get_all('photoAward')
+				photo.awards += photoAward
+				photo.put()
+				self.render('photoperm.html', **templateVals)
+			elif action == "add_comment":
+				comment = self.request.get('comment')
+				user_key = self.request.get('user_key')
+				photo.comments += comment
+				photo.put()
+				self.render('photoperm.html', **templateVals)
 		else:
 			self.redirect('/')
 

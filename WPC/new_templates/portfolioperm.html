@@ -52,9 +52,6 @@
                <a href="/signin"><button class="btn btn-sm btn-danger" type="button"><i class="fa fa-register" style="color:white;"></i>Send for Review</button></a>
             {%else%} 
               <a href="/{{user.key.id()}}/about" style="color:white;"><button type="button" title="About {{user.name}}" style="margin:5px;" class="btn btn-info btn-sm photographer_options"><i class="fa fa-key"></i></button></a>
-              <button type="button" title="Add {{user.name}} to Ideabook" class="btn btn-info btn-sm photographer_options" data-toggle="modal" data-target=".follow">
-                <span class="glyphicon glyphicon-pushpin" style="color:white;"></span>
-              </button>
               <button type="button" title="Send Private Message to {{user.name}}" style="margin:5px;" class="btn btn-info btn-sm photographer_options" data-toggle="modal" data-target=".personal_message"><i class="fa fa-envelope"></i></button>
               <button type="button" title="Share {{user.name}} portfolio" style="margin:5px;" class="btn btn-info btn-sm photographer_options" data-toggle="modal" data-target=".share_modal"><i class="fa fa-share"></i></button>
               <button type="button" title="Give Award to {{user.name}}" style="margin:5px;" class="btn btn-info btn-sm photographer_options" data-toggle="modal" data-target=".photography_awards"><i class="fa fa-trophy"></i></button>
@@ -152,6 +149,142 @@
       </div>
     </div>
 
+
+<div class="modal fade photography_awards" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title">Give Photography Awards</h4>
+          </div>
+          <form role="form" method="post">
+            <input type="hidden" name="actionType" value="photography_awards">
+            <input type="hidden" id="userid" name="user" value="{{user.key.id()}}">
+            <div class="col-lg-2 col-md-2 text-center">
+                <div class="service-item change_color">
+                    <div onclick="change_color_n_add_input_awards(this, 'Simply_Awesome')"><i class="service-icon fa fa-trophy"></i>
+                    <h4>Simply Awesome!!!</h4></div>
+                    <div id="Simply_Awesome"></div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-2 text-center">
+                <div class="service-item change_color" >
+                    <div onclick="change_color_n_add_input_awards(this, 'Jaw_Dropping')"><i class="service-icon fa fa-trophy"></i>
+                    <h4>Jaw Dropping!!!</h4></div>
+                    <div id="Jaw_Dropping"></div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-2 text-center">
+                <div class="service-item change_color">
+                    <div onclick="change_color_n_add_input_awards(this, 'World_Class')"><i class="service-icon fa fa-trophy"></i>
+                    <h4>World Class</h4></div>
+                    <div id="World_Class"></div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-2 text-center">
+                <div class="service-item change_color">
+                    <div onclick="change_color_n_add_input_awards(this, 'Beautiful_Composition')"><i class="service-icon fa fa-trophy"></i>
+                    <h4>Beautiful Composition</h4></div>
+                    <div id="Beautiful_Composition"></div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-2 text-center">
+                <div class="service-item change_color">
+                    <div onclick="change_color_n_add_input_awards(this, 'Piece_of_Art')"><i class="service-icon fa fa-trophy"></i>
+                    <h4>Piece of Art</h4></div>
+                    <div id="Piece_of_Art"></div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-2 text-center">
+                <div class="service-item change_color">
+                    <div onclick="change_color_n_add_input_awards(this, 'Truly_Inspirational')"><i class="service-icon fa fa-trophy"></i>
+                    <h4>Truly Inspirational</h4></div>
+                    <div id="Truly_Inspirational"></div>
+                </div>
+            </div>
+          <div class="modal-footer">
+          </div>
+          <div class="photography_awards_inputs">
+          </div>
+          <button class="btn btn-xs btn-success padding-bottom" type="submit">Give Awards</button>
+        </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade awards" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title">{{user.name}} Awards</h4>
+          </div>
+          {% set Simply_Awesome_num = 0 %}
+          {% set Jaw_Dropping_num = 0 %}
+          {% set World_Class_num = 0 %}
+          {% set Beautiful_Composition_num = 0 %}
+          {% set Piece_of_Art_num = 0 %}
+          {% set Truly_Inspirational_num = 0 %}
+
+          {%for a in user.awards%}
+                {%if a == 'Simply_Awesome'%}
+                  {% set Simply_Awesome_num =  Simply_Awesome_num + 1%}
+                {%elif a == 'Jaw_Dropping'%}
+                  {% set Jaw_Dropping_num =  Jaw_Dropping_num + 1%}
+                {%elif a == 'World_Class'%}
+                  {% set World_Class_num =  World_Class_num + 1%}
+                {%elif a == 'Beautiful_Composition'%}
+                  {% set Beautiful_Composition_num =  Beautiful_Composition_num + 1%}
+                {%elif a == 'Piece_of_Art'%}
+                  {% set Piece_of_Art_num =  Piece_of_Art_num + 1%}
+                {%elif a == 'Truly_Inspirational'%}
+                  {% set Truly_Inspirational_num =  Truly_Inspirational_num + 1%}
+                {%endif%}
+             {%if loop.last%}
+                {%if Simply_Awesome_num > 0%}
+                 <div class="col-md-2 text-center">
+                      <div><i  style="color:gold;" class="fa fa-trophy fa-3x"><span class="badge pull-right">{{Simply_Awesome_num}}</span></i>
+                      <h5>Simply Awesome</h5></div>
+                 </div>
+                 {%endif%}
+                 {%if Jaw_Dropping_num > 0%}
+                 <div class="col-md-2 text-center">
+                      <div><i  style="color:gold;" class="fa fa-trophy fa-3x"><span class="badge pull-right">{{Jaw_Dropping_num}}</span></i>
+                      <h5>Jaw Dropping</h5></div>
+                 </div>
+                 {%endif%}
+                 {%if World_Class_num > 0%}
+                 <div class="col-md-2 text-center">
+                      <div><i  style="color:gold;" class="fa fa-trophy fa-3x"><span class="badge pull-right">{{World_Class_num}}</span></i>
+                      <h5>World Class</h5></div>
+                 </div>
+                 {%endif%}
+                 {%if Beautiful_Composition_num > 0%}
+                 <div class="col-md-2 text-center">
+                      <div><i  style="color:gold;" class="fa fa-trophy fa-3x"><span class="badge pull-right">{{Beautiful_Composition_num}}</span></i>
+                      <h5>Beautiful Composition</h5></div>
+                 </div>
+                 {%endif%}
+                 {%if Piece_of_Art_num > 0%}
+                 <div class="col-md-2 text-center">
+                      <div><i  style="color:gold;" class="fa fa-trophy fa-3x"><span class="badge pull-right">{{Piece_of_Art_num}}</span></i>
+                      <h5>Piece of Art</h5></div>
+                 </div>
+                 {%endif%}
+                 {%if Truly_Inspirational_num > 0%}
+                 <div class="col-md-2 text-center">
+                      <div><i  style="color:gold;" class="fa fa-trophy fa-3x"><span class="badge pull-right">{{Truly_Inspirational_num}}</span></i>
+                      <h5>Truly Inspirational</h5></div>
+                 </div>
+                 {%endif%}
+              {%endif%}
+          {%endfor%}
+          <div class="modal-footer">
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="modal fade delete_modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-sm">
         <div class="modal-content">
@@ -218,7 +351,7 @@
       <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
         {%for p in portfolio.photos%}
         {%if loop.index % 4 == 1%}
-                <a href="{{p}}"><img src="{{get_serving_url(p)}}" width="98%" id="temp1" alt="photo"></a>
+                <a href="/servephoto/{{p}}"><img src="{{get_serving_url(p)}}" width="98%" id="temp1" alt="photo"></a>
           <br>
           
           <div class="button-container post-action padding_top padding_bottom">
@@ -399,6 +532,18 @@
     } else {
       element.style.color = 'blue';
       document.getElementById(type).innerHTML = "<input type='hidden' name='photoType' value='"+type+"'>";
+    }
+  }
+</script>
+<script>
+  function change_color_n_add_input_awards(element, type) {
+    
+    if (element.style.color == "gold") {
+        element.style.color = 'gray';
+        document.getElementById(type).innerHTML = "<input type='hidden' name='photoAwardDelete' value='"+type+"'>";
+    } else {
+      element.style.color = 'gold';
+      document.getElementById(type).innerHTML = "<input type='hidden' name='photoAward' value='"+type+"'>";
     }
   }
 </script>
