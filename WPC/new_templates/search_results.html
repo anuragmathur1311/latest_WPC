@@ -26,91 +26,41 @@
 {%block pageContent%}
     <div id="myCarousel" class="carousel slide" data-ride="carousel">
         <!-- Indicators -->
-        <ol class="carousel-indicators">
-            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-            <li data-target="#myCarousel" data-slide-to="1"></li>
-            <li data-target="#myCarousel" data-slide-to="2"></li>
-        </ol>
 
         <div class="carousel-inner">
-            <div class="item active">
-                <a  href="/images/Brooklyn_Bridge.jpg" ><img src="/images/Brooklyn_Bridge.jpg" alt="First slide"/></a>
-                <div class="container">
-                    <div class="carousel-caption">
-				<div class="navbar-wrapper">
-				  <div class="container">
-					<div class="navbar navbar-transparent padding-top" role="navigation">
-					  <div class="container">
-						<div class="navbar-header">
-						  <a class="navbar-brand" href="#"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="20px"> Anurag Mathur</a>
-						</div>
-						<div class="navbar-collapse collapse">
-						  <ul class="nav navbar-nav">
-							<li><a href="#"></i><i class="fa fa-thumbs-o-up" style="color:white;"></i></a></li>
-							<li><a href="#"></i><i class="fa fa-plus" style="color:white;"></i></a></li>
-							<li><a href="#"></i><i class="fa fa-share" style="color:white;"></i></a></li>
-							<li><a href="#"></i><span class="glyphicon glyphicon-pushpin"></span></a></li>
-						  </ul>
-						</div>
-					  </div>
-					</div>
-				  </div>
-				</div>
-                    </div>
+        {%for p in photos%}
+        {%if loop.first%}
+          <div class="item active">
+        {%else%}
+          <div class="item">
+        {%endif%}
+          <a href="/photo/{{p.key.urlsafe()}}"><img src="{{get_serving_url(p.blobKey,size=100)}}" width="98%" id="temp1" alt="photo"></a>
+          <div class="container">
+              <div class="carousel-caption">
+        				<div class="navbar-wrapper">
+        				  <div class="container">
+        					<div class="navbar navbar-transparent padding-top" role="navigation">
+        					  <div class="container">
+        						<div class="navbar-header">
+        						  <a class="navbar-brand" href="#"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="20px"> Anurag Mathur</a>
+        						</div>
+        						<div class="navbar-collapse collapse">
+        						  <ul class="nav navbar-nav">
+        							<li><a href="#"></i><i class="fa fa-thumbs-o-up" style="color:white;"></i></a></li>
+        							<li><a href="#"></i><i class="fa fa-plus" style="color:white;"></i></a></li>
+        							<li><a href="#"></i><i class="fa fa-share" style="color:white;"></i></a></li>
+        							<li><a href="#"></i><span class="glyphicon glyphicon-pushpin"></span></a></li>
+        						  </ul>
+        						</div>
+        					  </div>
+        					</div>
+        				  </div>
+        				</div>
                 </div>
             </div>
-            <div class="item">
-                <a  href="/images/DSC_1582.jpg" ><img src="/images/DSC_1582.jpg" alt="First slide"/></a>
-                <div class="container">
-                    <div class="carousel-caption">
-				<div class="navbar-wrapper">
-				  <div class="container">
-					<div class="navbar navbar-transparent padding-top" role="navigation">
-					  <div class="container">
-						<div class="navbar-header">
-						  <a class="navbar-brand" href="#"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="20px"> Anurag Mathur</a>
-						</div>
-						<div class="navbar-collapse collapse">
-						  <ul class="nav navbar-nav">
-							<li><a href="#"></i><i class="fa fa-thumbs-o-up" style="color:white;"></i></a></li>
-							<li><a href="#"></i><i class="fa fa-plus" style="color:white;"></i></a></li>
-							<li><a href="#"></i><i class="fa fa-share" style="color:white;"></i></a></li>
-							<li><a href="#"></i><span class="glyphicon glyphicon-pushpin"></span></a></li>
-						  </ul>
-						</div>
-					  </div>
-					</div>
-				  </div>
-				</div>
-                    </div>
-                </div>
-            </div>
-            <div class="item">
-                <a  href="/images/DSC_1737.jpg" ><img src="/images/DSC_1737.jpg" alt="First slide"/></a>
-                <div class="container">
-                    <div class="carousel-caption">
-				<div class="navbar-wrapper">
-				  <div class="container">
-					<div class="navbar navbar-transparent padding-top" role="navigation">
-					  <div class="container">
-						<div class="navbar-header">
-						  <a class="navbar-brand" href="#"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="20px"> Anurag Mathur</a>
-						</div>
-						<div class="navbar-collapse collapse">
-						  <ul class="nav navbar-nav">
-							<li><a href="#"></i><i class="fa fa-thumbs-o-up" style="color:white;"></i></a></li>
-							<li><a href="#"></i><i class="fa fa-plus" style="color:white;"></i></a></li>
-							<li><a href="#"></i><i class="fa fa-share" style="color:white;"></i></a></li>
-							<li><a href="#"></i><span class="glyphicon glyphicon-pushpin"></span></a></li>
-						  </ul>
-						</div>
-					  </div>
-					</div>
-				  </div>
-				</div>
-                    </div>
-                </div>
-            </div>
+        </div>
+        {%endfor%}
+
         </div>
         <a class="left carousel-control" href="#myCarousel" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>
         <a class="right carousel-control" href="#myCarousel" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
@@ -133,16 +83,16 @@
           <a  href="#photographers" ><img class="img-circle" data-src="holder.js/140x140/sky/text:Photographers" alt="Generic placeholder image"></a>
         </div><!-- /.col-lg-4 -->
         <div class="col-lg-2 col-md-4 col-xs-6">
-          <a  href="#blog" ><img class="img-circle" data-src="holder.js/140x140/sky/text:Blog" alt="Generic placeholder image"></a>
+          <a  href="#blog" ><img class="img-circle" data-src="holder.js/140x140/sky/text:Blogs" alt="Generic placeholder image"></a>
         </div><!-- /.col-lg-4 -->
         <div class="col-lg-2 col-md-4 col-xs-6">
-            <a  href="#forum" ><img class="img-circle" data-src="holder.js/140x140/sky/text:Forum" alt="Generic placeholder image"></a>
+            <a  href="#group" ><img class="img-circle" data-src="holder.js/140x140/sky/text:Groups" alt="Generic placeholder image"></a>
         </div><!-- /.col-lg-4 -->
         <div class="col-lg-2 col-md-4 col-xs-6">
             <a  href="#news" ><img class="img-circle" data-src="holder.js/140x140/sky/text:News" alt="Generic placeholder image"></a>
         </div><!-- /.col-lg-4 -->
         <div class="col-lg-2 col-md-4 col-xs-6">
-            <a  href="#trends" ><img class="img-circle" data-src="holder.js/140x140/sky/text:Create Trends" alt="Generic placeholder image"></a>
+            <a  href="#trends" ><img class="img-circle" data-src="holder.js/140x140/sky/text:Create" alt="Generic placeholder image"></a>
         </div><!-- /.col-lg-4 -->
       </div><!-- /.row -->
       
@@ -151,34 +101,182 @@
       <div id="photos" class="portfolio main">
           <div class="container grid-custom">
               <h3>Photos</h3>
-              <div class="container-fluid grid-custom">
-                  <div class="col-md-3 col-sm-4 col-xs-6">
-                      <div class="row image_padding"><img src="/images/AnuragMathur.jpg" alt="" class="img-responsive"></div>
-                      <div class="row image_padding"><img src="/images/AnuragMathur-2.jpg" alt="" class="img-responsive"></div>
-                      <div class="row image_padding"><img src="/images/Artist_1.jpg" alt="" class="img-responsive"></div>
-                      <div class="row image_padding"><img src="/images/Artists_2.jpg" alt="" class="img-responsive"></div>
-                  </div>
-                  <div class="col-md-3 col-sm-4 col-xs-6">
-                      <div class="row image_padding"><img src="/images/asli_India_4_WMedited.jpg" alt="" class="img-responsive"></div>
-                      <div class="row image_padding"><img src="/images/faith_disrupted.jpg" alt="" class="img-responsive"></div>
-                      <div class="row image_padding"><img src="/images/asli_India_WM.jpg" alt="" class="img-responsive"></div>
-                      <div class="row image_padding"><img src="/images/Beach_Diaries.jpg" alt="" class="img-responsive"></div>
-                  </div>
-                  <div class="col-md-3 col-sm-4 col-xs-6">
-                      <div class="row image_padding"><img src="/images/Brooklyn_Bridge.jpg" alt="" class="img-responsive"></div>
-                      <div class="row image_padding"><img src="/images/DSC_1556.jpg" alt="" class="img-responsive"></div>
-                      <div class="row image_padding"><img src="/images/DSC_1582.jpg" alt="" class="img-responsive"></div>
-                      <div class="row image_padding"><img src="/images/DSC_1596.jpg" alt="" class="img-responsive"></div>
-                  </div>
-                  <div class="col-md-3 col-sm-4 col-xs-6">
-                      <div class="row image_padding"><img src="/images/DSC_1737.jpg" alt="" class="img-responsive"></div>
-                      <div class="row image_padding"><img src="/images/Overload.jpg" alt="" class="img-responsive"></div>
-                      <div class="row image_padding"><img src="/images/Reflections.jpg" alt="" class="img-responsive"></div>
-                      <div class="row image_padding"><img src="/images/Shadow_of_the_Empire3.jpg" alt="" class="img-responsive"></div>
-                      <div class="row image_padding"><img src="/images/Beach_Diaries.jpg" alt="" class="img-responsive"></div>
-                  </div>
-                  
-              </div>
+        {%for p in photos%}
+        {% else %}
+          <div>
+            <h2>No photos found, please search something else</h2>
+            {%if me == user%}
+              <a href="/newphoto">Add Photos</a>
+            {%endif%}
+          </div>
+            {%set no_photos = 1%}
+        {% endfor %}
+        {%if no_photos != 1%}
+      <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
+        {%for p in photos%}
+        {%if loop.index % 4 == 1%}
+                <a href="/photo/{{p.key.urlsafe()}}"><img src="{{get_serving_url(p.blobKey,size=100)}}" width="98%" id="temp1" alt="photo"></a>
+          <br>
+          
+          <div class="button-container post-action padding_top padding_bottom">
+            <p>{{p.likes}} <i class="fa fa-thumbs-o-up fa-1x"></i> | {{p.viewed}} <i class="fa fa-eye fa-1x"></i></p>
+                 {%if me == user%}
+                  <form method="post">
+                    <input type="hidden" name="actionType" value="edit">
+                    <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+                    <button class="btn btn-primary btn-xs" type="submit" title="Edit Image" value="Edit"><span class="glyphicon glyphicon-edit" style="color:white;"></span></button>
+                  </form>
+                  <form method="post">
+                    <input type="hidden" name="actionType" value="delete">
+                    <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+                    <button class="btn btn-primary btn-xs" type="submit" title="Delete Image" value="Delete"><span class="glyphicon glyphicon-trash" style="color:white;"></span></button>
+                  </form>
+                  <form method="post">
+                    <input type="hidden" name="actionType" value="download">
+                    <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+                    <button class="btn btn-primary btn-xs" type="submit"title="Download Image"  value="Delete"><i class="fa fa-download fa-1x"></i></button>
+                  </form>
+                  {%else%}
+                  <form method="post">
+                    <input type="hidden" name="actionType" value="like">
+                    <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+                    <button class="btn btn-info btn-xs" type="submit" title="Like This Image"><i class="fa fa-thumbs-up fa-1x"></i></button>
+                 </form>
+                  <form method="post">
+                      <input type="hidden" name="actionType" value="add">
+                      <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+                      <button class="btn btn-primary btn-xs" type="submit" title="Add Image to Ideabook"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
+                  </form>
+                  {%endif%}
+          </div>
+                <hr>
+        {%endif%}
+        {% endfor %}
+        </div>
+        <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
+        {%for p in photos%}
+        {%if loop.index % 4 == 2%}
+                <a href="/photo/{{p.key.urlsafe()}}"><img src="{{get_serving_url(p.blobKey,size=100)}}" width="98%" id="temp1" alt="photo"></a>
+          <br>
+          
+          <div class="button-container post-action padding_top padding_bottom">
+            <p>{{p.likes}} <i class="fa fa-thumbs-o-up fa-1x"></i> | {{p.viewed}} <i class="fa fa-eye fa-1x"></i></p>
+                 {%if me == user%}
+                  <form method="post">
+                    <input type="hidden" name="actionType" value="edit">
+                    <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+                    <button class="btn btn-primary btn-xs" type="submit" title="Edit Image" value="Edit"><span class="glyphicon glyphicon-edit" style="color:white;"></span></button>
+                  </form>
+                  <form method="post">
+                    <input type="hidden" name="actionType" value="delete">
+                    <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+                    <button class="btn btn-primary btn-xs" type="submit" title="Delete Image" value="Delete"><span class="glyphicon glyphicon-trash" style="color:white;"></span></button>
+                  </form>
+                  <form method="post">
+                    <input type="hidden" name="actionType" value="download">
+                    <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+                    <button class="btn btn-primary btn-xs" type="submit"title="Download Image"  value="Delete"><i class="fa fa-download fa-1x"></i></button>
+                  </form>
+                  {%else%}
+                  <form method="post">
+                    <input type="hidden" name="actionType" value="like">
+                    <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+                    <button class="btn btn-info btn-xs" type="submit" title="Like This Image"><i class="fa fa-thumbs-up fa-1x"></i></button>
+                 </form>
+                  <form method="post">
+                      <input type="hidden" name="actionType" value="add">
+                      <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+                      <button class="btn btn-primary btn-xs" type="submit" title="Add Image to Ideabook"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
+                  </form>
+                  {%endif%}
+          </div>
+                <hr>
+        {%endif%}
+        {% endfor %}
+        </div>
+        <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
+        {%for p in photos%}
+        {%if loop.index % 4 == 3%}
+                <a href="/photo/{{p.key.urlsafe()}}"><img src="{{get_serving_url(p.blobKey,size=100)}}" width="98%" id="temp1" alt="photo"></a>
+          <br>
+          
+          <div class="button-container post-action padding_top padding_bottom">
+            <p>{{p.likes}} <i class="fa fa-thumbs-o-up fa-1x"></i> | {{p.viewed}} <i class="fa fa-eye fa-1x"></i></p>
+                 {%if me == user%}
+                  <form method="post">
+                    <input type="hidden" name="actionType" value="edit">
+                    <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+                    <button class="btn btn-primary btn-xs" type="submit" title="Edit Image" value="Edit"><span class="glyphicon glyphicon-edit" style="color:white;"></span></button>
+                  </form>
+                  <form method="post">
+                    <input type="hidden" name="actionType" value="delete">
+                    <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+                    <button class="btn btn-primary btn-xs" type="submit" title="Delete Image" value="Delete"><span class="glyphicon glyphicon-trash" style="color:white;"></span></button>
+                  </form>
+                  <form method="post">
+                    <input type="hidden" name="actionType" value="download">
+                    <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+                    <button class="btn btn-primary btn-xs" type="submit"title="Download Image"  value="Delete"><i class="fa fa-download fa-1x"></i></button>
+                  </form>
+                  {%else%}
+                  <form method="post">
+                    <input type="hidden" name="actionType" value="like">
+                    <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+                    <button class="btn btn-info btn-xs" type="submit" title="Like This Image"><i class="fa fa-thumbs-up fa-1x"></i></button>
+                 </form>
+                  <form method="post">
+                      <input type="hidden" name="actionType" value="add">
+                      <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+                      <button class="btn btn-primary btn-xs" type="submit" title="Add Image to Ideabook"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
+                  </form>
+                  {%endif%}
+          </div>
+                <hr>
+        {%endif%}
+        {% endfor %}
+        </div>
+        <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
+        {%for p in photos%}
+        {%if loop.index % 4 == 0%}
+                <a href="/photo/{{p.key.urlsafe()}}"><img src="{{get_serving_url(p.blobKey,size=100)}}" width="98%" id="temp1" alt="photo"></a>
+          <br>
+          
+          <div class="button-container post-action padding_top padding_bottom">
+            <p>{{p.likes}} <i class="fa fa-thumbs-o-up fa-1x"></i> | {{p.viewed}} <i class="fa fa-eye fa-1x"></i></p>
+                 {%if me == user%}
+                  <form method="post">
+                    <input type="hidden" name="actionType" value="edit">
+                    <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+                    <button class="btn btn-primary btn-xs" type="submit" title="Edit Image" value="Edit"><span class="glyphicon glyphicon-edit" style="color:white;"></span></button>
+                  </form>
+                  <form method="post">
+                    <input type="hidden" name="actionType" value="delete">
+                    <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+                    <button class="btn btn-primary btn-xs" type="submit" title="Delete Image" value="Delete"><span class="glyphicon glyphicon-trash" style="color:white;"></span></button>
+                  </form>
+                  <form method="post">
+                    <input type="hidden" name="actionType" value="download">
+                    <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+                    <button class="btn btn-primary btn-xs" type="submit"title="Download Image"  value="Delete"><i class="fa fa-download fa-1x"></i></button>
+                  </form>
+                  {%else%}
+                  <form method="post">
+                    <input type="hidden" name="actionType" value="like">
+                    <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+                    <button class="btn btn-info btn-xs" type="submit" title="Like This Image"><i class="fa fa-thumbs-up fa-1x"></i></button>
+                 </form>
+                  <form method="post">
+                      <input type="hidden" name="actionType" value="add">
+                      <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+                      <button class="btn btn-primary btn-xs" type="submit" title="Add Image to Ideabook"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
+                  </form>
+                  {%endif%}
+          </div>
+                <hr>
+        {%endif%}
+        {% endfor %}
+        </div>
+        {%endif%}
           </div>
           <button type="button" class="btn btn-info btn-sm col-xs-offset-6"> Load More</button>
       </div>
@@ -188,10 +286,22 @@
           <div class="container grid-custom">
               <h3>Photographers</h3>
               <!-- Three columns of text below the carousel -->
+              {%for u in users%}
+                {% else %}
+                  <div>
+                    <h2>No photographers found, please search something else</h2>
+                    {%if me == ""%}
+                      <a href="/signin">Signup</a>
+                    {%endif%}
+                  </div>
+                    {%set no_photos = 1%}
+                {% endfor %}
+              {%if no_blogs != 1%}  
+              {%for u in users%}
               <div class="row" style="text-align:center;">
                   <div class="col-lg-2">
-                      <img class="img-circle" src="/images/Artist_1.jpg" height="150px" alt="Generic placeholder image">
-                          <a href="/{{me.key.id()}}"><em>{{me.name}}</em></a>
+                      <img class="img-circle" src="{{user.avatar_url}}" height="150px" alt="Generic placeholder image">
+                          <a href="/{{u.key.id()}}"><em>{{u.name}}</em></a>
                           <p></p>
                           <button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-picture" style="color:white;"></span></button>
                           <button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-thumbs-up" style="color:white;"></span></button>
@@ -199,6 +309,8 @@
                           <button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-pushpin" style="color:white;"></span></button>
                   </div><!-- /.col-lg-4 -->
               </div><!-- /.row -->
+              {%endfor%}
+              {%endif%}
           </div>
           <button type="button" class="btn btn-info btn-sm col-xs-offset-6"> Load More</button>
       </div>
@@ -207,14 +319,120 @@
       <div id="blog" class="">
           <div class="container grid-custom">
               <h3>Blogs</h3>
+              {%for b in blogs%}
+              {% else %}
+                  <div>
+                    <h2>No blogs found, please search something else</h2>
+                    {%if me == user%}
+                    <a href="/newblog">Add Blog</a>
+                    {%endif%}
+                  </div>
+                  {%set no_blogs = 1%}
+              {% endfor %}
+              {%if no_blogs != 1%}
+              <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
+              {%for b in blogs%}
+              {%if loop.index % 4 == 1%}
+                      <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
+                      <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{user.name}}</em></h5></a>
+                      <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
+                      <hr>
+              {%endif%}
+              {% endfor %}
+              </div>
+              <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
+              {%for b in blogs%}
+              {%if loop.index % 4 == 2%}
+                      <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
+                      <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{user.name}}</em></h5></a>
+                      <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
+                      <hr>
+              {%endif%}
+              {% endfor %}
+              </div>
+              <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
+              {%for b in blogs%}
+              {%if loop.index % 4 == 3%}
+                      <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
+                      <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{user.name}}</em></h5></a>
+                      <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
+                      <hr>
+              {%endif%}
+              {% endfor %}
+              </div>
+              <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
+              {%for b in blogs%}
+              {%if loop.index % 4 == 0%}
+                      <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
+                      <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{user.name}}</em></h5></a>
+                      <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
+                      <hr>
+              {%endif%}
+              {% endfor %}
+              </div>
+              {%endif%}
           </div>
           <button type="button" class="btn btn-info btn-sm col-xs-offset-6"> Load More</button>
       </div>
       
       <hr class="horizontal-line">
-      <div id="forum" class=" ">
+      <div id="group" class=" ">
           <div class="container grid-custom">
-              <h3>Forum</h3>
+              <h3>Groups</h3>
+              {%for b in user.groups%}
+              {% else %}
+                  <div>
+                    <h2>No groups found, please search something else</h2>
+                    {%if me == user%}
+                    <a href="/newgroup">Add Group</a>
+                    {%endif%}
+                  </div>
+                  {%set no_blogs = 1%}
+              {% endfor %}
+            <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
+
+
+              {%if no_group != 1%}
+              {%for b in user.groups%}
+              {%if loop.index % 4 == 1%}
+                      <a href="/group/{{b.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.get().name}}</h3>
+                      <img src="{{b.get().cover_photo}}" alt="{{b.get().name}} Cover Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{user.name}}</em></h5></a>
+                      <div class="blog_content thumb_blog_content">{{b.get().description}}</div>
+                      <hr>
+              {%endif%}
+              {% endfor %}
+              </div>
+              <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
+              {%for b in user.groups%}
+              {%if loop.index % 4 == 2%}
+                      <a href="/group/{{b.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.get().name}}</h3>
+                      <img src="{{b.get().cover_photo}}" alt="{{b.get().name}} Cover Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{user.name}}</em></h5></a>
+                      <div class="blog_content thumb_blog_content">{{b.get().description}}</div>
+                      <hr>
+              {%endif%}
+              {% endfor %}
+              </div>
+              <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
+              {%for b in user.groups%}
+              {%if loop.index % 4 == 3%}
+                      <a href="/group/{{b.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.get().name}}</h3>
+                      <img src="{{b.get().cover_photo}}" alt="{{b.get().name}} Cover Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{user.name}}</em></h5></a>
+                      <div class="blog_content thumb_blog_content">{{b.get().description}}</div>
+                      <hr>
+              {%endif%}
+              {% endfor %}
+              </div>
+              <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
+              {%for b in user.groups%}
+              {%if loop.index % 4 == 0%}
+                      <a href="/group/{{b.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.get().name}}</h3>
+                      <img src="{{b.get().cover_photo}}" alt="{{b.get().name}} Cover Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{user.name}}</em></h5></a>
+                      <div class="blog_content thumb_blog_content">{{b.get().description}}</div>
+                      <hr>
+              {%endif%}
+              {% endfor %}
+              </div>
+              {%endif%}
           </div>
           <button type="button" class="btn btn-info btn-sm col-xs-offset-6"> Load More</button>
       </div>

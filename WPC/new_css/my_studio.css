@@ -102,7 +102,7 @@ body {
 }
 
 .small_photos {
-    height:100px;
+    height:120px;
     overflow-x: scroll;
     overflow-y: hidden;
     white-space: nowrap;

@@ -82,8 +82,8 @@
     <hr>
     <h4>WPC Top 100 Photos</h4><a>View All</a>
     <div class="col-md-12 top_photos">
-      {%for p in top_100%}
-          <img src="{{get_serving_url(p.blobKey)}}" alt="Profile Image" class="img-rounded shadow_class" height="400px">
+      {%for p in recommended%}
+          <a href="/photo/{{p.key.urlsafe()}}"><img src="{{get_serving_url(p.blobKey, size=400)}}" alt="{{p.caption}}" class="img-rounded shadow_class" height="400px"></a>
       {%endfor%}
     </div>
     <div class="row">
@@ -91,16 +91,9 @@
     </div>
     <h4>WPC Recommended Photos</h4><a>View All</a>
     <div class="col-md-12 small_photos">
-      <img src="/images/img_1.jpg" alt="Profile Image" class="img-rounded " height="100px">
-      <img src="/images/img_1.jpg" alt="Profile Image" class="img-rounded " height="100px">
-      <img src="/images/img_1.jpg" alt="Profile Image" class="img-rounded " height="100px">
-      <img src="/images/img_1.jpg" alt="Profile Image" class="img-rounded " height="100px">
-      <img src="/images/img_1.jpg" alt="Profile Image" class="img-rounded " height="100px">
-      <img src="/images/img_1.jpg" alt="Profile Image" class="img-rounded " height="100px">
-      <img src="/images/img_1.jpg" alt="Profile Image" class="img-rounded " height="100px">
-      <img src="/images/img_1.jpg" alt="Profile Image" class="img-rounded " height="100px">
-      <img src="/images/img_1.jpg" alt="Profile Image" class="img-rounded " height="100px">
-      <img src="/images/img_1.jpg" alt="Profile Image" class="img-rounded " height="100px">
+      {%for p in recommended%}
+          <a href="/photo/{{p.key.urlsafe()}}"><img src="{{get_serving_url(p.blobKey, size=400)}}" alt="{{p.caption}}" class="img-rounded shadow_class" height="100px"></a>
+      {%endfor%}
     </div>
     <div class="row">
       <hr>
@@ -108,7 +101,7 @@
     <h4>Most Viewed Photos</h4><a>View All</a>
     <div class="col-md-12 small_photos">
        {%for p in most_viewed%}
-          <img src="{{get_serving_url(p.blobKey)}}" alt="Profile Image" class="img-rounded shadow_class" height="400px">
+          <a href="/photo/{{p.key.urlsafe()}}"><img src="{{get_serving_url(p.blobKey, size=100)}}" alt="{{p.caption}}" class="img-rounded shadow_class" height="100px"></a>
       {%endfor%}
     </div>
     <div class="row">
@@ -148,7 +141,7 @@
     <h4>Most liked Photos</h4><a>View All</a>
     <div class="col-md-12 small_photos">
       {%for p in most_liked%}
-          <img src="{{get_serving_url(p.blobKey)}}" alt="Profile Image" class="img-rounded shadow_class" height="400px">
+          <a href="/photo/{{p.key.urlsafe()}}"><img src="{{get_serving_url(p.blobKey,size=100)}}" alt="Profile Image" class="img-rounded shadow_class" height="100px"></a>
       {%endfor%}
     </div>
     <div class="row">

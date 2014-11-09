@@ -80,13 +80,13 @@
                       </li>
                       <li><a href="https://www.facebook.com/pages/Anurag-Mathurs-Photography/215979155096125?ref=hl&ref_type=bookmark"><i class="fa fa-facebook fa-2x"></i></a></li>
                       <li><a href="www.twitter.com"><i class="fa fa-twitter fa-2x"></i></a></li>
-                      <li><a href="www.dribble.com"><i class="fa fa-google-plus-square fa-2x"></i></a></li>
-                      <li><a href="www.dribble.com"><i class="fa fa-pinterest fa-2x"></i></a></li>
+                      <li><a href="www.googleplus.com"><i class="fa fa-google-plus-square fa-2x"></i></a></li>
+                      <li><a href="www.pinterest.com"><i class="fa fa-pinterest fa-2x"></i></a></li>
                       {%endblock%}
                   </ul>
-                  <form class="navbar-form navbar-left" role="search" action="/search" method="get">
+                  <form class="navbar-form navbar-left" role="search" action="/search" method="post">
                       <div class="form-group">
-                          <input type="text" class="form-control" placeholder="Search" size="40">
+                          <input type="text" name="search_string" class="form-control" placeholder="Search" size="40">
                       </div>
                   </form>
                   {%endblock%}
@@ -133,32 +133,6 @@
 		{%block carousel%}
     <div id="myCarousel" class="carousel slide" data-ride="carousel">
       <div class="carousel-inner">
-        <div class="item active">
-          <img src="/images/Artists_2.jpg" alt="First slide"/>
-          <div class="container">
-            <div class="carousel-caption">
-				<div class="navbar-wrapper">
-					<div class="container">
-						<div class="navbar navbar-transparent navbar-static-top padding-top" role="navigation">
-							<div class="container">
-								<div class="navbar-header">
-									<a class="navbar-brand" href="#" style="color:white"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="20px"> Anurag Mathur</a>
-								</div>
-								<div class="navbar-collapse collapse">
-									<ul class="nav navbar-nav">
-										<li><a href="#"></i><i class="fa fa-thumbs-o-up" style="color:white;"></i></a></li>
-										<li><a href="#"></i><i class="fa fa-plus" style="color:white;"></i></a></li>
-										<li><a href="#"></i><i class="fa fa-share" style="color:white;"></i></a></li>
-										<li><a href="#"></i><span class="glyphicon glyphicon-pushpin" style="color:white"></span></a></li>
-									</ul>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-            </div>
-          </div>
-        </div>
         {%for p in most_viewed%}
         {%if loop.index % 5 == 0%}
          <div class="item">
@@ -186,7 +160,11 @@
 	        </div>
          </div>
         {%else%}
-	        <div class="item">
+		     {%if loop.first%}
+	          <div class="item active">
+	        {%else%}
+	          <div class="item">
+	        {%endif%}
 	          <img src="{{get_serving_url(p.blobKey)}}" alt="{{p.name}}"/>
 	          <div class="container">
 	            <div class="carousel-caption">

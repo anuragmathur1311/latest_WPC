@@ -17,6 +17,24 @@ indexes:
     direction: desc
 
 - kind: Picture
+  properties:
+  - name: albums
+  - name: viewed
+    direction: desc
+
+- kind: Picture
+  properties:
+  - name: caption
+  - name: viewed
+    direction: desc
+
+- kind: Picture
+  properties:
+  - name: tags
+  - name: viewed
+    direction: desc
+
+- kind: Picture
   ancestor: yes
   properties:
   - name: updated

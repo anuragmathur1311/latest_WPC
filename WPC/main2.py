@@ -100,7 +100,7 @@ class MainHandler(PageHandler):
 			qry1 = qry.order(-Picture.viewed)
 			most_viewed = qry1.fetch(100)
 			templateVals['most_viewed'] = most_viewed
-			self.render('index.html', **templateVals)
+			self.render('index_user.html', **templateVals)
 
 class UserHomeHandler(PageHandler):
 	def get(self):
@@ -161,18 +161,32 @@ class SearchResultsHandler(PageHandler):           ## TODO
 			self.redirect('/')
 
 	def post(self):
-		if self.user:
-			title = self.request.get('title')
-			content = self.request.get('content')
-			if title and content:
-				create_blog(title, content, self.user.key)
-				self.redirect('/%s/blogs' % self.user.key.id())
-			else:
-				errorMsg = "Please enter both title and content!"
-				templateVals = {'me': self.user, 'title': title, 'content': content, 'submitError': errorMsg}
-				self.render('search_results.html', **templateVals)
+		if not self.user:
+			templateVals = {'me': ""}
 		else:
-			self.redirect('/')
+			templateVals = {'me': self.user}
+		search_string = self.request.get('search_string')
+		photos_qry = Picture.query(ndb.OR(Picture.caption == search_string, Picture.tags == search_string, Picture.albums == search_string)).order(-Picture.viewed)
+		blogs_qry = Blog.query(Blog.title == search_string)
+		groups_qry = Group.query(Group.name == search_string)
+		users_qry = User.query(ndb.OR(User.name == search_string, User.wpc_name == search_string, User.email == search_string, User.photography_interests == search_string))
+
+		photos = photos_qry.fetch(100)
+		blogs = blogs_qry.fetch(100)
+		groups = groups_qry.fetch(100)
+		users = users_qry.fetch(100)
+
+		print search_string
+		print photos
+		print blogs
+		print groups
+		print users
+
+		templateVals['photos'] = photos
+		templateVals['blogs'] = blogs
+		templateVals['groups'] = groups
+		templateVals['users'] = users
+		self.render('search_results.html', **templateVals)
 
 class ForumHandler(PageHandler):    ## TODO
 	def get(self):
@@ -218,13 +232,19 @@ class PhotosHandler(PageHandler):
 		qry1 = qry.order(-Picture.viewed)
 		qry2 = qry.order(-Picture.awards)
 		qry3 = qry.order(-Picture.likes)
+		qry4 = qry1
+		qry5 = qry.order(-Picture.tags)
+		
 		most_viewed = qry1.fetch(100)
 		top_100 = qry2.fetch(100)
 		most_liked = qry3.fetch(100)
-		print top_100
+		recommended = qry4.fetch(100)
+		tags = qry5.fetch(100)
+
 		templateVals['top_100'] = top_100
 		templateVals['most_viewed'] = most_viewed
 		templateVals['most_liked'] = most_liked
+		templateVals['recommended'] = recommended
 		self.render('photos.html', **templateVals)
 
 class BlogsHandler(PageHandler):
