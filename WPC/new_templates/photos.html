@@ -80,7 +80,12 @@
     {%block signup_links%}  
     {%endblock%}
     <hr>
-    <h4>WPC Top 100 Photos</h4><a>View All</a>
+    <h4>WPC Top 100 Photos</h4>
+    <form role="form" method="post">
+      <input type="hidden" name="photo_list" value="top_100">
+      <input type="hidden" name="list_type" value="default_list">
+       <button class="btn_genre" type="submit" style="color:blue;">View All</button>
+    </form>
     <div class="col-md-12 top_photos">
       {%for p in recommended%}
           <a href="/photo/{{p.key.urlsafe()}}"><img src="{{get_serving_url(p.blobKey, size=400)}}" alt="{{p.caption}}" class="img-rounded shadow_class" height="400px"></a>
@@ -89,7 +94,30 @@
     <div class="row">
       <hr>
     </div>
-    <h4>WPC Recommended Photos</h4><a>View All</a>
+    <div class="col-md-12">
+      <h4>Photography Genre</h4>
+    {%for pi_list in [('Advertising'), ('Aerial'), ('Architectural'), ('Astronomical'), ('Music'), ('Event'), ('Family'), ('Fashion'), ('Food'), ('Landscape'), ('Macro'), ('Medical'), ('Nude'), ('Photojournalism'), ('Scientific'), ('Sports'), ('Street'), ('Travel'), ('Underwater'), ('Vehicle'), ('Wedding'), ('Wildlife')]%}
+      <form role="form" method="post">
+        <input type="hidden" name="photo_list" value="{{pi_list}}">
+        <input type="hidden" name="list_type" value="genre">
+        <div class="col-lg-2 col-md-2 text-center">
+            <div class="service-item change_color">
+                <button class="btn_genre" type="submit"><i  style="color:red;" class="service-icon-photos fa fa-{{pi_list}}"></i>
+                <h4 style="color:black;">{{pi_list}}</h4></button>
+            </div>
+        </div>
+      </form>
+    {%endfor%}
+    </div>
+    <div class="row">
+      <hr>
+    </div>
+    <h4>WPC Recommended Photos</h4>
+    <form role="form" method="post">
+      <input type="hidden" name="photo_list" value="recommended">
+      <input type="hidden" name="list_type" value="default_list">
+       <button class="btn_genre" type="submit" style="color:blue;">View All</button>
+    </form>
     <div class="col-md-12 small_photos">
       {%for p in recommended%}
           <a href="/photo/{{p.key.urlsafe()}}"><img src="{{get_serving_url(p.blobKey, size=400)}}" alt="{{p.caption}}" class="img-rounded shadow_class" height="100px"></a>
@@ -98,7 +126,24 @@
     <div class="row">
       <hr>
     </div>
-    <h4>Most Viewed Photos</h4><a>View All</a>
+<!--    <h4>WPC Photo Playlists</h4><a>View All</a>
+    <div class="col-md-12 small_photos">
+      <form role="form" method="post">
+       {%for p in most_viewed%}
+            <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+            <button type="submit" class="btn btn-success btn-lg padding-top">{{p.caption}}</button>
+      {%endfor%}
+      </form>
+    </div>
+    <div class="row">
+      <hr>
+    </div> -->
+    <h4>Most Viewed Photos</h4>
+    <form role="form" method="post">
+      <input type="hidden" name="photo_list" value="most_viewed">
+      <input type="hidden" name="list_type" value="default_list">
+       <button class="btn_genre" type="submit" style="color:blue;">View All</button>
+    </form>
     <div class="col-md-12 small_photos">
        {%for p in most_viewed%}
           <a href="/photo/{{p.key.urlsafe()}}"><img src="{{get_serving_url(p.blobKey, size=100)}}" alt="{{p.caption}}" class="img-rounded shadow_class" height="100px"></a>
@@ -138,7 +183,12 @@
     </div>
     <div class="row">
     </div>
-    <h4>Most liked Photos</h4><a>View All</a>
+    <h4>Most liked Photos</h4>
+    <form role="form" method="post">
+      <input type="hidden" name="photo_list" value="most_liked">
+      <input type="hidden" name="list_type" value="default_list">
+       <button class="btn_genre" type="submit" style="color:blue;">View All</button>
+    </form>
     <div class="col-md-12 small_photos">
       {%for p in most_liked%}
           <a href="/photo/{{p.key.urlsafe()}}"><img src="{{get_serving_url(p.blobKey,size=100)}}" alt="Profile Image" class="img-rounded shadow_class" height="100px"></a>

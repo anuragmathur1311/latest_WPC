@@ -1,0 +1,340 @@
+{%if me%}
+		{%extends "index_user.html"%}
+{%else%}
+		{%extends "index.html"%}
+{%endif%}
+
+{%block title%}
+  {%if me%}
+    {{me.name}} | Photos | WPC
+  {%else%}
+    Photos | WPC
+  {%endif%}
+{%endblock%}
+
+{%block styleSheets%}
+		<link href="/css/bootstrap.css" rel="stylesheet">
+		<link href="/css/cover1.css" rel="stylesheet">
+		<link href="/css/my_studio.css" rel="stylesheet">
+		<!-- Custom styles for this template -->
+		<link href="/css/carousel.css" rel="stylesheet">
+		<link href="/css/font.css" rel="stylesheet">
+{%endblock%}
+
+{%block carousel%}
+{%endblock%}
+
+{%block pageContent%}
+    <div id="myCarousel" class="carousel slide" data-ride="carousel">
+      <div class="carousel-inner">
+        {%for p in photos%}
+        {%if loop.index % 5 == 0%}
+         <div class="item">
+	        <div class="item">
+	          <img src="/images/img_2.jpg" alt="Ad" style="margin:300px;text-align:center;"/>
+	          <div class="container">
+	            <div class="carousel-caption">
+					<div class="navbar-wrapper">
+					  <div class="container">
+						<div class="navbar navbar-transparent navbar-static-top padding-top" role="navigation">
+						  <div class="container">
+							<div class="navbar-header">
+							  <a class="navbar-brand" href="#" style="color:white"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="20px">AD</a>
+							</div>
+							<div class="navbar-collapse collapse">
+							  <ul class="nav navbar-nav">
+							  </ul>
+							</div>
+						  </div>
+						</div>
+					  </div>
+					</div>
+	            </div>
+	          </div>
+	        </div>
+         </div>
+        {%endif%}
+		     {%if loop.first%}
+	          <div class="item active">
+	        {%else%}
+	          <div class="item">
+	        {%endif%}
+	          <img src="{{get_serving_url(p.blobKey)}}" alt="{{p.name}}"/>
+	          <div class="container">
+	            <div class="carousel-caption">
+					<div class="navbar-wrapper">
+					  <div class="container">
+						<div class="navbar navbar-transparent navbar-static-top padding-top" role="navigation">
+						  <div class="container">
+							<div class="navbar-header">
+							  <a class="navbar-brand" href="#" style="color:white"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="20px"> Kalika Mathur</a>
+							</div>
+							<div class="navbar-collapse collapse">
+							  <ul class="nav navbar-nav">
+								<li><a href="#"></i><i class="fa fa-thumbs-o-up" style="color:white;"></i></a></li>
+								<li><a href="#"></i><i class="fa fa-plus" style="color:white;"></i></a></li>
+								<li><a href="#"></i><i class="fa fa-share" style="color:white;"></i></a></li>
+								<li><a href="#"></i><span class="glyphicon glyphicon-pushpin" style="color:white"></span></a></li>
+							  </ul>
+							</div>
+						  </div>
+						</div>
+					  </div>
+					</div>
+	            </div>
+	          </div>
+	        </div>
+        {%endfor%}
+      </div>
+      <a class="left carousel-control" href="#myCarousel" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>
+      <a class="right carousel-control" href="#myCarousel" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
+    </div>
+
+<h1 style="text-align:center;">{{list_name}}</h1>
+<hr>
+<div class="row" >
+		{%for p in photos%}
+        {% else %}
+          <div>
+            <h2>No photos found </h2>
+            <a href="/newphoto">Add Photos</a>
+          </div>
+            {%set no_photos = 1%}
+        {% endfor %}
+        {%if no_photos != 1%}
+		  <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
+	      {%for p in photos%}
+	      {%if loop.index % 4 == 1%}
+	              <a href="/photo/{{p.key.urlsafe()}}"><img src="{{get_serving_url(p.blobKey,size=100)}}" width="98%" id="temp1" alt="photo"></a>
+					{%for tags in p.tags%}
+						<script>
+							$( ".all_tags" ).append( "<button type='' onclick='filter_photos()' class='btn btn-warning btn-xs margin-top margin_tag_albums margin-bottom'>{{tags}}</button>");
+						</script>
+					{%endfor%}
+					{%for albums in p.albums%}
+						<script>
+							$( ".all_albums" ).append( "<button type='' onclick='filter_photos()' class='btn btn-danger btn-xs margin-top margin_tag_albums margin-bottom'>{{albums}}</button>");
+						</script>
+					{%endfor%}
+					<br>
+					
+			          <div class="button-container post-action padding_top padding_bottom">
+			            <p>{{p.likes}} <i class="fa fa-thumbs-o-up fa-1x"></i> | {{p.viewed}} <i class="fa fa-eye fa-1x"></i></p>
+			           {%if me == user%}
+			            <form method="post">
+			              <input type="hidden" name="actionType" value="edit">
+			              <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+			              <button class="btn btn-primary btn-xs" type="submit" title="Edit Image" value="Edit"><span class="glyphicon glyphicon-edit" style="color:white;"></span></button>
+			            </form>
+			            <form method="post">
+			              <input type="hidden" name="actionType" value="delete">
+			              <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+			              <button class="btn btn-primary btn-xs" type="submit" title="Delete Image" value="Delete"><span class="glyphicon glyphicon-trash" style="color:white;"></span></button>
+			            </form>
+			            <form method="post">
+			              <input type="hidden" name="actionType" value="download">
+			              <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+			              <button class="btn btn-primary btn-xs" type="submit"title="Download Image"  value="Delete"><i class="fa fa-download fa-1x"></i></button>
+			            </form>
+			            {%else%}
+			            <form method="post">
+				            <input type="hidden" name="actionType" value="like">
+				            <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+				            <button class="btn btn-info btn-xs" type="submit" title="Like This Image"><i class="fa fa-thumbs-up fa-1x"></i></button>
+				         </form>
+			            <form method="post">
+			              	<input type="hidden" name="actionType" value="add">
+			              	<input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+			              	<button class="btn btn-primary btn-xs" type="submit" title="Add Image to Ideabook"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
+			            </form>
+			            {%endif%}
+			          </div>
+	              
+	      {%endif%}
+	      {% endfor %}
+	      </div>
+	      <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
+	      {%for p in photos%}
+	      {%if loop.index % 4 == 2%}
+	              <a href="/photo/{{p.key.urlsafe()}}"><img src="{{get_serving_url(p.blobKey,size=100)}}" width="98%" id="temp1" alt="photo"></a>
+					{%for tags in p.tags%}
+						<script>
+								$( ".all_tags" ).append( "<button type='' onclick='filter_photos()' class='btn btn-warning btn-xs margin-top margin_tag_albums margin-bottom'>{{tags}}</button>");
+						</script>
+					{%endfor%}
+					{%for albums in p.albums%}
+						<script>
+								$( ".all_albums" ).append( "<button type='' onclick='filter_photos()' class='btn btn-danger btn-xs margin-top margin_tag_albums margin-bottom'>{{albums}}</button>");
+						</script>
+					{%endfor%}
+					<br>
+					
+			          <div class="button-container post-action padding_top padding_bottom">
+			            <p>{{p.likes}} <i class="fa fa-thumbs-o-up fa-1x"></i> | {{p.viewed}} <i class="fa fa-eye fa-1x"></i></p>
+			            {%if me == user%}
+			            <form method="post">
+			              <input type="hidden" name="actionType" value="edit">
+			              <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+			              <button class="btn btn-primary btn-xs" type="submit" title="Edit Image" value="Edit"><span class="glyphicon glyphicon-edit" style="color:white;"></span></button>
+			            </form>
+			            <form method="post">
+			              <input type="hidden" name="actionType" value="delete">
+			              <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+			              <button class="btn btn-primary btn-xs" type="submit" title="Delete Image" value="Delete"><span class="glyphicon glyphicon-trash" style="color:white;"></span></button>
+			            </form>
+			            <form method="post">
+			              <input type="hidden" name="actionType" value="download">
+			              <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+			              <button class="btn btn-primary btn-xs" type="submit"title="Download Image"  value="Delete"><i class="fa fa-download fa-1x"></i></button>
+			            </form>
+			            {%else%}
+			            <form method="post">
+				            <input type="hidden" name="actionType" value="like">
+				            <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+				            <button class="btn btn-info btn-xs" type="submit" value="Delete"><i class="fa fa-thumbs-up fa-1x"></i></button>
+				         </form>
+			            <form method="post">
+			              <input type="hidden" name="actionType" value="add">
+			              <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+			              <button class="btn btn-primary btn-xs" type="submit" title="Add Image to Ideabook" value="Delete"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
+			            </form>
+			            {%endif%}
+			          </div>
+	              
+	      {%endif%}
+	      {% endfor %}
+	      </div>
+	      <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
+	      {%for p in photos%}
+	      {%if loop.index % 4 == 3%}
+	              <a href="/photo/{{p.key.urlsafe()}}"><img src="{{get_serving_url(p.blobKey,size=100)}}" width="98%" id="temp1" alt="photo"></a>
+					{%for tags in p.tags%}
+						<script>
+								$( ".all_tags" ).append( "<button type='' onclick='filter_photos()' class='btn btn-warning btn-xs margin-top margin_tag_albums margin-bottom'>{{tags}}</button>");
+						</script>
+					{%endfor%}
+					{%for albums in p.albums%}
+						<script>
+								$( ".all_albums" ).append( "<button type='' onclick='filter_photos()' class='btn btn-danger btn-xs margin-top margin_tag_albums margin-bottom'>{{albums}}</button>");
+						</script>
+					{%endfor%}
+					<br>
+					
+			          <div class="button-container post-action padding_top padding_bottom">
+			            <p>{{p.likes}} <i class="fa fa-thumbs-o-up fa-1x"></i> | {{p.viewed}} <i class="fa fa-eye fa-1x"></i></p>
+			            {%if me == user%}
+			            <form method="post">
+			              <input type="hidden" name="actionType" value="edit">
+			              <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+			              <button class="btn btn-primary btn-xs" type="submit" title="Edit Image" value="Edit"><span class="glyphicon glyphicon-edit" style="color:white;"></span></button>
+			            </form>
+			            <form method="post">
+			              <input type="hidden" name="actionType" value="delete">
+			              <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+			              <button class="btn btn-primary btn-xs" type="submit" title="Delete Image" value="Delete"><span class="glyphicon glyphicon-trash" style="color:white;"></span></button>
+			            </form>
+			            <form method="post">
+			              <input type="hidden" name="actionType" value="download">
+			              <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+			              <button class="btn btn-primary btn-xs" type="submit"title="Download Image"  value="Delete"><i class="fa fa-download fa-1x"></i></button>
+			            </form>
+			            {%else%}
+			            <form method="post">
+				            <input type="hidden" name="actionType" value="like">
+				            <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+				            <button class="btn btn-info btn-xs" type="submit" value="Delete"><i class="fa fa-thumbs-up fa-1x"></i></button>
+				         </form>
+			            <form method="post">
+			              <input type="hidden" name="actionType" value="add">
+			              <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+			              <button class="btn btn-primary btn-xs" type="submit" title="Add Image to Ideabook" value="Delete"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
+			            </form>
+			            {%endif%}
+			          </div>
+	              
+	      {%endif%}
+	      {% endfor %}
+	      </div>
+	      <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
+	      {%for p in photos%}
+	      {%if loop.index % 4 == 0%}
+	              <a href="/photo/{{p.key.urlsafe()}}"><img src="{{get_serving_url(p.blobKey,size=100)}}" width="98%" id="temp1" alt="photo"></a>
+					{%for tags in p.tags%}
+						<script>
+								$( ".all_tags" ).append( "<button type='' onclick='filter_photos()' class='btn btn-warning btn-xs margin-top margin_tag_albums margin-bottom'>{{tags}}</button>");
+						</script>
+					{%endfor%}
+					{%for albums in p.albums%}
+						<script>
+								$( ".all_albums" ).append( "<button type='' onclick='filter_photos()' class='btn btn-danger btn-xs margin-top margin_tag_albums margin-bottom'>{{albums}}</button>");
+						</script>
+					{%endfor%}
+					<br>
+					
+			          <div class="button-container post-action padding_top padding_bottom">
+			            <p>{{p.likes}} <i class="fa fa-thumbs-o-up fa-1x"></i> | {{p.viewed}} <i class="fa fa-eye fa-1x"></i></p>
+			            {%if me == user%}
+			            <form method="post">
+			              <input type="hidden" name="actionType" value="edit">
+			              <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+			              <button class="btn btn-primary btn-xs" type="submit" title="Edit Image" value="Edit"><span class="glyphicon glyphicon-edit" style="color:white;"></span></button>
+			            </form>
+			            <form method="post">
+			              <input type="hidden" name="actionType" value="delete">
+			              <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+			              <button class="btn btn-primary btn-xs" type="submit" title="Delete Image" value="Delete"><span class="glyphicon glyphicon-trash" style="color:white;"></span></button>
+			            </form>
+			            <form method="post">
+			              <input type="hidden" name="actionType" value="download">
+			              <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+			              <button class="btn btn-primary btn-xs" type="submit"title="Download Image"  value="Delete"><i class="fa fa-download fa-1x"></i></button>
+			            </form>
+			            {%else%}
+			            <form method="post">
+				            <input type="hidden" name="actionType" value="like">
+				            <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+				            <button class="btn btn-info btn-xs" type="submit" value="Delete"><i class="fa fa-thumbs-up fa-1x"></i></button>
+				         </form>
+			            <form method="post">
+			              <input type="hidden" name="actionType" value="add">
+			              <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+			              <button class="btn btn-primary btn-xs" type="submit" title="Add Image to Ideabook" value="Delete"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
+			            </form>
+			            {%endif%}
+			          </div>
+	              
+	      {%endif%}
+	      {% endfor %}
+	      </div>
+	      {%endif%}
+	</div>
+{%endblock%}
+
+{%block javaScripts%}
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script type ="text/javascript" src="/js/login.js"> </script>
+<script type ="text/javascript" src="/js/jquery.min.js"></script>
+<script type ="text/javascript" src="/js/bootstrap.min.js"></script>
+<script type ="text/javascript" src="/js/docs.min.js"></script>
+
+<script>
+	jQuery(document).ready(function() {
+		var offset = 220;
+		var duration = 1500;
+		jQuery(window).scroll(function() {
+			if (jQuery(this).scrollTop() > offset) {
+				jQuery('.back-to-top').fadeIn(duration);
+			} else {
+				jQuery('.back-to-top').fadeOut(duration);
+			}
+		});
+		jQuery('.back-to-top').click(function(event) {
+			event.preventDefault();
+			jQuery('html, body').animate({scrollTop: 0}, duration);
+			return false;
+		})
+	});
+</script>
+{%endblock%}

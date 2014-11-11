@@ -457,6 +457,22 @@ i.service-icon {
   text-align: center;
 }
 
+i.service-icon-photos {
+  border: 3px solid black;
+  border-radius: 50%;
+  display: inline-block;
+  font-size: 56px;
+  width: 140px;
+  height: 140px;
+  line-height: 136px;
+  vertical-align: middle; 
+  text-align: center;
+}
+
+.btn_genre {
+  background-color: transparent;
+  border: 0;
+}
 /* Callout */
 
 .callout {

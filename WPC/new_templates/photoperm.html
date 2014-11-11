@@ -219,7 +219,17 @@
 		            {%endfor%}
 				</div>
 
-			</div> 
+			</div>
+			<div class="panel panel-default">
+				<div class="panel-heading"><h4>Associated Photography Genre</h4></div><hr>
+				<div class="panel-body" style="margin:0px;">
+					{%for g in photo.align_genre%}
+						<div class="col-md-3" style="color:blue;margin:0px;"><i class="service-icon fa fa-{{g}}"></i>
+				        <h4>{{g}}</h4></div>
+					{%endfor%}
+				</div>
+			</div>
+			<div class="col-md-12"><hr></div>
 			<div class="panel panel-default">
 				<div class="panel-heading"><h4>Associated Tags</h4></div>
 				<div class="panel-body">

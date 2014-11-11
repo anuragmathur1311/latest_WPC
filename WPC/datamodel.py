@@ -145,6 +145,7 @@ class Picture(Item): # Parent=User
 	tags = ndb.StringProperty(repeated=True)
 	albums = ndb.StringProperty(repeated=True)
 	awards = ndb.StringProperty(repeated=True)
+	align_genre = ndb.StringProperty(repeated=True)
 
 class Blog(Item): # Parent=User
 	title = ndb.StringProperty(required=True)

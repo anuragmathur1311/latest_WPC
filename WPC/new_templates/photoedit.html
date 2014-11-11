@@ -76,7 +76,23 @@
 					</div><!-- /btn-group -->
 				  </div><!-- /input-group -->
               </div>
-          </div> 
+          </div>
+          <div class="panel panel-default">
+          		<div class="panel-heading"><h4>Align to your Photography Interests</h4></div>
+              	<div class="panel-body">
+		        	  {%for i in user.photography_interests%}
+		        	  	{%if i in photo.align_genre%}
+		          			<div class="col-md-3" onclick="change_color_n_add_input_genre(this, '{{i}}')" style="color:blue;"><i class="service-icon fa fa-{{i}}"></i>
+		            		<h4>{{i}}</h4></div>
+		            	{%else%}
+		            		<div class="col-md-3" onclick="change_color_n_add_input_genre(this, '{{i}}')" style="color:gray;"><i class="service-icon fa fa-{{i}}"></i>
+		            		<h4>{{i}}</h4></div>
+		            	{%endif%}
+		          	{%endfor%}
+              	</div>
+              	<div class="photo_genre"></div>
+              	<div class="photo_genre_delete"></div>
+          </div>
       </div>
   </div>
   <div class="col-md-4 col-md-offset-1 permapage_container">
@@ -136,4 +152,16 @@
 		$( ".photo_albums" ).append( "<input type='hidden' name='albums' value='"+album+"'>" );
 	}
 	</script>
+	<script>
+  function change_color_n_add_input_genre(element, type) {
+    
+    if (element.style.color == "blue") {
+        element.style.color = 'gray';
+        $( ".photo_genre_delete" ).append( "<input type='hidden' name='photoGenreDelete' value='"+type+"'>" );
+    } else if (element.style.color == "gray") {
+      element.style.color = 'blue';
+      $( ".photo_genre" ).append( "<input type='hidden' name='photoGenre' value='"+type+"'>" );
+    }
+  }
+</script>
 {%endblock%}

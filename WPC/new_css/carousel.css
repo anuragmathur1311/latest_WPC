@@ -896,14 +896,3 @@ footer a {
     border-width:0;
     background-color:blue;
 }
-
-.button-container form,
-.button-container form div {
-    display: inline;
-    margin-top: 5px;
-}
-
-.button-container button {
-    display: inline;
-    vertical-align: middle;
-}

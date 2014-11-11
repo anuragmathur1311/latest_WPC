@@ -159,13 +159,13 @@
 	          </div>
 	        </div>
          </div>
-        {%else%}
+        {%endif%}
 		     {%if loop.first%}
 	          <div class="item active">
 	        {%else%}
 	          <div class="item">
 	        {%endif%}
-	          <img src="{{get_serving_url(p.blobKey)}}" alt="{{p.name}}"/>
+	          <a href="/photo/{{p.key.urlsafe()}}"><img src="{{get_serving_url(p.blobKey)}}" alt="{{p.name}}"/></a>
 	          <div class="container">
 	            <div class="carousel-caption">
 					<div class="navbar-wrapper">
@@ -173,7 +173,7 @@
 						<div class="navbar navbar-transparent navbar-static-top padding-top" role="navigation">
 						  <div class="container">
 							<div class="navbar-header">
-							  <a class="navbar-brand" href="#" style="color:white"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="20px"> Kalika Mathur</a>
+							  <a class="navbar-brand" href="#" style="color:white"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="20px">{{p.parent()}}</a>
 							</div>
 							<div class="navbar-collapse collapse">
 							  <ul class="nav navbar-nav">
@@ -190,7 +190,6 @@
 	            </div>
 	          </div>
 	        </div>
-        {%endif%}
         {%endfor%}
       </div>
       <a class="left carousel-control" href="#myCarousel" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>

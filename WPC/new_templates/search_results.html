@@ -297,10 +297,11 @@
                     {%set no_photos = 1%}
                 {% endfor %}
               {%if no_blogs != 1%}  
-              {%for u in users%}
               <div class="row" style="text-align:center;">
-                  <div class="col-lg-2">
-                      <img class="img-circle" src="{{user.avatar_url}}" height="150px" alt="Generic placeholder image">
+              {%for u in users%}
+                  <div class="col-md-2">
+                      <img class="img-circle" src="{{u.avatar_url}}" height="150px" alt="Generic placeholder image">
+                          <p></p>
                           <a href="/{{u.key.id()}}"><em>{{u.name}}</em></a>
                           <p></p>
                           <button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-picture" style="color:white;"></span></button>
@@ -308,8 +309,8 @@
                           <button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-plus-sign" style="color:white;"></span></button>
                           <button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-pushpin" style="color:white;"></span></button>
                   </div><!-- /.col-lg-4 -->
-              </div><!-- /.row -->
               {%endfor%}
+              </div><!-- /.row -->
               {%endif%}
           </div>
           <button type="button" class="btn btn-info btn-sm col-xs-offset-6"> Load More</button>

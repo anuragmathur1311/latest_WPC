@@ -176,12 +176,6 @@ class SearchResultsHandler(PageHandler):           ## TODO
 		groups = groups_qry.fetch(100)
 		users = users_qry.fetch(100)
 
-		print search_string
-		print photos
-		print blogs
-		print groups
-		print users
-
 		templateVals['photos'] = photos
 		templateVals['blogs'] = blogs
 		templateVals['groups'] = groups
@@ -235,11 +229,11 @@ class PhotosHandler(PageHandler):
 		qry4 = qry1
 		qry5 = qry.order(-Picture.tags)
 		
-		most_viewed = qry1.fetch(100)
-		top_100 = qry2.fetch(100)
-		most_liked = qry3.fetch(100)
-		recommended = qry4.fetch(100)
-		tags = qry5.fetch(100)
+		most_viewed = qry1.fetch()
+		top_100 = qry2.fetch()
+		most_liked = qry3.fetch()
+		recommended = qry4.fetch()
+		tags = qry5.fetch()
 
 		templateVals['top_100'] = top_100
 		templateVals['most_viewed'] = most_viewed
@@ -247,16 +241,56 @@ class PhotosHandler(PageHandler):
 		templateVals['recommended'] = recommended
 		self.render('photos.html', **templateVals)
 
+	def post(self):
+		if not self.user:
+			templateVals = {'me': ""}
+		else:
+			templateVals = {'me': self.user}
+		photo_list = self.request.get('photo_list')
+		list_type = self.request.get('list_type')
+
+		if list_type == 'default_list':
+			qry = Picture.query()
+			if photo_list == 'top_100':
+				qry1 = qry.order(-Picture.awards)
+				templateVals['list_name'] = 'Top 100 photos on WPC'
+			elif photo_list == 'most_viewed':
+				qry1 = qry.order(-Picture.viewed)
+				templateVals['list_name'] = 'Top 1000 Most Viewed photos on WPC'
+			elif photo_list == 'most_liked':
+				qry1 = qry.order(-Picture.likes)
+				templateVals['list_name'] = 'Top 1000 Most Liked photos on WPC'
+			elif photo_list == 'recommended':
+				qry1 = qry.order(-Picture.viewed)
+				templateVals['list_name'] = 'WPC Recommended'
+			photos = qry1.fetch(1000)
+			templateVals['photos'] = photos
+		elif list_type == 'genre':
+			photos_qry = Picture.query(Picture.align_genre == photo_list)
+			templateVals['photos'] = photos_qry
+		self.render('photo_list.html', **templateVals)
+
 class BlogsHandler(PageHandler):
 	def get(self):
 		if not self.user:
 			templateVals = {'me': ""}
-			self.render('blogs.html', **templateVals)
 		else:
 			templateVals = {'me': self.user}
+			templateVals['user'] = self.user
 			myblogs = Blog.of_ancestor(self.user.key)
-			templateVals['myblogs'] = myblogs	
-			self.render('blogs.html', **templateVals)
+			templateVals['myblogs'] = myblogs
+		qry = Blog.query()
+		qry1 = qry.order(-Blog.created)
+		qry2 = qry.order(Blog.created)
+
+		blogs = qry.fetch()
+		newest = qry1.fetch()
+		oldest = qry2.fetch()
+
+		templateVals['blogs'] = blogs
+		templateVals['newest'] = newest
+		templateVals['oldest'] = oldest
+		self.render('blogs.html', **templateVals)
 
 
 class UserIdeabookHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler):
@@ -743,7 +777,9 @@ class PhotoEditHandler(PageHandler):
 				iso = self.request.get('iso')
 				tagList = self.request.get_all('tags')
 				albumList = self.request.get_all('albums')
-				
+				photoGenre = self.request.get_all('photoGenre')
+				photoGenreDelete = self.request.get_all('photoGenreDelete')
+
 				photo.caption = caption
 				photo.description = description
 				photo.location = location
@@ -754,6 +790,9 @@ class PhotoEditHandler(PageHandler):
 				photo.iso = iso
 				photo.tags += tagList
 				photo.albums += albumList
+				photo.align_genre += photoGenre
+				for i in photoGenreDelete:
+					photo.align_genre.remove(i)
 				photo.put()
 				self.redirect('/%s/photos' % self.user.key.id())
 			elif action == "delete":

@@ -81,105 +81,271 @@
       <a class="left carousel-control" href="#myCarousel" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>
       <a class="right carousel-control" href="#myCarousel" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
     </div><!-- /.carousel -->
-
+      <div id="my_blogs">
+      </div>
 
     <h1> All Blogs </h1>
     <hr class="horizontal-line">
+    <div id="blog_sort">
     {%if me%}
-        <h4>Filter By :</h4><a href="">	Trendiest	</a>|<a href="">	Newest	</a>|<a href="">	Oldest	</a>|<a href="">	Highest Rating	</a>|<a onclick="myblogs();" href="javascript:void(0);">	<em>My Blogs</em>	</a>
+        <h4>Filter By :</h4><a href="">	Trendiest	</a>|<a onclick="newest_blogs();" href="javascript:void(0);">	Newest	</a>|<a onclick="oldest_blogs();" href="javascript:void(0);">	Oldest	</a>|<a href="">	Highest Rating	</a>|<a onclick="myblogs();" href="javascript:void(0);">	<em>My Blogs</em>	</a>
     {%else%}
-        <h4>Filter By :</h4><a href="">	Trendiest	</a>|<a href="">	Newest	</a>|<a href="">	Oldest	</a>|<a href="">	Highest Rating	</a>
+        <h4>Filter By :</h4><a href=""> Trendiest </a>|<a onclick="newest_blogs();" href="javascript:void(0);"> Newest  </a>|<a onclick="oldest_blogs();" href="javascript:void(0);"> Oldest  </a>|<a href="">  Highest Rating  </a>
     {%endif%}
-      <div id="my_blogs">
-      </div>
+    </div>
   	<div class="col-md-12" id="blogs_section">
-  		<div class="col-md-4 col-sm-6">
-  			<a href=""><h3><em>How to take good Music Photographs</em></h3>
-  			<img src="/images/Artists_2.jpg" alt="Profile Image" class="img-rounded" width="300px"></a>
-  			<a href=""><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5></a>
-  			<p>In the chaotic heart of downtown Brooklyn, a door greets you with an illustration of a man in a pink tutu and leopard print leggings tossing up a peace sign. Welcome to Space-Made—the art lab where Cameron Russell and her collaborators create Interrupt, a magazine that lets marginalized communities tell their own stories...</p>
-  			<hr class="horizontal-line">
-  			<a href=""><h3>THAILAND<br>Beach & Beer</h3>
-  			<img src="/images/AnuragMathur.jpg" alt="Profile Image" class="img-rounded" width="300px">
-              <a href=""><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5></a>
-  			<p>In the chaotic heart of downtown Brooklyn, a door greets you with an illustration of a man in a pink tutu and leopard print leggings tossing up a peace sign. Welcome to Space-Made—the art lab where Cameron Russell and her collaborators create Interrupt, a magazine that lets marginalized communities tell their own stories...</p>              
-  			<hr class="horizontal-line">
-  			<a href=""><h3>Ad</h3>
-  			<img src="/images/img_2.jpg" alt="Profile Image" class="img-rounded" width="300px">
-              <hr class="horizontal-line">
-  		</div>
-  		<div class="col-md-4 col-sm-6">
-  			<a href=""><h3>Trip to International Suraj-Kund Festival</h3>	
-  			<img src="/images/Artist_1.jpg" alt="Profile Image" class="img-rounded" width="300px">
-              <a href=""><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5></a>
-  			<p>In the chaotic heart of downtown Brooklyn, a door greets you with an illustration of a man in a pink tutu and leopard print leggings tossing up a peace sign. Welcome to Space-Made—the art lab where Cameron Russell and her collaborators create Interrupt, a magazine that lets marginalized communities tell their own stories...</p>
-  			<hr class="horizontal-line">
-  			<a href=""><h3>Ad</h3>
-  			<img src="/images/img_2.jpg" alt="Profile Image" class="img-rounded" width="300px">
-              <hr class="horizontal-line">
-   			<a href=""><h3>Overloaded INDIA!!</h3>
-  			<img src="/images/Overload.jpg" alt="Profile Image" class="img-rounded" width="300px">
-              <a href=""><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5></a>
-  			<p>In the chaotic heart of downtown Brooklyn, a door greets you with an illustration of a man in a pink tutu and leopard print leggings tossing up a peace sign. Welcome to Space-Made—the art lab where Cameron Russell and her collaborators create Interrupt, a magazine that lets marginalized communities tell their own stories...</p>
-  			<hr class="horizontal-line">
-  		</div>
-  		<div class="col-md-4 col-sm-6">
-  			<a href=""><h3>Travel Blog - Hannagan, AZ, USA</h3>	
-  			<img src="/images/Into_the_Storm.jpg" alt="Profile Image" class="img-rounded" width="300px">
-              <a href=""><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5></a>
-  			<p>In the chaotic heart of downtown Brooklyn, a door greets you with an illustration of a man in a pink tutu and leopard print leggings tossing up a peace sign. Welcome to Space-Made—the art lab where Cameron Russell and her collaborators create Interrupt, a magazine that lets marginalized communities tell their own stories...</p>
-  			<hr class="horizontal-line">
-  			<a href=""><h3>New York, New York</h3>
-  			<img src="/images/AnuragMathur-2.jpg" alt="Profile Image" class="img-rounded" width="300px">
-              <a href=""><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5></a>
-  			<p>In the chaotic heart of downtown Brooklyn, a door greets you with an illustration of a man in a pink tutu and leopard print leggings tossing up a peace sign. Welcome to Space-Made—the art lab where Cameron Russell and her collaborators create Interrupt, a magazine that lets marginalized communities tell their own stories...</p>
-              <hr class="horizontal-line">
-  			<a href=""><h3>Ad</h3>
-  			<img src="/images/img_2.jpg" alt="Profile Image" class="img-rounded" width="300px">
-              <hr class="horizontal-line">
-  		</div>
-  	</div>
+      {%for b in blogs%}
+      {% else %}
+          <div>
+            <h2>No Blogs in {{me.name}} Portfolio</h2>
+            {%if me == user%}
+            <a href="/newblog">Add Blog</a>
+            {%endif%}
+          </div>
+          {%set no_blogs = 1%}
+      {% endfor %}
+      {%if no_blogs != 1%}
+      <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
+      {%for b in blogs%}
+      {%if loop.index % 4 == 1%}
+              <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
+              <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{user.name}}</em></h5></a>
+              <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
+              <hr>
+      {%endif%}
+      {% endfor %}
+      </div>
+      <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
+      {%for b in blogs%}
+      {%if loop.index % 4 == 2%}
+              <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
+              <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{user.name}}</em></h5></a>
+              <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
+              <hr>
+      {%endif%}
+      {% endfor %}
+      </div>
+      <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
+      {%for b in blogs%}
+      {%if loop.index % 4 == 3%}
+              <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
+              <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{user.name}}</em></h5></a>
+              <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
+              <hr>
+      {%endif%}
+      {% endfor %}
+      </div>
+      <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
+      {%for b in blogs%}
+      {%if loop.index % 4 == 0%}
+              <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
+              <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{user.name}}</em></h5></a>
+              <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
+              <hr>
+      {%endif%}
+      {% endfor %}
+      </div>
+      {%endif%}
+    </div>
+
 
 <div style="display:none;">
-  <div id="blogs">
+  <div id="my_blogs">
     <br>
-    <div class="row col-md-4 col-sm-4" style="margin:0px;">
+    <h1> My Blogs </h1>
+    <hr class="horizontal-line">
+    <div class="row col-md-12 col-sm-12" style="margin:0px;">
       {%for b in myblogs%}
-      {%if loop.index % 3 == 1%}
-              <a href="/blog/{{b.key.urlsafe()}}"><h3 style="word-wrap:normal;">{{b.title}}</h3>
-              <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5></a>
+      {% else %}
+          <div>
+            <h2>No Blogs in {{me.name}} Portfolio</h2>
+            {%if me == user%}
+            <a href="/newblog">Add Blog</a>
+            {%endif%}
+          </div>
+          {%set no_blogs = 1%}
+      {% endfor %}
+      {%if no_blogs != 1%}
+      <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
+      {%for b in myblogs%}
+      {%if loop.index % 4 == 1%}
+              <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
+              <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{user.name}}</em></h5></a>
               <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
-              <hr class="horizontal-line">
+              <hr>
       {%endif%}
       {% endfor %}
       </div>
-      <div class="row col-md-4 col-sm-4" style="margin:0px;">
+      <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
       {%for b in myblogs%}
-      {%if loop.index % 3 == 2%}
-              <a href="/blog/{{b.key.urlsafe()}}"><h3 style="word-wrap:normal;">{{b.title}}</h3>
-              <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5></a>
+      {%if loop.index % 4 == 2%}
+              <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
+              <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{user.name}}</em></h5></a>
               <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
-              <hr class="horizontal-line">
+              <hr>
       {%endif%}
       {% endfor %}
       </div>
-      <div class="row col-md-4 col-sm-4" style="margin:0px;">
+      <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
       {%for b in myblogs%}
-      {%if loop.index % 3 == 0%}
-              <a href="/blog/{{b.key.urlsafe()}}"><h3 style="word-wrap:normal;">{{b.title}}</h3>
-              <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5></a>
+      {%if loop.index % 4 == 3%}
+              <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
+              <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{user.name}}</em></h5></a>
               <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
-              <hr class="horizontal-line">
+              <hr>
       {%endif%}
       {% endfor %}
+      </div>
+      <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
+      {%for b in myblogs%}
+      {%if loop.index % 4 == 0%}
+              <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
+              <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{user.name}}</em></h5></a>
+              <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
+              <hr>
+      {%endif%}
+      {% endfor %}
+      </div>
+      {%endif%}
       </div>
       <div class="col-md-12"><hr></div>
   </div>
 </div>
 
+<div style="display:none;">
+  <div id="oldest_blogs">
+    <br>
+    <div class="row col-md-12 col-sm-12" style="margin:0px;">
+      {%for b in oldest%}
+      {% else %}
+          <div>
+            <h2>No Blogs in {{me.name}} Portfolio</h2>
+            {%if me == user%}
+            <a href="/newblog">Add Blog</a>
+            {%endif%}
+          </div>
+          {%set no_blogs = 1%}
+      {% endfor %}
+      {%if no_blogs != 1%}
+      <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
+      {%for b in oldest%}
+      {%if loop.index % 4 == 1%}
+              <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
+              <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{user.name}}</em></h5></a>
+              <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
+              <hr>
+      {%endif%}
+      {% endfor %}
+      </div>
+      <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
+      {%for b in oldest%}
+      {%if loop.index % 4 == 2%}
+              <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
+              <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{user.name}}</em></h5></a>
+              <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
+              <hr>
+      {%endif%}
+      {% endfor %}
+      </div>
+      <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
+      {%for b in oldest%}
+      {%if loop.index % 4 == 3%}
+              <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
+              <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{user.name}}</em></h5></a>
+              <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
+              <hr>
+      {%endif%}
+      {% endfor %}
+      </div>
+      <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
+      {%for b in oldest%}
+      {%if loop.index % 4 == 0%}
+              <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
+              <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{user.name}}</em></h5></a>
+              <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
+              <hr>
+      {%endif%}
+      {% endfor %}
+      </div>
+      {%endif%}
+      </div>
+      <div class="col-md-12"><hr></div>
+  </div>
+</div>
+
+<div style="display:none;">
+  <div id="newest_blogs">
+    <br>
+    <div class="row col-md-12 col-sm-12" style="margin:0px;">
+      {%for b in newest%}
+      {% else %}
+          <div>
+            <h2>No Blogs in {{me.name}} Portfolio</h2>
+            {%if me == user%}
+            <a href="/newblog">Add Blog</a>
+            {%endif%}
+          </div>
+          {%set no_blogs = 1%}
+      {% endfor %}
+      {%if no_blogs != 1%}
+      <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
+      {%for b in newest%}
+      {%if loop.index % 4 == 1%}
+              <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
+              <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{user.name}}</em></h5></a>
+              <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
+              <hr>
+      {%endif%}
+      {% endfor %}
+      </div>
+      <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
+      {%for b in newest%}
+      {%if loop.index % 4 == 2%}
+              <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
+              <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{user.name}}</em></h5></a>
+              <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
+              <hr>
+      {%endif%}
+      {% endfor %}
+      </div>
+      <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
+      {%for b in newest%}
+      {%if loop.index % 4 == 3%}
+              <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
+              <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{user.name}}</em></h5></a>
+              <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
+              <hr>
+      {%endif%}
+      {% endfor %}
+      </div>
+      <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
+      {%for b in newest%}
+      {%if loop.index % 4 == 0%}
+              <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
+              <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{user.name}}</em></h5></a>
+              <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
+              <hr>
+      {%endif%}
+      {% endfor %}
+      </div>
+      {%endif%}
+      </div>
+      <div class="col-md-12"><hr></div>
+  </div>
+</div>
 <script>
   function myblogs() {
-     $( "#my_blogs" ).load( "/blogs #blogs" );
+     $( "#my_blogs" ).load( "/blogs #my_blogs" );
+  }
+</script>
+<script>
+  function newest_blogs() {
+     $( "#blogs_section" ).load( "/blogs #newest_blogs" );
+  }
+</script>
+<script>
+  function oldest_blogs() {
+     $( "#blogs_section" ).load( "/blogs #oldest_blogs" );
   }
 </script>
 
