@@ -56,8 +56,8 @@ def create_picture(blobKey, caption, description, location, parent_key):
 	picKey = pic.put()
 	return pic
 
-def create_group(name, description, cover_photo, parent_key):
-	grp = Group(name=name, description=description, cover_photo=cover_photo, parent=parent_key)
+def create_group(name, description, cover_photo, resultphotoList, parent_key):
+	grp = Group(name=name, description=description, cover_photo=cover_photo, photos=resultphotoList, parent=parent_key)
 	grp.members.append(parent_key)
 	grpKey = grp.put()
 	user = parent_key.get()
@@ -88,6 +88,9 @@ def delete_group(group_key, user_key):
 
 def delete_portfolio(portfolio_key, user_key):
 	if user_key == portfolio_key.parent():
+		user = user_key.get()
+		user.portfolios.remove(portfolio_key)
+		userKey = user.put()
 		portfolio_key.delete()
 	return
 

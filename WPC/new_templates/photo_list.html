@@ -28,6 +28,47 @@
     <div id="myCarousel" class="carousel slide" data-ride="carousel">
       <div class="carousel-inner">
         {%for p in photos%}
+		     {%if loop.first%}
+	          <div class="item active">
+	        {%else%}
+	          <div class="item">
+	        {%endif%}
+	          <img src="{{get_serving_url(p.blobKey)}}" alt="{{p.name}}"/>
+	          <div class="container">
+	            <div class="carousel-caption">
+					<div class="navbar-wrapper">
+					  <div class="container">
+						<div class="navbar navbar-transparent navbar-static-top padding-top" role="navigation">
+						  <div class="container">
+							<div class="navbar-header">
+							  <a class="navbar-brand" href="/{{p.key.parent().get().wpc_name}}" style="color:white"><img src="{{p.key.parent().get().avatar_url}}" alt="Profile Image" class="img-circle" width="20px">{{p.key.parent().get().name}}</a>
+							</div>
+							<div class="navbar-collapse collapse">
+							  <ul class="nav navbar-nav">
+								 <li style="margin:13px;"><form role="form" action="/photo_lists" method="post">
+						            <input type="hidden" name="actionType" value="like">
+						            <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+						            <button class="btn_genre" type="submit" title="Like This Image"><a href="#"></i><i class="fa fa-thumbs-o-up" style="color:white;"></i></a></button>
+						         </form></li>
+								<li style="margin:13px;"><form method="post">
+						            <input type="hidden" name="actionType" value="add">
+						            <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+						            <button class="btn_genre" type="submit" title="Add this Image to Ideabook"><a href="#"></i><i class="fa fa-plus" style="color:white;"></i></a></button>
+						         </form></li>
+						         <li style="margin:13px;"><form method="post">
+						            <input type="hidden" name="actionType" value="share">
+						            <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
+						            <button class="btn_genre" type="submit" title="Share This Image"><a href="#"></i><i class="fa fa-share" style="color:white;"></i></a></button>
+						         </form></li>	
+							  </ul>
+							</div>
+						  </div>
+						</div>
+					  </div>
+					</div>
+	            </div>
+	          </div>
+	        </div>
         {%if loop.index % 5 == 0%}
          <div class="item">
 	        <div class="item">
@@ -54,36 +95,6 @@
 	        </div>
          </div>
         {%endif%}
-		     {%if loop.first%}
-	          <div class="item active">
-	        {%else%}
-	          <div class="item">
-	        {%endif%}
-	          <img src="{{get_serving_url(p.blobKey)}}" alt="{{p.name}}"/>
-	          <div class="container">
-	            <div class="carousel-caption">
-					<div class="navbar-wrapper">
-					  <div class="container">
-						<div class="navbar navbar-transparent navbar-static-top padding-top" role="navigation">
-						  <div class="container">
-							<div class="navbar-header">
-							  <a class="navbar-brand" href="#" style="color:white"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="20px"> Kalika Mathur</a>
-							</div>
-							<div class="navbar-collapse collapse">
-							  <ul class="nav navbar-nav">
-								<li><a href="#"></i><i class="fa fa-thumbs-o-up" style="color:white;"></i></a></li>
-								<li><a href="#"></i><i class="fa fa-plus" style="color:white;"></i></a></li>
-								<li><a href="#"></i><i class="fa fa-share" style="color:white;"></i></a></li>
-								<li><a href="#"></i><span class="glyphicon glyphicon-pushpin" style="color:white"></span></a></li>
-							  </ul>
-							</div>
-						  </div>
-						</div>
-					  </div>
-					</div>
-	            </div>
-	          </div>
-	        </div>
         {%endfor%}
       </div>
       <a class="left carousel-control" href="#myCarousel" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>
@@ -106,19 +117,10 @@
 	      {%for p in photos%}
 	      {%if loop.index % 4 == 1%}
 	              <a href="/photo/{{p.key.urlsafe()}}"><img src="{{get_serving_url(p.blobKey,size=100)}}" width="98%" id="temp1" alt="photo"></a>
-					{%for tags in p.tags%}
-						<script>
-							$( ".all_tags" ).append( "<button type='' onclick='filter_photos()' class='btn btn-warning btn-xs margin-top margin_tag_albums margin-bottom'>{{tags}}</button>");
-						</script>
-					{%endfor%}
-					{%for albums in p.albums%}
-						<script>
-							$( ".all_albums" ).append( "<button type='' onclick='filter_photos()' class='btn btn-danger btn-xs margin-top margin_tag_albums margin-bottom'>{{albums}}</button>");
-						</script>
-					{%endfor%}
 					<br>
 					
 			          <div class="button-container post-action padding_top padding_bottom">
+			          	<a href="/{{p.key.parent().get().wpc_name}}"><h5 style="color:green;"><img src="{{p.key.parent().get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em>{{p.key.parent().get().name}}</em></h5></a>
 			            <p>{{p.likes}} <i class="fa fa-thumbs-o-up fa-1x"></i> | {{p.viewed}} <i class="fa fa-eye fa-1x"></i></p>
 			           {%if me == user%}
 			            <form method="post">
@@ -157,19 +159,10 @@
 	      {%for p in photos%}
 	      {%if loop.index % 4 == 2%}
 	              <a href="/photo/{{p.key.urlsafe()}}"><img src="{{get_serving_url(p.blobKey,size=100)}}" width="98%" id="temp1" alt="photo"></a>
-					{%for tags in p.tags%}
-						<script>
-								$( ".all_tags" ).append( "<button type='' onclick='filter_photos()' class='btn btn-warning btn-xs margin-top margin_tag_albums margin-bottom'>{{tags}}</button>");
-						</script>
-					{%endfor%}
-					{%for albums in p.albums%}
-						<script>
-								$( ".all_albums" ).append( "<button type='' onclick='filter_photos()' class='btn btn-danger btn-xs margin-top margin_tag_albums margin-bottom'>{{albums}}</button>");
-						</script>
-					{%endfor%}
 					<br>
 					
 			          <div class="button-container post-action padding_top padding_bottom">
+			          	<a href="/{{p.key.parent().get().wpc_name}}"><h5 style="color:green;"><img src="{{p.key.parent().get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em>{{p.key.parent().get().name}}</em></h5></a>
 			            <p>{{p.likes}} <i class="fa fa-thumbs-o-up fa-1x"></i> | {{p.viewed}} <i class="fa fa-eye fa-1x"></i></p>
 			            {%if me == user%}
 			            <form method="post">
@@ -208,19 +201,10 @@
 	      {%for p in photos%}
 	      {%if loop.index % 4 == 3%}
 	              <a href="/photo/{{p.key.urlsafe()}}"><img src="{{get_serving_url(p.blobKey,size=100)}}" width="98%" id="temp1" alt="photo"></a>
-					{%for tags in p.tags%}
-						<script>
-								$( ".all_tags" ).append( "<button type='' onclick='filter_photos()' class='btn btn-warning btn-xs margin-top margin_tag_albums margin-bottom'>{{tags}}</button>");
-						</script>
-					{%endfor%}
-					{%for albums in p.albums%}
-						<script>
-								$( ".all_albums" ).append( "<button type='' onclick='filter_photos()' class='btn btn-danger btn-xs margin-top margin_tag_albums margin-bottom'>{{albums}}</button>");
-						</script>
-					{%endfor%}
 					<br>
 					
 			          <div class="button-container post-action padding_top padding_bottom">
+			          	<a href="/{{p.key.parent().get().wpc_name}}"><h5 style="color:green;"><img src="{{p.key.parent().get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em>{{p.key.parent().get().name}}</em></h5></a>
 			            <p>{{p.likes}} <i class="fa fa-thumbs-o-up fa-1x"></i> | {{p.viewed}} <i class="fa fa-eye fa-1x"></i></p>
 			            {%if me == user%}
 			            <form method="post">
@@ -259,19 +243,10 @@
 	      {%for p in photos%}
 	      {%if loop.index % 4 == 0%}
 	              <a href="/photo/{{p.key.urlsafe()}}"><img src="{{get_serving_url(p.blobKey,size=100)}}" width="98%" id="temp1" alt="photo"></a>
-					{%for tags in p.tags%}
-						<script>
-								$( ".all_tags" ).append( "<button type='' onclick='filter_photos()' class='btn btn-warning btn-xs margin-top margin_tag_albums margin-bottom'>{{tags}}</button>");
-						</script>
-					{%endfor%}
-					{%for albums in p.albums%}
-						<script>
-								$( ".all_albums" ).append( "<button type='' onclick='filter_photos()' class='btn btn-danger btn-xs margin-top margin_tag_albums margin-bottom'>{{albums}}</button>");
-						</script>
-					{%endfor%}
 					<br>
 					
 			          <div class="button-container post-action padding_top padding_bottom">
+			          	<a href="/{{p.key.parent().get().wpc_name}}"><h5 style="color:green;"><img src="{{p.key.parent().get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em>{{p.key.parent().get().name}}</em></h5></a>
 			            <p>{{p.likes}} <i class="fa fa-thumbs-o-up fa-1x"></i> | {{p.viewed}} <i class="fa fa-eye fa-1x"></i></p>
 			            {%if me == user%}
 			            <form method="post">

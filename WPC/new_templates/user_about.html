@@ -38,17 +38,25 @@
                 <a href="#map_canvas"><img src="/fonts/Flags/{{user.country}}.png" alt="country" width="40px"></a><br>
             </div>
             <div class="col-md-4 col-md-offset-4">
-                <a href=""><i class="fa fa-star" style="color:gold;"></i><i class="fa fa-star" style="color:gold;"></i><i class="fa fa-star" style="color:gold;"></i><i class="fa fa-star" style="color:gold;"></i><i class="fa fa-star" style="color:gray;"></i></a>
-                <h2 style="margin-top:0px"><em>{{user.wpc_score}}</em></h2>
                 {%if user.wpc_score<=5000%}
+                <a href=""><i class="fa fa-star" style="color:gold;"></i><i class="fa fa-star" style="color:gray;"></i><i class="fa fa-star" style="color:gray;"></i><i class="fa fa-star" style="color:gray;"></i><i class="fa fa-star" style="color:gray;"></i></a>
+                <h2 style="margin-top:0px"><em>{{user.wpc_score}}</em></h2>
                     <button type="submit" class="btn btn-danger">Beginner Photographer</button><br>
                 {%elif user.wpc_score>5000 or user.wpc_score<=10000%}
+                <a href=""><i class="fa fa-star" style="color:gold;"></i><i class="fa fa-star" style="color:gold;"></i><i class="fa fa-star" style="color:gray;"></i><i class="fa fa-star" style="color:gray;"></i><i class="fa fa-star" style="color:gray;"></i></a>
+                <h2 style="margin-top:0px"><em>{{user.wpc_score}}</em></h2>
                     <button type="submit" class="btn btn-danger">Amateur Photographer</button><br>
                 {%elif user.wpc_score>10000 or user.wpc_score<=20000%}
+                <a href=""><i class="fa fa-star" style="color:gold;"></i><i class="fa fa-star" style="color:gold;"></i><i class="fa fa-star" style="color:gold;"></i><i class="fa fa-star" style="color:gray;"></i><i class="fa fa-star" style="color:gray;"></i></a>
+                <h2 style="margin-top:0px"><em>{{user.wpc_score}}</em></h2>
                     <button type="submit" class="btn btn-danger">Semi-Pro Photographer</button><br>
                 {%elif user.wpc_score>20000 or user.wpc_score<=25000%}
+                <a href=""><i class="fa fa-star" style="color:gold;"></i><i class="fa fa-star" style="color:gold;"></i><i class="fa fa-star" style="color:gold;"></i><i class="fa fa-star" style="color:gold;"></i><i class="fa fa-star" style="color:gray;"></i></a>
+                <h2 style="margin-top:0px"><em>{{user.wpc_score}}</em></h2>
                     <button type="submit" class="btn btn-danger">Professional Photographer</button><br>
                 {%elif user.wpc_score>25000%}
+                <a href=""><i class="fa fa-star" style="color:gold;"></i><i class="fa fa-star" style="color:gold;"></i><i class="fa fa-star" style="color:gold;"></i><i class="fa fa-star" style="color:gold;"></i><i class="fa fa-star" style="color:gold;"></i></a>
+                <h2 style="margin-top:0px"><em>{{user.wpc_score}}</em></h2>
                     <button type="submit" class="btn btn-danger">Master Photographer</button><br>
                 {% endif %}
             </div>

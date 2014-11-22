@@ -46,6 +46,18 @@
           <div class="container" id="thumb_img1"></div>
         </div>
         <div id="group_cover_image"></div>
+        <h3>Add Photos</h3>
+      <div class="col-md-8" style="margin:0px;">
+        <div class="photo_box">
+          {%for p in photos%}
+            <img onclick="change_border_insert_input(this, '{{p.key.urlsafe()}}');" src="{{get_serving_url(p.blobKey,size=30)}}" height="50px" style="margin:2px;" id="temp1" alt="photo">
+          {%endfor%}
+        </div>
+        <p>Select photos to be added to this portfolio, you can add or remove photos later as well</p>
+      </div>
+        <div class="selected_photos"></div>
+        <div class="unselected_photos"></div>
+      <div class="row"></div>
       <h3>Invite people to join the group</h3>
       <textarea class="" cols="80" id="" name="description" placeholder="Add WPC User Id or email id of people you'd like to invite, seperated by commas" rows="5"></textarea><br>
       <h3>Add Group's Permissions</h3>
@@ -109,6 +121,20 @@ function change_main_image(img_key) {
 function back_to_image_selector() {
     document.getElementById("photo_select").innerHTML = "{%for p in photos%}<div class='col-xs-3'><a onclick='change_main_image('{{get_serving_url(p.blobKey)}}');' href='javascript:void(0);'><img src='{{get_serving_url(p.blobKey)}}' height='100px' alt='photo'></a></div>{%endfor%}";
 } 
+</script>
+<script type="text/javascript">
+  function change_border_insert_input(element, photo_key) {
+    
+    if (element.style.border == "") {
+        element.style.border = '3px solid blue';
+        $( ".selected_photos" ).append( "<input type='hidden' name='photoSelect' value='"+photo_key+"'>" );
+        //document.getElementById('selected_photos').innerHTML = "<input type='hidden' name='photoSelect' value='"+photo_key+"'>";
+    } else if (element.style.border == "3px solid blue") {
+      element.style.border = "";
+      $( ".unselected_photos" ).append( "<input type='hidden' name='photoSelectDelete' value='"+photo_key+"'>" );
+      //document.getElementById('unselected_photos').innerHTML = "<input type='hidden' name='photoSelectDelete' value='"+photo_key+"'>";
+    }
+  }
 </script>
 <script>
 window.onload = function(){  

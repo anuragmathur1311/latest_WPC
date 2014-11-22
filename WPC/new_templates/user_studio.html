@@ -279,7 +279,7 @@
     <li><a onclick="portfolios();" href="javascript:void(0);"><h4>Portfolios</h4></a></li>
     <li><a onclick="blogs();" href="javascript:void(0);"><h4>Blogs</h4></a></li>
     <li><a onclick="groups();" href="javascript:void(0);"><h4>Groups</h4></a></li>
-    <li><a onclick="questions();" href="javascript:void(0);"><h4>Questions</h3></a></li>
+    <!--<li><a onclick="questions();" href="javascript:void(0);"><h4>Questions</h3></a></li>-->
   </ul>
   <hr>
   <div class="row" style="margin-top:20px;z-index:1;"> 
@@ -582,59 +582,63 @@
 </div>
 <div style="display:none;">
   <div id="groups">
+    
       {%for b in user.groups%}
-      {% else %}
-          <div>
-            <h2>No Groups in {{user.name}} Portfolio</h2>
-            {%if me == user%}
-            <a href="/newgroup">Add Group</a>
-            {%endif%}
-          </div>
-          {%set no_blogs = 1%}
-      {% endfor %}
-    <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
-
-
-      {%if no_group != 1%}
+      {%if loop.index == 0%}
+       <h2>There are no groups that you have created of are a member of</h2>
+       {%set no_groups = 1%}
+       {%endif%}
+       {% endfor %}
+       {%if no_groups != 1%}
+       
       {%for b in user.groups%}
       {%if loop.index % 4 == 1%}
+          {%if me.key == b.parent()%}
+          <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
               <a href="/group/{{b.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.get().name}}</h3>
-              <img src="{{b.get().cover_photo}}" alt="{{b.get().name}} Cover Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{user.name}}</em></h5></a>
+              <img src="{{b.get().cover_photo}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="{{me.avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5></a>
               <div class="blog_content thumb_blog_content">{{b.get().description}}</div>
               <hr>
+          </div>
+          {%endif%}
       {%endif%}
       {% endfor %}
-      </div>
-      <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
       {%for b in user.groups%}
       {%if loop.index % 4 == 2%}
+          {%if me.key == b.parent()%}
+          <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
               <a href="/group/{{b.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.get().name}}</h3>
-              <img src="{{b.get().cover_photo}}" alt="{{b.get().name}} Cover Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{user.name}}</em></h5></a>
+              <img src="{{b.get().cover_photo}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="{{me.avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5></a>
               <div class="blog_content thumb_blog_content">{{b.get().description}}</div>
               <hr>
+          </div>
+          {%endif%}
       {%endif%}
       {% endfor %}
-      </div>
-      <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
       {%for b in user.groups%}
       {%if loop.index % 4 == 3%}
+          {%if me.key == b.parent()%}
+          <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
               <a href="/group/{{b.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.get().name}}</h3>
-              <img src="{{b.get().cover_photo}}" alt="{{b.get().name}} Cover Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{user.name}}</em></h5></a>
+              <img src="{{b.get().cover_photo}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="{{me.avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5></a>
               <div class="blog_content thumb_blog_content">{{b.get().description}}</div>
               <hr>
+          </div>
+          {%endif%}
       {%endif%}
       {% endfor %}
-      </div>
-      <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
       {%for b in user.groups%}
       {%if loop.index % 4 == 0%}
+          {%if me.key == b.parent()%}
+          <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
               <a href="/group/{{b.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.get().name}}</h3>
-              <img src="{{b.get().cover_photo}}" alt="{{b.get().name}} Cover Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{user.name}}</em></h5></a>
+              <img src="{{b.get().cover_photo}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="{{me.avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5></a>
               <div class="blog_content thumb_blog_content">{{b.get().description}}</div>
               <hr>
+          </div>
+          {%endif%}
       {%endif%}
       {% endfor %}
-      </div>
       {%endif%}
   </div>
 </div>
@@ -812,27 +816,27 @@
 <script>
   function blogs() {
     $( "#my_ideas" ).load( "/{{user.key.id()}} #blogs" );
-    document.getElementById("ideabook_list").innerHTML = "<li><a onclick='photos();' href='javascript:void(0);'><h4>Photos</h4></a></li><li><a onclick='portfolios();' href='javascript:void(0);'><h4>Portfolios</h4></a></li><li class='active'><a onclick='blogs();' href='javascript:void(0);'><h4>Blogs</h4></a></li><li><a onclick='groups();' href='javascript:void(0);'><h4>Groups</h4></a></li><li><a onclick='questions();' href='javascript:void(0);'><h4>Questions</h4></a></li>";
+    document.getElementById("ideabook_list").innerHTML = "<li><a onclick='photos();' href='javascript:void(0);'><h4>Photos</h4></a></li><li><a onclick='portfolios();' href='javascript:void(0);'><h4>Portfolios</h4></a></li><li class='active'><a onclick='blogs();' href='javascript:void(0);'><h4>Blogs</h4></a></li><li><a onclick='groups();' href='javascript:void(0);'><h4>Groups</h4></a></li>";
   }
 
   function portfolios() {
     $( "#my_ideas" ).load( "/{{user.key.id()}} #portfolios" );
-    document.getElementById("ideabook_list").innerHTML = "<li><a onclick='photos();' href='javascript:void(0);'><h4>Photos</h4></a></li><li class='active'><a onclick='portfolios();' href='javascript:void(0);'><h4>Portfolios</h4></a></li><li><a onclick='blogs();' href='javascript:void(0);'><h4>Blogs</h4></a></li><li><a onclick='groups();' href='javascript:void(0);'><h4>Groups</h4></a></li><li><a onclick='questions();' href='javascript:void(0);'><h4>Questions</h4></a></li>";
+    document.getElementById("ideabook_list").innerHTML = "<li><a onclick='photos();' href='javascript:void(0);'><h4>Photos</h4></a></li><li class='active'><a onclick='portfolios();' href='javascript:void(0);'><h4>Portfolios</h4></a></li><li><a onclick='blogs();' href='javascript:void(0);'><h4>Blogs</h4></a></li><li><a onclick='groups();' href='javascript:void(0);'><h4>Groups</h4></a></li>";
   }
 
   function groups() {
     $( "#my_ideas" ).load( "/{{user.key.id()}} #groups" );
-    document.getElementById("ideabook_list").innerHTML = "<li><a onclick='photos();' href='javascript:void(0);'><h4>Photos</h4></a></li><li><a onclick='portfolios();' href='javascript:void(0);'><h4>Portfolios</h4></a></li><li><a onclick='blogs();' href='javascript:void(0);'><h4>Blogs</h4></a></li><li class='active'><a onclick='groups();' href='javascript:void(0);'><h4>Groups</h4></a></li><li><a onclick='questions();' href='javascript:void(0);'><h4>Questions</h4></a></li>";
+    document.getElementById("ideabook_list").innerHTML = "<li><a onclick='photos();' href='javascript:void(0);'><h4>Photos</h4></a></li><li><a onclick='portfolios();' href='javascript:void(0);'><h4>Portfolios</h4></a></li><li><a onclick='blogs();' href='javascript:void(0);'><h4>Blogs</h4></a></li><li class='active'><a onclick='groups();' href='javascript:void(0);'><h4>Groups</h4></a></li>";
   }
     
  function questions() {
     $( "#my_ideas" ).load( "/{{user.key.id()}} #questions" );
-    document.getElementById("ideabook_list").innerHTML = "<li><a onclick='photos();' href='javascript:void(0);'><h4>Photos</h4></a></li><li><a onclick='portfolios();' href='javascript:void(0);'><h4>Portfolios</h4></a></li><li><a onclick='blogs();' href='javascript:void(0);'><h4>Blogs</h4></a></li><li><a onclick='groups();' href='javascript:void(0);'><h4>Groups</h4></a></li><li class='active'><a onclick='questions();' href='javascript:void(0);'><h4>Questions</h4></a></li>";
+    document.getElementById("ideabook_list").innerHTML = "<li><a onclick='photos();' href='javascript:void(0);'><h4>Photos</h4></a></li><li><a onclick='portfolios();' href='javascript:void(0);'><h4>Portfolios</h4></a></li><li><a onclick='blogs();' href='javascript:void(0);'><h4>Blogs</h4></a></li><li><a onclick='groups();' href='javascript:void(0);'><h4>Groups</h4></a></li>";
   }
 
   function photos() {
    $( "#my_ideas" ).load( "/{{user.key.id()}} #photos" );
-    document.getElementById("ideabook_list").innerHTML = "<li class='active'><a onclick='photos();' href='javascript:void(0);'><h4>Photos</h4></a></li><li><a onclick='portfolios();' href='javascript:void(0);'><h4>Portfolios</h4></a></li><li><a onclick='blogs();' href='javascript:void(0);'><h4>Blogs</h4></a></li><li><a onclick='groups();' href='javascript:void(0);'><h4>Groups</h4></a></li><li><a onclick='questions();' href='javascript:void(0);'><h4>Questions</h4></a></li>";
+    document.getElementById("ideabook_list").innerHTML = "<li class='active'><a onclick='photos();' href='javascript:void(0);'><h4>Photos</h4></a></li><li><a onclick='portfolios();' href='javascript:void(0);'><h4>Portfolios</h4></a></li><li><a onclick='blogs();' href='javascript:void(0);'><h4>Blogs</h4></a></li><li><a onclick='groups();' href='javascript:void(0);'><h4>Groups</h4></a></li>";
   }
   function photos_thumbs(img_link, img_src) {
    $( "#my_ideas" ).load( "/{{user.key.id()}} #photos_thumb_views" );

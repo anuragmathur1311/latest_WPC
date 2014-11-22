@@ -84,7 +84,7 @@ class Group(ndb.Model): # Parent=User (Admin)
 
 class Portfolio(ndb.Model): # Parent=User (Admin)
 	name = ndb.StringProperty(required=True)
-	photos = ndb.StringProperty(repeated=True)
+	photos = ndb.KeyProperty(kind='Picture', repeated=True)
 	created = ndb.DateTimeProperty(auto_now_add=True)
 	cover_photo1 = ndb.StringProperty()
 	cover_photo2 = ndb.StringProperty()

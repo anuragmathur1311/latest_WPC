@@ -37,43 +37,149 @@
 	            <div class="row">
 	                <div class="col-md-8 col-md-offset-2 text-center">
 	                    <h1>{{blog.title}}</h1>
-						<img class="img-circle" data-src="holder.js/100x100/lava/text:Profile Photo" alt="Generic placeholder image">
-						<a href=""><h5 style="color:white;"><em>{{me.name}}<em></h5></a>
+						<img class="img-circle" src="{{user.avatar_url}}" height="100px" alt="Generic placeholder image">
+						<a href="/{{user.key.id()}}"><h5 style="color:white;"><em>{{user.name}}<em></h5></a>
 						<hr>
-	                    <h3>{{blog.likes}} <i class="fa fa-thumbs-o-up fa-1x"></i> | {{blog.viewed}} <i class="fa fa-eye fa-1x"></i></h3>
+	                    <h3 style="color:black;">{{blog.likes}} <i class="fa fa-thumbs-o-up fa-1x"></i> | {{blog.viewed}} <i class="fa fa-eye fa-1x"></i></h3>
 	                </div>
 	            </div>
 	        </div>
 	    </div>
       <div class="button-container post-action padding_top">
+      {%if me == user%}
         <form method="post">
           <input type="hidden" name="actionType" value="edit">
-          <input type="hidden" name="photoKey" value="{{blog.key.urlsafe()}}">
-          <button class="btn btn-success btn-xs" type="submit" value="Edit"><span class="glyphicon glyphicon-edit" style="color:white;"></span></button>
+          <input type="hidden" name="blogKey" value="{{blog.key.urlsafe()}}">
+          <button class="btn btn-success btn-xs" type="submit"><span class="glyphicon glyphicon-edit" style="color:white;"></span></button>
         </form>
         <form method="post">
           <input type="hidden" name="actionType" value="delete">
-          <input type="hidden" name="photoKey" value="{{blog.key.urlsafe()}}">
-          <button class="btn btn-success btn-xs" type="submit" value="Delete"><span class="glyphicon glyphicon-trash" style="color:white;"></span></button>
+          <button class="btn btn-success btn-xs" type="submit"><span class="glyphicon glyphicon-trash" style="color:white;"></span></button>
         </form>
-		<form method="post">
-          <input type="hidden" name="actionType" value="share">
-          <input type="hidden" name="photoKey" value="{{blog.key.urlsafe()}}">
-          <button class="btn btn-success btn-xs" type="submit" value="Delete"><i class="fa fa-share fa-1x"></i></button>
-        </form>
-		<form method="post">
+        <button class="btn btn-success btn-xs" data-toggle="modal" data-target=".share_modal"><i class="fa fa-share fa-1x"></i></button>
+        {%else%}
+          <button class="btn btn-success btn-xs" data-toggle="modal" data-target=".share_modal"><i class="fa fa-share fa-1x"></i></button>
+        <form method="post">
           <input type="hidden" name="actionType" value="like">
-          <input type="hidden" name="photoKey" value="{{blog.key.urlsafe()}}">
-          <button class="btn btn-info btn-xs" type="submit" value="Delete"><i class="fa fa-thumbs-o-up fa-1x"></i></button>
+          <button class="btn btn-info btn-xs" type="submit"><i class="fa fa-thumbs-o-up fa-1x"></i></button>
         </form>
+        <form method="post">
+          <input type="hidden" name="actionType" value="add">
+          <input type="hidden" name="blogKey" value="{{blog.key.urlsafe()}}">
+          <button class="btn btn-info btn-xs" type="submit"><i class="fa fa-plus fa-1x"></i></button>
+        </form>
+        {%endif%}
+        </div>
       </div>
     </div>
     <div class="post-date">
       {{blog.updated.strftime("%b %d, %Y")}}
     </div>
-  <div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 col-xs-10 col-xs-offset-1 post-content blog_content" style="text-align:justify;" id="blog_content">
-    <pre>{{blog.content | safe}}</pre>
+<div id="fb-root"></div>
+<script>
+(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.0";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
+</script>
+
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+<!-- Place this tag in your head or just before your close body tag. -->
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+
+<script type="text/javascript">
+(function(d){
+    var f = d.getElementsByTagName('SCRIPT')[0], p = d.createElement('SCRIPT');
+    p.type = 'text/javascript';
+    p.async = true;
+    p.src = '//assets.pinterest.com/js/pinit.js';
+    f.parentNode.insertBefore(p, f);
+}(document));
+</script>
+
+
+
+    <div class="modal fade share_modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title">Share Profile</h4>
+          </div>
+          <form role="form" method="post">
+            <input type="hidden" name="formType" value="share_links">
+            <br>
+                <h4>Link to Profile</h4>
+                <h4 style="color:blue;"><em>http://www.worldphotographersclub.com/blog/{{blog.key.urlsafe()}}</em></h4><br>
+                <p>or</p>
+              <ul class="list-inline">
+                <li><a class="fb-share-button" data-href="https://developers.facebook.com/docs/plugins/" data-layout="button_count" data-width="100"></a></li>
+                <li><a href="https://twitter.com/share" class="twitter-share-button" data-size="large">Tweet</a></li>
+                <li><div class="g-plus" data-action="share" data-height="30"></div></li>
+                 <li><a href="http://www.pinterest.com/pin/create/button/
+                    ?url=http%3A%2F%2Fwww.flickr.com%2Fphotos%2Fkentbrew%2F6851755809%2F
+                    &media=http%3A%2F%2Ffarm8.staticflickr.com%2F7027%2F6851755809_df5b2051c9_z.jpg
+                    &description=Next%20stop%3A%20Pinterest"
+                    data-pin-do="buttonPin"
+                    data-pin-config="above">
+                    <img src="//assets.pinterest.com/images/pidgets/pin_it_button.png" />
+                </a></li>
+              </ul>
+          </form>
+        </div>
+      </div>
+    </div>
+
+  <div class="col-md-8 col-md-offset-1 col-sm-10 col-xs-10 post-content blog_content" style="text-align:left;font-family:serif;" id="blog_content">
+    <h4>{{blog.content | safe}}</h4>
   </div>
+  <div class="col-md-2 col-md-offset-1 col-sm-2 col-xs-2">
+        <p>Ads</p>
+        <img src="/images/img_2.jpg" class="img-responsive">
+        <p><a href="my_studio.html" style="color:black;"></a></p>
+
+        <img src="/images/img_2.jpg" class="img-responsive">
+        <p><a href="my_studio.html" style="color:black;"></a></p>
+
+        <img src="/images/img_2.jpg" class="img-responsive">
+        <p><a href="my_studio.html" style="color:black;"></a></p>
+
+        <hr>
+
+        <p>Trending Photographers</p>
+        <img src="/images/img_2.jpg" class="profile-img" width="100px">
+        <p><a href="my_studio.html" style="color:black;"></a></p>
+
+        <img src="/images/img_2.jpg" class="profile-img" width="100px">
+        <p><a href="my_studio.html" style="color:black;"></a></p>
+
+        <img src="/images/img_2.jpg" class="profile-img" width="100px">
+        <p><a href="my_studio.html" style="color:black;"></a></p>
+
+        <p>Top Photos</p>
+        <img src="/images/img_1.jpg" class="img-responsive">
+        <p><a href="my_studio.html" style="color:black;"></a></p>
+
+        <img src="/images/img_1.jpg" class="img-responsive">
+        <p><a href="my_studio.html" style="color:black;"></a></p>
+
+        <img src="/images/img_1.jpg" class="img-responsive">
+        <p><a href="my_studio.html" style="color:black;"></a></p>
+
+        <p>Trending Blogs</p>
+        <img src="/images/img_3.jpg" class="img-responsive">
+        <p><a href="my_studio.html" style="color:black;"></a></p>
+
+        <img src="/images/img_3.jpg" class="img-responsive">
+        <p><a href="my_studio.html" style="color:black;"></a></p>
+
+        <img src="/images/img_3.jpg" class="img-responsive">
+        <p><a href="my_studio.html" style="color:black;"></a></p>
+      </div>
 </div>
 </div>
 {%endblock%}

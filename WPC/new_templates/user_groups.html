@@ -95,66 +95,127 @@
   <hr style="margin:0px;">
 <h2>Admin Groups</h2>
   	<div class="col-md-12" id="blogs_section">
-    <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
+    
       {%for b in user.groups%}
       {%if loop.index == 0%}
        <h2>There are no groups that you have created of are a member of</h2>
+       {%set no_groups = 1%}
        {%endif%}
        {% endfor %}
+       {%if no_groups != 1%}
+       
       {%for b in user.groups%}
       {%if loop.index % 4 == 1%}
+          {%if me.key == b.parent()%}
+          <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
               <a href="/group/{{b.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.get().name}}</h3>
-              <img src="{{b.get().cover_photo}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5></a>
+              <img src="{{b.get().cover_photo}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="{{me.avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5></a>
               <div class="blog_content thumb_blog_content">{{b.get().description}}</div>
               <hr>
+          </div>
+          {%endif%}
       {%endif%}
       {% endfor %}
-      </div>
-      <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
       {%for b in user.groups%}
       {%if loop.index % 4 == 2%}
+          {%if me.key == b.parent()%}
+          <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
               <a href="/group/{{b.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.get().name}}</h3>
-              <img src="{{b.get().cover_photo}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5></a>
+              <img src="{{b.get().cover_photo}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="{{me.avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5></a>
               <div class="blog_content thumb_blog_content">{{b.get().description}}</div>
               <hr>
+          </div>
+          {%endif%}
       {%endif%}
       {% endfor %}
-      </div>
-      <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
       {%for b in user.groups%}
       {%if loop.index % 4 == 3%}
+          {%if me.key == b.parent()%}
+          <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
               <a href="/group/{{b.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.get().name}}</h3>
-              <img src="{{b.get().cover_photo}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5></a>
+              <img src="{{b.get().cover_photo}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="{{me.avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5></a>
               <div class="blog_content thumb_blog_content">{{b.get().description}}</div>
               <hr>
+          </div>
+          {%endif%}
       {%endif%}
       {% endfor %}
-      </div>
-      <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
       {%for b in user.groups%}
       {%if loop.index % 4 == 0%}
+          {%if me.key == b.parent()%}
+          <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
               <a href="/group/{{b.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.get().name}}</h3>
-              <img src="{{b.get().cover_photo}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5></a>
+              <img src="{{b.get().cover_photo}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="{{me.avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5></a>
               <div class="blog_content thumb_blog_content">{{b.get().description}}</div>
               <hr>
+          </div>
+          {%endif%}
       {%endif%}
       {% endfor %}
-      </div>
+      {%endif%}
 </div>
 <div class="row">    
     <hr>
 </div>
 <h2>Member Groups</h2>
   	<div class="col-md-12" id="blogs_section">
-	    <div id="myblogs">
-		{%if me%}
-			{%for b in groups%}
-				<div class="col-md-4 col-sm-6">
-					<a href="/blog/{{b.key.urlsafe()}}"><h3>{{b.name}}</h3>	
-					<img src="{{b.cover_photo}}" alt="Profile Image" class="img-rounded" width="300px">
-					<div style="width: 400px; height:100px; overflow: hidden;"><p>{{b.description}}</p></div>
-				</div>
-			{% endfor %}
-		{%endif%}
-    </div>
+    
+      {%for b in user.groups%}
+      {%if loop.index == 0%}
+       <h2>There are no groups that you have created of are a member of</h2>
+       {%set no_groups = 1%}
+       {%endif%}
+       {% endfor %}
+       {%if no_groups != 1%}
+       
+      {%for b in user.groups%}
+      {%if loop.index % 4 == 1%}
+          {%if me.key != b.parent()%}
+          <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
+              <a href="/group/{{b.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.get().name}}</h3>
+              <img src="{{b.get().cover_photo}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="{{b.get().key.parent().get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em>{{b.get().key.parent().get().name}}</em></h5></a>
+              <div class="blog_content thumb_blog_content">{{b.get().description}}</div>
+              <hr>
+          </div>
+          {%endif%}
+      {%endif%}
+      {% endfor %}
+      {%for b in user.groups%}
+      {%if loop.index % 4 == 2%}
+          {%if me.key != b.parent()%}
+          <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
+              <a href="/group/{{b.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.get().name}}</h3>
+              <img src="{{b.get().cover_photo}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="{{b.get().key.parent().get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em>{{b.get().key.parent().get().name}}</em></h5></a>
+              <div class="blog_content thumb_blog_content">{{b.get().description}}</div>
+              <hr>
+          </div>
+          {%endif%}
+      {%endif%}
+      {% endfor %}
+      {%for b in user.groups%}
+      {%if loop.index % 4 == 3%}
+          {%if me.key != b.parent()%}
+          <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
+              <a href="/group/{{b.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.get().name}}</h3>
+              <img src="{{b.get().cover_photo}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="{{b.get().key.parent().get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em>{{b.get().key.parent().get().name}}</em></h5></a>
+              <div class="blog_content thumb_blog_content">{{b.get().description}}</div>
+              <hr>
+          </div>
+          {%endif%}
+      {%endif%}
+      {% endfor %}
+      {%for b in user.groups%}
+      {%if loop.index % 4 == 0%}
+          {%if me.key != b.parent()%}
+          <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
+              <a href="/group/{{b.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.get().name}}</h3>
+              <img src="{{b.get().cover_photo}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="{{b.get().key.parent().get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em>{{b.get().key.parent().get().name}}</em></h5></a>
+              <div class="blog_content thumb_blog_content">{{b.get().description}}</div>
+              <hr>
+          </div>
+          {%endif%}
+      {%endif%}
+      {% endfor %}
+      {%endif%}
+  </div>
 {%endblock%}

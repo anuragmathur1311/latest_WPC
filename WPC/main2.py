@@ -252,7 +252,7 @@ class PhotosHandler(PageHandler):
 		if list_type == 'default_list':
 			qry = Picture.query()
 			if photo_list == 'top_100':
-				qry1 = qry.order(-Picture.awards)
+				qry1 = qry.order(-Picture.viewed)
 				templateVals['list_name'] = 'Top 100 photos on WPC'
 			elif photo_list == 'most_viewed':
 				qry1 = qry.order(-Picture.viewed)
@@ -270,6 +270,27 @@ class PhotosHandler(PageHandler):
 			templateVals['photos'] = photos_qry
 		self.render('photo_list.html', **templateVals)
 
+
+class PhotoListPageHandler(PageHandler): 
+	def post(self):
+		if not self.user:
+			templateVals = {'me': ""}
+		else:
+			templateVals = {'me': self.user}
+		action = self.request.get('actionType')
+		if action == "like":
+			photoKey = get_key_urlunsafe(self.request.get('photoKey'))
+			photo = photoKey.get()
+			photo.likes += 1
+			photo.put()
+		qry = Picture.query()
+		qry1 = qry.order(-Picture.awards)
+		photos = qry1.fetch(1000)
+		templateVals['photos'] = photos
+		templateVals['list_name'] = 'Top 1000 Most Viewed photos on WPC'
+		self.render('photo_list.html', **templateVals)
+
+
 class BlogsHandler(PageHandler):
 	def get(self):
 		if not self.user:
@@ -282,14 +303,17 @@ class BlogsHandler(PageHandler):
 		qry = Blog.query()
 		qry1 = qry.order(-Blog.created)
 		qry2 = qry.order(Blog.created)
+		qry3 = qry.order(Blog.viewed)
 
 		blogs = qry.fetch()
 		newest = qry1.fetch()
 		oldest = qry2.fetch()
+		views = qry3.fetch(5)
 
 		templateVals['blogs'] = blogs
 		templateVals['newest'] = newest
 		templateVals['oldest'] = oldest
+		templateVals['views'] = views
 		self.render('blogs.html', **templateVals)
 
 
@@ -301,15 +325,30 @@ class UserIdeabookHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler
 		if user:
 			templateVals = {'me': self.user}
 			templateVals['user'] = user
-			photos = Picture.of_ancestor(user.key)
-			templateVals['photos'] = photos
-			blogs = Blog.of_ancestor(user.key)
-			templateVals['blogs'] = blogs
-			uploadUrl = blobstore.create_upload_url('/resource')
-			templateVals['uploadUrl'] = uploadUrl
 			self.render('user_ideabook.html', **templateVals)
 		else:
 			self.redirect('/')
+
+	def post(self, resource):
+		userid = resource
+		user = User.get_by_id(userid)
+		templateVals = {'me': self.user}
+		templateVals['user'] = user
+		if self.user:
+			action = self.request.get('actionType')
+			if action == "like":
+				photoKey = get_key_urlunsafe(self.request.get('photoKey'))
+				photo = photoKey.get()
+				photo.likes += 1
+				photo.put()
+				self.user.wpc_score += 100
+				self.user.put()
+			if action == "delete":
+				photoKey = get_key_urlunsafe(self.request.get('photoKey'))
+				user.pinned_photos.remove(photoKey)
+				user.put()
+			self.render('user_ideabook.html', **templateVals)
+
 
 class UserStudioHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler):
 	def get(self, resource):
@@ -403,6 +442,7 @@ class UserStudioHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler):
 			if form == "photography_awards":
 				photoAward = self.request.get_all('photoAward')
 				user.awards += photoAward
+				self.user.wpc_score += 100
 			if form == "follow":
 				user_key = self.request.get('user_key')
 				self_user_key = self.request.get('self_user_key')
@@ -410,6 +450,7 @@ class UserStudioHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler):
 				self_user_key = [self.user.key]
 				user.following += self_user_key
 				self.user.followers += user_key
+				self.user.wpc_score += 100
 			else:
 				self.redirect('/' + userid)
 			user.put()
@@ -553,6 +594,8 @@ class UserPhotosHandler(PageHandler):
 				photo = photoKey.get()
 				photo.likes += 1
 				photo.put()
+				self.user.wpc_score += 100
+				self.user.put()
 				self.redirect('/%s/photos' % resource)
 			if action == "add":
 				self.redirect('/%s/photos' % resource)
@@ -631,15 +674,43 @@ class PortfolioPermpageHandler(PageHandler):
 		templateVals = {'me': self.user}
 		templateVals['user'] = user
 		templateVals['portfolio'] = portfolio
+		photos = Picture.of_ancestor(self.user.key)
+		templateVals['photos'] = photos
 		if action == "delete":
-			delete_portfolio(portfolioKey, self.user.key)
-			self.redirect('/%s' % self.user.key.id())
+			if self.user:
+				delete_portfolio(portfolioKey, self.user.key)
+				self.render('user_portfolios.html', **templateVals)
 		if action == "photography_awards":
 			photoAward = self.request.get_all('photoAward')
 			user.awards += photoAward
 			user.put()
 			self.render('portfolioperm.html', **templateVals)
-
+		if action == "select1":
+			cover1 = self.request.get('cover1Key')
+			portfolio.cover_photo1 = cover1
+			portfolio.put()
+			self.render('portfolioperm.html', **templateVals)
+		if action == "select2":
+			cover2 = self.request.get('cover2Key')
+			portfolio.cover_photo2 = cover2
+			portfolio.put()
+			self.render('portfolioperm.html', **templateVals)
+		if action == "edit":
+			photoKey = get_key_urlunsafe(self.request.get('photoKey'))
+			self.redirect('/editphoto/%s' % photoKey.urlsafe())
+		if action == "like":
+			photoKey = get_key_urlunsafe(self.request.get('photoKey'))
+			photo = photoKey.get()
+			photo.likes += 1
+			photo.put()
+			self.user.wpc_score += 100
+			self.user.put()
+			self.render('portfolioperm.html', **templateVals)
+		if action == "add":
+			photoKey = get_key_urlunsafe(self.request.get('photoKey'))
+			self.user.pinned_photos.append(photoKey)
+			self.user.put()
+			self.render('portfolioperm.html', **templateVals)
 
 class UserPortfolioHandler(PageHandler):
 	def get(self, resource):
@@ -653,6 +724,25 @@ class UserPortfolioHandler(PageHandler):
 			self.render('user_portfolios.html', **templateVals)
 		else:
 			self.redirect('/')
+
+	def post(self, resource):       ## FIXME
+		userid = resource
+		user = User.get_by_id(userid)
+		templateVals = {'me': self.user}
+		templateVals['user'] = user
+		photos = Picture.of_ancestor(self.user.key)
+		templateVals['photos'] = photos
+		portfolioKey = self.request.get('portfolioKey')
+		portfolio = get_key_urlunsafe(portfolioKey)
+		action = self.request.get('actionType')
+		print portfolio.parent()
+		print portfolioKey
+		if action == "delete":
+			if self.user:
+				delete_portfolio(portfolio, self.user.key)
+				self.render('user_portfolios.html', **templateVals)
+		if action == "edit":
+			self.render('user_portfolios.html', **templateVals)
 
 
 
@@ -671,6 +761,8 @@ class PortfolioNewHandler(PageHandler ,blobstore_handlers.BlobstoreUploadHandler
 	def post(self):
 		if self.user:
 			resultphotoList = []
+			temp1 = []
+			temp2 = []
 			cover1 = None
 			cover2 = None
 			portfolio_title = self.request.get('portfolio_title')
@@ -680,8 +772,14 @@ class PortfolioNewHandler(PageHandler ,blobstore_handlers.BlobstoreUploadHandler
 			cover_image_2_upload = self.get_uploads('cover_image_2_upload')
 			photoSelect = self.request.get_all('photoSelect')
 			photoSelectDelete = self.request.get_all('photoSelectDelete')
-			resultphotoList += photoSelect
-			for i in photoSelectDelete:
+			for w in photoSelect:
+				x = get_key_urlunsafe(w)
+				temp1.append(x)
+			for r in photoSelectDelete:
+				x = get_key_urlunsafe(r)
+				temp2.append(x)
+			resultphotoList += temp1
+			for i in temp2:
 				resultphotoList.remove(i)
 			print resultphotoList
 			if cover_image_1_select:
@@ -821,6 +919,9 @@ class GroupNewHandler(PageHandler ,blobstore_handlers.BlobstoreUploadHandler):
 			action = self.request.get('actionType')
 			name = self.request.get('name')
 			description = self.request.get('description')
+			temp1 = []
+			temp2 = []
+			resultphotoList = []
 			if action == "select":
 				cover = self.request.get('cover_image')
 			elif action == "upload":
@@ -828,8 +929,17 @@ class GroupNewHandler(PageHandler ,blobstore_handlers.BlobstoreUploadHandler):
 				blobInfo = uploads[0]
 				photo = create_picture(blobInfo.key(), None, None, None, self.user.key)
 				cover = images.get_serving_url(photo.blobKey)
+			photoSelect = self.request.get_all('photoSelect')
+			photoSelectDelete = self.request.get_all('photoSelectDelete')
+			for w in photoSelect:
+				x = get_key_urlunsafe(w)
+				temp1.append(x)
+			for r in photoSelectDelete:
+				x = get_key_urlunsafe(r)
+				temp2.append(x)
+			resultphotoList += temp1
 			if name:
-				group = create_group(name, description, cover, self.user.key)
+				group = create_group(name, description, cover, resultphotoList, self.user.key)
 				self.redirect('/group/%s' % group.key.urlsafe())
 			else:
 				errorMsg = "Please enter group's name!"
@@ -910,8 +1020,12 @@ class GroupPermpageHandler(PageHandler):
 	def get(self, resource):
 		groupKey = get_key_urlunsafe(resource)
 		group = groupKey.get()
+		userKey = groupKey.parent()
+		user = userKey.get()
 		if group:
 			templateVals = {'me': self.user}
+			templateVals['user'] = user
+			templateVals['photos'] = Picture.of_ancestor(self.user.key)
 			templateVals['group'] = group
 			self.render('groupperm.html', **templateVals)
 		else:
@@ -919,12 +1033,57 @@ class GroupPermpageHandler(PageHandler):
 
 	def post(self, resource):       ## FIXME
 		groupKey = get_key_urlunsafe(resource)
+		group = groupKey.get()
+		userKey = groupKey.parent()
+		user = userKey.get()
+		templateVals = {'me': self.user}
+		templateVals['user'] = user
+		templateVals['photos'] = Picture.of_ancestor(self.user.key)
+		templateVals['group'] = group
+		temp1 = []
+		temp2 = []
+		resultphotoList = []
 		action = self.request.get('actionType')
 		if action == "delete":
 			delete_group(groupKey, self.user.key)
 			self.redirect('/%s' % self.user.key.id())
 		elif action == "edit":
 			self.redirect('/editgroup/%s' % resource)
+		elif action == "add_photos":
+			photoSelect = self.request.get_all('photoSelect')
+			photoSelectDelete = self.request.get_all('photoSelectDelete')
+			for w in photoSelect:
+				x = get_key_urlunsafe(w)
+				temp1.append(x)
+			for r in photoSelectDelete:
+				x = get_key_urlunsafe(r)
+				temp2.append(x)
+			resultphotoList += temp1
+			group.photos += resultphotoList
+			group.put()
+		elif action == "join_group":
+			usr_key = self.request.get('self_user_key')
+			self_user_key = [self.user.key]
+			group.members += self_user_key
+			self.user.groups.append(groupKey)
+			self.user.put()
+			group.put()
+		elif action == "delete_photo":
+			photoKey = get_key_urlunsafe(self.request.get('photoKey'))
+			group.photos.remove(photoKey)
+			group.put()
+		elif action == "like":
+			photoKey = get_key_urlunsafe(self.request.get('photoKey'))
+			photo = photoKey.get()
+			photo.likes += 1
+			photo.put()
+			self.user.wpc_score += 100
+			self.user.put()
+		elif action == "add":
+			photoKey = get_key_urlunsafe(self.request.get('photoKey'))
+			self.user.pinned_photos.append(photoKey)
+			self.user.put()
+		self.render('groupperm.html', **templateVals)
 
 class PhotoPermpageHandler(PageHandler):
 	def get(self, resource):
@@ -988,17 +1147,28 @@ class PhotoPermpageHandler(PageHandler):
 			if action == "like":	
 				photo.likes += 1
 				photo.put()
+				self.user.wpc_score += 100
+				self.user.put()
 				self.render('photoperm.html', **templateVals)
 			elif action == "photography_awards":
 				photoAward = self.request.get_all('photoAward')
 				photo.awards += photoAward
 				photo.put()
+				self.user.wpc_score += 100
+				self.user.put()
 				self.render('photoperm.html', **templateVals)
 			elif action == "add_comment":
 				comment = self.request.get('comment')
 				user_key = self.request.get('user_key')
 				photo.comments += comment
 				photo.put()
+				self.user.wpc_score += 100
+				self.user.put()
+				self.render('photoperm.html', **templateVals)
+			elif action == "add":
+				photoKey = get_key_urlunsafe(self.request.get('photoKey'))
+				self.user.pinned_photos.append(photoKey)
+				self.user.put()
 				self.render('photoperm.html', **templateVals)
 		else:
 			self.redirect('/')
@@ -1027,20 +1197,28 @@ class BlogPermpageHandler(PageHandler):
 	def post(self, resource):
 		blogKey = get_key_urlunsafe(resource)
 		blog = blogKey.get()
+		userKey = blogKey.parent()
+		user = userKey.get()
 		templateVals ={'blog': blog, 'me':self.user}
-		if user and self.user and (self.user == user):
+		templateVals['user'] = user
+		if self.user == user:
 			action = self.request.get('actionType')
 			if action == "delete":
 				delete_blog(blogKey, self.user.key)
 				self.redirect('/%s/blogs' % self.user.key.id())
 			elif action == "edit":
 				self.redirect('/editblog/%s' % resource)
-			elif action == "like":	
+		else:
+			action = self.request.get('actionType')
+			if action == "like":	
 				blog.likes += 1
 				blog.put()
 				self.render('blogperm.html', **templateVals)
-		else:
-			self.redirect('/')
+			if action == "add":
+				blogKey = get_key_urlunsafe(self.request.get('blogKey'))
+				self.user.pinned_blogs.append(blogKey)
+				self.user.put()
+				self.render('blogperm.html', **templateVals)
 
 class PhotoServeHandler(blobstore_handlers.BlobstoreDownloadHandler):
 	def get(self, resource):
@@ -1121,6 +1299,7 @@ app = webapp2.WSGIApplication([
 			('/logout', LogoutHandler),
 			('/groups' , GroupsHandler),
 			('/photos' , PhotosHandler),
+			('/photo_lists' , PhotoListPageHandler),
 			('/blogs' , BlogsHandler),
 			('/forum', ForumHandler),
 			('/explore', ExploreHandler),

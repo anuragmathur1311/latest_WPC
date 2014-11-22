@@ -72,13 +72,13 @@
       <div class="col-md-8" style="margin:0px;">
         <div class="photo_box">
           {%for p in photos%}
-            <img onclick="change_border_insert_input(this, '{{p.blobKey}}');" src="{{get_serving_url(p.blobKey,size=30)}}" height="50px" style="margin:2px;" id="temp1" alt="photo">
+            <img onclick="change_border_insert_input(this, '{{p.key.urlsafe()}}');" src="{{get_serving_url(p.blobKey,size=30)}}" height="50px" style="margin:2px;" id="temp1" alt="photo">
           {%endfor%}
         </div>
         <p>Select photos to be added to this portfolio, you can add or remove photos later as well</p>
       </div>
-      <div class="selected_photos"></div>
-      <div class="unselected_photos"></div>
+        <div class="selected_photos"></div>
+        <div class="unselected_photos"></div>
       <div class="row"></div>
 
       <h3>Share Portfolio</h3>

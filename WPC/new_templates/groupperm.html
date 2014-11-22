@@ -26,134 +26,489 @@
 {%endblock%}
 
 {%block pageContent%}
-<div class="post">
-  <div class="post-heading">
-    <div class="post-title">
-      <div class="callout" style="background: url({{group.cover_photo}}) no-repeat center center fixed;background-size: cover;">
-          <div class="vert-text">
+    <div class="post">
+      <div class="post-heading">
+        <div class="post-title">
+          <div class="callout" style="background: url({{group.cover_photo}}) no-repeat center center fixed;background-size: cover;">
+            <div class="vert-text">
               <div class="row">
-                  <div class="col-md-8 col-md-offset-2 text-center">
-                      <h1>{{group.name}}</h1>
-                      <hr>
-                      <h3>{{group.description}}</h3>
-                      <hr>
-                      <h3>{{group.photos.len}} Photographs | {{group.members.len}} Members
-                  </div>
+                <div class="col-md-8 col-md-offset-2 text-center">
+                  <h1>{{group.name}}</h1>
+                  <hr>
+                  <h3>{{group.description}}</h3>
+                  <hr>
+                  <h3>{{len(group.photos)}} Photographs | {{len(group.members)}} Members
+                </div>
               </div>
-            <div class="row">
-              <div class="col-md-2">
-                <h4>Group Admin</h4>
-                      <img class="img-circle" src="{{me.avatar_url}}" height="100px" alt="Profile image">
-                          <a href=""><h5 style="color:white;"><em>{{me.name}}<em></h5></a>
-                          <img src="/fonts/Flags/{{me.country}}.png" alt="country" width="40px"></a>
-                          <p></p>
-                          <button type="button" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-picture" style="color:white;"></span></button>
-                          <button type="button" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-plus-sign" style="color:white;"></span></button>
-                          <button type="button" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-pushpin" style="color:white;"></span></button>
-                  </div><!-- /.col-lg-4 -->
+              <div class="row">
+                <div class="col-md-2">
+
+                </div><!-- /.col-lg-4 -->
+              </div>
             </div>
           </div>
+        </div>
       </div>
-    </div><br>
+    </div>
+    <br>
     <div style="text-align:right;margin-right:10px;">
-      <ul class="nav navbar-nav navbar-right">
-          <li class="dropdown">
-              <button type="button" style="margin-left:5px;" class="btn btn-xs btn-success dropdown-toggle" data-toggle="dropdown">Add Photos</button>
-              <ul class="dropdown-menu">
-                  <li>
-                    <div class="form_signin_container" style="text-align:center;">
-                        <button type="button" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#select_photo">From My Library</button><br><br>
-                        <button type="button" class="btn btn-xs btn-primary">Upload Photos</button>
-                    </div>
-                  </li>
-              </ul>
-          </li>
-      </ul>
-      <button type="button" class="btn btn-xs btn-success">Invite Photographers</button>
+      {%if me.key in group.members%}
+      <button type="button" style="margin-left:5px;" data-toggle="modal" data-target="#add_image" class="btn btn-xs btn-info" >Add Photos</button>
+      {%else%}
+      <button type="button" style="margin-left:5px;"  disabled="disabled" class="btn btn-xs btn-info" >Add Photos</button>
+      {%endif%}
+
+      {%if me.key in group.members%}
+      <button type="button" class="btn btn-xs btn-info" disabled="disabled">Member</button>
+      {%else%}
+      <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#join_group">Join Group</button>
+      {%endif%}
     </div>
+
+    <div class="modal fade" id="join_group" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title">Are you sure you want to join group {{group.name}}?</h4>
+          </div>
+          <form role="form" method="post">
+              <div class="modal-footer">
+                <input type="hidden" id="" name="actionType" value="join_group">
+                <input type="hidden" id="userid" name="self_user_key" value="{{me.key}}">
+               <button class="btn btn-primary btn-sm" type="submit">Yes</button>
+              </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+  <div class="modal fade bs-example-modal-lg" id="add_image" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+          <h4 class="modal-title">Select and Add Photo</h4>
+        </div>
+        <form method="post">
+              <div class="col-md-12 col-sm-12 col-xs-12" id="photo_select">
+                <div class="">
+                      {%for p in photos%}
+                        <div class="col-md-3">
+                          <a href="javascript:void(0);"><img onclick="change_border_insert_input(this, '{{p.key.urlsafe()}}');" src="{{get_serving_url(p.blobKey)}}" height="100px" alt="photo"></a>
+                          </div>
+                      {%endfor%}
+                </div><br>
+                
+                  <input type="hidden" id="" name="actionType" value="add_photos">
+                  <div class="selected_photos"></div>
+                  <div class="unselected_photos"></div>
+               
+              </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-xs btn-primary">Select and Close</button>
+        </div>
+         </form>
+      </div>
+    </div>
+  </div>
+
+<script type="text/javascript">
+  function change_border_insert_input(element, photo_key) {
+    
+    if (element.style.border == "") {
+        element.style.border = '3px solid blue';
+        $( ".selected_photos" ).append( "<input type='hidden' name='photoSelect' value='"+photo_key+"'>" );
+        //document.getElementById('selected_photos').innerHTML = "<input type='hidden' name='photoSelect' value='"+photo_key+"'>";
+    } else if (element.style.border == "3px solid blue") {
+      element.style.border = "";
+      $( ".unselected_photos" ).append( "<input type='hidden' name='photoSelectDelete' value='"+photo_key+"'>" );
+      //document.getElementById('unselected_photos').innerHTML = "<input type='hidden' name='photoSelectDelete' value='"+photo_key+"'>";
+    }
+  }
+</script>
+<br>
+    <div id="about" class="intro">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3 text-center">
+                    <h2></h2>
+                    <p class="lead">Place for Ads <br><a target="_blank" href="http://www.worldphotographersclub.com/">worldphotographersclub</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<hr>
+  <ul class="nav nav-pills nav-justified" role="tablist" id="photo_member_list">
+    <li class="active"><a onclick="photos();" href="javascript:void(0);"><h4>Photos</h4></a></li>
+    <li><a onclick="members();" href="javascript:void(0);"><h4>Members</h4></a></li>
+    <li><a onclick="calendar();" href="javascript:void(0);"><h4>Calendar</h4></a></li>
+  </ul>
+  <hr>
+
+    <div id="photo_member_area">
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-      <h3 style="color:black;">Member Photographers</h3>
-              <div class="row">
-                  <div class="col-md-2">
-                      <img class="img-circle" data-src="holder.js/100x100/sky/text:Profile Photo" alt="Generic placeholder image">
-                          <a href=""><h5 style="color:green;"><em>{{me.name}}<em></h5></a>
-                          <p></p>
-                          <button type="button" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-picture" style="color:white;"></span></button>
-                          <button type="button" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-plus-sign" style="color:white;"></span></button>
-                          <button type="button" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-pushpin" style="color:white;"></span></button>
-                  </div><!-- /.col-lg-4 -->
-                  <div class="col-md-2">
-                      <img class="img-circle" data-src="holder.js/100x100/sky/text:Profile Photo" alt="Generic placeholder image">
-                          <a href=""><h5 style="color:green;"><em>{{me.name}}<em></h5></a>
-                          <p></p>
-                          <button type="button" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-picture" style="color:white;"></span></button>
-                          <button type="button" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-plus-sign" style="color:white;"></span></button>
-                          <button type="button" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-pushpin" style="color:white;"></span></button>
-                  </div><!-- /.col-lg-4 -->
-                  <div class="col-md-2">
-                      <img class="img-circle" data-src="holder.js/100x100/sky/text:Profile Photo" alt="Generic placeholder image">
-                          <a href=""><h5 style="color:green;"><em>{{me.name}}<em></h5></a>
-                          <p></p>
-                          <button type="button" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-picture" style="color:white;"></span></button>
-                          <button type="button" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-plus-sign" style="color:white;"></span></button>
-                          <button type="button" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-pushpin" style="color:white;"></span></button>
-                  </div><!-- /.col-lg-4 -->
-                  <div class="col-md-2">
-                      <img class="img-circle" data-src="holder.js/100x100/sky/text:Profile Photo" alt="Generic placeholder image">
-                          <a href=""><h5 style="color:green;"><em>{{me.name}}<em></h5></a>
-                          <p></p>
-                          <button type="button" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-picture" style="color:white;"></span></button>
-                          <button type="button" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-plus-sign" style="color:white;"></span></button>
-                          <button type="button" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-pushpin" style="color:white;"></span></button>
-                  </div><!-- /.col-lg-4 -->
-                  <div class="col-md-2">
-                      <img class="img-circle" data-src="holder.js/100x100/sky/text:Profile Photo" alt="Generic placeholder image">
-                          <a href=""><h5 style="color:green;"><em>{{me.name}}<em></h5></a>
-                          <p></p>
-                          <button type="button" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-picture" style="color:white;"></span></button>
-                          <button type="button" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-plus-sign" style="color:white;"></span></button>
-                          <button type="button" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-pushpin" style="color:white;"></span></button>
-                  </div><!-- /.col-lg-4 -->
-                  <div class="col-md-2">
-                      <img class="img-circle" data-src="holder.js/100x100/sky/text:Profile Photo" alt="Generic placeholder image">
-                          <a href=""><h5 style="color:green;"><em>{{me.name}}<em></h5></a>
-                          <p></p>
-                          <button type="button" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-picture" style="color:white;"></span></button>
-                          <button type="button" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-plus-sign" style="color:white;"></span></button>
-                          <button type="button" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-pushpin" style="color:white;"></span></button>
-                  </div><!-- /.col-lg-4 -->
-              </div><!-- /.row --><hr>
+      {%for p in group.photos%}
+        {% else %}
+          <div>
+            <h2>No photos in {{group.name}} Group </h2>
+          </div>
+            {%set no_photos = 1%}
+        {% endfor %}
+        {%if no_photos != 1%}
+      <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
+        {%for p in group.photos%}
+        {%if loop.index % 4 == 1%}
+                <a href="/photo/{{p.get().key.urlsafe()}}"><img src="{{get_serving_url(p.get().blobKey,size=100)}}" width="98%" id="temp1" alt="photo"></a>
+          <br>
+              <div class="button-container post-action padding_top padding_bottom">
+                  <a href="/{{p.get().key.parent().get().key.id()}}"><h5 style="color:green;"><img src="{{p.get().key.parent().get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em>{{p.get().key.parent().get().name}}</em></h5></a>
+                  <p>{{p.get().likes}} <i class="fa fa-thumbs-o-up fa-1x"></i> | {{p.get().viewed}} <i class="fa fa-eye fa-1x"></i></p>
+                  {%if me.key in group.members%}
+                      {%if me.key == p.get().key.parent().get().key%}
+                          <form method="post">
+                            <input type="hidden" name="actionType" value="delete_photo">
+                            <input type="hidden" name="photoKey" value="{{p.get().key.urlsafe()}}">
+                            <button class="btn btn-primary btn-xs" type="submit" title="Delete Image" value="Delete"><span class="glyphicon glyphicon-trash" style="color:white;"></span></button>
+                          </form>
+                      {%endif%}
+                  {%endif%}
+                  <form method="post">
+                    <input type="hidden" name="actionType" value="like">
+                    <input type="hidden" name="photoKey" value="{{p.get().key.urlsafe()}}">
+                    <button class="btn btn-info btn-xs" type="submit" title="Like This Image"><i class="fa fa-thumbs-up fa-1x"></i></button>
+                 </form>
+                  <form method="post">
+                      <input type="hidden" name="actionType" value="add">
+                      <input type="hidden" name="photoKey" value="{{p.get().key.urlsafe()}}">
+                      <button class="btn btn-primary btn-xs" type="submit" title="Add Image to Ideabook"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
+                  </form>
+                  
+                </div>
+                <hr>
+        {%endif%}
+        {% endfor %}
+        </div>
+        <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
+        {%for p in group.photos%}
+        {%if loop.index % 4 == 2%}
+                <a href="/photo/{{p.get().key.urlsafe()}}"><img src="{{get_serving_url(p.get().blobKey,size=100)}}" width="98%" id="temp1" alt="photo"></a>
+          <br>
+              <div class="button-container post-action padding_top padding_bottom">
+                <a href="/{{p.get().key.parent().get().key.id()}}"><h5 style="color:green;"><img src="{{p.get().key.parent().get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em>{{p.get().key.parent().get().name}}</em></h5></a>
+                  <p>{{p.get().likes}} <i class="fa fa-thumbs-o-up fa-1x"></i> | {{p.get().viewed}} <i class="fa fa-eye fa-1x"></i></p>
+                  {%if me.key in group.members%}
+                      {%if me.key == p.get().key.parent().get().key%}
+                          <form method="post">
+                            <input type="hidden" name="actionType" value="delete_photo">
+                            <input type="hidden" name="photoKey" value="{{p.get().key.urlsafe()}}">
+                            <button class="btn btn-primary btn-xs" type="submit" title="Delete Image" value="Delete"><span class="glyphicon glyphicon-trash" style="color:white;"></span></button>
+                          </form>
+                      {%endif%}
+                  {%endif%}
+                  <form method="post">
+                    <input type="hidden" name="actionType" value="like">
+                    <input type="hidden" name="photoKey" value="{{p.get().key.urlsafe()}}">
+                    <button class="btn btn-info btn-xs" type="submit" title="Like This Image"><i class="fa fa-thumbs-up fa-1x"></i></button>
+                 </form>
+                  <form method="post">
+                      <input type="hidden" name="actionType" value="add">
+                      <input type="hidden" name="photoKey" value="{{p.get().key.urlsafe()}}">
+                      <button class="btn btn-primary btn-xs" type="submit" title="Add Image to Ideabook"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
+                  </form>
+                  
+                </div>
+                <hr>
+        {%endif%}
+        {% endfor %}
+        </div>
+        <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
+        {%for p in group.photos%}
+        {%if loop.index % 4 == 3%}
+                <a href="/photo/{{p.get().key.urlsafe()}}"><img src="{{get_serving_url(p.get().blobKey,size=100)}}" width="98%" id="temp1" alt="photo"></a>
+          <br>
+              <div class="button-container post-action padding_top padding_bottom">
+                <a href="/{{p.get().key.parent().get().key.id()}}"><h5 style="color:green;"><img src="{{p.get().key.parent().get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em>{{p.get().key.parent().get().name}}</em></h5></a>
+                  <p>{{p.get().likes}} <i class="fa fa-thumbs-o-up fa-1x"></i> | {{p.get().viewed}} <i class="fa fa-eye fa-1x"></i></p>
+                  {%if me.key in group.members%}
+                      {%if me.key == p.get().key.parent().get().key%}
+                          <form method="post">
+                            <input type="hidden" name="actionType" value="delete_photo">
+                            <input type="hidden" name="photoKey" value="{{p.get().key.urlsafe()}}">
+                            <button class="btn btn-primary btn-xs" type="submit" title="Delete Image" value="Delete"><span class="glyphicon glyphicon-trash" style="color:white;"></span></button>
+                          </form>
+                      {%endif%}
+                  {%endif%}
+                  <form method="post">
+                    <input type="hidden" name="actionType" value="like">
+                    <input type="hidden" name="photoKey" value="{{p.get().key.urlsafe()}}">
+                    <button class="btn btn-info btn-xs" type="submit" title="Like This Image"><i class="fa fa-thumbs-up fa-1x"></i></button>
+                 </form>
+                  <form method="post">
+                      <input type="hidden" name="actionType" value="add">
+                      <input type="hidden" name="photoKey" value="{{p.get().key.urlsafe()}}">
+                      <button class="btn btn-primary btn-xs" type="submit" title="Add Image to Ideabook"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
+                  </form>
+                  
+                </div>
+                <hr>
+        {%endif%}
+        {% endfor %}
+        </div>
+        <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
+        {%for p in group.photos%}
+        {%if loop.index % 4 == 0%}
+                <a href="/photo/{{p.get().key.urlsafe()}}"><img src="{{get_serving_url(p.get().blobKey,size=100)}}" width="98%" id="temp1" alt="photo"></a>
+          <br>
+          
+          <div class="button-container post-action padding_top padding_bottom">
+          <br>
+              <div class="button-container post-action padding_top padding_bottom">
+                <a href="/{{p.get().key.parent().get().key.id()}}"><h5 style="color:green;"><img src="{{p.get().key.parent().get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em>{{p.get().key.parent().get().name}}</em></h5></a>
+                  <p>{{p.get().likes}} <i class="fa fa-thumbs-o-up fa-1x"></i> | {{p.get().viewed}} <i class="fa fa-eye fa-1x"></i></p>
+                  {%if me.key in group.members%}
+                      {%if me.key == p.get().key.parent().get().key%}
+                          <form method="post">
+                            <input type="hidden" name="actionType" value="delete_photo">
+                            <input type="hidden" name="photoKey" value="{{p.get().key.urlsafe()}}">
+                            <button class="btn btn-primary btn-xs" type="submit" title="Delete Image" value="Delete"><span class="glyphicon glyphicon-trash" style="color:white;"></span></button>
+                          </form>
+                      {%endif%}
+                  {%endif%}
+                  <form method="post">
+                    <input type="hidden" name="actionType" value="like">
+                    <input type="hidden" name="photoKey" value="{{p.get().key.urlsafe()}}">
+                    <button class="btn btn-info btn-xs" type="submit" title="Like This Image"><i class="fa fa-thumbs-up fa-1x"></i></button>
+                 </form>
+                  <form method="post">
+                      <input type="hidden" name="actionType" value="add">
+                      <input type="hidden" name="photoKey" value="{{p.get().key.urlsafe()}}">
+                      <button class="btn btn-primary btn-xs" type="submit" title="Add Image to Ideabook"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
+                  </form>
+                  
+                </div>
+                <hr>
+        {%endif%}
+        {% endfor %}
+        </div>
+        {%endif%}
     </div>
+    </div>
+  </div>
+<br>
+    <div class="row"></div>
+    <div id="about" class="intro">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3 text-center">
+                    <h2></h2>
+                    <p class="lead">Place for Ads <br><a target="_blank" href="http://www.worldphotographersclub.com/">worldphotographersclub</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+  <div style="display:none;">
+    <div id="members">
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-      <h3 style="color:black;">Photographs</h3>
-              <div class="row">
-                 <div class="col-md-3 col-sm-4 col-xs-6">
-                    <div class="row padding_top_bottom"><img src="/images/img_8.jpg" alt="" class="img-responsive"></div>
-                    <div class="row padding_top_bottom"><img src="/images/AnuragMathur-2.jpg" alt="" class="img-responsive"></div>
-                    <div class="row padding_top_bottom"><img src="/images/Artist_1.jpg" alt="" class="img-responsive"></div>
-                    <div class="row padding_top_bottom"><img src="/images/Artists_2.jpg" alt="" class="img-responsive"></div>
-                </div>
-                <div class="col-md-3 col-sm-4 col-xs-6">
-                    <div class="row padding_top_bottom"><img src="/images/asli_India_4_WMedited.jpg" alt="" class="img-responsive"></div>
-                    <div class="row padding_top_bottom"><img src="/images/faith_disrupted.jpg" alt="" class="img-responsive"></div>
-                    <div class="row padding_top_bottom"><img src="/images/asli_India_WM.jpg" alt="" class="img-responsive"></div>
-                    <div class="row padding_top_bottom"><img src="/images/Beach_Diaries.jpg" alt="" class="img-responsive"></div>
-                </div>
-                <div class="col-md-3 col-sm-4 col-xs-6">
-                    <div class="row padding_top_bottom"><img src="/images/Brooklyn_Bridge.jpg" alt="" class="img-responsive"></div>
-                    <div class="row padding_top_bottom"><img src="/images/DSC_1556.jpg" alt="" class="img-responsive"></div>
-                    <div class="row padding_top_bottom"><img src="/images/DSC_1582.jpg" alt="" class="img-responsive"></div>
-                    <div class="row padding_top_bottom"><img src="/images/DSC_1596.jpg" alt="" class="img-responsive"></div>
-                </div>
-                <div class="col-md-3 col-sm-4 col-xs-6">
-                    <div class="row padding_top_bottom"><img src="/images/DSC_1737.jpg" alt="" class="img-responsive"></div>
-                    <div class="row padding_top_bottom"><img src="/images/Overload.jpg" alt="" class="img-responsive"></div>
-                    <div class="row padding_top_bottom"><img src="/images/Reflections.jpg" alt="" class="img-responsive"></div>
-                    <div class="row padding_top_bottom"><img src="/images/Shadow_of_the_Empire3.jpg" alt="" class="img-responsive"></div>
-                    <div class="row padding_top_bottom"><img src="/images/Beach_Diaries.jpg" alt="" class="img-responsive"></div>
-                </div>
-              </div><!-- /.row -->
+    {%for fl in  group.members%}
+    {%else%}
+      <br><h2>There are no members in this group</h2>
+    {%endfor%}
+    {%for fl in group.members%}
+        <div class="col-md-2">
+          {%if fl.get().key.id() == user.key.id()%}
+            <h4><em>Group Admin</em></h4>
+          {%else%}
+            <h4>    </h4>
+          {%endif%}
+            <img class="img-circle" src="{{fl.get().avatar_url}}" height="100px" alt="Profile image">
+            <a href="/{{fl.get().key.id()}}"><h5 style="color:black;"><em>{{fl.get().name}}<em></h5>
+            <img src="/fonts/Flags/{{fl.get().country}}.png" alt="country" width="40px"></a>
+            <h5 style="color:green"><em>#{{fl.get().wpc_score}}</em></h5>
+            <button type="button" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-picture" style="color:white;"></span></button>
+            <button type="button" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
+        </div><!-- /.col-lg-4 -->
+   {%endfor%}
     </div>
+</div>
+</div>
+
+  <div style="display:none;">
+    <div id="calendar">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+      <h2> This option is not available yet</h2>
+    </div>
+</div>
+</div>
+
+  <div style="display:none;">
+    <div id="photos">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            {%for p in group.photos%}
+        {% else %}
+          <div>
+            <h2>No photos in {{group.name}} Group </h2>
+          </div>
+            {%set no_photos = 1%}
+        {% endfor %}
+        {%if no_photos != 1%}
+      <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
+        {%for p in group.photos%}
+        {%if loop.index % 4 == 1%}
+                <a href="/photo/{{p.get().key.urlsafe()}}"><img src="{{get_serving_url(p.get().blobKey,size=100)}}" width="98%" id="temp1" alt="photo"></a>
+          <br>
+              <div class="button-container post-action padding_top padding_bottom">
+                <a href="/{{p.get().key.parent().get().key.id()}}"><h5 style="color:green;"><img src="{{p.get().key.parent().get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em>{{p.get().key.parent().get().name}}</em></h5></a>
+                  <p>{{p.get().likes}} <i class="fa fa-thumbs-o-up fa-1x"></i> | {{p.get().viewed}} <i class="fa fa-eye fa-1x"></i></p>
+                  {%if me.key in group.members%}
+                      {%if me.key == p.get().key.parent().get().key%}
+                          <form method="post">
+                            <input type="hidden" name="actionType" value="delete_photo">
+                            <input type="hidden" name="photoKey" value="{{p.get().key.urlsafe()}}">
+                            <button class="btn btn-primary btn-xs" type="submit" title="Delete Image" value="Delete"><span class="glyphicon glyphicon-trash" style="color:white;"></span></button>
+                          </form>
+                      {%endif%}
+                  {%endif%}
+                  <form method="post">
+                    <input type="hidden" name="actionType" value="like">
+                    <input type="hidden" name="photoKey" value="{{p.get().key.urlsafe()}}">
+                    <button class="btn btn-info btn-xs" type="submit" title="Like This Image"><i class="fa fa-thumbs-up fa-1x"></i></button>
+                 </form>
+                  <form method="post">
+                      <input type="hidden" name="actionType" value="add">
+                      <input type="hidden" name="photoKey" value="{{p.get().key.urlsafe()}}">
+                      <button class="btn btn-primary btn-xs" type="submit" title="Add Image to Ideabook"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
+                  </form>
+                  
+                </div>
+                <hr>
+        {%endif%}
+        {% endfor %}
+        </div>
+        <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
+        {%for p in group.photos%}
+        {%if loop.index % 4 == 2%}
+                <a href="/photo/{{p.get().key.urlsafe()}}"><img src="{{get_serving_url(p.get().blobKey,size=100)}}" width="98%" id="temp1" alt="photo"></a>
+          <br>
+              <div class="button-container post-action padding_top padding_bottom">
+                <a href="/{{p.get().key.parent().get().key.id()}}"><h5 style="color:green;"><img src="{{p.get().key.parent().get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em>{{p.get().key.parent().get().name}}</em></h5></a>
+                  <p>{{p.get().likes}} <i class="fa fa-thumbs-o-up fa-1x"></i> | {{p.get().viewed}} <i class="fa fa-eye fa-1x"></i></p>
+                  {%if me.key in group.members%}
+                      {%if me.key == p.get().key.parent().get().key%}
+                          <form method="post">
+                            <input type="hidden" name="actionType" value="delete_photo">
+                            <input type="hidden" name="photoKey" value="{{p.get().key.urlsafe()}}">
+                            <button class="btn btn-primary btn-xs" type="submit" title="Delete Image" value="Delete"><span class="glyphicon glyphicon-trash" style="color:white;"></span></button>
+                          </form>
+                      {%endif%}
+                  {%endif%}
+                  <form method="post">
+                    <input type="hidden" name="actionType" value="like">
+                    <input type="hidden" name="photoKey" value="{{p.get().key.urlsafe()}}">
+                    <button class="btn btn-info btn-xs" type="submit" title="Like This Image"><i class="fa fa-thumbs-up fa-1x"></i></button>
+                 </form>
+                  <form method="post">
+                      <input type="hidden" name="actionType" value="add">
+                      <input type="hidden" name="photoKey" value="{{p.get().key.urlsafe()}}">
+                      <button class="btn btn-primary btn-xs" type="submit" title="Add Image to Ideabook"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
+                  </form>
+                  
+                </div>
+                <hr>
+        {%endif%}
+        {% endfor %}
+        </div>
+        <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
+        {%for p in group.photos%}
+        {%if loop.index % 4 == 3%}
+                <a href="/photo/{{p.get().key.urlsafe()}}"><img src="{{get_serving_url(p.get().blobKey,size=100)}}" width="98%" id="temp1" alt="photo"></a>
+          <br>
+              <div class="button-container post-action padding_top padding_bottom">
+                <a href="/{{p.get().key.parent().get().key.id()}}"><h5 style="color:green;"><img src="{{p.get().key.parent().get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em>{{p.get().key.parent().get().name}}</em></h5></a>
+                  <p>{{p.get().likes}} <i class="fa fa-thumbs-o-up fa-1x"></i> | {{p.get().viewed}} <i class="fa fa-eye fa-1x"></i></p>
+                  {%if me.key in group.members%}
+                      {%if me.key == p.get().key.parent().get().key%}
+                          <form method="post">
+                            <input type="hidden" name="actionType" value="delete_photo">
+                            <input type="hidden" name="photoKey" value="{{p.get().key.urlsafe()}}">
+                            <button class="btn btn-primary btn-xs" type="submit" title="Delete Image" value="Delete"><span class="glyphicon glyphicon-trash" style="color:white;"></span></button>
+                          </form>
+                      {%endif%}
+                  {%endif%}
+                  <form method="post">
+                    <input type="hidden" name="actionType" value="like">
+                    <input type="hidden" name="photoKey" value="{{p.get().key.urlsafe()}}">
+                    <button class="btn btn-info btn-xs" type="submit" title="Like This Image"><i class="fa fa-thumbs-up fa-1x"></i></button>
+                 </form>
+                  <form method="post">
+                      <input type="hidden" name="actionType" value="add">
+                      <input type="hidden" name="photoKey" value="{{p.get().key.urlsafe()}}">
+                      <button class="btn btn-primary btn-xs" type="submit" title="Add Image to Ideabook"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
+                  </form>
+                  
+                </div>
+                <hr>
+        {%endif%}
+        {% endfor %}
+        </div>
+        <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
+        {%for p in group.photos%}
+        {%if loop.index % 4 == 0%}
+                <a href="/photo/{{p.get().key.urlsafe()}}"><img src="{{get_serving_url(p.get().blobKey,size=100)}}" width="98%" id="temp1" alt="photo"></a>
+          <br>
+          
+          <div class="button-container post-action padding_top padding_bottom">
+          <br>
+              <div class="button-container post-action padding_top padding_bottom">
+                <a href="/{{p.get().key.parent().get().key.id()}}"><h5 style="color:green;"><img src="{{p.get().key.parent().get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em>{{p.get().key.parent().get().name}}</em></h5></a>
+                  <p>{{p.get().likes}} <i class="fa fa-thumbs-o-up fa-1x"></i> | {{p.get().viewed}} <i class="fa fa-eye fa-1x"></i></p>
+                  {%if me.key in group.members%}
+                      {%if me.key == p.get().key.parent().get().key%}
+                          <form method="post">
+                            <input type="hidden" name="actionType" value="delete_photo">
+                            <input type="hidden" name="photoKey" value="{{p.get().key.urlsafe()}}">
+                            <button class="btn btn-primary btn-xs" type="submit" title="Delete Image" value="Delete"><span class="glyphicon glyphicon-trash" style="color:white;"></span></button>
+                          </form>
+                      {%endif%}
+                  {%endif%}
+                  <form method="post">
+                    <input type="hidden" name="actionType" value="like">
+                    <input type="hidden" name="photoKey" value="{{p.get().key.urlsafe()}}">
+                    <button class="btn btn-info btn-xs" type="submit" title="Like This Image"><i class="fa fa-thumbs-up fa-1x"></i></button>
+                 </form>
+                  <form method="post">
+                      <input type="hidden" name="actionType" value="add">
+                      <input type="hidden" name="photoKey" value="{{p.get().key.urlsafe()}}">
+                      <button class="btn btn-primary btn-xs" type="submit" title="Add Image to Ideabook"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
+                  </form>
+                  
+                </div>
+                <hr>
+        {%endif%}
+        {% endfor %}
+        </div>
+        {%endif%}
+    </div>
+</div>
+</div>
+
+<script>
+ function photos() {
+    $( "#photo_member_area" ).load( "/group/{{group.key.urlsafe()}} #photos" );
+    document.getElementById("photo_member_list").innerHTML = "<li class='active'><a onclick='photos();'' href='javascript:void(0);''><h4>Photos</h4></a></li><li><a onclick='members();'' href='javascript:void(0);''><h4>Members</h4></a></li><li><a onclick='calendar();' href='javascript:void(0);'><h4>Calendar</h4></a></li>";
+  }
+
+   function members() {
+    $( "#photo_member_area" ).load( "/group/{{group.key.urlsafe()}} #members" );
+    document.getElementById("photo_member_list").innerHTML = "<li><a onclick='photos();'' href='javascript:void(0);''><h4>Photos</h4></a></li><li  class='active'><a onclick='members();'' href='javascript:void(0);''><h4>Members</h4></a></li><li><a onclick='calendar();' href='javascript:void(0);'><h4>Calendar</h4></a></li>";
+  }
+
+  function calendar() {
+    $( "#photo_member_area" ).load( "/group/{{group.key.urlsafe()}} #calendar" );
+    document.getElementById("photo_member_list").innerHTML = "<li><a onclick='photos();'' href='javascript:void(0);''><h4>Photos</h4></a></li><li><a onclick='members();'' href='javascript:void(0);''><h4>Members</h4></a></li><li class='active'><a onclick='calendar();' href='javascript:void(0);'><h4>Calendar</h4></a></li>";
+  }
+</script>
 </div>
   <div class="modal fade bs-example-modal-lg" id="select_photo" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">

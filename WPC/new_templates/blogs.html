@@ -42,41 +42,31 @@
     {%endblock%}  
     <div id="myCarousel" class="carousel slide" data-ride="carousel">
       <ol class="carousel-indicators">
-        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-        <li data-target="#myCarousel" data-slide-to="1"></li>
-        <li data-target="#myCarousel" data-slide-to="2"></li>
+        {%for b in views%}
+          {%if loop.first%}
+            <li data-target="#myCarousel" data-slide-to="{{loop.index}}" class="active"></li>
+          {%else%}
+            <li data-target="#myCarousel" data-slide-to="{{loop.index}}"></li>
+          {%endif%}
+        {%endfor%}
       </ol>
       <div class="carousel-inner">
-        <div class="item active">
+        {%for b in views%}
+        {%if loop.first%}
+          <div class="item active">
+        {%else%}
+          <div class="item">
+        {%endif%}
           <div class="container">
             <div class="carousel-caption">
-              <h1><img src="/images/Overload.jpg" alt="Profile Image" class="img-rounded" width="100px">  Overloaded INDIA!!</h1>
-              <p>In the chaotic heart of downtown Brooklyn, a door greets you with an illustration of a man in a pink tutu and leopard print leggings tossing up a peace sign. Welcome to Space-Made—the art lab where Cameron Russell and her collaborators create Interrupt, a magazine that lets marginalized communities tell their own stories...</p>
-              <p><a class="btn btn-sm btn-success" href="#" role="button">Read Blog</a></p>
-              <a href=""><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5></a>
+              <h1><img src="{{b.cover}}" alt="Blog Image" class="img-rounded" width="100px">  {{b.title}}</h1>
+              <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
+              <p><a class="btn btn-sm btn-success" href="/blog/{{b.key.urlsafe()}}" role="button">Read Blog</a></p>
+              <a href=""><h5 style="color:green;"><img src="{{b.key.parent().get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em>{{b.key.parent().get().name}}</em></h5></a>
             </div>
           </div>
         </div>
-        <div class="item">
-          <div class="container">
-            <div class="carousel-caption">
-              <h1><img src="/images/Artists_2.jpg" alt="Profile Image" class="img-rounded" width="100px">  How to take good Music Photographs</h1>
-              <p>In the chaotic heart of downtown Brooklyn, a door greets you with an illustration of a man in a pink tutu and leopard print leggings tossing up a peace sign. Welcome to Space-Made—the art lab where Cameron Russell and her collaborators create Interrupt, a magazine that lets marginalized communities tell their own stories...</p>
-              <p><a class="btn btn-sm btn-success" href="#" role="button">Read Blog</a></p>
-              <a href=""><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5></a>
-            </div>
-          </div>
-        </div>
-        <div class="item">
-          <div class="container">
-            <div class="carousel-caption">
-              <h1><img src="/images/AnuragMathur-2.jpg" alt="Profile Image" class="img-rounded" width="100px">  New York, New York</h1>
-              <p>In the chaotic heart of downtown Brooklyn, a door greets you with an illustration of a man in a pink tutu and leopard print leggings tossing up a peace sign. Welcome to Space-Made—the art lab where Cameron Russell and her collaborators create Interrupt, a magazine that lets marginalized communities tell their own stories...</p>
-              <p><a class="btn btn-sm btn-success" href="#" role="button">Read Blog</a></p>
-              <a href=""><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5></a>
-            </div>
-          </div>
-        </div>
+        {%endfor%}
       </div>
       <a class="left carousel-control" href="#myCarousel" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>
       <a class="right carousel-control" href="#myCarousel" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
@@ -109,7 +99,7 @@
       {%for b in blogs%}
       {%if loop.index % 4 == 1%}
               <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
-              <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{user.name}}</em></h5></a>
+              <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="{{b.key.parent().get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em>{{b.key.parent().get().name}}</em></h5></a>
               <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
               <hr>
       {%endif%}
@@ -119,7 +109,7 @@
       {%for b in blogs%}
       {%if loop.index % 4 == 2%}
               <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
-              <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{user.name}}</em></h5></a>
+              <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="{{b.key.parent().get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em>{{b.key.parent().get().name}}</em></h5></a>
               <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
               <hr>
       {%endif%}
@@ -129,7 +119,7 @@
       {%for b in blogs%}
       {%if loop.index % 4 == 3%}
               <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
-              <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{user.name}}</em></h5></a>
+              <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="{{b.key.parent().get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em>{{b.key.parent().get().name}}</em></h5></a>
               <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
               <hr>
       {%endif%}
@@ -139,7 +129,7 @@
       {%for b in blogs%}
       {%if loop.index % 4 == 0%}
               <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
-              <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{user.name}}</em></h5></a>
+              <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="{{b.key.parent().get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em>{{b.key.parent().get().name}}</em></h5></a>
               <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
               <hr>
       {%endif%}
@@ -170,7 +160,7 @@
       {%for b in myblogs%}
       {%if loop.index % 4 == 1%}
               <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
-              <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{user.name}}</em></h5></a>
+              <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="{{b.key.parent().get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em>{{b.key.parent().get().name}}</em></h5></a>
               <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
               <hr>
       {%endif%}
@@ -180,7 +170,7 @@
       {%for b in myblogs%}
       {%if loop.index % 4 == 2%}
               <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
-              <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{user.name}}</em></h5></a>
+              <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="{{b.key.parent().get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em>{{b.key.parent().get().name}}</em></h5></a>
               <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
               <hr>
       {%endif%}
@@ -190,7 +180,7 @@
       {%for b in myblogs%}
       {%if loop.index % 4 == 3%}
               <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
-              <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{user.name}}</em></h5></a>
+              <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="{{b.key.parent().get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em>{{b.key.parent().get().name}}</em></h5></a>
               <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
               <hr>
       {%endif%}
@@ -200,7 +190,7 @@
       {%for b in myblogs%}
       {%if loop.index % 4 == 0%}
               <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
-              <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{user.name}}</em></h5></a>
+              <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="{{b.key.parent().get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em>{{b.key.parent().get().name}}</em></h5></a>
               <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
               <hr>
       {%endif%}
@@ -231,7 +221,7 @@
       {%for b in oldest%}
       {%if loop.index % 4 == 1%}
               <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
-              <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{user.name}}</em></h5></a>
+              <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="{{b.key.parent().get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em>{{b.key.parent().get().name}}</em></h5></a>
               <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
               <hr>
       {%endif%}
@@ -241,7 +231,7 @@
       {%for b in oldest%}
       {%if loop.index % 4 == 2%}
               <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
-              <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{user.name}}</em></h5></a>
+              <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="{{b.key.parent().get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em>{{b.key.parent().get().name}}</em></h5></a>
               <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
               <hr>
       {%endif%}
@@ -251,7 +241,7 @@
       {%for b in oldest%}
       {%if loop.index % 4 == 3%}
               <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
-              <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{user.name}}</em></h5></a>
+              <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="{{b.key.parent().get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em>{{b.key.parent().get().name}}</em></h5></a>
               <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
               <hr>
       {%endif%}
@@ -261,7 +251,7 @@
       {%for b in oldest%}
       {%if loop.index % 4 == 0%}
               <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
-              <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{user.name}}</em></h5></a>
+              <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="{{b.key.parent().get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em>{{b.key.parent().get().name}}</em></h5></a>
               <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
               <hr>
       {%endif%}
@@ -292,7 +282,7 @@
       {%for b in newest%}
       {%if loop.index % 4 == 1%}
               <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
-              <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{user.name}}</em></h5></a>
+             <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="{{b.key.parent().get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em>{{b.key.parent().get().name}}</em></h5></a>
               <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
               <hr>
       {%endif%}
@@ -302,7 +292,7 @@
       {%for b in newest%}
       {%if loop.index % 4 == 2%}
               <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
-              <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{user.name}}</em></h5></a>
+              <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="{{b.key.parent().get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em>{{b.key.parent().get().name}}</em></h5></a>
               <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
               <hr>
       {%endif%}
@@ -312,7 +302,7 @@
       {%for b in newest%}
       {%if loop.index % 4 == 3%}
               <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
-              <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{user.name}}</em></h5></a>
+              <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="{{b.key.parent().get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em>{{b.key.parent().get().name}}</em></h5></a>
               <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
               <hr>
       {%endif%}
@@ -322,7 +312,7 @@
       {%for b in newest%}
       {%if loop.index % 4 == 0%}
               <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
-              <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{user.name}}</em></h5></a>
+              <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="{{b.key.parent().get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em>{{b.key.parent().get().name}}</em></h5></a>
               <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
               <hr>
       {%endif%}
