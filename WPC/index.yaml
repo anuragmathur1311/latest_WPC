@@ -16,6 +16,17 @@ indexes:
   - name: updated
     direction: desc
 
+- kind: Messages
+  ancestor: yes
+  properties:
+  - name: created
+
+- kind: Messages
+  ancestor: yes
+  properties:
+  - name: created
+    direction: desc
+
 - kind: Picture
   properties:
   - name: albums

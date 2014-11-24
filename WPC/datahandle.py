@@ -73,6 +73,12 @@ def create_portfolio(name, cover1, cover2, resultphotoList, parent_key):
 	userKey = user.put()
 	return portfolio
 
+def create_message(message_type, message, sender, message_photo, message_blog, message_group, parent_key):
+	message = Messages(message_type=message_type, message=message, sender=sender, message_photo=message_photo, message_blog=message_blog, message_group=message_group, parent=parent_key)
+	messageKey = message.put()
+	user = parent_key.get()
+	userKey = user.put()
+
 def add_member(grpKey, userKey):
 	grp = grpKey.get()
 	user = userKey.get()

@@ -147,6 +147,14 @@ class Picture(Item): # Parent=User
 	awards = ndb.StringProperty(repeated=True)
 	align_genre = ndb.StringProperty(repeated=True)
 
+class Messages(Item):
+	message_type = ndb.IntegerProperty()
+	message = ndb.TextProperty()
+	sender = ndb.KeyProperty(kind='User')
+	message_photo = ndb.KeyProperty(kind='Picture')
+	message_blog = ndb.KeyProperty(kind='Blog')
+	message_group = ndb.KeyProperty(kind='Group')
+
 class Blog(Item): # Parent=User
 	title = ndb.StringProperty(required=True)
 	content = ndb.TextProperty(required=True)

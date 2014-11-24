@@ -80,6 +80,14 @@
     {%block signup_links%}  
     {%endblock%}
     <hr>
+
+    <div class="col-md-12 text-center">
+        <p>Ads</p>
+        <img src="/images/img_2.jpg"  height="90px" width="728px">
+    </div>
+    <div class="col-md-12 text-center">
+    <hr>
+</div>
     <h4>WPC Top 100 Photos</h4>
     <form role="form" method="post">
       <input type="hidden" name="photo_list" value="top_100">
@@ -94,6 +102,14 @@
     <div class="row">
       <hr>
     </div>
+
+    <div class="col-md-12 text-center">
+        <p>Ads</p>
+        <img src="/images/img_2.jpg"  height="90px" width="728px">
+    </div>
+    <div class="col-md-12 text-center">
+    <hr>
+</div>
     <div class="col-md-12">
       <h4>Photography Genre</h4>
     {%for pi_list in [('Advertising'), ('Aerial'), ('Architectural'), ('Astronomical'), ('Music'), ('Event'), ('Family'), ('Fashion'), ('Food'), ('Landscape'), ('Macro'), ('Medical'), ('Nude'), ('Photojournalism'), ('Scientific'), ('Sports'), ('Street'), ('Travel'), ('Underwater'), ('Vehicle'), ('Wedding'), ('Wildlife')]%}
@@ -138,6 +154,15 @@
     <div class="row">
       <hr>
     </div> -->
+     <hr>
+
+    <div class="col-md-12 text-center">
+        <p>Ads</p>
+        <img src="/images/img_2.jpg"  height="90px" width="728px">
+    </div>
+    <div class="col-md-12 text-center">
+    <hr>
+</div>
     <h4>Most Viewed Photos</h4>
     <form role="form" method="post">
       <input type="hidden" name="photo_list" value="most_viewed">
@@ -182,6 +207,23 @@
       <hr>
     </div>
     <div class="row">
+    </div>
+    <h4>Best WPC Score Photographers</h4>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 top_photos">
+    {%for fl in top_users%}
+        <div class="col-md-2">
+            <p>{{fl.name}}</p>
+            <img class="img-circle" src="{{fl.avatar_url}}" height="100px" alt="Profile image">
+            <a href="/{{fl.key.id()}}"><h5 style="color:black;"><em>{{fl.name}}<em></h5>
+            <img src="/fonts/Flags/{{fl.country}}.png" alt="country" width="40px"></a>
+            <h5 style="color:green"><em>#{{fl.wpc_score}}</em></h5>
+            <button type="button" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-picture" style="color:white;"></span></button>
+            <button type="button" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
+        </div><!-- /.col-lg-4 -->
+   {%endfor%}
+    </div>
+    <div class="row">
+      <hr>
     </div>
     <h4>Most liked Photos</h4>
     <form role="form" method="post">

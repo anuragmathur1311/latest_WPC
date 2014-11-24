@@ -41,28 +41,12 @@ Home | WPC
 			  <ul class="dropdown-menu">
 				  <li>
 					<div class="messages_container">
-					  <a href=""><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5>
-					  <p>Photographer added new Photos</p></a>
-
-					  <hr class="horizontal-line">
-					  <a href=""><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5>
-					  <p>Your photo is used by Photographer in his blog/forum/group XYZ</p></a>
-					  
-					  <hr class="horizontal-line">
-					  <a href=""><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5>
-					  <p>Photographer Commented on your photo</p></a>
-
-					  <hr class="horizontal-line">
-					  <a href=""><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5>
-					  <p>Photographer added new Photos</p></a>
-
-					  <hr class="horizontal-line">
-					  <a href=""><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5>
-					  <p>Your photo is used by Photographer in his blog/forum/group XYZ</p></a>
-					  
-					  <hr class="horizontal-line">
-					  <a href=""><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5>
-					  <p>Photographer Commented on your photo</p></a>
+					  {%for m in messages%}
+						  <a href=""><h5 style="color:green;"><img src="{{get_serving_url(m.message_photo.get().blobKey)}}" alt="Profile Image" class="img-circle" width="25px"> <em>{{m.sender.get().name}}</em></h5>
+						  <p>{{m.message}}</p></a>
+						  <p>{{m.updated.strftime("%c")}}</p>
+						  <hr class="horizontal-line">
+					  {%endfor%}
 					</div>
 				  </li>
 			  </ul>

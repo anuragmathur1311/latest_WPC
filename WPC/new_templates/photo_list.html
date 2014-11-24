@@ -72,7 +72,11 @@
         {%if loop.index % 5 == 0%}
          <div class="item">
 	        <div class="item">
-	          <img src="/images/img_2.jpg" alt="Ad" style="margin:300px;text-align:center;"/>
+	        	<div style="margin:200px;" >
+	          <img src="/images/img_2.jpg" height="250px" width="300px">
+	          <img src="/images/img_2.jpg" height="250px" width="300px">
+	          <img src="/images/img_2.jpg" height="250px" width="300px">
+	      </div>
 	          <div class="container">
 	            <div class="carousel-caption">
 					<div class="navbar-wrapper">
@@ -80,7 +84,7 @@
 						<div class="navbar navbar-transparent navbar-static-top padding-top" role="navigation">
 						  <div class="container">
 							<div class="navbar-header">
-							  <a class="navbar-brand" href="#" style="color:white"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="20px">AD</a>
+							  <a class="navbar-brand" href="#" style="color:white">ADs</a>
 							</div>
 							<div class="navbar-collapse collapse">
 							  <ul class="nav navbar-nav">
@@ -103,6 +107,14 @@
 
 <h1 style="text-align:center;">{{list_name}}</h1>
 <hr>
+
+    <div class="col-md-12 text-center">
+        <p>Ads</p>
+        <img src="/images/img_2.jpg"  height="90px" width="728px">
+    </div>
+    <div class="col-md-12 text-center">
+    <hr>
+</div>
 <div class="row" >
 		{%for p in photos%}
         {% else %}
@@ -283,6 +295,16 @@
 	      </div>
 	      {%endif%}
 	</div>
+
+	<hr>
+
+    <div class="col-md-12 text-center">
+        <p>Ads</p>
+        <img src="/images/img_2.jpg"  height="90px" width="728px">
+    </div>
+    <div class="col-md-12 text-center">
+    <hr>
+</div>
 {%endblock%}
 
 {%block javaScripts%}

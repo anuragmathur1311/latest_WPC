@@ -22,71 +22,49 @@ Home | WPC
 {%block signup_links%}  
 {%endblock%}
 {%block pageContent%}
-
-    <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-      	<div class="modal-dialog modal-lg">
-        	<div class="modal-content">
-          		<div class="modal-header">
-            		<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-            		<h4 class="modal-title">Invite Friends to join WPC</h4>
-          		</div>
-          		<div class="modal-body">
-              		<textarea class="textarea_no_border" name="title" cols="100" rows="2" placeholder="Enter Email Addresses seperated by commas" ></textarea><br>
-          		</div>
-          		<div class="modal-footer">
-            		<button type="button" class="btn btn-xs btn-primary">Send Invitations</button>  or
-            		<button type="button" class="btn btn-xs btn-primary"><i class="fa fa-facebook fa-1x"></i></button>
-           			<button type="button" class="btn btn-xs btn-primary"><i class="fa fa-google-plus fa-1x"></i></button>
-          		</div>
-        	</div>
-      	</div>
-    </div>
-	<div class="modal fade my_portfolios" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-lg">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-					<h4 class="modal-title">My Portfolios</h4>
-				</div>
-				<div class="col-md-3">
-					<a href=""><h4>All Photos</h4>  
-					<img src="http://localhost:8080/servephoto/Usy_-HJCX6Qwl0nIayd47g==" alt="Profile Image" class="img-rounded" width="140px"></a><br>
-					<div class="button-container post-action padding_top">
-						<form method="post">
-							<input type="hidden" name="actionType" value="delete">
-							<input type="hidden" name="photoKey" value="">
-							<button class="btn btn-primary btn-xs" type="submit" value="Delete"><span class="glyphicon glyphicon-trash" style="color:white;"></span></button>
-						</form>
-						<form method="post">
-							<input type="hidden" name="actionType" value="share">
-							<input type="hidden" name="photoKey" value="">
-							<button class="btn btn-primary btn-xs" type="submit" value="Delete"><i class="fa fa-share fa-1x"></i></button>
-						</form>
-						<form method="post">
-							<input type="hidden" name="actionType" value="download">
-							<input type="hidden" name="photoKey" value="">
-							<button class="btn btn-primary btn-xs" type="submit" value="Delete"><i class="fa fa-download fa-1x"></i></button>
-						</form>
-					</div>
-				</div>
-				<div class="modal-footer">
-				</div>
-			</div>
-		</div>
-	</div>
-    <br><br>
-     <div class="col-md-2 padding-top">
- 		<a class="navbar-brand" href="/{{me.key.id()}}"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="20px"> {{me.name}}</a>
- 	</div>
+<br><br>
+     <div class="col-md-2 padding-top" style="text-align:center;">
+ 		<a class="navbar-brand" href="/{{me.key.id()}}"><img src="{{me.avatar_url}}" alt="Profile Image" class="img-circle" width="35px"> {{me.name}}<br>
+            {%if me.phone_num%}
+                <p>{{me.phone_num}}</p>
+            {%endif%}
+        <img src="/fonts/Flags/{{me.country}}.png" alt="country" width="40px"></a>
+    </div>	
  	<div class="row col-md-8 padding-top">
-      <form class="forum_ques" role="form" method="post">
+      		<form method="post">
               <div class="input-group">
-                <input type="text" class="form-control" placeholder="What are you clicking right now?">
+              	<input type="hidden" name="actionType" value="update_status">
+                <input type="text" class="form-control" name="update_status" placeholder="What are you clicking right now?">
                 <div class="input-group-btn">
-                  <button type="button" class="btn btn-success"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
+                  <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
                 </div><!-- /btn-group -->
               </div><!-- /input-group -->
-      </form><br>
+             </form>
+             <h4 style="color:green;font-family:arial;"><em>"{{me.status}}"</em></h4>
+             <br>
+    </div>
+    <div class="col-md-2 padding-top">
+        {%if me.wpc_score<=5000%}
+        <i class="fa fa-star" style="color:gold;"></i><i class="fa fa-star" style="color:gray;"></i><i class="fa fa-star" style="color:gray;"></i><i class="fa fa-star" style="color:gray;"></i><i class="fa fa-star" style="color:gray;"></i>
+        <h2 style="margin-top:0px"><em>{{me.wpc_score}}</em></h2>
+            <button type="submit" class="btn btn-danger">Beginner Photographer</button><br>
+        {%elif me.wpc_score>5000 or me.wpc_score<=10000%}
+        <i class="fa fa-star" style="color:gold;"></i><i class="fa fa-star" style="color:gold;"></i><i class="fa fa-star" style="color:gray;"></i><i class="fa fa-star" style="color:gray;"></i><i class="fa fa-star" style="color:gray;"></i>
+        <h2 style="margin-top:0px"><em>{{me.wpc_score}}</em></h2>
+            <button type="submit" class="btn btn-danger">Amateur Photographer</button><br>
+        {%elif me.wpc_score>10000 or me.wpc_score<=20000%}
+        <i class="fa fa-star" style="color:gold;"></i><i class="fa fa-star" style="color:gold;"></i><i class="fa fa-star" style="color:gold;"></i><i class="fa fa-star" style="color:gray;"></i><i class="fa fa-star" style="color:gray;"></i>
+        <h2 style="margin-top:0px"><em>{{me.wpc_score}}</em></h2>
+            <button type="submit" class="btn btn-danger">Semi-Pro Photographer</button><br>
+        {%elif me.wpc_score>20000 or me.wpc_score<=25000%}
+        <i class="fa fa-star" style="color:gold;"></i><i class="fa fa-star" style="color:gold;"></i><i class="fa fa-star" style="color:gold;"></i><i class="fa fa-star" style="color:gold;"></i><i class="fa fa-star" style="color:gray;"></i>
+        <h2 style="margin-top:0px"><em>{{me.wpc_score}}</em></h2>
+            <button type="submit" class="btn btn-danger">Professional Photographer</button><br>
+        {%elif me.wpc_score>25000%}
+        <i class="fa fa-star" style="color:gold;"></i><i class="fa fa-star" style="color:gold;"></i><i class="fa fa-star" style="color:gold;"></i><i class="fa fa-star" style="color:gold;"></i><i class="fa fa-star" style="color:gold;"></i>
+        <h2 style="margin-top:0px"><em>{{me.wpc_score}}</em></h2>
+            <button type="submit" class="btn btn-danger">Master Photographer</button><br>
+        {% endif %}
     </div>
 	<div class="" id="main">
 		<div class="row">   
@@ -95,94 +73,186 @@ Home | WPC
 
 		<div class="col-md-8 col-sm-8 col-xs-8">
 			<h1 style="text-align:center;">My Feed</h1>
-				<div class="col-md-6 col-sm-6 col-xs-12">
-					<div class="card">
-						<div class="panel-thumbnail"><img src="/images/Artist_1.jpg" class="img-responsive"></div>
-						<p><a href="my_studio.html" style="color:black;"></a></p>
-						<button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-picture" style="color:white;"></span></button>
-						<button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-thumbs-up" style="color:white;"></span></button>
-						<button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-plus-sign" style="color:white;"></span></button>
-						<button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-pushpin" style="color:white;"></span></button>
-						<div class="panel-body">
-							<p class="lead">Photographer added new Photos</p>
-							<a><h5 style="color:black;">Go to Photographer Photos</h5></a>
-						</div>
-					</div>
 
-					<hr>
-					
+			<div class="col-md-6 col-sm-6 col-xs-12">
+				{%for m in messages%}
+				{%if loop.index % 2 == 1%}	
 					<div class="card">
-						<div class="panel-thumbnail"><img src="/images/AnuragMathur.jpg" class="img-responsive"></div>
+						{%if m.message_type == 1 or m.message_type == 4 or m.message_type == 5 or m.message_type == 6 or m.message_type == 7%}
+							<a href="/photo/{{m.message_photo.get().key.urlsafe()}}"><div class="panel-thumbnail"><img src="{{get_serving_url(m.message_photo.get().blobKey)}}" class="img-responsive"></div></a>
+						{%elif m.message_type == 2%}
+							<div class="panel-thumbnail"><img src="{{m.message_blog.get().cover}}" class="img-responsive"></div>
+						{%elif m.message_type == 3%}
+							<div class="panel-thumbnail"><img src="{{m.message_group.get().cover_photo}}" class="img-responsive"></div>
+						{%endif%}
 						<p><a href="my_studio.html" style="color:black;"></a></p>
-						<button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-picture" style="color:white;"></span></button>
-						<button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-thumbs-up" style="color:white;"></span></button>
-						<button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-plus-sign" style="color:white;"></span></button>
-						<button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-pushpin" style="color:white;"></span></button>
+						<button type="button" class="btn btn-success btn-xs photographer_options" title="Go to {{m.sender.get().name}}'s photos"><span class="glyphicon glyphicon-picture" style="color:white;"></span></button>
+						<button type="button" class="btn btn-info btn-xs photographer_options" title="Like this postcard"><span class="glyphicon glyphicon-thumbs-up" style="color:white;"></span></button>
+						<button type="button" class="btn btn-success btn-xs photographer_options" title="Add {{m.sender.get().name}} to ideabook"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
+						<p>{{m.likes}} <i class="fa fa-thumbs-o-up fa-1x"></i> | {{m.updated.strftime("%c")}}</p>
 						<div class="panel-body">
-							<p class="lead">Your photo is used by Photographer in his blog/forum/group XYZ</p>
-							<input type="text" class="form-control" placeholder="Add a comment..">
+							{%if m.message_type == 1%}
+								<p><em style="color:blue">{{m.sender.get().name}}</em> added new Photos</p>
+							{%elif m.message_type == 2%}
+								<p><em style="color:blue">{{m.sender.get().name}}</em> added new Blog</p>
+								<a href="/blog/{{m.message_blog.get().key.urlsafe()}}"><h3 style="color:black;">{{m.message_blog.get().title}}</h3></a>
+							{%elif m.message_type == 3%}
+								<p><em style="color:blue">{{m.sender.get().name}}</em> added new Group</p>
+								<a href="/group/{{m.message_group.get().key.urlsafe()}}"><h3 style="color:black;">{{m.message_group.get().name}}</h3>
+								<p>{{m.message_group.get().description}}</p>	
+								</a>
+							{%elif m.message_type == 4%}
+								<p><em style="color:blue">{{m.sender.get().name}}</em> sent you a personal message</p>
+								<p class="lead">{{m.message}}</p>
+							{%elif m.message_type == 5%}
+								<p><em style="color:blue">{{m.sender.get().name}}</em> has given you an Award</p>
+								{%if m.message == 'Simply_Awesome'%}
+				                  {% set award_name =  'Simply Awesome'%}
+				                {%elif m.message == 'Jaw_Dropping'%}
+				                  {% set award_name =  'Jaw Dropping'%}
+				                {%elif m.message == 'World_Class'%}
+				                  {% set award_name =  'World Class'%}
+				                {%elif m.message == 'Beautiful_Composition'%}
+				                  {% set award_name =  'Beautiful Composition'%}
+				                {%elif m.message == 'Piece_of_Art'%}
+				                  {% set award_name =  'Piece of Art'%}
+				                {%elif m.message == 'Truly_Inspirational'%}
+				                  {% set award_name =  'Truly Inspirational'%}
+				                {%endif%}
+								<div><i style="color:gold;" class="fa fa-trophy fa-2x"></i>
+                      			<h5>{{award_name}}</h5></div>
+                      		{%elif m.message_type == 6%}
+								<p><em style="color:blue">{{m.sender.get().name}}</em> has given your photo <span style="color:blue;">{{m.message_photo.get().caption}}</span> an Award</p>
+								{%if m.message == 'Simply_Awesome'%}
+				                  {% set award_name =  'Simply Awesome'%}
+				                {%elif m.message == 'Jaw_Dropping'%}
+				                  {% set award_name =  'Jaw Dropping'%}
+				                {%elif m.message == 'World_Class'%}
+				                  {% set award_name =  'World Class'%}
+				                {%elif m.message == 'Beautiful_Composition'%}
+				                  {% set award_name =  'Beautiful Composition'%}
+				                {%elif m.message == 'Piece_of_Art'%}
+				                  {% set award_name =  'Piece of Art'%}
+				                {%elif m.message == 'Truly_Inspirational'%}
+				                  {% set award_name =  'Truly Inspirational'%}
+				                {%endif%}
+								<div><i style="color:gold;" class="fa fa-trophy fa-2x"></i>
+                      			<h5>{{award_name}}</h5></div>
+                      		{%elif m.message_type == 7%}
+								<p><em  style="color:blue">{{m.sender.get().name}}</em> updated his status</p>
+								<p class="lead">{{m.message}}</p>		
+							{%endif%}
 						</div>
 					</div>
-					
 					<hr>
-				</div><!--/col-->
+				{%endif%}
+				{%endfor%}
+			</div><!--/col-->
 
-				<div class="col-md-6 col-sm-6 col-xs-12">
+			<div class="col-md-6 col-sm-6 col-xs-12">
+				{%for m in messages%}
+				{%if loop.index % 2 == 0%}
 					<div class="card">
-						<div class="panel-thumbnail"><img src="/images/Artists_2.jpg" class="img-responsive"></div>
+						{%if m.message_type == 1 or m.message_type == 4 or m.message_type == 5 or m.message_type == 6 or m.message_type == 7%}
+							<a href="/photo/{{m.message_photo.get().key.urlsafe()}}"><div class="panel-thumbnail"><img src="{{get_serving_url(m.message_photo.get().blobKey)}}" class="img-responsive"></div></a>
+						{%elif m.message_type == 2%}
+							<div class="panel-thumbnail"><img src="{{m.message_blog.get().cover}}" class="img-responsive"></div>
+						{%elif m.message_type == 3%}
+							<div class="panel-thumbnail"><img src="{{m.message_group.get().cover_photo}}" class="img-responsive"></div>
+						{%endif%}
 						<p><a href="my_studio.html" style="color:black;"></a></p>
-						<button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-picture" style="color:white;"></span></button>
-						<button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-thumbs-up" style="color:white;"></span></button>
-						<button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-plus-sign" style="color:white;"></span></button>
-						<button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-pushpin" style="color:white;"></span></button>
+						<button type="button" class="btn btn-success btn-xs photographer_options" title="Go to {{m.sender.get().name}}'s photos"><span class="glyphicon glyphicon-picture" style="color:white;"></span></button>
+						<button type="button" class="btn btn-info btn-xs photographer_options" title="Like this postcard"><span class="glyphicon glyphicon-thumbs-up" style="color:white;"></span></button>
+						<button type="button" class="btn btn-success btn-xs photographer_options" title="Add {{m.sender.get().name}} to ideabook"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
+						<p>{{m.likes}} <i class="fa fa-thumbs-o-up fa-1x"></i> | {{m.updated.strftime("%c")}}</p>
 						<div class="panel-body">
-							<p class="lead">Photographer Commented on your photo</p>
-							<input type="text" class="form-control" placeholder="Reply..">
+							{%if m.message_type == 1%}
+								<p><em  style="color:blue">{{m.sender.get().name}}</em> added new Photos</p>
+							{%elif m.message_type == 2%}
+								<p><em  style="color:blue">{{m.sender.get().name}}</em> added new Blog</p>
+								<a href="/blog/{{m.message_blog.get().key.urlsafe()}}"><h3 style="color:black;">{{m.message_blog.get().title}}</h3></a>
+							{%elif m.message_type == 3%}
+								<p><em  style="color:blue">{{m.sender.get().name}}</em> added new Group</p>
+								<a href="/group/{{m.message_group.get().key.urlsafe()}}"><h3 style="color:black;">{{m.message_group.get().name}}</h3>
+								<p>{{m.message_group.get().description}}</p>	
+								</a>
+							{%elif m.message_type == 4%}
+								<p><em  style="color:blue">{{m.sender.get().name}}</em> sent you a personal message</p>
+								<p class="lead">{{m.message}}</p>
+							{%elif m.message_type == 5%}
+								<p><em style="color:blue">{{m.sender.get().name}}</em> has given you an Award</p>
+								{%if m.message == 'Simply_Awesome'%}
+				                  {% set award_name =  'Simply Awesome'%}
+				                {%elif m.message == 'Jaw_Dropping'%}
+				                  {% set award_name =  'Jaw Dropping'%}
+				                {%elif m.message == 'World_Class'%}
+				                  {% set award_name =  'World Class'%}
+				                {%elif m.message == 'Beautiful_Composition'%}
+				                  {% set award_name =  'Beautiful Composition'%}
+				                {%elif m.message == 'Piece_of_Art'%}
+				                  {% set award_name =  'Piece of Art'%}
+				                {%elif m.message == 'Truly_Inspirational'%}
+				                  {% set award_name =  'Truly Inspirational'%}
+				                {%endif%}
+								<div><i style="color:gold;" class="fa fa-trophy fa-2x"></i>
+                      			<h5>{{award_name}}</h5></div>	
+                      		{%elif m.message_type == 6%}
+								<p><em style="color:blue">{{m.sender.get().name}}</em> has given your photo <span style="color:blue;">{{m.message_photo.get().caption}}</span> an Award</p>
+								{%if m.message == 'Simply_Awesome'%}
+				                  {% set award_name =  'Simply Awesome'%}
+				                {%elif m.message == 'Jaw_Dropping'%}
+				                  {% set award_name =  'Jaw Dropping'%}
+				                {%elif m.message == 'World_Class'%}
+				                  {% set award_name =  'World Class'%}
+				                {%elif m.message == 'Beautiful_Composition'%}
+				                  {% set award_name =  'Beautiful Composition'%}
+				                {%elif m.message == 'Piece_of_Art'%}
+				                  {% set award_name =  'Piece of Art'%}
+				                {%elif m.message == 'Truly_Inspirational'%}
+				                  {% set award_name =  'Truly Inspirational'%}
+				                {%endif%}
+								<div><i style="color:gold;" class="fa fa-trophy fa-2x"></i>
+                      			<h5>{{award_name}}</h5></div>	
+                      		{%elif m.message_type == 7%}
+								<p><em  style="color:blue">{{m.sender.get().name}}</em> updated his status</p>
+								<p class="lead">{{m.message}}</p>	
+							{%endif%}
 						</div>
 					</div>
 					<hr>
-					<div class="card">
-						<div class="panel-thumbnail"><img src="/images/Brooklyn_Bridge.jpg" class="img-responsive"></div>
-						<p><a href="my_studio.html" style="color:black;"></a></p>
-						<button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-picture" style="color:white;"></span></button>
-						<button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-thumbs-up" style="color:white;"></span></button>
-						<button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-plus-sign" style="color:white;"></span></button>
-						<button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-pushpin" style="color:white;"></span></button>
-						<div class="panel-body">
-						<p class="lead">Photographer has sent you a private message</p>
-							<h4><em>Hi ! How are you??</em></h4>
-							<input type="text" class="form-control" placeholder="Reply..">
-						</div>
-					</div>
-					<hr>
-				</div><!--/col-->
+				{%endif%}
+				{%endfor%}
+			</div><!--/col-->
 		</div>
 
-		<div class="col-md-2 col-md-offset-2 col-sm-2 col-sm-offset-2 col-xs-2">
+		<div class="col-md-3 col-md-offset-1 col-sm-2 col-sm-offset-2 col-xs-2">
 
+			<div class="col-md-10 col-md-offset-1 col-sm-2 col-sm-offset-2 col-xs-2">
 			<p>Ads</p>
-			<img src="/images/img_2.jpg" class="img-responsive">
+			<img src="/images/img_2.jpg"  height="250px" width="300px">
 			<p><a href="my_studio.html" style="color:black;"></a></p>
 
-			<img src="/images/img_2.jpg" class="img-responsive">
+			<img src="/images/img_2.jpg"  height="250px" width="300px">
 			<p><a href="my_studio.html" style="color:black;"></a></p>
 
-			<img src="/images/img_2.jpg" class="img-responsive">
+			<img src="/images/img_2.jpg"  height="250px" width="300px">
 			<p><a href="my_studio.html" style="color:black;"></a></p>
-
-			<hr>
-			<p>My Groups</p>
-			<img src="/images/AnuragMathur-2.jpg" class="img-responsive">
-			<p><a href="my_studio.html" style="color:black;">New York City Photographs</a></p>
-
-			<img src="/images/Overload.jpg" class="img-responsive">
-			<p><a href="my_studio.html" style="color:black;">Delhi Streets</a></p>
-
-			<img src="/images/Brooklyn_Bridge.jpg" class="img-responsive">
-			<p><a href="my_studio.html" style="color:black;">Beautiful Bridges</a></p>
-			<a style="text-align:center;"><p>Show All</p></a>
+		</div>
 			<hr>
 			
+			<div class="col-md-9 col-md-offset-3 col-sm-2 col-sm-offset-2 col-xs-2">
+				<p>My Groups</p>
+			{%for b in me.groups%}
+				{%if loop.index <= 5%}
+					<a href="/group/{{b.urlsafe()}}"><img src="{{b.get().cover_photo}}" class="img-responsive">
+					<p style="color:black;">{{b.get().name}}</p></a>
+				{%endif%}
+			{%endfor%}
+			<a href="/{{me.key.id()}}/groups" style="text-align:center;"><p>Show All</p></a>
+			<hr>
+			</div>
+
+			<div class="col-md-9 col-md-offset-3 col-sm-2 col-sm-offset-2 col-xs-2">
 			<p>Suggestions</p>
 			<img src="/images/img_2.jpg" class="img-responsive">
 			<p><a href="my_studio.html" style="color:black;"></a></p>
@@ -192,7 +262,10 @@ Home | WPC
 
 			<img src="/images/img_2.jpg" class="img-responsive">
 			<p><a href="my_studio.html" style="color:black;"></a></p>
+			</div>
 			<hr>
+
+			<div class="col-md-9 col-md-offset-3 col-sm-2 col-sm-offset-2 col-xs-2">
 			<p>Trending Photographers</p>
 			<img src="/images/img_2.jpg" class="profile-img" width="100%">
 			<p><a href="my_studio.html" style="color:black;"></a></p>
@@ -202,8 +275,17 @@ Home | WPC
 
 			<img src="/images/img_2.jpg" class="profile-img" width="100%">
 			<p><a href="my_studio.html" style="color:black;"></a></p>
+			</div>
 		</div><!--/col-->  
 	</div>
+ <hr>
 
+    <div class="col-md-12 text-center">
+        <p>Ads</p>
+        <img src="/images/img_2.jpg"  height="90px" width="728px">
+    </div>
+    <div class="col-md-12 text-center">
+    <hr>
+</div>
 {%endblock%}
 		

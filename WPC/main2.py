@@ -97,9 +97,14 @@ class MainHandler(PageHandler):
 		else:
 			templateVals = {'me': self.user}
 			qry = Picture.query()
+			qry2 = Messages.query(ancestor=self.user.key)
 			qry1 = qry.order(-Picture.viewed)
 			most_viewed = qry1.fetch(100)
+			messages = qry2.fetch()
 			templateVals['most_viewed'] = most_viewed
+			templateVals['messages'] = messages
+			print "in index user"
+			print messages
 			self.render('index_user.html', **templateVals)
 
 class UserHomeHandler(PageHandler):
@@ -107,9 +112,32 @@ class UserHomeHandler(PageHandler):
 		#userid = str(urllib.unquote(resource))
 		if self.user:
 			templateVals = {'me': self.user}
+			qry2 = Messages.query(ancestor=self.user.key).order(-Messages.created)
+			messages = qry2.fetch()
+			templateVals['messages'] = messages
 			self.render('user_home.html', **templateVals)
 		else:
 			self.redirect('/')
+
+	def post(self):
+		if self.user:
+			templateVals = {'me': self.user}
+			qry2 = Messages.query(ancestor=self.user.key).order(-Messages.created)
+			messages = qry2.fetch()
+			templateVals['messages'] = messages
+			action = self.request.get('actionType')
+			if action == 'update_status':
+				update_status = self.request.get('update_status')
+				self.user.status = update_status
+				self.user.put()
+				blog = create_blog("", "", "", self.user.key)
+				resultphotoList = []
+				group = create_group("", "", "", resultphotoList, self.user.key)
+				message_type = 7
+				for f in self.user.followers:
+					create_message(message_type, update_status, self.user.key, self.user.avatar, blog.key, None, f.get().key)
+			self.render('user_home.html', **templateVals)
+
 
 class UserSettingsHandler(blobstore_handlers.BlobstoreUploadHandler, PageHandler):
 	def get(self):
@@ -166,10 +194,12 @@ class SearchResultsHandler(PageHandler):           ## TODO
 		else:
 			templateVals = {'me': self.user}
 		search_string = self.request.get('search_string')
+		search_string_lower = search_string.lower()
+		search_string_upper = search_string.upper()
 		photos_qry = Picture.query(ndb.OR(Picture.caption == search_string, Picture.tags == search_string, Picture.albums == search_string)).order(-Picture.viewed)
 		blogs_qry = Blog.query(Blog.title == search_string)
 		groups_qry = Group.query(Group.name == search_string)
-		users_qry = User.query(ndb.OR(User.name == search_string, User.wpc_name == search_string, User.email == search_string, User.photography_interests == search_string))
+		users_qry = User.query(ndb.OR(User.name == search_string, User.name == search_string_lower, User.name == search_string_upper, User.wpc_name == search_string, User.email == search_string, User.photography_interests == search_string))
 
 		photos = photos_qry.fetch(100)
 		blogs = blogs_qry.fetch(100)
@@ -223,19 +253,23 @@ class PhotosHandler(PageHandler):
 		else:
 			templateVals = {'me': self.user}
 		qry = Picture.query()
+		qry_p = User.query()
 		qry1 = qry.order(-Picture.viewed)
 		qry2 = qry.order(-Picture.awards)
 		qry3 = qry.order(-Picture.likes)
 		qry4 = qry1
 		qry5 = qry.order(-Picture.tags)
+		qry6 = qry_p.order(-User.wpc_score)
 		
-		most_viewed = qry1.fetch()
-		top_100 = qry2.fetch()
-		most_liked = qry3.fetch()
-		recommended = qry4.fetch()
+		most_viewed = qry1.fetch(250)
+		top_100 = qry2.fetch(100)
+		most_liked = qry3.fetch(250)
+		recommended = qry4.fetch(250)
 		tags = qry5.fetch()
+		top_users = qry6.fetch(6)
 
 		templateVals['top_100'] = top_100
+		templateVals['top_users'] = top_users
 		templateVals['most_viewed'] = most_viewed
 		templateVals['most_liked'] = most_liked
 		templateVals['recommended'] = recommended
@@ -437,12 +471,20 @@ class UserStudioHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler):
 			print "user != self.user"
 			form = self.request.get('formType')
 			action = self.request.get('actionType')
+			blog = create_blog("", "", "", self.user.key)
+			resultphotoList = []
+			group = create_group("", "", "", resultphotoList, self.user.key)
 			if form == "personal_message":
 				message = self.request.get('message')
+				message_type = 4
+				create_message(message_type, message, self.user.key, self.user.avatar, blog.key, group.key, user.key)
 			if form == "photography_awards":
 				photoAward = self.request.get_all('photoAward')
 				user.awards += photoAward
 				self.user.wpc_score += 100
+				message_type = 5
+				for a in photoAward:
+					create_message(message_type, a, self.user.key, self.user.avatar, blog.key, group.key, user.key)
 			if form == "follow":
 				user_key = self.request.get('user_key')
 				self_user_key = self.request.get('self_user_key')
@@ -684,6 +726,14 @@ class PortfolioPermpageHandler(PageHandler):
 			photoAward = self.request.get_all('photoAward')
 			user.awards += photoAward
 			user.put()
+			self.user.wpc_score += 100
+			self.user.put()
+			blog = create_blog("", "", "", self.user.key)
+			resultphotoList = []
+			group = create_group("", "", "", resultphotoList, self.user.key)
+			message_type = 5
+			for a in photoAward:
+				create_message(message_type, a, self.user.key, self.user.avatar, blog.key, group.key, user.key)
 			self.render('portfolioperm.html', **templateVals)
 		if action == "select1":
 			cover1 = self.request.get('cover1Key')
@@ -836,6 +886,9 @@ class PhotoNewHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler):
 					description = descriptionList[i]
 					location = locationList[i]
 					photo = create_picture(blobInfo.key(), caption, description, location, self.user.key)
+				message_type = 1
+				for f in self.user.followers:
+					create_message(message_type, 'Photographer added new photos', self.user.key, photo.key, None, None, f.get().key)
 				self.redirect('/%s/photos' % self.user.key.id())
 			else:
 				uploadUrl = blobstore.create_upload_url('/newphoto')
@@ -940,6 +993,10 @@ class GroupNewHandler(PageHandler ,blobstore_handlers.BlobstoreUploadHandler):
 			resultphotoList += temp1
 			if name:
 				group = create_group(name, description, cover, resultphotoList, self.user.key)
+				message_type = 3
+				blog = create_blog("", "", "", self.user.key)
+				for f in self.user.followers:
+					create_message(message_type, 'Photographer added new Group', self.user.key, self.user.avatar, blog.key, group.key, f.get().key)
 				self.redirect('/group/%s' % group.key.urlsafe())
 			else:
 				errorMsg = "Please enter group's name!"
@@ -976,6 +1033,9 @@ class BlogNewHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler):
 				cover = images.get_serving_url(photo.blobKey)
 			if title and content:
 				blog = create_blog(title, content, cover, self.user.key)
+				message_type = 2
+				for f in self.user.followers:
+					create_message(message_type, 'Photographer added new Blog', self.user.key, self.user.avatar, blog.key, None, f.get().key)
 				self.redirect('/blog/%s' % blog.key.urlsafe())
 			else:
 				errorMsg = "Please enter both title and content!"
@@ -1156,6 +1216,12 @@ class PhotoPermpageHandler(PageHandler):
 				photo.put()
 				self.user.wpc_score += 100
 				self.user.put()
+				blog = create_blog("", "", "", self.user.key)
+				resultphotoList = []
+				group = create_group("", "", "", resultphotoList, self.user.key)
+				message_type = 6
+				for a in photoAward:
+					create_message(message_type, a, self.user.key, photo.key, blog.key, group.key, user.key)
 				self.render('photoperm.html', **templateVals)
 			elif action == "add_comment":
 				comment = self.request.get('comment')

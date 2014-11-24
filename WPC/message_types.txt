@@ -43,3 +43,11 @@ Suggested Posts
 6) upcoming events - M 
 7) Ads - M
 8) forum - M
+
+message#	type
+1			new photo to all followers
+2			new blog to all followers
+3			new group to all followers 
+4			personal message to user
+5			award to user
+6			award to photo
