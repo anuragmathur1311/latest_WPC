@@ -42,9 +42,63 @@ Home | WPC
 				  <li>
 					<div class="messages_container">
 					  {%for m in messages%}
-						  <a href=""><h5 style="color:green;"><img src="{{get_serving_url(m.message_photo.get().blobKey)}}" alt="Profile Image" class="img-circle" width="25px"> <em>{{m.sender.get().name}}</em></h5>
-						  <p>{{m.message}}</p></a>
-						  <p>{{m.updated.strftime("%c")}}</p>
+					  	{%if m.message_type == 1%}
+						  <h5 style="color:green;"><img src="{{m.sender.get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em><a href="/{{m.sender.get().key.id()}}">{{m.sender.get().name}}</a> <span style="color:black;">added new photos</span></em><p style="font-size:10px;">{{m.updated.strftime("%c")}}</p></h5>
+						  <a href="/{{m.sender.get().key.id()}}/photos"><p>Go to {{m.sender.get().name}} photos</p></a>
+						 {%endif%}
+						 {%if m.message_type == 2%}
+						  <h5 style="color:green;"><img src="{{m.sender.get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em><a href="/{{m.sender.get().key.id()}}">{{m.sender.get().name}}</a> <span style="color:black;">added a new blog</span></em><p style="font-size:10px;">{{m.updated.strftime("%c")}}</p></h5>
+						  <a href="/blog/{{m.message_blog.get().key.urlsafe()}}"><p>Go to blog "{{m.message_blog.get().title}}"</p><img src="{{m.message_blog.get().cover}}" class="img-responsive"></a>
+						 {%endif%}
+						 {%if m.message_type == 3%}
+						  <h5 style="color:green;"><img src="{{m.sender.get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em><a href="/{{m.sender.get().key.id()}}">{{m.sender.get().name}}</a> <span style="color:black;">added a new group</span></em><p style="font-size:10px;">{{m.updated.strftime("%c")}}</p></h5>
+						  <a href="/group/{{m.message_group.get().key.urlsafe()}}"><p>Go to group "{{m.message_group.get().name}}"</p><img src="{{m.message_group.get().cover_photo}}" class="img-responsive"></a>
+						 {%endif%}
+						 {%if m.message_type == 4%}
+						  <h5 style="color:green;"><img src="{{m.sender.get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em><a href="/{{m.sender.get().key.id()}}">{{m.sender.get().name}}</a> <span style="color:black;">sent you a private message</span></em><p style="font-size:10px;">{{m.updated.strftime("%c")}}</p></h5>
+						  <a href="/home"><p>"{{m.message}}"</p></a>
+						 {%endif%}
+						 {%if m.message_type == 5%}
+						  <h5 style="color:green;"><img src="{{m.sender.get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em><a href="/{{m.sender.get().key.id()}}">{{m.sender.get().name}}</a> <span style="color:black;"> has given you an Award</span></em><p style="font-size:10px;">{{m.updated.strftime("%c")}}</p></h5>
+						  		{%if m.message == 'Simply_Awesome'%}
+				                  {% set award_name =  'Simply Awesome'%}
+				                {%elif m.message == 'Jaw_Dropping'%}
+				                  {% set award_name =  'Jaw Dropping'%}
+				                {%elif m.message == 'World_Class'%}
+				                  {% set award_name =  'World Class'%}
+				                {%elif m.message == 'Beautiful_Composition'%}
+				                  {% set award_name =  'Beautiful Composition'%}
+				                {%elif m.message == 'Piece_of_Art'%}
+				                  {% set award_name =  'Piece of Art'%}
+				                {%elif m.message == 'Truly_Inspirational'%}
+				                  {% set award_name =  'Truly Inspirational'%}
+				                {%endif%}
+								<div><i style="color:gold;" class="fa fa-trophy fa-2x"></i>
+                      			<h5>{{award_name}}</h5></div>
+						 {%endif%}
+						 {%if m.message_type == 6%}
+						  <h5 style="color:green;"><img src="{{m.sender.get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em><a href="/{{m.sender.get().key.id()}}">{{m.sender.get().name}}</a> <span style="color:black;"> has given your photo <span style="color:blue;">{{m.message_photo.get().caption}}</span> an Award</span></em><p style="font-size:10px;">{{m.updated.strftime("%c")}}</p></h5>
+						  		{%if m.message == 'Simply_Awesome'%}
+				                  {% set award_name =  'Simply Awesome'%}
+				                {%elif m.message == 'Jaw_Dropping'%}
+				                  {% set award_name =  'Jaw Dropping'%}
+				                {%elif m.message == 'World_Class'%}
+				                  {% set award_name =  'World Class'%}
+				                {%elif m.message == 'Beautiful_Composition'%}
+				                  {% set award_name =  'Beautiful Composition'%}
+				                {%elif m.message == 'Piece_of_Art'%}
+				                  {% set award_name =  'Piece of Art'%}
+				                {%elif m.message == 'Truly_Inspirational'%}
+				                  {% set award_name =  'Truly Inspirational'%}
+				                {%endif%}
+								<div><i style="color:gold;" class="fa fa-trophy fa-2x"></i>
+                      			<h5>{{award_name}}</h5></div>
+                      			<a href="/photo/{{m.message_photo.get().key.urlsafe()}}"><div class="panel-thumbnail"><img src="{{get_serving_url(m.message_photo.get().blobKey)}}" class="img-responsive"></div></a>
+						 {%endif%}
+						  {%if m.message_type == 7%}
+						  <h5 style="color:green;"><img src="{{m.sender.get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em><a href="/{{m.sender.get().key.id()}}">{{m.sender.get().name}}</a> <span style="color:black;">liked your photo <span style="color:blue;">{{m.message_photo.get().caption}}</span></span></em><p style="font-size:10px;">{{m.updated.strftime("%c")}}</p></h5>
+						  <a href="/photo/{{m.message_photo.get().key.urlsafe()}}"><div class="panel-thumbnail"><img src="{{get_serving_url(m.message_photo.get().blobKey)}}" class="img-responsive"></div></a>
+						 {%endif%}
 						  <hr class="horizontal-line">
 					  {%endfor%}
 					</div>

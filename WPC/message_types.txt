@@ -51,3 +51,4 @@ message#	type
 4			personal message to user
 5			award to user
 6			award to photo
+7			like a photo

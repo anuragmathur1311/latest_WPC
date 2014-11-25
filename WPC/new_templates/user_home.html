@@ -237,19 +237,19 @@ Home | WPC
 
 			<img src="/images/img_2.jpg"  height="250px" width="300px">
 			<p><a href="my_studio.html" style="color:black;"></a></p>
-		</div>
+			</div>
 			<hr>
 			
 			<div class="col-md-9 col-md-offset-3 col-sm-2 col-sm-offset-2 col-xs-2">
 				<p>My Groups</p>
-			{%for b in me.groups%}
-				{%if loop.index <= 5%}
-					<a href="/group/{{b.urlsafe()}}"><img src="{{b.get().cover_photo}}" class="img-responsive">
-					<p style="color:black;">{{b.get().name}}</p></a>
-				{%endif%}
-			{%endfor%}
-			<a href="/{{me.key.id()}}/groups" style="text-align:center;"><p>Show All</p></a>
-			<hr>
+				{%for b in me.groups%}
+					{%if loop.index <= 5%}
+						<a href="/group/{{b.urlsafe()}}"><img src="{{b.get().cover_photo}}" class="img-responsive">
+						<p style="color:black;">{{b.get().name}}</p></a>
+					{%endif%}
+				{%endfor%}
+				<a href="/{{me.key.id()}}/groups" style="text-align:center;"><p>Show All</p></a>
+				<hr>
 			</div>
 
 			<div class="col-md-9 col-md-offset-3 col-sm-2 col-sm-offset-2 col-xs-2">
