@@ -8,7 +8,7 @@ Home | WPC
 
 {%block userNavLinks%}
 	<ul class="nav navbar-nav navbar-right" style="text-align:left;">
-		<li><a class="" href="/{{me.key.id()}}" style="color:yellow;font-size:20px;" ><em>{{me.name}}</em></a></li>
+		<li><a class="" href="/{{me.key.id()}}" title="Your WPC Score is #{{me.wpc_score}}" style="color:yellow;font-size:20px;" ><em>{{me.name}}</em></a></li>
 		<li><a href="/home"><span class="glyphicon glyphicon-home"></span></a></li>
 		<li><a href="/{{me.key.id()}}/photos"><span class="glyphicon glyphicon-picture"></span></a></li>
 		  <li>
@@ -17,7 +17,7 @@ Home | WPC
 				  <li><a href="/newphoto"><span class="glyphicon glyphicon-picture"></span> Photos</a></li>
 				  <li><a href="/newblog"><span class="glyphicon glyphicon-pencil"></span> Blog Post</a></li>
 				  <li><a href="/newgroup"><i class="fa fa-group"></i> Group</a></li>
-				  <li><a href="/forum"><span class="glyphicon glyphicon-bell"></span> A Question</a></li>
+				  <!--<li><a href="/forum"><span class="glyphicon glyphicon-bell"></span> A Question</a></li>-->
 				  <li><a href="/newportfolio"><i class="fa fa-camera"></i> Portfolio (1/3)</a></li>
 			  </ul>
 		  </li>
@@ -25,7 +25,7 @@ Home | WPC
 			  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span><b class="caret"></b></a>
 			  <ul class="dropdown-menu" role="menu">
 				  <li><a href="/{{me.key.id()}}/blogs"><span class="glyphicon glyphicon-pencil"></span> My Blogs</a></li>
-				  <li><a href="/{{me.key.id()}}/q&a"><span class="glyphicon glyphicon-bell"></span> My Questions</a></li>
+				  <!--<li><a href="/{{me.key.id()}}/q&a"><span class="glyphicon glyphicon-bell"></span> My Questions</a></li>-->
 				  <li><a href="/{{me.key.id()}}/groups"><i class="fa fa-group"></i> My Groups</a></li>
 				  <li><a href="/{{me.key.id()}}/ideabook"><span class="glyphicon glyphicon-heart-empty"></span> My Ideabook</a></li>
 				  <li><a href="/{{me.key.id()}}/portfolios"><span class="glyphicon glyphicon-camera"></span> My Portfolios</a></li>
@@ -37,10 +37,12 @@ Home | WPC
 			  </ul>
 		  </li>
 		  <li class="dropdown">
-			  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-envelope"></span><b class="caret"></b><span class="badge pull-right">42</span></a>
+			  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-envelope"></span><b class="caret"></b><span class="badge pull-right">{{len(messages)}}</span></a>
 			  <ul class="dropdown-menu">
 				  <li>
 					<div class="messages_container">
+						<h3 style="color:gray;">Notifications</h2>
+						<hr>
 					  {%for m in messages%}
 					  	{%if m.message_type == 1%}
 						  <h5 style="color:green;"><img src="{{m.sender.get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em><a href="/{{m.sender.get().key.id()}}">{{m.sender.get().name}}</a> <span style="color:black;">added new photos</span></em><p style="font-size:10px;">{{m.updated.strftime("%c")}}</p></h5>
@@ -99,7 +101,18 @@ Home | WPC
 						  <h5 style="color:green;"><img src="{{m.sender.get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em><a href="/{{m.sender.get().key.id()}}">{{m.sender.get().name}}</a> <span style="color:black;">liked your photo <span style="color:blue;">{{m.message_photo.get().caption}}</span></span></em><p style="font-size:10px;">{{m.updated.strftime("%c")}}</p></h5>
 						  <a href="/photo/{{m.message_photo.get().key.urlsafe()}}"><div class="panel-thumbnail"><img src="{{get_serving_url(m.message_photo.get().blobKey)}}" class="img-responsive"></div></a>
 						 {%endif%}
-						  <hr class="horizontal-line">
+						  {%if m.message_type == 8%}
+						  <h5 style="color:green;"><img src="{{m.sender.get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em><a href="/{{m.sender.get().key.id()}}">{{m.sender.get().name}}</a> <span style="color:black;"> is following you</span></em><p style="font-size:10px;">{{m.updated.strftime("%c")}}</p></h5>
+						 {%endif%}
+						  {%if m.message_type == 9%}
+						  <h5 style="color:green;"><img src="{{m.sender.get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em><a href="/{{m.sender.get().key.id()}}">{{m.sender.get().name}}</a> <span style="color:black;"> joined your group {{m.message_group.get().name}}</span></em><p style="font-size:10px;">{{m.updated.strftime("%c")}}</p></h5>
+						   <a href="/group/{{m.message_group.get().key.urlsafe()}}"><p>Go to group "{{m.message_group.get().name}}"</p><img src="{{m.message_group.get().cover_photo}}" class="img-responsive"></a>
+						 {%endif%}
+						 {%if m.message_type == 10%}
+						  <h5 style="color:green;"><img src="{{m.sender.get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em><a href="/{{m.sender.get().key.id()}}">{{m.sender.get().name}}</a> <span style="color:black;"> liked your blog {{m.message_blog.get().title}}</span></em><p style="font-size:10px;">{{m.updated.strftime("%c")}}</p></h5>
+						   <a href="/blog/{{m.message_blog.get().key.urlsafe()}}"><p>Go to blog "{{m.message_blog.get().title}}"</p><img src="{{m.message_blog.get().cover}}" class="img-responsive"></a>
+						 {%endif%}
+						  <hr>
 					  {%endfor%}
 					</div>
 				  </li>

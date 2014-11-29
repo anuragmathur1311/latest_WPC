@@ -52,7 +52,7 @@ Upload Photos | WPC
 				        <ul class="dropdown-menu dropdown-menu-right" role="menu">
 						{%for p in photos%}
 								{%for albums in p.albums%}
-									<<li><a href="#">{{albums}}</a></li>
+									<li><a href="#">{{albums}}</a></li>
 								{%endfor%}
 						{%endfor%}
 				        </ul>
@@ -66,10 +66,9 @@ Upload Photos | WPC
 				      <div class="input-group-btn">
 				        <button type="button" class="btn btn-default	 dropdown-toggle" data-toggle="dropdown">Existing Locations <span class="caret"></span></button>
 				        <ul class="dropdown-menu dropdown-menu-right" role="menu">
-				          <li><a href="#">Location 1</a></li>
-				          <li><a href="#">Location 2</a></li>
-				          <li><a href="#">Location 3</a></li>
-				          <li><a href="#">Location 4</a></li>
+				         {%for p in photos%}
+								<li><a href="#">{{p.location}}</a></li>
+						{%endfor%}
 				        </ul>
 				      </div><!-- /btn-group -->
 				    </div><!-- /input-group -->
@@ -79,11 +78,11 @@ Upload Photos | WPC
 				    <div class="input-group">
 				      <input type="text" class="form-control"  placeholder="Add New Tag">
 				      <div class="input-group-btn">
-				        <button type="button" class="btn btn-default	 dropdown-toggle" data-toggle="dropdown">Existing Tags <span class="caret"></span></button>
+				        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Existing Tags <span class="caret"></span></button>
 				        <ul class="dropdown-menu dropdown-menu-right" role="menu">
 						{%for p in photos%}
 								{%for tags in p.tags%}
-									<<li><a href="#">{{tags}}</a></li>
+									<li><a href="#">{{tags}}</a></li>
 								{%endfor%}
 						{%endfor%}
 				        </ul>

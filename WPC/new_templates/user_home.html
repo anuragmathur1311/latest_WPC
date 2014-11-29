@@ -76,6 +76,7 @@ Home | WPC
 
 			<div class="col-md-6 col-sm-6 col-xs-12">
 				{%for m in messages%}
+				{%if  m.message_type <=7 %}
 				{%if loop.index % 2 == 1%}	
 					<div class="card">
 						{%if m.message_type == 1 or m.message_type == 4 or m.message_type == 5 or m.message_type == 6 or m.message_type == 7%}
@@ -140,17 +141,32 @@ Home | WPC
                       			<h5>{{award_name}}</h5></div>
                       		{%elif m.message_type == 7%}
 								<p><em  style="color:blue">{{m.sender.get().name}}</em> updated his status</p>
-								<p class="lead">{{m.message}}</p>		
+								<p class="lead">{{m.message}}</p>
+								    <form method="post">
+						              	<div class="input-group">
+						              		<input type="hidden" name="actionType" value="comment">
+							              	<input type="hidden" name="messageKey" value="{{m.key.urlsafe()}}">
+							                <input type="text" class="form-control" name="comment" placeholder="Comment...">
+						                <div class="input-group-btn">
+						                	<button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
+						                </div><!-- /btn-group -->
+						              	</div><!-- /input-group -->
+						            </form>
+						            {%for c in m.comments%}
+										<p>{{c}}</p>
+									{%endfor%}
 							{%endif%}
 						</div>
 					</div>
 					<hr>
+				{%endif%}
 				{%endif%}
 				{%endfor%}
 			</div><!--/col-->
 
 			<div class="col-md-6 col-sm-6 col-xs-12">
 				{%for m in messages%}
+				{%if  m.message_type <=7 %}
 				{%if loop.index % 2 == 0%}
 					<div class="card">
 						{%if m.message_type == 1 or m.message_type == 4 or m.message_type == 5 or m.message_type == 6 or m.message_type == 7%}
@@ -215,11 +231,15 @@ Home | WPC
                       			<h5>{{award_name}}</h5></div>	
                       		{%elif m.message_type == 7%}
 								<p><em  style="color:blue">{{m.sender.get().name}}</em> updated his status</p>
-								<p class="lead">{{m.message}}</p>	
+								<p class="lead">{{m.message}}</p>
+								{%for c in m.comments%}
+									<p>{{c}}</p>
+								{%endfor%}
 							{%endif%}
 						</div>
 					</div>
 					<hr>
+				{%endif%}
 				{%endif%}
 				{%endfor%}
 			</div><!--/col-->

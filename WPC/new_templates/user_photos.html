@@ -55,9 +55,11 @@ My Photos | WPC
           		<a href="#" class="dropdown-toggle" data-toggle="dropdown">Find Photos</a>
           		<ul class="dropdown-menu">
             		<li>
-              			<form class="navbar-form navbar-left" role="search" action="photos.html">
-                			<div class="form-group">
-                  				<input type="text" class="form-control" placeholder="Find Photos">
+              			<form class="navbar-form navbar-left" method="post">
+                			<div class="form-group" style="text-align:center;">
+                				<input type="hidden" name="actionType" value="search">
+                  				<input type="text" name="search_string" class="form-control" placeholder="Find Photos by name">
+                  				<button class="btn btn-primary btn-xs padding-top" type="submit" title="Search Photos"><i class="fa fa-search" style="color:white;"></i>  search</button>
                 			</div>
               			</form>                        
             		</li>
@@ -80,12 +82,12 @@ My Photos | WPC
         </div>
 	</div>
 	<div class="col-md-4">
-  		<h1> {{user.name}}<em> Photos</em>  {%if not me%}<a href="/signin"><button class="btn btn-xs btn-danger" type="button"><i class="fa fa-register" style="color:white;"></i>  Register with WPC</button></a>{%endif%}</h1>
+  		<h1> <a href="/{{user.key.id()}}/photos" style="color:black;">{{user.name}}<em> Photos</em></a>  {%if not me%}<a href="/signin"><button class="btn btn-xs btn-danger" type="button"><i class="fa fa-register" style="color:white;"></i>  Register with WPC</button></a>{%endif%}</h1>
 	</div>
 	<div class="col-md-4">
 		<div class="col-md-6">
 			<div class="dropdown">
-          		<a href="#" class="dropdown-toggle" data-toggle="dropdown"><h4>My Albums</h4></a>
+          		<a href="#" class="dropdown-toggle" data-toggle="dropdown"><h4>Albums</h4></a>
           		<ul class="dropdown-menu">
             		<div class="all_albums"></div>
           		</ul>
@@ -93,7 +95,7 @@ My Photos | WPC
 		</div>
 		<div class="col-md-6">
 			<div class="dropdown">
-          		<a href="#" class="dropdown-toggle" data-toggle="dropdown"><h4>My Tags</h4></a>
+          		<a href="#" class="dropdown-toggle" data-toggle="dropdown"><h4>Tags</h4></a>
           		<ul class="dropdown-menu">
             		<div class="all_tags"></div>
           		</ul>
@@ -120,12 +122,12 @@ My Photos | WPC
 	              <a href="/photo/{{p.key.urlsafe()}}"><img src="{{get_serving_url(p.blobKey,size=100)}}" width="98%" id="temp1" alt="photo"></a>
 					{%for tags in p.tags%}
 						<script>
-							$( ".all_tags" ).append( "<button type='' onclick='filter_photos()' class='btn btn-warning btn-xs margin-top margin_tag_albums margin-bottom'>{{tags}}</button>");
+							$( ".all_tags" ).append( "<form method='post'><input type='hidden' name='actionType' value='filter_tag'><input type='hidden' name='tag_name' value='{{tags}}'><button type='submit' class='btn btn-warning btn-xs margin-top margin_tag_albums margin-bottom'>{{tags}}</button></form>");
 						</script>
 					{%endfor%}
 					{%for albums in p.albums%}
 						<script>
-							$( ".all_albums" ).append( "<button type='' onclick='filter_photos()' class='btn btn-danger btn-xs margin-top margin_tag_albums margin-bottom'>{{albums}}</button>");
+							$( ".all_albums" ).append( "<form method='post'><input type='hidden' name='actionType' value='filter_album'><input type='hidden' name='album_name' value='{{albums}}'><button type='submit' class='btn btn-danger btn-xs margin-top margin_tag_albums margin-bottom'>{{albums}}</button></form>");
 						</script>
 					{%endfor%}
 					<br>
@@ -171,12 +173,12 @@ My Photos | WPC
 	              <a href="/photo/{{p.key.urlsafe()}}"><img src="{{get_serving_url(p.blobKey,size=100)}}" width="98%" id="temp1" alt="photo"></a>
 					{%for tags in p.tags%}
 						<script>
-								$( ".all_tags" ).append( "<button type='' onclick='filter_photos()' class='btn btn-warning btn-xs margin-top margin_tag_albums margin-bottom'>{{tags}}</button>");
+							$( ".all_tags" ).append( "<form method='post'><input type='hidden' name='actionType' value='filter_tag'><input type='hidden' name='tag_name' value='{{tags}}'><button type='submit' class='btn btn-warning btn-xs margin-top margin_tag_albums margin-bottom'>{{tags}}</button></form>");
 						</script>
 					{%endfor%}
 					{%for albums in p.albums%}
 						<script>
-								$( ".all_albums" ).append( "<button type='' onclick='filter_photos()' class='btn btn-danger btn-xs margin-top margin_tag_albums margin-bottom'>{{albums}}</button>");
+							$( ".all_albums" ).append( "<form method='post'><input type='hidden' name='actionType' value='filter_album'><input type='hidden' name='album_name' value='{{albums}}'><button type='submit' class='btn btn-danger btn-xs margin-top margin_tag_albums margin-bottom'>{{albums}}</button></form>");
 						</script>
 					{%endfor%}
 					<br>
@@ -222,12 +224,12 @@ My Photos | WPC
 	              <a href="/photo/{{p.key.urlsafe()}}"><img src="{{get_serving_url(p.blobKey,size=100)}}" width="98%" id="temp1" alt="photo"></a>
 					{%for tags in p.tags%}
 						<script>
-								$( ".all_tags" ).append( "<button type='' onclick='filter_photos()' class='btn btn-warning btn-xs margin-top margin_tag_albums margin-bottom'>{{tags}}</button>");
+							$( ".all_tags" ).append( "<form method='post'><input type='hidden' name='actionType' value='filter_tag'><input type='hidden' name='tag_name' value='{{tags}}'><button type='submit' class='btn btn-warning btn-xs margin-top margin_tag_albums margin-bottom'>{{tags}}</button></form>");
 						</script>
 					{%endfor%}
 					{%for albums in p.albums%}
 						<script>
-								$( ".all_albums" ).append( "<button type='' onclick='filter_photos()' class='btn btn-danger btn-xs margin-top margin_tag_albums margin-bottom'>{{albums}}</button>");
+							$( ".all_albums" ).append( "<form method='post'><input type='hidden' name='actionType' value='filter_album'><input type='hidden' name='album_name' value='{{albums}}'><button type='submit' class='btn btn-danger btn-xs margin-top margin_tag_albums margin-bottom'>{{albums}}</button></form>");
 						</script>
 					{%endfor%}
 					<br>
@@ -273,12 +275,12 @@ My Photos | WPC
 	              <a href="/photo/{{p.key.urlsafe()}}"><img src="{{get_serving_url(p.blobKey,size=100)}}" width="98%" id="temp1" alt="photo"></a>
 					{%for tags in p.tags%}
 						<script>
-								$( ".all_tags" ).append( "<button type='' onclick='filter_photos()' class='btn btn-warning btn-xs margin-top margin_tag_albums margin-bottom'>{{tags}}</button>");
+							$( ".all_tags" ).append( "<form method='post'><input type='hidden' name='actionType' value='filter_tag'><input type='hidden' name='tag_name' value='{{tags}}'><button type='submit' class='btn btn-warning btn-xs margin-top margin_tag_albums margin-bottom'>{{tags}}</button></form>");
 						</script>
 					{%endfor%}
 					{%for albums in p.albums%}
 						<script>
-								$( ".all_albums" ).append( "<button type='' onclick='filter_photos()' class='btn btn-danger btn-xs margin-top margin_tag_albums margin-bottom'>{{albums}}</button>");
+							$( ".all_albums" ).append( "<form method='post'><input type='hidden' name='actionType' value='filter_album'><input type='hidden' name='album_name' value='{{albums}}'><button type='submit' class='btn btn-danger btn-xs margin-top margin_tag_albums margin-bottom'>{{albums}}</button></form>");
 						</script>
 					{%endfor%}
 					<br>

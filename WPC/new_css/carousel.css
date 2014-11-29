@@ -896,3 +896,12 @@ footer a {
     border-width:0;
     background-color:blue;
 }
+.imageAndText {
+  position: relative;
+} 
+.imageAndText .col {
+  position:absolute; 
+  z-index: 1; 
+  bottom: 0; 
+  left: 10px;
+}

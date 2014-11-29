@@ -75,6 +75,11 @@
     <div class="post-date">
       {{blog.updated.strftime("%b %d, %Y")}}
     </div>
+    <div class="col-md-12 text-center">
+        <p>Ads</p>
+        <img src="/images/img_2.jpg"  height="90px" width="728px">
+    </div>
+    <div class="row"><hr></div>
 <div id="fb-root"></div>
 <script>
 (function(d, s, id) {
@@ -133,53 +138,18 @@
         </div>
       </div>
     </div>
-
-  <div class="col-md-8 col-md-offset-1 col-sm-10 col-xs-10 post-content blog_content" style="text-align:left;font-family:serif;" id="blog_content">
-    <h4>{{blog.content | safe}}</h4>
-  </div>
-  <div class="col-md-2 col-md-offset-1 col-sm-2 col-xs-2">
+  <ul class="nav nav-pills nav-justified" role="tablist" id="photo_member_list">
+    <li class="active"><a onclick="photos();" href="javascript:void(0);"><h4>Blog</h4></a></li>
+    <li><a onclick="members();" href="javascript:void(0);"><h4>Comments</h4></a></li>
+  </ul>
+  <div class="row">   
+    </div>
+    <div class="col-md-8 col-md-offset-1 col-sm-10 col-xs-10 post-content blog_content" style="text-align:left;font-family:serif;" id="blog_content">
+      <h4>{{blog.content | safe}}</h4>
+    </div>
+   <div class="row"><hr></div>
+<div class="col-md-12 text-center">
         <p>Ads</p>
-        <img src="/images/img_2.jpg" class="img-responsive">
-        <p><a href="my_studio.html" style="color:black;"></a></p>
-
-        <img src="/images/img_2.jpg" class="img-responsive">
-        <p><a href="my_studio.html" style="color:black;"></a></p>
-
-        <img src="/images/img_2.jpg" class="img-responsive">
-        <p><a href="my_studio.html" style="color:black;"></a></p>
-
-        <hr>
-
-        <p>Trending Photographers</p>
-        <img src="/images/img_2.jpg" class="profile-img" width="100px">
-        <p><a href="my_studio.html" style="color:black;"></a></p>
-
-        <img src="/images/img_2.jpg" class="profile-img" width="100px">
-        <p><a href="my_studio.html" style="color:black;"></a></p>
-
-        <img src="/images/img_2.jpg" class="profile-img" width="100px">
-        <p><a href="my_studio.html" style="color:black;"></a></p>
-
-        <p>Top Photos</p>
-        <img src="/images/img_1.jpg" class="img-responsive">
-        <p><a href="my_studio.html" style="color:black;"></a></p>
-
-        <img src="/images/img_1.jpg" class="img-responsive">
-        <p><a href="my_studio.html" style="color:black;"></a></p>
-
-        <img src="/images/img_1.jpg" class="img-responsive">
-        <p><a href="my_studio.html" style="color:black;"></a></p>
-
-        <p>Trending Blogs</p>
-        <img src="/images/img_3.jpg" class="img-responsive">
-        <p><a href="my_studio.html" style="color:black;"></a></p>
-
-        <img src="/images/img_3.jpg" class="img-responsive">
-        <p><a href="my_studio.html" style="color:black;"></a></p>
-
-        <img src="/images/img_3.jpg" class="img-responsive">
-        <p><a href="my_studio.html" style="color:black;"></a></p>
-      </div>
-</div>
-</div>
+        <img src="/images/img_2.jpg"  height="90px" width="728px">
+    </div>
 {%endblock%}

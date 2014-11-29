@@ -41,6 +41,7 @@ class User(ndb.Model):
 	storybook = ndb.KeyProperty(kind='Story', repeated=True)
 	notifications = ndb.KeyProperty(kind='Story', repeated=True)
 	photography_interests = ndb.StringProperty(repeated=True)
+	total_likes = ndb.IntegerProperty(default=0)
 	
 	@property
 	def avatar_url(self):
@@ -127,7 +128,7 @@ class Post(ndb.Model):
 		return cls.query(ancestor=ancestor_key).order(-cls.updated)
 
 class Item(Post):
-	comments = ndb.KeyProperty(kind='Comment', repeated=True)
+	#comments = ndb.KeyProperty(kind='Comment', repeated=True)
 	permission = ndb.StringProperty(default='Public')
 	visibleTo = ndb.KeyProperty(kind='User', repeated=True)
 	followed = ndb.KeyProperty(kind='User', repeated=True)
@@ -154,6 +155,7 @@ class Messages(Item):
 	message_photo = ndb.KeyProperty(kind='Picture')
 	message_blog = ndb.KeyProperty(kind='Blog')
 	message_group = ndb.KeyProperty(kind='Group')
+	comments = ndb.TextProperty(repeated=True)
 
 class Blog(Item): # Parent=User
 	title = ndb.StringProperty(required=True)

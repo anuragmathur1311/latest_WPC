@@ -128,22 +128,18 @@
   }
 </script>
 <br>
-    <div id="about" class="intro">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6 col-md-offset-3 text-center">
-                    <h2></h2>
-                    <p class="lead">Place for Ads <br><a target="_blank" href="http://www.worldphotographersclub.com/">worldphotographersclub</a></p>
-                </div>
-            </div>
-        </div>
+    <div class="col-md-12 text-center">
+        <p>Ads</p>
+        <img src="/images/img_2.jpg"  height="90px" width="728px">
     </div>
-
+<div class="row">
 <hr>
+</div>
   <ul class="nav nav-pills nav-justified" role="tablist" id="photo_member_list">
     <li class="active"><a onclick="photos();" href="javascript:void(0);"><h4>Photos</h4></a></li>
     <li><a onclick="members();" href="javascript:void(0);"><h4>Members</h4></a></li>
     <li><a onclick="calendar();" href="javascript:void(0);"><h4>Calendar</h4></a></li>
+    <li><a onclick="calendar();" href="javascript:void(0);"><h4>Messages</h4></a></li>
   </ul>
   <hr>
 
@@ -298,15 +294,9 @@
   </div>
 <br>
     <div class="row"></div>
-    <div id="about" class="intro">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6 col-md-offset-3 text-center">
-                    <h2></h2>
-                    <p class="lead">Place for Ads <br><a target="_blank" href="http://www.worldphotographersclub.com/">worldphotographersclub</a></p>
-                </div>
-            </div>
-        </div>
+    <div class="col-md-12 text-center">
+        <p>Ads</p>
+        <img src="/images/img_2.jpg"  height="90px" width="728px">
     </div>
   <div style="display:none;">
     <div id="members">
@@ -496,17 +486,22 @@
 <script>
  function photos() {
     $( "#photo_member_area" ).load( "/group/{{group.key.urlsafe()}} #photos" );
-    document.getElementById("photo_member_list").innerHTML = "<li class='active'><a onclick='photos();'' href='javascript:void(0);''><h4>Photos</h4></a></li><li><a onclick='members();'' href='javascript:void(0);''><h4>Members</h4></a></li><li><a onclick='calendar();' href='javascript:void(0);'><h4>Calendar</h4></a></li>";
+    document.getElementById("photo_member_list").innerHTML = "<li class='active'><a onclick='photos();'' href='javascript:void(0);''><h4>Photos</h4></a></li><li><a onclick='members();'' href='javascript:void(0);''><h4>Members</h4></a></li><li><a onclick='calendar();' href='javascript:void(0);'><h4>Calendar</h4></a></li><li><a onclick='messages();' href='javascript:void(0);'><h4>Messages</h4></a></li>";
   }
 
    function members() {
     $( "#photo_member_area" ).load( "/group/{{group.key.urlsafe()}} #members" );
-    document.getElementById("photo_member_list").innerHTML = "<li><a onclick='photos();'' href='javascript:void(0);''><h4>Photos</h4></a></li><li  class='active'><a onclick='members();'' href='javascript:void(0);''><h4>Members</h4></a></li><li><a onclick='calendar();' href='javascript:void(0);'><h4>Calendar</h4></a></li>";
+    document.getElementById("photo_member_list").innerHTML = "<li><a onclick='photos();'' href='javascript:void(0);''><h4>Photos</h4></a></li><li  class='active'><a onclick='members();'' href='javascript:void(0);''><h4>Members</h4></a></li><li><a onclick='calendar();' href='javascript:void(0);'><h4>Calendar</h4></a></li><li><a onclick='messages();' href='javascript:void(0);'><h4>Messages</h4></a></li>";
   }
 
   function calendar() {
     $( "#photo_member_area" ).load( "/group/{{group.key.urlsafe()}} #calendar" );
-    document.getElementById("photo_member_list").innerHTML = "<li><a onclick='photos();'' href='javascript:void(0);''><h4>Photos</h4></a></li><li><a onclick='members();'' href='javascript:void(0);''><h4>Members</h4></a></li><li class='active'><a onclick='calendar();' href='javascript:void(0);'><h4>Calendar</h4></a></li>";
+    document.getElementById("photo_member_list").innerHTML = "<li><a onclick='photos();'' href='javascript:void(0);''><h4>Photos</h4></a></li><li><a onclick='members();'' href='javascript:void(0);''><h4>Members</h4></a></li><li class='active'><a onclick='calendar();' href='javascript:void(0);'><h4>Calendar</h4></a></li><li><a onclick='messages();' href='javascript:void(0);'><h4>Messages</h4></a></li>";
+  }
+
+  function messages() {
+    $( "#photo_member_area" ).load( "/group/{{group.key.urlsafe()}} #calendar" );
+    document.getElementById("photo_member_list").innerHTML = "<li><a onclick='photos();'' href='javascript:void(0);''><h4>Photos</h4></a></li><li><a onclick='members();'' href='javascript:void(0);''><h4>Members</h4></a></li><li ><a onclick='calendar();' href='javascript:void(0);'><h4>Calendar</h4></a></li><li class='active'><a onclick='messages();' href='javascript:void(0);'><h4>Messages</h4></a></li>";
   }
 </script>
 </div>

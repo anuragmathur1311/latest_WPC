@@ -52,3 +52,48 @@ message#	type
 5			award to user
 6			award to photo
 7			like a photo
+8			usr if following you
+9 			user joined your group
+10			user liked blog
+
+
+
+Remaining Work
+1) Articles page, and layout  - layout done...need to decide on content of these articles
+2) like, add options on the carousel - done
+3) top photos, trending blog, groups etc on index page
+4) make playlists on photos page
+5) carousel display slides on photos and blogs page
+6) improve search
+7) search in photos and blogs page - removed
+8) explore button
+9) load more options in all pages
+10) ratings algorithm of photos and blogs
+11) correct the layout of options on studio bar in the middle 
+12) resize all uploaded images to 1920x1080p or 2k resolution
+13) options under all phtoos in home page
+14) sort according to the tags or album buttons - done...tags and albums shud only appear once
+15) search photos and filter photos - search done....thinking of removing filter
+16) upload status on photos page
+17) add details to all photos on phtoos page
+18) put ads on all pages properly
+19) implement invite friends
+20) update user settings - partially done....permissions remaining
+21) badge num on notification icon 
+22) Analytics on settings page
+23) login not working...have to correct it
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
