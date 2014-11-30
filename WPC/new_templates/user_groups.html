@@ -111,6 +111,16 @@
               <a href="/group/{{b.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.get().name}}</h3>
               <img src="{{b.get().cover_photo}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="{{me.avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5></a>
               <div class="blog_content thumb_blog_content">{{b.get().description}}</div>
+              <div class="button-container post-action padding_top padding_bottom">
+                 {%if me == user%}
+                  <form method="post">
+                    <input type="hidden" name="actionType" value="delete_group">
+                    <input type="hidden" id="userid" name="user" value="{{user.key.id()}}">
+                    <input type="hidden" name="groupKey" value="{{b.get().key.urlsafe()}}">
+                    <button class="btn btn-primary btn-xs" type="submit" title="Delete Group"><span class="glyphicon glyphicon-trash" style="color:white;"></span></button>
+                  </form>
+                  {%endif%}
+                </div>
               <hr>
           </div>
           {%endif%}
@@ -123,6 +133,16 @@
               <a href="/group/{{b.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.get().name}}</h3>
               <img src="{{b.get().cover_photo}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="{{me.avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5></a>
               <div class="blog_content thumb_blog_content">{{b.get().description}}</div>
+              <div class="button-container post-action padding_top padding_bottom">
+                 {%if me == user%}
+                  <form method="post">
+                    <input type="hidden" name="actionType" value="delete_group">
+                    <input type="hidden" id="userid" name="user" value="{{user.key.id()}}">
+                    <input type="hidden" name="groupKey" value="{{b.get().key.urlsafe()}}">
+                    <button class="btn btn-primary btn-xs" type="submit" title="Delete Group"><span class="glyphicon glyphicon-trash" style="color:white;"></span></button>
+                  </form>
+                  {%endif%}
+                </div>
               <hr>
           </div>
           {%endif%}
@@ -135,6 +155,17 @@
               <a href="/group/{{b.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.get().name}}</h3>
               <img src="{{b.get().cover_photo}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="{{me.avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5></a>
               <div class="blog_content thumb_blog_content">{{b.get().description}}</div>
+                            <div class="button-container post-action padding_top padding_bottom">
+                 {%if me == user%}
+                  <form method="post">
+                    <input type="hidden" name="actionType" value="delete_group">
+                    <input type="hidden" id="userid" name="user" value="{{user.key.id()}}">
+                    <input type="hidden" name="groupKey" value="{{b.key.urlsafe()}}">
+                    <button class="btn btn-primary btn-xs" type="submit" title="Delete Group"><span class="glyphicon glyphicon-trash" style="color:white;"></span></button>
+                  </form>
+                  {%endif%}
+                </div>
+
               <hr>
           </div>
           {%endif%}
@@ -147,6 +178,16 @@
               <a href="/group/{{b.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.get().name}}</h3>
               <img src="{{b.get().cover_photo}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="{{me.avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5></a>
               <div class="blog_content thumb_blog_content">{{b.get().description}}</div>
+                            <div class="button-container post-action padding_top padding_bottom">
+                 {%if me == user%}
+                  <form method="post">
+                    <input type="hidden" name="actionType" value="delete_group">
+                    <input type="hidden" id="userid" name="user" value="{{user.key.id()}}">
+                    <input type="hidden" name="groupKey" value="{{b.key.urlsafe()}}">
+                    <button class="btn btn-primary btn-xs" type="submit" title="Delete Group"><span class="glyphicon glyphicon-trash" style="color:white;"></span></button>
+                  </form>
+                  {%endif%}
+                </div>
               <hr>
           </div>
           {%endif%}

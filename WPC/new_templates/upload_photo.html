@@ -16,7 +16,7 @@ Upload Photos | WPC
   <hr class="horizontal-line">
 			<form id="photoupload" action="{{uploadUrl}}" method="post" enctype="multipart/form-data">
 				<div class="column fileupload-buttonbar">
-					<div class="row col-sm-4">
+					<div class="row col-sm-3">
 						<!-- The fileinput-button span is used to style the file input field as button -->
 						<span class="btn btn-info fileinput-button">
 							<i class="glyphicon glyphicon-plus"></i>
@@ -26,10 +26,6 @@ Upload Photos | WPC
 						<button type="submit" class="btn btn-success start">
 							<i class="glyphicon glyphicon-upload"></i>
 							<span style="color:white;">Start upload</span>
-						</button>
-						<button type="reset" class="btn btn-info cancel">
-							<i class="glyphicon glyphicon-ban-circle"></i>
-							<span style="color:white;">Cancel upload</span>
 						</button>
 						<div class="error" style="color:red;">{{submitError}}</div>
 						<!-- The global file processing state -->
@@ -43,6 +39,11 @@ Upload Photos | WPC
 					  </div>
 					</div>
 				</div>
+				<div class="col-md-12 text-center" style="margin:0px;">
+			        <p>Ads</p>
+			        <img src="/images/img_2.jpg"  height="90px" width="728px">
+			        <br>
+			    </div>
 				<h3>Update properties for all photos or update later after uploading is done</h3>
 				   <div class="col-lg-4 col-lg-offset-4">
 				    <div class="input-group">
@@ -104,7 +105,10 @@ Upload Photos | WPC
 					</tbody>
 				</table>
 			</form>
-			
+			<div class="col-md-12 text-center">
+			        <p>Ads</p>
+			        <img src="/images/img_2.jpg"  height="90px" width="728px">
+			    </div>
 			<div class="row">
 				<!-- Three columns of text below the carousel --> 
 				<div class="container" id="thumb_img2">
@@ -113,6 +117,8 @@ Upload Photos | WPC
 			</div>
 			<p id="demo"></p>
 			<script src="/js/holder.js"></script>
+
+
 			<!-- FOOTER -->
 			<footer class="footer_new">
 				<div class="row">

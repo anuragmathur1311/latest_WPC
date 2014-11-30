@@ -316,8 +316,12 @@
             <a href="/{{fl.get().key.id()}}"><h5 style="color:black;"><em>{{fl.get().name}}<em></h5>
             <img src="/fonts/Flags/{{fl.get().country}}.png" alt="country" width="40px"></a>
             <h5 style="color:green"><em>#{{fl.get().wpc_score}}</em></h5>
-            <button type="button" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-picture" style="color:white;"></span></button>
-            <button type="button" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
+            <a href="/{{fl.get().key.id()}}/photos"><button type="button" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-picture" style="color:white;"></span></button></a>
+            {%if fl.get().key.id() == user.key.id()%}
+              <button type="button" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
+            {%else%}
+              <button type="button" class="btn btn-info btn-xs" disabled="disabled"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
+            {%endif%}
         </div><!-- /.col-lg-4 -->
    {%endfor%}
     </div>

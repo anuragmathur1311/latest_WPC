@@ -485,6 +485,31 @@
 		        <p>Ads</p>
 		        <img src="/images/img_2.jpg"  height="90px" width="728px">
 		    </div>
+		    <div class="row"></div>
+			<h1 style="text-align:center;">New and Trending Photographers</h1>
+		    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 top_photos">
+		    {%for fl in new_users%}
+		        <div class="col-md-2 col-sm-6 col-xs-12">
+		            <img class="img-circle" src="{{fl.avatar_url}}" height="100px" alt="Profile image">
+		            <a href="/{{fl.key.id()}}"><h5 style="color:black;"><em>{{fl.name}}<em></h5>
+		            <img src="/fonts/Flags/{{fl.country}}.png" alt="country" width="40px"></a>
+		            <h5 style="color:green"><em>#{{fl.wpc_score}}</em></h5>
+		            <div class="button-container">
+		            <a href="/{{fl.key.id()}}/photos"><button type="button" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-picture" style="color:white;"></span></button></a>
+			            {%if fl.key.id() == me.key.id()%}
+			              <button type="button" class="btn btn-info btn-xs"  disabled="disabled"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
+			            {%else%}
+			            <form method="post">
+							<input type="hidden" name="actionType" value="follow">
+							<input type="hidden" name="user_key" value="{{fl.key.id()}}">
+	                		<input type="hidden" name="self_user_key" value="{{me.key.id()}}">
+			        	    <button type="submit" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
+			              </form>
+			            {%endif%}
+		        	</div>
+		        </div><!-- /.col-lg-4 -->
+		   {%endfor%}
+		    </div>
 			{%endblock%}
 			{%block footer%}
 			<!-- FOOTER -->

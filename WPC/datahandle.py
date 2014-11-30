@@ -89,6 +89,9 @@ def add_member(grpKey, userKey):
 
 def delete_group(group_key, user_key):
 	if user_key == group_key.parent():
+		user = user_key.get()
+		user.groups.remove(group_key)
+		userKey = user.put()
 		group_key.delete()
 	return
 

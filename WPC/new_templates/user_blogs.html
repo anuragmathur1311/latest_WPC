@@ -100,7 +100,7 @@
               {%if loop.index % 3 == 1%}
                 <div class="col-md-4 col-sm-4 col-xs-6" style="margin:0px;">
                       <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
-                      <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5></a>
+                      <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{b.key.parent().get().name}}</em></h5></a>
                       <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
                       <hr class="horizontal-line">
                 </div>
@@ -108,7 +108,7 @@
               {%if loop.index % 3 == 2%}
                 <div class="col-md-4 col-sm-4 col-xs-6" style="margin:0px;">
                       <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
-                      <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5></a> 
+                      <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{b.key.parent().get().name}}</em></h5></a> 
                        <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
                        <hr class="horizontal-line">
                 </div>
@@ -116,7 +116,7 @@
               {%if loop.index % 3 == 0%}
                 <div class="col-md-4 col-sm-4 col-xs-6" style="margin:0px;">
                       <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
-                      <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5></a> 
+                      <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{b.key.parent().get().name}}</em></h5></a> 
                       <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
                        <hr class="horizontal-line">
                 </div>

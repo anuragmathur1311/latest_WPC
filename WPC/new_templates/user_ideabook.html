@@ -154,7 +154,6 @@
       {%if loop.index % 3 == 1%}
               <a href="/blog/{{b.get().key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.get().title}}</h3>
               <img src="{{b.get().cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="{{b.get().key.parent().get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em>{{b.get().key.parent().get().name}}</em></h5></a>
-              <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
               <hr>
       {%endif%}
       {% endfor %}
@@ -162,9 +161,8 @@
       <div class="row col-md-4 col-sm-4 col-xs-6" style="margin:0px;">
       {%for b in user.pinned_blogs%}
       {%if loop.index % 3 == 2%}
-              <a href="/blog/{{b.get().key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.get().title}}</h3>
-              <img src="{{b.get().cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5></a>
-              <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
+               <a href="/blog/{{b.get().key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.get().title}}</h3>
+              <img src="{{b.get().cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="{{b.get().key.parent().get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em>{{b.get().key.parent().get().name}}</em></h5></a>
               <hr>
       {%endif%}
       {% endfor %}
@@ -172,9 +170,8 @@
       <div class="row col-md-4 col-sm-4 col-xs-6" style="margin:0px;">
       {%for b in user.pinned_blogs%}
       {%if loop.index % 3 == 0%}
-              <a href="/blog/{{b.get().key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.get().title}}</h3>
-              <img src="{{b.get().cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{me.name}}</em></h5></a>
-              <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
+               <a href="/blog/{{b.get().key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.get().title}}</h3>
+              <img src="{{b.get().cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="{{b.get().key.parent().get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em>{{b.get().key.parent().get().name}}</em></h5></a>
               <hr>
       {%endif%}
       {% endfor %}

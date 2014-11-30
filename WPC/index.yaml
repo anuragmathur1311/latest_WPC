@@ -50,3 +50,22 @@ indexes:
   properties:
   - name: updated
     direction: desc
+
+- kind: User
+  properties:
+  - name: wpc_score
+  - name: joined
+    direction: desc
+
+- kind: User
+  properties:
+  - name: wpc_score
+    direction: desc
+  - name: joined
+    direction: desc
+
+- kind: User
+  ancestor: yes
+  properties:
+  - name: joined
+    direction: desc

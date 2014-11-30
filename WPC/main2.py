@@ -103,9 +103,13 @@ class MainHandler(PageHandler):
 			qry2 = Messages.query(ancestor=self.user.key).order(-Messages.created)
 			qry1 = qry.order(-Picture.viewed)
 			qry3 = qry.order(-Picture.created)
+			qry4 = User.query(ndb.AND(User.wpc_score >= 5000 , User.wpc_score <= 10000)).order(-User.wpc_score)
+			qry5 = qry4.order(-User.joined)
+			new_users = qry5.fetch(6)
 			most_viewed = qry1.fetch(10)
 			messages = qry2.fetch()
 			new_photos = qry3.fetch(20)
+			templateVals['new_users'] = new_users
 			templateVals['new_photos'] = new_photos
 			templateVals['most_viewed'] = most_viewed
 			templateVals['messages'] = messages
@@ -119,6 +123,10 @@ class MainHandler(PageHandler):
 			qry3 = qry.order(-Picture.created)
 			most_viewed = qry1.fetch(10)
 			new_photos = qry3.fetch(20)
+			qry4 = User.query(ndb.AND(User.wpc_score >= 5000 , User.wpc_score <= 10000)).order(-User.wpc_score)
+			qry5 = qry4.order(-User.joined)
+			new_users = qry5.fetch(6)
+			templateVals['new_users'] = new_users
 			templateVals['new_photos'] = new_photos
 			templateVals['most_viewed'] = most_viewed
 			errorMsg = "Please signup/login to perform this action" 
@@ -132,6 +140,10 @@ class MainHandler(PageHandler):
 			most_viewed = qry1.fetch(10)
 			messages = qry2.fetch()
 			new_photos = qry3.fetch(20)
+			qry4 = User.query(ndb.AND(User.wpc_score >= 5000 , User.wpc_score <= 10000)).order(-User.wpc_score)
+			qry5 = qry4.order(-User.joined)
+			new_users = qry5.fetch(6)
+			templateVals['new_users'] = new_users
 			templateVals['new_photos'] = new_photos
 			templateVals['most_viewed'] = most_viewed
 			templateVals['messages'] = messages
@@ -154,6 +166,23 @@ class MainHandler(PageHandler):
 				photoKey = get_key_urlunsafe(self.request.get('photoKey'))
 				self.user.pinned_photos.append(photoKey)
 				self.user.put()
+			if action == "follow":
+				user = self.request.get('user_key')
+				self_user = self.request.get('self_user_key')
+				user_key = User.get_by_id(user)
+				self_user_key = User.get_by_id(self_user)
+				userKey = [user_key.key]
+				self_userKey = [self_user_key.key]
+				user_key.followers+= self_userKey
+				self_user_key.following += userKey
+				self.user.wpc_score += 100
+				user_key.put()
+				self.user.put()
+				resultphotoList = []
+				blog = create_blog("", "", "", self.user.key)
+				group = create_group("", "", "", resultphotoList, self.user.key)
+				message_type = 8
+				create_message(message_type, 'Photographer is following you', self.user.key, self.user.avatar, blog.key, group.key, user_key.key)
 			self.render('index_user.html', **templateVals)
 
 class UserHomeHandler(PageHandler):
@@ -492,7 +521,11 @@ class UserStudioHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler):
 		#userid = str(urllib.unquote(resource))
 		userid = resource
 		user = User.get_by_id(userid)
+		print "user"
+		print "###############################################"
 		if user:
+			print "in if user"
+			print "###############################################"
 			templateVals = {'me': self.user}
 			templateVals['user'] = user
 			photos = Picture.of_ancestor(user.key)
@@ -507,6 +540,8 @@ class UserStudioHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler):
 			if self.user != user:
 				self.user.profile_views += 1
 				self.user.put()
+			print "2 in if user"
+			print "###############################################"
 			self.render('user_studio.html', **templateVals)
 		else:
 			self.redirect('/')
@@ -514,7 +549,9 @@ class UserStudioHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler):
 	def post(self, resource):
 		userid = self.request.get('user')
 		user = User.get_by_id(userid)
+		print "###############################################"
 		print userid
+		print "###############################################"
 		if user and self.user == user:
 			form = self.request.get('formType')
 			action = self.request.get('actionType')
@@ -529,8 +566,11 @@ class UserStudioHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler):
 					user.avatar = photo.key
 				elif action == "remove":
 					user.avatar = None
+				user.put()
+				self.redirect('/' + userid)	
 			elif form == "cover_image1":
 				if action == "select":
+					print "######################in cover 1 select #########################"
 					user.cover1 = get_key_urlunsafe(self.request.get('cover1Key'))
 				elif action == "upload":
 					uploads = self.get_uploads('cover1')
@@ -539,6 +579,8 @@ class UserStudioHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler):
 					user.cover1 = photo.key
 				elif action == "remove":
 					user.cover1 = None
+				user.put()
+				self.redirect('/' + userid)	
 			elif form == "cover_image2":
 				if action == "select":
 					user.cover2 = get_key_urlunsafe(self.request.get('cover2key'))
@@ -549,6 +591,8 @@ class UserStudioHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler):
 					user.cover2 = photo.key
 				elif action == "remove":
 					user.cover2 = None
+				user.put()
+				self.redirect('/' + userid)	
 			elif form == "watermark_image":
 				if action == "select":
 					user.watermark = get_key_urlunsafe(self.request.get('watermark_image_key'))
@@ -559,6 +603,8 @@ class UserStudioHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler):
 					user.watermark = photo.key
 				elif action == "remove":
 					user.cover1 = None
+				user.put()
+				self.redirect('/' + userid)	
 			elif form == "photography_types":
 				print "photography_types"
 				photoType = self.request.get_all('photoType')
@@ -566,16 +612,37 @@ class UserStudioHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler):
 				user.photography_interests += photoType
 				for i in photoTypeDelete:
 					user.photography_interests.remove(i)
-			elif form == "delete":
-				photoKey = get_key_urlunsafe(self.request.get('photoKey'))
-				delete_photo(photoKey, self.user.key)
-			elif form == "edit":
-				photoKey = get_key_urlunsafe(self.request.get('photoKey'))
-				self.redirect('/editphoto/%s' % photoKey.urlsafe())
+				user.put()
+				self.redirect('/' + userid)	
+			elif form == "photo":
+				print "##################### In photo ##########################"
+				if action == "delete":
+					print "##################### In photo delete ##########################"
+					photoKey = get_key_urlunsafe(self.request.get('photoKey'))
+					delete_photo(photoKey, self.user.key)
+					self.redirect('/' + userid)
+				elif action == "edit":
+					print "##################### In photo edit ##########################"
+					photoKey = get_key_urlunsafe(self.request.get('photoKey'))
+					print photoKey.urlsafe()
+					self.redirect('/editphoto/%s' % photoKey.urlsafe())
+			elif form == "group":
+				print "##################### In delete group ##########################"
+				if action == "delete_group":
+					groupKey = get_key_urlunsafe(self.request.get('groupKey'))
+					print "###############################################"
+					print groupKey
+					delete_group(groupKey, self.user.key)
+					self.redirect('/' + userid)
+			elif form == "portfolio":
+				if action == "delete":
+					if self.user:
+						portfolioKey = self.request.get('portfolioKey')
+						portfolio = get_key_urlunsafe(portfolioKey)
+						delete_portfolio(portfolio, self.user.key)
+					self.redirect('/' + userid)
 			else:
 				self.redirect('/' + userid)
-			user.put()
-			self.redirect('/' + userid)
 		elif user != self.user:
 			print "user != self.user"
 			form = self.request.get('formType')
@@ -599,8 +666,8 @@ class UserStudioHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler):
 				self_user_key = self.request.get('self_user_key')
 				user_key = [user.key]
 				self_user_key = [self.user.key]
-				user.following += self_user_key
-				self.user.followers += user_key
+				user.followers += self_user_key
+				self.user.following += user_key
 				self.user.wpc_score += 100
 				message_type = 8
 				create_message(message_type, 'Photographer is following you', self.user.key, self.user.avatar, blog.key, group.key, user.key)
@@ -853,6 +920,27 @@ class UserGroupsHandler(PageHandler):
 			qry2 = Messages.query(ancestor=self.user.key).order(-Messages.created)
 			messages = qry2.fetch()
 			templateVals['messages'] = messages
+			self.render('user_groups.html', **templateVals)
+		else:
+			self.redirect('/')
+
+	def post(self, resource):
+		userid = resource
+		user = User.get_by_id(userid)
+		templateVals = {'me': self.user}
+		templateVals['user'] = user
+		qry2 = Messages.query(ancestor=self.user.key).order(-Messages.created)
+		messages = qry2.fetch()
+		templateVals['messages'] = messages
+		if self.user == user:
+			print "inside if user"
+			action = self.request.get('actionType')
+			groupKey = get_key_urlunsafe(self.request.get('groupKey'))
+			if action == "delete_group":
+				print "inside delete"
+				print "####################################################"
+				delete_group(groupKey, self.user.key)
+				print "####################################################"
 			self.render('user_groups.html', **templateVals)
 		else:
 			self.redirect('/')
