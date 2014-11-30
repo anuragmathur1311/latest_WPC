@@ -647,17 +647,20 @@ class UserStudioHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler):
 			print "user != self.user"
 			form = self.request.get('formType')
 			action = self.request.get('actionType')
-			blog = create_blog("", "", "", self.user.key)
-			resultphotoList = []
-			group = create_group("", "", "", resultphotoList, self.user.key)
 			if form == "personal_message":
 				message = self.request.get('message')
+				blog = create_blog("", "", "", self.user.key)
+				resultphotoList = []
+				group = create_group("", "", "", resultphotoList, self.user.key)
 				message_type = 4
 				create_message(message_type, message, self.user.key, self.user.avatar, blog.key, group.key, user.key)
 			if form == "photography_awards":
 				photoAward = self.request.get_all('photoAward')
 				user.awards += photoAward
 				self.user.wpc_score += 100
+				blog = create_blog("", "", "", self.user.key)
+				resultphotoList = []
+				group = create_group("", "", "", resultphotoList, self.user.key)
 				message_type = 5
 				for a in photoAward:
 					create_message(message_type, 'Photographer has given you an Award', self.user.key, self.user.avatar, blog.key, group.key, user.key)
@@ -669,6 +672,9 @@ class UserStudioHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler):
 				user.followers += self_user_key
 				self.user.following += user_key
 				self.user.wpc_score += 100
+				blog = create_blog("", "", "", self.user.key)
+				resultphotoList = []
+				group = create_group("", "", "", resultphotoList, self.user.key)
 				message_type = 8
 				create_message(message_type, 'Photographer is following you', self.user.key, self.user.avatar, blog.key, group.key, user.key)
 			else:
