@@ -5,7 +5,7 @@ import logging
 
 def create_user(email, name, wpc_name, password):
 	user = User(id=wpc_name, name=name, wpc_name=wpc_name, email=email, score=0)
-	user.passwordHash = utils.hash_password(email, password)
+	user.passwordHash = utils.hash_password(wpc_name, password)
 	userKey = user.put()
 	return user
 

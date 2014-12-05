@@ -50,7 +50,11 @@
                       <li class="dropdown">
 							<!-- Split button -->
 							<div class="btn-group" style="margin-top:10px;">
-							  <button type="button" class="btn btn-primary" style="color:white;"><em>EXPLORE</em></button>
+							<form method="post" action="/explore">
+							  <input type="hidden" name="actionType" value="explore">
+							  <button type="submit" class="btn btn-primary" style="color:white;"><em>EXPLORE</em></button>
+							</form>
+							<!--
 							  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
 							    <span class="caret"></span>
 							    <span class="sr-only">Toggle Dropdown</span>
@@ -65,7 +69,7 @@
 							    <li><input type="checkbox" value="forum"> Forum</li>
 							    <li class="divider"></li>
 							    <li style="text-align:center;"><button class="btn btn-sm btn-primary" type="submit">EXPLORE</button></li>
-							  </form>
+							  </form>-->
 							</div>
                       </li>
                       {%block homepage_links%}
@@ -100,7 +104,7 @@
                                 <div class="form_signin_container">
                                     <form class="form-signin" role="form"  onsubmit="return validateLogin()" action="/login" method="post" name="login_form">
                                         <h2 class="form-signin-heading">Please sign in</h2>
-                                        <input type="text" name="email" class="form-control" placeholder="Email address" value="{{signupEmail}}" required autofocus>
+                                        <input type="text" name="wpc_name" class="form-control" placeholder="WPC User Name" value="{{signupEmail}}" required autofocus>
                                         <input type="password" name="password" class="form-control" placeholder="Password" required>
                                         <label><input type="checkbox" value="remember-me"> Remember Me</label>
                                         <button class="btn btn-lg btn-success btn-block" type="submit">Log In</button>
@@ -549,6 +553,7 @@
 		<script type ="text/javascript" src="/js/jquery.min.js"></script>
 		<script type ="text/javascript" src="/js/bootstrap.min.js"></script>
 		<script type ="text/javascript" src="/js/docs.min.js"></script>
+		<script src="https://apis.google.com/js/client.js"></script>
 
 		<script>
 			jQuery(document).ready(function() {

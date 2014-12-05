@@ -59,29 +59,31 @@ message#	type
 
 
 Remaining Work
-1) Articles page, and layout  - layout done...need to decide on content of these articles
-2) like, add options on the carousel - done
-3) new users, new photos, groups etc on index page - new users, new photos done..
-4) make playlists on photos page
-5) carousel display slides on photos and blogs page
+1) Articles page, and layout  										- layout done...need to decide on content of these articles
+2) like, add options on the carousel 								- done
+3) new users, new photos, groups etc on index page 					- new users, new photos done..
+4) make playlists on photos pages 									- playlists will be added after a sometime with good database
+5) carousel display slides on photos and blogs pages 				- done
 6) improve search
-7) search in photos and blogs page - removed
-8) explore button
+7) search in photos and blogs page 									- removed
+8) explore button 													- done, may be need to optimize
 9) load more options in all pages
 10) ratings algorithm of photos and blogs
-11) correct the layout of options on studio bar in the middle 
-12) resize all uploaded images to 1920x1080p or 2k resolution
+11) correct the layout of options on studio bar in the middle 		- working correctly on large screens, not on phones might go ahead and 	
+																	  release beta with this only
+12) resize all uploaded images to 1920x1080p or 2k resolution		- cannot be done without PIL library (need to install it asap)
 13) options under all phtoos in home page
-14) sort according to the tags or album buttons - done...tags and albums shud only appear once
-15) search photos and filter photos - search done....thinking of removing filter
+14) sort according to the tags or album buttons 					- done...tags and albums shud only appear once
+15) search photos and filter photos 								- search done....thinking of removing filter
 16) upload status on photos page
 17) add details to all photos on phtoos page
 18) put ads on all pages properly
 19) implement invite friends
-20) update user settings - partially done....permissions remaining
+20) update user settings 											- partially done....permissions remaining
 21) badge num on notification icon 
 22) Analytics on settings page
-23) login not working...have to correct it
+23) login not working...have to correct it 							- done should not be a prb for all new users
+24) My gear in about												- removing it, will add later
 
 
 

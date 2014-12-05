@@ -35,7 +35,7 @@
       </div>
       <div class="transbox_bottom_right">
         <div class="col-md-12 col-sm-12 col-xs-12" style="margin:0px;">
-          <div class="col-md-2 col-sm-2 col-xs-2" style="margin-top:-50px;height:50px;z-index:3;left:5px;">
+          <div class="col-md-2 col-sm-3 col-xs-4" style="margin-top:-50px;height:50px;z-index:3;left:5px;">
             <div class="profile-img">
               <img src="{{user.avatar_url}}" alt="Profile Image" style="margin-left:-25px;margin-top:0px;" width="200px">
             </div>
@@ -43,11 +43,11 @@
             <a data-toggle="modal" data-target=".profile_image" title="Change Portfolio Image" style="color:white;z-index:4;"><i style="font-size:20px;" class="fa fa-edit"></i></a>
             {%endif%}
           </div>
-          <div class="col-md-2 col-sm-2 col-xs-2" style="margin:-5px;left:12%;">
+          <div class="col-md-2 col-sm-3 col-xs-4" style="margin:-5px;left:12%;z-index:3">
             <h2><a class="" href="/{{user.key.id()}}" style="color:white;font-size:20px;padding_bottom:2px;" ><em>  {{user.name}} </em></a></h2>
             <img src="/fonts/Flags/{{user.country}}.png" alt="country" width="30px"/>
           </div>
-          <div class="col-md-4 col-sm-4 col-xs-4" style="margin:30px;">
+          <div class="col-md-4 col-sm-3 col-xs-4" style="margin:30px;z-index:3">
             {%if me == user%}
                <a href="/{{user.key.id()}}/about" style="color:white;"><button type="button" title="About {{user.name}}" style="margin:5px;" class="btn btn-info btn-sm photographer_options"><i class="fa fa-key"></i></button></a>
                <button type="button" title="Share {{user.name}} portfolio" style="margin:5px;" class="btn btn-info btn-sm photographer_options" data-toggle="modal" data-target=".share_modal"><i class="fa fa-share"></i></button>
@@ -61,7 +61,7 @@
               <button type="button" title="Give Award to {{user.name}}" style="margin:5px;" class="btn btn-info btn-sm photographer_options" data-toggle="modal" data-target=".photography_awards"><i class="fa fa-trophy"></i></button>
             {%endif%}
            </div>
-          <div class="col-md-5 col-sm-5 col-xs-5" style="margin:0px;">
+          <div class="col-md-5 col-sm-5 col-xs-5" style="margin:0px;z-index:3">
             <div class="col-md-2 col-sm-2 col-xs-2" style="margin:0px;">
               <a data-toggle="modal" data-target=".followers"><h2 style="color:white;">{{len(user.followers)}}</h2>
               <h4 style="color:yellow;">Followers</h4></a>
@@ -1457,28 +1457,33 @@ function select_cover2(img_key, img_src) {
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-            <h4 class="modal-title">Share Profile</h4>
+            <h4 class="modal-title">Share Photo</h4>
           </div>
           <form role="form" method="post">
             <input type="hidden" name="formType" value="share_links">
             <br>
-                _group<h4>Link to Profile</h4>
+                <h4>Link to Profile</h4>
                 <h4 style="color:blue;"><em>http://www.worldphotographersclub.com/{{user.key.id()}}</em></h4><br>
-                <p>or</p>
-              <ul class="list-inline">
-                <li><a class="fb-share-button" data-href="https://developers.facebook.com/docs/plugins/" data-layout="button_count" data-width="100"></a></li>
-                <li><a href="https://twitter.com/share" class="twitter-share-button" data-size="large">Tweet</a></li>
-                <li><div class="g-plus" data-action="share" data-height="30"></div></li>
-                 <li><a href="http://www.pinterest.com/pin/create/button/
-                    ?url=http%3A%2F%2Fwww.flickr.com%2Fphotos%2Fkentbrew%2F6851755809%2F
-                    &media=http%3A%2F%2Ffarm8.staticflickr.com%2F7027%2F6851755809_df5b2051c9_z.jpg
-                    &description=Next%20stop%3A%20Pinterest"
-                    data-pin-do="buttonPin"
-                    data-pin-config="above">
-                    <img src="//assets.pinterest.com/images/pidgets/pin_it_button.png" />
-                </a></li>
-              </ul>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="photo_select" align="center">
+                  <p>or</p>
+                      <div class="col-md-2 col-md-offset-2">
+                        <a class="fb-share-button" data-href="https://developers.facebook.com/docs/plugins/" data-layout="button_count" data-width="100"></a>
+                      </div>
+                      <div class="col-md-2">
+                        <a href="https://twitter.com/share" class="twitter-share-button" data-size="large">Tweet</a>
+                      </div>
+                      <div class="col-md-2">
+                        <div class="g-plus" data-action="share" data-height="30"></div>
+                      </div>
+                      <div class="col-md-2">
+                        <a href="http://www.pinterest.com/pin/create/button/?url=http%3A%2F%2Fwww.flickr.com%2Fphotos%2Fkentbrew%2F6851755809%2F&media=http%3A%2F%2Ffarm8.staticflickr.com%2F7027%2F6851755809_df5b2051c9_z.jpg&description=Next%20stop%3A%20Pinterest" data-pin-do="buttonPin" data-pin-config="above">
+                        <img src="//assets.pinterest.com/images/pidgets/pin_it_button.png" />
+                        </a>
+                      </div>
+                </div>
           </form>
+          <div class="modal-footer">
+        </div>
         </div>
       </div>
     </div>

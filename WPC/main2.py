@@ -20,6 +20,7 @@ import urllib
 import webapp2
 import jinja2
 import logging
+import random
 
 from datamodel import *
 from datahandle import *
@@ -132,6 +133,7 @@ class MainHandler(PageHandler):
 			errorMsg = "Please signup/login to perform this action" 
 			self.render('index.html', **templateVals)
 		else:
+			action = self.request.get('actionType')
 			templateVals = {'me': self.user}
 			qry = Picture.query()
 			qry2 = Messages.query(ancestor=self.user.key).order(-Messages.created)
@@ -147,7 +149,6 @@ class MainHandler(PageHandler):
 			templateVals['new_photos'] = new_photos
 			templateVals['most_viewed'] = most_viewed
 			templateVals['messages'] = messages
-			action = self.request.get('actionType')
 			if action == "like":
 				photoKey = get_key_urlunsafe(self.request.get('photoKey'))
 				photo = photoKey.get()
@@ -162,11 +163,13 @@ class MainHandler(PageHandler):
 				group = create_group("", "", "", resultphotoList, self.user.key)
 				message_type = 7
 				create_message(message_type, 'Photographer liked your photo', self.user.key, photo.key, blog.key, group.key, user.key)
-			if action == "add":
+				self.render('index_user.html', **templateVals)
+			elif action == "add":
 				photoKey = get_key_urlunsafe(self.request.get('photoKey'))
 				self.user.pinned_photos.append(photoKey)
 				self.user.put()
-			if action == "follow":
+				self.render('index_user.html', **templateVals)
+			elif action == "follow":
 				user = self.request.get('user_key')
 				self_user = self.request.get('self_user_key')
 				user_key = User.get_by_id(user)
@@ -183,7 +186,13 @@ class MainHandler(PageHandler):
 				group = create_group("", "", "", resultphotoList, self.user.key)
 				message_type = 8
 				create_message(message_type, 'Photographer is following you', self.user.key, self.user.avatar, blog.key, group.key, user_key.key)
-			self.render('index_user.html', **templateVals)
+				self.render('index_user.html', **templateVals)
+			elif action == "delete":
+				photoKey = get_key_urlunsafe(self.request.get('photoKey'))
+				delete_photo(photoKey, self.user.key)
+				self.render('index_user.html', **templateVals)
+
+			
 
 class UserHomeHandler(PageHandler):
 	def get(self):
@@ -213,7 +222,7 @@ class UserHomeHandler(PageHandler):
 				group = create_group("", "", "", resultphotoList, self.user.key)
 				message_type = 7
 				for f in self.user.followers:
-					create_message(message_type, update_status, self.user.key, self.user.avatar, blog.key, None, f.get().key)
+					create_message(message_type, update_status, self.user.key, self.user.avatar, blog.key, group.key, f.get().key)
 			if action == 'comment':
 				comment = self.request.get('comment')
 				messageKey = get_key_urlunsafe(self.request.get('messageKey'))
@@ -269,7 +278,37 @@ class UserSettingsHandler(blobstore_handlers.BlobstoreUploadHandler, PageHandler
 			
 class ExploreHandler(PageHandler):               ## TODO
 	def post(self):
-		self.redirect('/')
+		action = self.request.get('actionType')
+		if action == "explore":
+			num = random.randint(1, 4)
+			if num == 1:
+				qry = Picture.query()
+				count = qry.count()
+				row_num = random.randint(1, count)
+				photo = qry.fetch(1, offset=row_num, keys_only=True)
+				photo_key = photo[0].urlsafe()
+				self.redirect('/photo/%s' % photo_key)
+			if num == 2:
+				qry = User.query()
+				count = qry.count()
+				row_num = random.randint(1, count)
+				user = qry.fetch(1, offset=row_num)
+				user_key = user[0].wpc_name
+				self.redirect('/%s' % user_key)
+			if num == 3:
+				qry = Blog.query()
+				count = qry.count()
+				row_num = random.randint(1, count)
+				blog = qry.fetch(1, offset=row_num, keys_only=True)
+				blog_key = blog[0].urlsafe()
+				self.redirect('/blog/%s' % blog_key)
+			if num == 4:
+				qry = Group.query()
+				count = qry.count()
+				row_num = random.randint(1, count)
+				group = qry.fetch(1, offset=row_num, keys_only=True)
+				group_key = group[0].urlsafe()
+				self.redirect('/group/%s' % group_key)
 
 class SearchResultsHandler(PageHandler):           ## TODO
 	def get(self):
@@ -364,10 +403,10 @@ class PhotosHandler(PageHandler):
 		qry5 = qry.order(-Picture.tags)
 		qry6 = qry_p.order(-User.wpc_score)
 		
-		most_viewed = qry1.fetch(250)
-		top_100 = qry2.fetch(100)
-		most_liked = qry3.fetch(250)
-		recommended = qry4.fetch(250)
+		most_viewed = qry1.fetch(5)
+		top_100 = qry2.fetch(10)
+		most_liked = qry3.fetch(5)
+		recommended = qry4.fetch(5)
 		tags = qry5.fetch()
 		top_users = qry6.fetch(6)
 
@@ -534,12 +573,13 @@ class UserStudioHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler):
 			templateVals['blogs'] = blogs
 			uploadUrl = blobstore.create_upload_url('/resource')
 			templateVals['uploadUrl'] = uploadUrl
-			qry2 = Messages.query(ancestor=self.user.key).order(-Messages.created)
-			messages = qry2.fetch()
-			templateVals['messages'] = messages
-			if self.user != user:
-				self.user.profile_views += 1
-				self.user.put()
+			if self.user:
+				qry2 = Messages.query(ancestor=self.user.key).order(-Messages.created)
+				messages = qry2.fetch()
+				templateVals['messages'] = messages
+			if not user:
+				user.profile_views += 1
+				user.put()
 			print "2 in if user"
 			print "###############################################"
 			self.render('user_studio.html', **templateVals)
@@ -1664,18 +1704,20 @@ class SignupHandler(PageHandler):
 class LoginHandler(PageHandler):
 	def post(self):
 	#	try:
-			email = self.request.get('email')
+			#email = self.request.get('email')
 			password = self.request.get('password')
-			templateVals = {'signinEmail': email}
-			print email
+			wpc_name = self.request.get('wpc_name')
+			templateVals = {'signinEmail': wpc_name}
+			print wpc_name
 			print password
-			if email and password:
+			if wpc_name and password:
 				print "in if 1"
-				user = User.get_by_id(email)
+				print wpc_name
+				user = User.get_by_id(wpc_name)
 				print user
 				if user:
 					print "in if 2"
-					if utils.valid_password(email, password, user.passwordHash):
+					if utils.valid_password(wpc_name, password, user.passwordHash):
 						print "in if 3"
 						self.login(user)
 						self.redirect("/")

@@ -37,7 +37,7 @@ Home | WPC
 			  </ul>
 		  </li>
 		  <li class="dropdown">
-			  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-envelope"></span><b class="caret"></b><span class="badge pull-right">{{len(messages)}}</span></a>
+			  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-envelope"></span><b class="caret"></b><span id="notification_count" class="badge pull-right">{{len(messages)}}</span></a>
 			  <ul class="dropdown-menu">
 				  <li>
 					<div class="messages_container">
@@ -119,6 +119,16 @@ Home | WPC
 			  </ul>
 		  </li>
 	</ul>
+	<div style="display:none;">
+	  <div id="count">
+
+	  </div>
+	</div>
+	<script>
+	//setInterval(function(){ 
+    // $( "#notification_count" ).load( "/ #count" );  
+	//}, 5000);
+	</script>
 
 {%endblock%}
 {%block signup_links%}  

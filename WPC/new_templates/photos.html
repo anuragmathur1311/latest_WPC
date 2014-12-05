@@ -34,36 +34,40 @@
     </div>
   </div>
 
-      <div id="myCarousel" class="carousel slide" data-ride="carousel">
-        <ol class="carousel-indicators">
-          {%for b in views%}
-            {%if loop.first%}
-              <li data-target="#myCarousel" data-slide-to="{{loop.index}}" class="active"></li>
-            {%else%}
-              <li data-target="#myCarousel" data-slide-to="{{loop.index}}"></li>
-            {%endif%}
-          {%endfor%}
-        </ol>
-        <div class="carousel-inner">
-          {%for b in views%}
-            {%if loop.first%}
-              <div class="item active">
-            {%else%}
-              <div class="item">
-            {%endif%}
-          <div class="container">
-            <div class="carousel-caption" style="bottom:50px;">
-              <h1><img src="{{b.cover}}" alt="Blog Image" class="img-rounded" width="100px">  {{b.title}}</h1>
-              <p><a class="btn btn-sm btn-success" href="/blog/{{b.key.urlsafe()}}" role="button">Read Blog</a></p>
-              <a href=""><h5 style="color:green;"><img src="{{b.key.parent().get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em>{{b.key.parent().get().name}}</em></h5></a>
+    <div id="myCarousel" class="carousel slide" data-ride="carousel">
+      <div class="carousel-inner">
+        {%for p in top_100%}
+         {%if loop.first%}
+            <div class="item active">
+          {%else%}
+            <div class="item">
+          {%endif%}
+            <a href="/photo/{{p.key.urlsafe()}}"><img src="{{get_serving_url(p.blobKey)}}" alt="{{p.name}}"/></a>
+            <div class="container">
+              <div class="carousel-caption">
+              </div>
             </div>
           </div>
+       {%if loop.index % 5 == 0%}
+         <div class="item">
+          <div class="item">
+          <div style="margin:0px;">
+            <img src="/images/img_2.jpg" height="250px" width="300px">
+            <img src="/images/img_2.jpg" height="250px" width="300px">
+            <img src="/images/img_2.jpg" height="250px" width="300px">
           </div>
-          {%endfor%}
-       </div>
-        <a class="left carousel-control" href="#myCarousel" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>
-        <a class="right carousel-control" href="#myCarousel" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
-      </div><!-- /.carousel -->
+            <div class="container">
+              <div class="carousel-caption">
+              </div>
+            </div>
+          </div>
+         </div>
+        {%endif%}
+        {%endfor%}
+      </div>
+      <a class="left carousel-control" href="#myCarousel" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>
+      <a class="right carousel-control" href="#myCarousel" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
+    </div>
     {%block signup_links%}  
     {%endblock%}
     <hr>
@@ -89,7 +93,8 @@
     <div class="row">
       <hr>
     </div>
-  <h4>WPC Curated Playlists</h4>
+    <!--
+  <h4>WPC Curated Groups</h4>
     <form role="form" method="post">
       <input type="hidden" name="photo_list" value="top_100">
       <input type="hidden" name="list_type" value="default_list">
@@ -98,6 +103,7 @@
      <div class="col-md-12 text-center">
     <hr>
 </div>
+-->
     <div class="col-md-12 text-center">
         <p>Ads</p>
         <img src="/images/img_2.jpg"  height="90px" width="728px">
@@ -149,7 +155,6 @@
     <div class="row">
       <hr>
     </div> -->
-     <hr>
 
     <div class="col-md-12 text-center">
         <p>Ads</p>
