@@ -145,7 +145,16 @@
       		</div>
 		</div>
 	</div>
-	
+     <div class="col-md-12 text-center">
+     <hr>
+   </div>
+
+    <div class="col-md-12 text-center">
+        <p>Ads</p>
+        <img src="/images/img_2.jpg" height="250px" width="300px">
+        <img src="/images/img_2.jpg" height="250px" width="300px">
+        <img src="/images/img_2.jpg" height="250px" width="300px">
+    </div>
 <div style="display:none;">
 	<div id="blogs">
 		<br>
@@ -186,7 +195,7 @@
     {%endfor%}
     {%for fl in user.following%}
         <div class="col-md-2">
-            <img class="img-circle" src="{{user.avatar_url}}" height="100px" alt="Profile image">
+            <img class="img-circle" src="{{fl.get().avatar_url}}" height="100px" alt="Profile image">
             <a href="/{{fl.get().key.id()}}"><h5 style="color:black;"><em>{{fl.get().name}}<em></h5>
             <img src="/fonts/Flags/{{fl.get().country}}.png" alt="country" width="40px"></a>
             <h5 style="color:green"><em>#{{fl.get().wpc_score}}</em></h5>

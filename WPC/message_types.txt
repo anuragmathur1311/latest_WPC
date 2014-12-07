@@ -55,6 +55,7 @@ message#	type
 8			usr if following you
 9 			user joined your group
 10			user liked blog
+11 			user updated his status
 
 
 
@@ -76,12 +77,12 @@ Remaining Work
 14) sort according to the tags or album buttons 					- done...tags and albums shud only appear once
 15) search photos and filter photos 								- search done....thinking of removing filter
 16) upload status on photos page
-17) add details to all photos on phtoos page
-18) put ads on all pages properly
+17) add details to all photos on phtoos upload page 				- done, removed location
+18) put ads on all pages properly									- done
 19) implement invite friends
 20) update user settings 											- partially done....permissions remaining
 21) badge num on notification icon 
-22) Analytics on settings page
+22) Analytics on settings pages 									- will enable this feature after some data is collected after may be 2-3 																		  months
 23) login not working...have to correct it 							- done should not be a prb for all new users
 24) My gear in about												- removing it, will add later
 

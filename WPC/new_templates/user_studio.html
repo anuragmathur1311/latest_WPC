@@ -110,7 +110,7 @@
           <input type="hidden" name="formType" value="personal_message">
           <div class="modal-footer">
          
-      _group    </div>
+      </div>
           <div class="row">
            {%for f in user.followers%}
                   <div class="col-sm-2">
@@ -133,7 +133,7 @@
           <input type="hidden" name="formType" value="personal_message">
           <div class="modal-footer">
          
-      _group    </div>
+      </div>
            <div class="row">
            {%for fl in user.following%}
                  <div class="col-sm-2">
@@ -228,7 +228,7 @@
           <form role="form" method="post">
               <div class="modal-footer">
                 <input type="hidden" name="formType" value="follow">
-                <input type="hidden" id="" name="actionType" value="_group">
+                <input type="hidden" id="" name="actionType" value="">
                 <input type="hidden" id="userid" name="user" value="{{user.key.id()}}">
                 <input type="hidden" id="userid" name="user_key" value="{{user.key}}">
                 <input type="hidden" id="userid" name="self_user_key" value="{{me.id}}">
@@ -1003,7 +1003,9 @@
 
     <div class="col-md-12 text-center">
         <p>Ads</p>
-        <img src="/images/img_2.jpg"  height="90px" width="728px">
+        <img src="/images/img_2.jpg" height="250px" width="300px">
+        <img src="/images/img_2.jpg" height="250px" width="300px">
+        <img src="/images/img_2.jpg" height="250px" width="300px">
     </div>
     <!-- /Map -->
     {%block footer%}
@@ -1334,7 +1336,7 @@ function select_cover2(img_key, img_src) {
           </div>
           <form role="form" method="post">
             <input type="hidden" name="formType" value="photography_types">
-            <input type="hidden" name="actionType" value="NONE">_group
+            <input type="hidden" name="actionType" value="NONE">
             <input type="hidden" id="userid" name="user" value="{{user.key.id()}}">
 
             {%for pi_list in [('Advertising'), ('Aerial'), ('Architectural'), ('Astronomical'), ('Music'), ('Event'), ('Family'), ('Fashion'), ('Food'), ('Landscape'), ('Macro'), ('Medical'), ('Nude'), ('Photojournalism'), ('Scientific'), ('Sports'), ('Street'), ('Travel'), ('Underwater'), ('Vehicle'), ('Wedding'), ('Wildlife')]%}
@@ -1371,7 +1373,7 @@ function select_cover2(img_key, img_src) {
           </div>
           <form role="form" method="post">
             <input type="hidden" name="formType" value="photography_awards">
-            <input type="hidden" name="actionType" value="NONE">_group
+            <input type="hidden" name="actionType" value="NONE">
             <input type="hidden" id="userid" name="user" value="{{user.key.id()}}">
             <div class="col-lg-2 col-md-2 text-center">
                 <div class="service-item change_color">

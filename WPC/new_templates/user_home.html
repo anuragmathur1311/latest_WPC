@@ -140,7 +140,7 @@ Home | WPC
 								<div><i style="color:gold;" class="fa fa-trophy fa-2x"></i>
                       			<h5>{{award_name}}</h5></div>
                       		{%elif m.message_type == 7%}
-								<p><em  style="color:blue">{{m.sender.get().name}}</em> updated his status</p>
+								<p><em  style="color:blue">{{m.sender.get().name}}</em> liked your photo</p>
 								<p class="lead">{{m.message}}</p>
 								    <form method="post">
 						              	<div class="input-group">
@@ -230,7 +230,7 @@ Home | WPC
 								<div><i style="color:gold;" class="fa fa-trophy fa-2x"></i>
                       			<h5>{{award_name}}</h5></div>	
                       		{%elif m.message_type == 7%}
-								<p><em  style="color:blue">{{m.sender.get().name}}</em> updated his status</p>
+								<p><em  style="color:blue">{{m.sender.get().name}}</em> liked your photo</p>
 								<p class="lead">{{m.message}}</p>
 								{%for c in m.comments%}
 									<p>{{c}}</p>

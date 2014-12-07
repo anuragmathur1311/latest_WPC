@@ -14,10 +14,10 @@
 <!-- Bootstrap core CSS -->
 <link href="/css/bootstrap.css" rel="stylesheet">
 <!-- Add custom CSS here -->
+<link href="/css/my_studio.css" rel="stylesheet">
 <link href="/css/carousel.css" rel="stylesheet">
 <link href="/css/font.css" rel="stylesheet">
 <link href="/css/search_results.css" rel="stylesheet">
-
 {%endblock%}
 
 {%block carousel%}
@@ -45,11 +45,14 @@
                                       <div class="navbar-collapse collapse">
                                           <ul class="nav navbar-nav">
                                               <li style="margin:13px;">
-                                                  <form role="form" action="/photo_lists" method="post">
+                                                <!--
+                                                  <form role="form" method="post">
                                                       <input type="hidden" name="actionType" value="like">
-                                                      <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
-                                                      <button class="btn_genre" type="submit" title="Like This Image"><a href="#"></i><i class="fa fa-thumbs-o-up" style="color:white;"></i></a></button>
+                                                      <input type="hidden" id="photoKey" name="photoKey" value="{{p.key.urlsafe()}}">
+                                                      <button class="btn_genre like_button" type="submit" id="after_like" title="Like This Image"><a href="#"></i><i class="fa fa-thumbs-o-up" style="color:white;"></i></a></button>
                                                   </form>
+                                                -->
+                                                <button class="btn_genre like_button" id="after_like_{{loop.index}}" title="Like This Image"><a onclick="like_button('{{p.key.urlsafe()}}', 'after_like_{{loop.index}}');" href="javascript:void(0);"></i><i class="fa fa-thumbs-o-up" style="color:white;"></i></a></button>
                                               </li>
                                               <li style="margin:13px;">
                                                   <form method="post">
@@ -76,27 +79,33 @@
           </div>
               {%if loop.index % 5 == 0%}
                   <div class="item">
-                      <img src="/images/img_2.jpg" alt="Ad" style="margin:300px;text-align:center;"/>
-                      <div class="container">
-                          <div class="carousel-caption">
-                              <div class="navbar-wrapper">
-                                  <div class="container">
-                                      <div class="navbar navbar-transparent navbar-static-top padding-top" role="navigation">
-                                          <div class="container">
-                                              <div class="navbar-header">
-                                                  <a class="navbar-brand" href="#" style="color:white"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="20px">AD</a>
-                                              </div>
-                                              <div class="navbar-collapse collapse">
-                                                  <ul class="nav navbar-nav">
-                                                  </ul>
-                                              </div>
-                                          </div>
-                                      </div>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
+          <div class="item">
+          <div style="margin:50px;">
+            <img src="/images/img_2.jpg" height="250px" width="300px">
+            <img src="/images/img_2.jpg" height="250px" width="300px">
+            <img src="/images/img_2.jpg" height="250px" width="300px">
+          </div>
+            <div class="container">
+              <div class="carousel-caption">
+          <div class="navbar-wrapper">
+            <div class="container">
+            <div class="navbar navbar-transparent navbar-static-top padding-top" role="navigation">
+              <div class="container">
+              <div class="navbar-header">
+                <a class="navbar-brand" href="#" style="color:white">ADs</a>
+              </div>
+              <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                </ul>
+              </div>
+              </div>
+            </div>
+            </div>
+          </div>
+              </div>
+            </div>
+          </div>
+         </div>
               {%endif%}
         {%else%}
             <div class="item active">
@@ -116,7 +125,27 @@
         <a class="right carousel-control" href="#myCarousel" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
     </div>
 
+  <script>
+  function like_button(photo_key, div_count) {
+    document.getElementById('loading').innerHTML = "<p style='color:white;'>Loading...</p>";
+    output = $.post( "/photo_lists", {actionType : 'like', photoKey : photo_key} )
+    output.done(function( data ) {
+    document.getElementById('loading').innerHTML = "";  
+    document.getElementById(div_count).innerHTML = data;
+  });
+  }
+  </script>
+    <div class="col-md-12 text-center">
+    <hr>
+</div>
 
+    <div class="col-md-12 text-center">
+        <p>Ads</p>
+        <img src="/images/img_2.jpg"  height="90px" width="728px">
+    </div>
+    <div class="col-md-12 text-center">
+    <hr>
+</div>
     <!-- Marketing messaging and featurettes
     ================================================== -->
     <!-- Wrap the rest of the page in another container to center all the content. -->
@@ -334,38 +363,48 @@
       <div id="photographers" class="">
           <div class="container grid-custom">
               <h3>Photographers</h3>
-              <!-- Three columns of text below the carousel -->
-              {%for u in users%}
-                {% else %}
-                  <div>
-                    <h2>No photographers found, please search something else</h2>
-                    {%if me == ""%}
-                      <a href="/signin">Signup</a>
-                    {%endif%}
-                  </div>
-                    {%set no_photos = 1%}
-                {% endfor %}
-              {%if no_blogs != 1%}  
-              <div class="row" style="text-align:center;">
-              {%for u in users%}
-                  <div class="col-md-2">
-                      <img class="img-circle" src="{{u.avatar_url}}" height="150px" alt="Generic placeholder image">
-                          <p></p>
-                          <a href="/{{u.key.id()}}"><em>{{u.name}}</em></a>
-                          <p></p>
-                          <button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-picture" style="color:white;"></span></button>
-                          <button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-thumbs-up" style="color:white;"></span></button>
-                          <button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-plus-sign" style="color:white;"></span></button>
-                          <button type="button" class="btn btn-success btn-xs photographer_options"><span class="glyphicon glyphicon-pushpin" style="color:white;"></span></button>
-                  </div><!-- /.col-lg-4 -->
-              {%endfor%}
-              </div><!-- /.row -->
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
+        {%for fl in users%}
+            <div class="col-md-2 col-sm-6 col-xs-12">
+                <img class="img-circle" src="{{fl.avatar_url}}" height="100px" alt="Profile image">
+                <a href="/{{fl.key.id()}}"><h5 style="color:black;"><em>{{fl.name}}<em></h5>
+                <img src="/fonts/Flags/{{fl.country}}.png" alt="country" width="40px"></a>
+                <h5 style="color:green"><em>#{{fl.wpc_score}}</em></h5>
+                {%if me%}
+                <div class="button-container">
+                <a href="/{{fl.key.id()}}/photos"><button type="button" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-picture" style="color:white;"></span></button></a>
+                  {%if fl.key.id() == me.key.id()%}
+                    <button type="button" class="btn btn-info btn-xs"  disabled="disabled"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
+                  {%else%}
+                  <form method="post">
+                      <input type="hidden" name="actionType" value="follow">
+                      <input type="hidden" name="user_key" value="{{fl.key.id()}}">
+                      <input type="hidden" name="self_user_key" value="{{me.key.id()}}">
+                      <button type="submit" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
+                    </form>
+                  {%endif%}
+              </div>
               {%endif%}
+            </div><!-- /.col-lg-4 -->
+        {%else%}
+        <h2>No photographers found, please search something else</h2>
+       {%endfor%}
+        </div>
           </div>
           <button type="button" class="btn btn-info btn-sm col-xs-offset-6"> Load More</button>
       </div>
       
       <hr class="horizontal-line">
+    <div class="col-md-12 text-center">
+        <p>Ads</p>
+        <img src="/images/img_2.jpg"  height="90px" width="728px">
+    </div>
+
+    <div class="col-md-12 text-center">
+    <hr class="horizontal-line">
+</div>
+
+
       <div id="blog" class="">
           <div class="container grid-custom">
               <h3>Blogs</h3>
@@ -445,9 +484,9 @@
               {%if no_group != 1%}
               {%for b in groups%}
               {%if loop.index % 4 == 1%}
-                      <a href="/group/{{b.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.get().name}}</h3>
-                      <img src="{{b.get().cover_photo}}" alt="{{b.get().name}} Cover Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{user.name}}</em></h5></a>
-                      <div class="blog_content thumb_blog_content">{{b.get().description}}</div>
+                      <a href="/group/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.name}}</h3>
+                      <img src="{{b.cover_photo}}" alt="{{b.name}} Cover Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{user.name}}</em></h5></a>
+                      <div class="blog_content thumb_blog_content">{{b.description}}</div>
                       <hr>
               {%endif%}
               {% endfor %}
@@ -455,9 +494,9 @@
               <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
               {%for b in groups%}
               {%if loop.index % 4 == 2%}
-                      <a href="/group/{{b.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.get().name}}</h3>
-                      <img src="{{b.get().cover_photo}}" alt="{{b.get().name}} Cover Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{user.name}}</em></h5></a>
-                      <div class="blog_content thumb_blog_content">{{b.get().description}}</div>
+                      <a href="/group/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.name}}</h3>
+                      <img src="{{b.cover_photo}}" alt="{{b.name}} Cover Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{user.name}}</em></h5></a>
+                      <div class="blog_content thumb_blog_content">{{b.description}}</div>
                       <hr>
               {%endif%}
               {% endfor %}
@@ -465,9 +504,9 @@
               <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
               {%for b in groups%}
               {%if loop.index % 4 == 3%}
-                      <a href="/group/{{b.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.get().name}}</h3>
-                      <img src="{{b.get().cover_photo}}" alt="{{b.get().name}} Cover Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{user.name}}</em></h5></a>
-                      <div class="blog_content thumb_blog_content">{{b.get().description}}</div>
+                      <a href="/group/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.name}}</h3>
+                      <img src="{{b.cover_photo}}" alt="{{b.name}} Cover Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{user.name}}</em></h5></a>
+                      <div class="blog_content thumb_blog_content">{{b.description}}</div>
                       <hr>
               {%endif%}
               {% endfor %}
@@ -475,9 +514,9 @@
               <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
               {%for b in groups%}
               {%if loop.index % 4 == 0%}
-                      <a href="/group/{{b.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.get().name}}</h3>
-                      <img src="{{b.get().cover_photo}}" alt="{{b.get().name}} Cover Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{user.name}}</em></h5></a>
-                      <div class="blog_content thumb_blog_content">{{b.get().description}}</div>
+                      <a href="/group/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.name}}</h3>
+                      <img src="{{b.cover_photo}}" alt="{{b.name}} Cover Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{user.name}}</em></h5></a>
+                      <div class="blog_content thumb_blog_content">{{b.description}}</div>
                       <hr>
               {%endif%}
               {% endfor %}
@@ -514,4 +553,12 @@
       </div>
       
       <hr class="horizontal-line">
+
+    <div class="col-md-12 text-center">
+        <p>Ads</p>
+        <img src="/images/img_2.jpg"  height="90px" width="728px">
+    </div>
+    <div class="col-md-12 text-center">
+    <hr>
+</div>
 {%endblock%}

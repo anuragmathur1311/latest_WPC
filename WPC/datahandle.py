@@ -56,6 +56,13 @@ def create_picture(blobKey, caption, description, location, parent_key):
 	picKey = pic.put()
 	return pic
 
+def create_multiple_picture(blobKey, caption, description, location, tag, album, parent_key):
+	pic = Picture(blobKey=blobKey, caption=caption, description=description, location=location, parent=parent_key)
+	pic.tags += tag
+	pic.albums += album
+	picKey = pic.put()
+	return pic
+
 def create_group(name, description, cover_photo, resultphotoList, parent_key):
 	grp = Group(name=name, description=description, cover_photo=cover_photo, photos=resultphotoList, parent=parent_key)
 	grp.members.append(parent_key)

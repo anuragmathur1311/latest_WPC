@@ -21,6 +21,7 @@ import webapp2
 import jinja2
 import logging
 import random
+import json
 
 from datamodel import *
 from datahandle import *
@@ -93,8 +94,12 @@ class MainHandler(PageHandler):
 			qry = Picture.query()
 			qry1 = qry.order(-Picture.viewed)
 			qry3 = qry.order(-Picture.created)
+			qry4 = User.query(ndb.AND(User.wpc_score >= 5000 , User.wpc_score <= 10000)).order(-User.wpc_score)
+			qry5 = qry4.order(-User.joined)
+			new_users = qry5.fetch(6)
 			most_viewed = qry1.fetch(10)
 			new_photos = qry3.fetch(20)
+			templateVals['new_users'] = new_users
 			templateVals['new_photos'] = new_photos
 			templateVals['most_viewed'] = most_viewed
 			self.render('index.html', **templateVals)
@@ -118,7 +123,7 @@ class MainHandler(PageHandler):
 
 	def post(self):
 		if not self.user:
-			templateVals = {'me': ""}
+			templateVals = {'me': "null"}
 			qry = Picture.query()
 			qry1 = qry.order(-Picture.viewed)
 			qry3 = qry.order(-Picture.created)
@@ -220,7 +225,7 @@ class UserHomeHandler(PageHandler):
 				blog = create_blog("", "", "", self.user.key)
 				resultphotoList = []
 				group = create_group("", "", "", resultphotoList, self.user.key)
-				message_type = 7
+				message_type = 11
 				for f in self.user.followers:
 					create_message(message_type, update_status, self.user.key, self.user.avatar, blog.key, group.key, f.get().key)
 			if action == 'comment':
@@ -456,15 +461,26 @@ class PhotosHandler(PageHandler):
 
 class PhotoListPageHandler(PageHandler): 
 	def post(self):
+		print "########## IN Post ####################"
 		if not self.user:
+			print "########## IN Not User ####################"
 			templateVals = {'me': ""}
+			qry = Picture.query()
+			qry1 = qry.order(-Picture.awards)
+			photos = qry1.fetch(10)
+			templateVals['photos'] = photos
+			templateVals['list_name'] = 'Top 1000 Most Viewed photos on WPC'
+			self.render('photo_list.html', **templateVals)	
 		else:
+			print "########## IN User ####################"
 			templateVals = {'me': self.user}
 			qry2 = Messages.query(ancestor=self.user.key).order(-Messages.created)
 			messages = qry2.fetch()
 			templateVals['messages'] = messages
 			action = self.request.get('actionType')
+			print action
 			if action == "like":
+				print "########## IN LIKE ####################"
 				photoKey = get_key_urlunsafe(self.request.get('photoKey'))
 				photo = photoKey.get()
 				photo.likes += 1
@@ -478,16 +494,20 @@ class PhotoListPageHandler(PageHandler):
 				group = create_group("", "", "", resultphotoList, self.user.key)
 				message_type = 7
 				create_message(message_type, 'Photographer liked your photo', self.user.key, photo.key, blog.key, group.key, user.key)
+				data = "<a href='#'></i><i class='fa fa-thumbs-o-up' style='color:yellow;'></i></a>"
+				print data
+				self.response.headers['Content-Type'] = 'application/json'
+        		self.response.write(json.dumps(data))
 			if action == "add":
 				photoKey = get_key_urlunsafe(self.request.get('photoKey'))
 				self.user.pinned_photos.append(photoKey)
 				self.user.put()
-		qry = Picture.query()
-		qry1 = qry.order(-Picture.awards)
-		photos = qry1.fetch(1000)
-		templateVals['photos'] = photos
-		templateVals['list_name'] = 'Top 1000 Most Viewed photos on WPC'
-		self.render('photo_list.html', **templateVals)
+				qry = Picture.query()
+				qry1 = qry.order(-Picture.awards)
+				photos = qry1.fetch(1000)
+				templateVals['photos'] = photos
+				templateVals['list_name'] = 'Top 1000 Most Viewed photos on WPC'
+				self.render('photo_list.html', **templateVals)
 
 
 class BlogsHandler(PageHandler):
@@ -717,6 +737,25 @@ class UserStudioHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler):
 				group = create_group("", "", "", resultphotoList, self.user.key)
 				message_type = 8
 				create_message(message_type, 'Photographer is following you', self.user.key, self.user.avatar, blog.key, group.key, user.key)
+			if form == "photo":
+				if action == "like":
+					photoKey = get_key_urlunsafe(self.request.get('photoKey'))
+					photo = photoKey.get()
+					photo.likes += 1
+					photo.put()
+					self.user.wpc_score += 100
+					self.user.put()
+					userKey = photoKey.parent()
+					user = userKey.get()
+					resultphotoList = []
+					blog = create_blog("", "", "", self.user.key)
+					group = create_group("", "", "", resultphotoList, self.user.key)
+					message_type = 7
+					create_message(message_type, 'Photographer liked your photo', self.user.key, photo.key, blog.key, group.key, user.key)
+				elif action == "add":
+					photoKey = get_key_urlunsafe(self.request.get('photoKey'))
+					self.user.pinned_photos.append(photoKey)
+					self.user.put()
 			else:
 				self.redirect('/' + userid)
 			user.put()
@@ -1211,14 +1250,19 @@ class PhotoNewHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler):
 			captionList = self.request.get_all('caption')
 			descriptionList = self.request.get_all('description')
 			locationList = self.request.get_all('location')
-			print self.request
+			#add_location = self.request.get('add_location')
+			tagList = self.request.get_all('add_tag')
+			albumList = self.request.get_all('add_album')
+			print tagList
+			print albumList
+			print "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"
 			if len(uploads)>0:
 				for i in range(len(uploads)):
 					blobInfo = uploads[i]
 					caption = captionList[i]
 					description = descriptionList[i]
 					location = locationList[i]
-					photo = create_picture(blobInfo.key(), caption, description, location, self.user.key)
+					photo = create_multiple_picture(blobInfo.key(), caption, description, location, albumList, tagList, self.user.key)
 				message_type = 1
 				for f in self.user.followers:
 					create_message(message_type, 'Photographer added new photos', self.user.key, photo.key, None, None, f.get().key)

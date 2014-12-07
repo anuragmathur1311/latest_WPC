@@ -47,63 +47,52 @@ Upload Photos | WPC
 				<h3>Update properties for all photos or update later after uploading is done</h3>
 				   <div class="col-lg-4 col-lg-offset-4">
 				    <div class="input-group">
-				      <input type="text" class="form-control" placeholder="Add New Album">
+				      <input type="text" class="form-control" id="add_album" name="add_album" value="" placeholder="Add New Album">
 				      <div class="input-group-btn">
 				        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Existing Albums <span class="caret"></span></button>
 				        <ul class="dropdown-menu dropdown-menu-right" role="menu">
 						{%for p in photos%}
 								{%for albums in p.albums%}
-									<li><a href="#">{{albums}}</a></li>
+									<li><a onclick="add_album('{{albums}}');" href="javascript:void(0);">{{albums}}</a></li>
 								{%endfor%}
 						{%endfor%}
 				        </ul>
 				      </div><!-- /btn-group -->
 				    </div><!-- /input-group -->
 				  </div><!-- /.col-lg-6 -->
-				</div><!-- /.row -->
+				  <!--	
 				   <div class="col-lg-4 col-lg-offset-4">
 				    <div class="input-group">
-				      <input type="text" class="form-control" placeholder="Add New Location">
+				      <input type="text" class="form-control" id="add_location" name="add_location" value="" placeholder="Add New Location">
 				      <div class="input-group-btn">
-				        <button type="button" class="btn btn-default	 dropdown-toggle" data-toggle="dropdown">Existing Locations <span class="caret"></span></button>
+				        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Existing Locations <span class="caret"></span></button>
 				        <ul class="dropdown-menu dropdown-menu-right" role="menu">
 				         {%for p in photos%}
-								<li><a href="#">{{p.location}}</a></li>
+								<li><a onclick="add_location('{{p.location}}');" href="javascript:void(0);">{{p.location}}</a></li>
 						{%endfor%}
 				        </ul>
-				      </div><!-- /btn-group -->
-				    </div><!-- /input-group -->
-				  </div><!-- /.col-lg-6 -->
-				</div><!-- /.row -->
+				      </div>
+				    </div>
+				  </div>-->
+
 				   <div class="col-lg-4 col-lg-offset-4">
 				    <div class="input-group">
-				      <input type="text" class="form-control"  placeholder="Add New Tag">
+				      <input type="text" class="form-control" id="add_tag" name="add_tag" value="" placeholder="Add New Tag">
 				      <div class="input-group-btn">
 				        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Existing Tags <span class="caret"></span></button>
 				        <ul class="dropdown-menu dropdown-menu-right" role="menu">
 						{%for p in photos%}
 								{%for tags in p.tags%}
-									<li><a href="#">{{tags}}</a></li>
+									<li><a onclick="add_tag('{{tags}}');" href="javascript:void(0);">{{tags}}</a></li>
 								{%endfor%}
 						{%endfor%}
 				        </ul>
 				      </div><!-- /btn-group -->
 				    </div><!-- /input-group -->
 				  </div><!-- /.col-lg-6 -->
-				</div><!-- /.row -->
-			<div class="col-lg-4 col-lg-offset-4">
-				<button class="btn btn-sm btn-success" type="submit">Add to all Photos</button>	
-			</div>
+
 				<div class="container" id="thumb_img1">
 				</div>
-				<!--<input type="hidden" id="myCaption" name="captions">
-				<input type="hidden" id="myDescription" name="descriptions">
-				<input type="hidden" id="myLocation" name="locations"> -->
-				<!-- The table listing the files available for upload/download -->
-				<table role="presentation" class="table table-striped">
-					<tbody class="files">
-					</tbody>
-				</table>
 			</form>
 			<div class="col-md-12 text-center">
 			        <p>Ads</p>
@@ -128,9 +117,9 @@ Upload Photos | WPC
 							</li>
 							<li><a href="www.twitter.com"><i class="fa fa-twitter fa-3x"></i></a>
 							</li>
-							<li><a href="www.dribble.com"><i class="fa fa-google-plus-square fa-3x"></i></a>
+							<li><a href="www.googleplus.com"><i class="fa fa-google-plus-square fa-3x"></i></a>
 							</li>
-							<li><a href="www.dribble.com"><i class="fa fa-pinterest fa-3x"></i></a>
+							<li><a href="www.pinterest.com"><i class="fa fa-pinterest fa-3x"></i></a>
 							</li>
 						</ul>
 					</div>
@@ -143,6 +132,20 @@ Upload Photos | WPC
 {% endblock %}
 
 {% block javaScripts%}
+<script type="text/javascript">
+function add_album(album_name) {
+	document.getElementById("add_album").value = album_name;
+	document.getElementById("add_album").placeholder = album_name;
+}
+function add_location(location_name) {
+	document.getElementById("add_location").value = location_name;
+	document.getElementById("add_location").placeholder = location_name;
+}
+function add_tag(tag_name) {
+	document.getElementById("add_tag").value = tag_name;
+	document.getElementById("add_tag").placeholder = tag_name;
+}
+</script>
 <script>
 window.onload = function(){  
     //Check File API support
@@ -182,7 +185,7 @@ window.onload = function(){
                 picReader.addEventListener("load",function(event){
 	                var picFile = event.target;
                     var div = document.createElement("div");
-                    div.innerHTML = "<div class='col-lg-4'><img class='img-rounded' src='" + picFile.result + "' height='140px' alt='"+file_name[w]+"'><h4 style='color:black;'>"+file_name_size[w]+"</h4><h5 class='form-signin-heading padding_bottom'>Update Photo Details</h5><input type='text' id='picCaption' name='caption' class='form-control padding_bottom' placeholder='Caption' autofocus><input type='text' id='picLocation' name='location' class='form-control padding_bottom' placeholder='Location' autofocus><textarea type='textarea' id='picDescription' name='description' class='form-control padding_bottom' placeholder='Description'></textarea></div>";
+                    div.innerHTML = "<div class='col-lg-4'><img class='img-rounded' src='" + picFile.result + "' height='140px' alt='"+file_name[w]+"'><h4 style='color:black;'>"+file_name_size[w]+"</h4><h5 class='form-signin-heading padding_bottom'>Update Photo Details</h5><input type='text' id='picCaption' name='caption' class='form-control padding_bottom' value="+file_name[w]+" placeholder='Caption' autofocus><input type='text' id='picLocation' name='location' class='form-control padding_bottom' placeholder='Location' autofocus><textarea type='textarea' id='picDescription' name='description' class='form-control padding_bottom' placeholder='Description'></textarea></div>";
                     w++;
                     output.insertBefore(div,null);            
                 });

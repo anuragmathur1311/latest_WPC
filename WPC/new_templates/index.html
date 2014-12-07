@@ -155,6 +155,7 @@
 							  <a class="navbar-brand" href="/{{p.key.parent().get().wpc_name}}" style="color:white"><img src="{{p.key.parent().get().avatar_url}}" alt="Profile Image" class="img-circle" width="20px">{{p.key.parent().get().name}}</a>
 							</div>
 							<div class="navbar-collapse collapse">
+							{%if me%}
 							  <ul class="nav navbar-nav">
 								<li style="margin:13px;"><form role="form" method="post">
 						            <input type="hidden" name="actionType" value="like">
@@ -170,6 +171,19 @@
 						            <button class="btn_genre" type="submit" title="Go to {{p.key.parent().get().wpc_name}}'s photos"><a href="/{{p.key.parent().get().wpc_name}}/photos"><span style="color:white;"class="glyphicon glyphicon-picture"></span></a></button>
 						         </li>	
 							  </ul>
+							 {%else%}
+							  <ul class="nav navbar-nav">
+								<li style="margin:13px;">
+						            <button class="btn_genre" data-toggle="modal" data-target=".login_for_action" title="Like This Image"><i class="fa fa-thumbs-o-up" style="color:white;"></i></button>
+						         </li>
+								<li style="margin:13px;">
+						            <button class="btn_genre" data-toggle="modal" data-target=".login_for_action" title="Add this Image to Ideabook"><i class="fa fa-plus" style="color:white;"></i></button>
+						         </li>
+						         <li style="margin:13px;">
+						            <button class="btn_genre" type="submit" title="Go to {{p.key.parent().get().wpc_name}}'s photos"><a href="/{{p.key.parent().get().wpc_name}}/photos"><span style="color:white;"class="glyphicon glyphicon-picture"></span></a></button>
+						         </li>	
+							  </ul>
+							{%endif%}
 							</div>
 						  </div>
 						</div>
@@ -212,6 +226,19 @@
       </div>
       <a class="left carousel-control" href="#myCarousel" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>
       <a class="right carousel-control" href="#myCarousel" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
+    </div>
+     <div class="modal fade login_for_action" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title">You have to Signin/signup to perform this action</h4>
+          </div>
+          <br>
+          <a href="/signin"><button class="btn btn-lg btn-success" type="button"><i class="fa fa-envelope" style="color:white;"></i>  Signin/Signup</button></a>
+          <hr>
+        </div>
+      </div>
     </div>
 		{%endblock%}
 		<!-- /.carousel -->
@@ -316,6 +343,7 @@
 					<div  class="col-md-4" style="padding:10px;">
 						<p>{{p.likes}} <i class="fa fa-thumbs-o-up fa-1x"></i> | {{p.viewed}} <i class="fa fa-eye fa-1x"></i></p>
 					</div>
+					{%if me%}
 					<div class="col-md-4 button-container" style="padding:10px;">
 						{%if me.key == p.key.parent().get().key%}
 							<form method="post">
@@ -346,6 +374,7 @@
 							</form>
 						{%endif%}
 					</div>
+					{%endif%}
 				</div>
 	      {%endif%}
 	      {% endfor %}
@@ -361,6 +390,7 @@
 					<div  class="col-md-4" style="padding:10px;">
 						<p>{{p.likes}} <i class="fa fa-thumbs-o-up fa-1x"></i> | {{p.viewed}} <i class="fa fa-eye fa-1x"></i></p>
 					</div>
+					{%if me%}
 					<div class="col-md-4 button-container" style="padding:10px;">
 						{%if me.key == p.key.parent().get().key%}
 							<form method="post">
@@ -391,6 +421,7 @@
 							</form>
 						{%endif%}
 					</div>
+					{%endif%}
 				</div>
 	      {%endif%}
 	      {% endfor %}
@@ -406,6 +437,7 @@
 					<div  class="col-md-4" style="padding:10px;">
 						<p>{{p.likes}} <i class="fa fa-thumbs-o-up fa-1x"></i> | {{p.viewed}} <i class="fa fa-eye fa-1x"></i></p>
 					</div>
+					{%if me%}
 					<div class="col-md-4 button-container" style="padding:10px;">
 						{%if me.key == p.key.parent().get().key%}
 							<form method="post">
@@ -436,6 +468,7 @@
 							</form>
 						{%endif%}
 					</div>
+					{%endif%}
 				</div>
 	      {%endif%}
 	      {% endfor %}
@@ -451,6 +484,7 @@
 					<div  class="col-md-4" style="padding:10px;">
 						<p>{{p.likes}} <i class="fa fa-thumbs-o-up fa-1x"></i> | {{p.viewed}} <i class="fa fa-eye fa-1x"></i></p>
 					</div>
+					{%if me%}
 					<div class="col-md-4 button-container" style="padding:10px;">
 						{%if me.key == p.key.parent().get().key%}
 							<form method="post">
@@ -481,6 +515,7 @@
 							</form>
 						{%endif%}
 					</div>
+					{%endif%}
 				</div>
 	      {%endif%}
 	      {% endfor %}
@@ -498,6 +533,7 @@
 		            <a href="/{{fl.key.id()}}"><h5 style="color:black;"><em>{{fl.name}}<em></h5>
 		            <img src="/fonts/Flags/{{fl.country}}.png" alt="country" width="40px"></a>
 		            <h5 style="color:green"><em>#{{fl.wpc_score}}</em></h5>
+		            {%if me%}
 		            <div class="button-container">
 		            <a href="/{{fl.key.id()}}/photos"><button type="button" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-picture" style="color:white;"></span></button></a>
 			            {%if fl.key.id() == me.key.id()%}
@@ -511,6 +547,7 @@
 			              </form>
 			            {%endif%}
 		        	</div>
+		        	{%endif%}
 		        </div><!-- /.col-lg-4 -->
 		   {%endfor%}
 		    </div>

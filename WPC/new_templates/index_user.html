@@ -8,6 +8,7 @@ Home | WPC
 
 {%block userNavLinks%}
 	<ul class="nav navbar-nav navbar-right" style="text-align:left;">
+		 <li id="loading"></li>
 		<li><a class="" href="/{{me.key.id()}}" title="Your WPC Score is #{{me.wpc_score}}" style="color:yellow;font-size:20px;" ><em>{{me.name}}</em></a></li>
 		<li><a href="/home"><span class="glyphicon glyphicon-home"></span></a></li>
 		<li><a href="/{{me.key.id()}}/photos"><span class="glyphicon glyphicon-picture"></span></a></li>
@@ -18,7 +19,7 @@ Home | WPC
 				  <li><a href="/newblog"><span class="glyphicon glyphicon-pencil"></span> Blog Post</a></li>
 				  <li><a href="/newgroup"><i class="fa fa-group"></i> Group</a></li>
 				  <!--<li><a href="/forum"><span class="glyphicon glyphicon-bell"></span> A Question</a></li>-->
-				  <li><a href="/newportfolio"><i class="fa fa-camera"></i> Portfolio (1/3)</a></li>
+				  <li><a href="/newportfolio"><i class="fa fa-camera"></i> Portfolio ({{len(me.portfolios)}}/2)</a></li>
 			  </ul>
 		  </li>
 		  <li>
@@ -30,7 +31,7 @@ Home | WPC
 				  <li><a href="/{{me.key.id()}}/ideabook"><span class="glyphicon glyphicon-heart-empty"></span> My Ideabook</a></li>
 				  <li><a href="/{{me.key.id()}}/portfolios"><span class="glyphicon glyphicon-camera"></span> My Portfolios</a></li>
 				  <li class="divider"></li>
-				  <li><a href="" data-toggle="modal" data-target=".bs-example-modal-lg"><i class="fa fa-phone"></i> Invite Friends</a></li>
+				  <li><a href="" data-toggle="modal" data-target="invite_friends"><i class="fa fa-phone"></i> Invite Friends</a></li>
 				  <li><a href="/settings"><span class="glyphicon glyphicon-cog"></span> Settings</a></li>
 				  <li class="divider"></li>
 				  <li><a href="/logout"><span class="glyphicon glyphicon-send"></span> Sign Out</a></li>
@@ -112,6 +113,10 @@ Home | WPC
 						  <h5 style="color:green;"><img src="{{m.sender.get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em><a href="/{{m.sender.get().key.id()}}">{{m.sender.get().name}}</a> <span style="color:black;"> liked your blog {{m.message_blog.get().title}}</span></em><p style="font-size:10px;">{{m.updated.strftime("%c")}}</p></h5>
 						   <a href="/blog/{{m.message_blog.get().key.urlsafe()}}"><p>Go to blog "{{m.message_blog.get().title}}"</p><img src="{{m.message_blog.get().cover}}" class="img-responsive"></a>
 						 {%endif%}
+						 {%if m.message_type == 11%}
+						  <h5 style="color:green;"><img src="{{m.sender.get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em><a href="/{{m.sender.get().key.id()}}">{{m.sender.get().name}}</a> <span style="color:black;">  updated his status</span></em><p style="font-size:10px;">{{m.updated.strftime("%c")}}</p></h5>
+						  <p>"{{m.message}}"</p>
+						 {%endif%}
 						  <hr>
 					  {%endfor%}
 					</div>
@@ -129,7 +134,6 @@ Home | WPC
     // $( "#notification_count" ).load( "/ #count" );  
 	//}, 5000);
 	</script>
-
 {%endblock%}
 {%block signup_links%}  
 {%endblock%}

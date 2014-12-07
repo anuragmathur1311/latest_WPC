@@ -27,6 +27,13 @@
 {%block pageContent%}
   <h1>Write A New Blog</h1>
   <hr class="horizontal-line">
+      <div class="col-md-12 text-center">
+        <p>Ads</p>
+        <img src="/images/img_2.jpg"  height="90px" width="728px">
+    </div>
+    <div class="col-md-12 text-center">
+    <hr>
+</div>
    <script src="/js/ckeditor.js"></script>
    <div class="col-md-10 col-md-offset-1 newblog_text">
 		<form action="{{uploadUrl}}" method="post" enctype="multipart/form-data">
@@ -48,25 +55,20 @@
 			  <div id="blog_cover_image"></div>
 			  <p></p>
 			  <h3>Write the blog</h3>
-			<textarea class="ckeditor" cols="80" id="editor1" name="content" rows="10">{{content}}</textarea><br>
+			<textarea class="ckeditor" cols="60" id="editor1" name="content" rows="10">{{content}}</textarea><br>
 			<button class="btn btn-xs btn-success" type="submit">Publish Blog</button>
 		</form>
 	</div>
 	<div class="col-md-12">
 		<hr>
 	</div>
-   <div class="col-md-10 col-md-offset-1">
-    <div id="about" class="intro">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6 col-md-offset-3 text-center">
-                    <h2></h2>
-                    <p class="lead">Place for Ads <br><a target="_blank" href="http://www.worldphotographersclub.com/">worldphotographersclub</a></p>
-                </div>
-            </div>
-        </div>
+    <div class="col-md-12 text-center">
+        <p>Ads</p>
+        <img src="/images/img_2.jpg"  height="90px" width="728px">
     </div>
-	</div>
+    <div class="col-md-12 text-center">
+    <hr>
+</div>
 	
   <div class="modal fade bs-example-modal-lg" id="select_photo" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
