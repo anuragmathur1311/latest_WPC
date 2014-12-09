@@ -154,7 +154,8 @@ class MainHandler(PageHandler):
 			templateVals['new_photos'] = new_photos
 			templateVals['most_viewed'] = most_viewed
 			templateVals['messages'] = messages
-			if action == "like":
+			data = ""
+			if action == 'like':
 				photoKey = get_key_urlunsafe(self.request.get('photoKey'))
 				photo = photoKey.get()
 				photo.likes += 1
@@ -169,12 +170,72 @@ class MainHandler(PageHandler):
 				message_type = 7
 				create_message(message_type, 'Photographer liked your photo', self.user.key, photo.key, blog.key, group.key, user.key)
 				self.render('index_user.html', **templateVals)
-			elif action == "add":
+			if action == 'carousel_like':
+				print "########## IN LIKE ####################"
+				photoKey = get_key_urlunsafe(self.request.get('photoKey'))
+				photo = photoKey.get()
+				photo.likes += 1
+				photo.put()
+				self.user.wpc_score += 100
+				self.user.put()
+				userKey = photoKey.parent()
+				user = userKey.get()
+				resultphotoList = []
+				blog = create_blog("", "", "", self.user.key)
+				group = create_group("", "", "", resultphotoList, self.user.key)
+				message_type = 7
+				create_message(message_type, 'Photographer liked your photo', self.user.key, photo.key, blog.key, group.key, user.key)
+				#data = "<a href='#'></i><i class='fa fa-thumbs-o-up' style='color:yellow;'></i></a>"
+				data = {'success': 1}
+				print data
+				self.response.headers['Content-Type'] = 'text/json'
+				self.response.out.write(json.dumps(data))
+			if action == 'photo_list_like':
+				print "########## IN List LIKE ####################"
+				photoKey = get_key_urlunsafe(self.request.get('photoKey'))
+				photo = photoKey.get()
+				photo.likes += 1
+				photo.put()
+				self.user.wpc_score += 100
+				self.user.put()
+				userKey = photoKey.parent()
+				user = userKey.get()
+				resultphotoList = []
+				blog = create_blog("", "", "", self.user.key)
+				group = create_group("", "", "", resultphotoList, self.user.key)
+				message_type = 7
+				create_message(message_type, 'Photographer liked your photo', self.user.key, photo.key, blog.key, group.key, user.key)
+				#data = "<a href='#'></i><i class='fa fa-thumbs-o-up' style='color:yellow;'></i></a>"
+				data = {'success': 1}
+				print data
+				self.response.headers['Content-Type'] = 'text/json'
+				self.response.out.write(json.dumps(data))
+			if action == 'add':
 				photoKey = get_key_urlunsafe(self.request.get('photoKey'))
 				self.user.pinned_photos.append(photoKey)
 				self.user.put()
 				self.render('index_user.html', **templateVals)
-			elif action == "follow":
+			if action == 'carousel_add':
+				print "########## IN ADD ####################"
+				photoKey = get_key_urlunsafe(self.request.get('photoKey'))
+				self.user.pinned_photos.append(photoKey)
+				self.user.put()
+				#add_output = "<a></i><i class='fa fa-plus' style='color:yellow;'></i></a>"
+				data = {'success': 1}
+				print data
+				self.response.headers['Content-Type'] = 'text/json'
+				self.response.out.write(json.dumps(data))
+			if action == 'photo_list_add':
+				print "########## IN ADD ####################"
+				photoKey = get_key_urlunsafe(self.request.get('photoKey'))
+				self.user.pinned_photos.append(photoKey)
+				self.user.put()
+				#add_output = "<a></i><i class='fa fa-plus' style='color:yellow;'></i></a>"
+				data = {'success': 1}
+				print data
+				self.response.headers['Content-Type'] = 'text/json'
+				self.response.out.write(json.dumps(data))
+			if action == 'follow':
 				user = self.request.get('user_key')
 				self_user = self.request.get('self_user_key')
 				user_key = User.get_by_id(user)
@@ -191,8 +252,11 @@ class MainHandler(PageHandler):
 				group = create_group("", "", "", resultphotoList, self.user.key)
 				message_type = 8
 				create_message(message_type, 'Photographer is following you', self.user.key, self.user.avatar, blog.key, group.key, user_key.key)
-				self.render('index_user.html', **templateVals)
-			elif action == "delete":
+				data = {'success': 1}
+				print data
+				self.response.headers['Content-Type'] = 'text/json'
+				self.response.out.write(json.dumps(data))
+			if action == 'delete':
 				photoKey = get_key_urlunsafe(self.request.get('photoKey'))
 				delete_photo(photoKey, self.user.key)
 				self.render('index_user.html', **templateVals)
