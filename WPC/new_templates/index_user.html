@@ -38,11 +38,11 @@ Home | WPC
 			  </ul>
 		  </li>
 		  <li class="dropdown">
-			  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-envelope"></span><b class="caret"></b><span id="notification_count" class="badge pull-right">{{len(messages)}}</span></a>
+			  <a onclick="mark_read()" href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-envelope"></span><b class="caret"></b><span id="notification_count" class="badge pull-right"></span></a>
 			  <ul class="dropdown-menu">
-				  <li>
+				  <li id="notification_messages">
 					<div class="messages_container">
-						<h3 style="color:gray;">Notifications</h2>
+						<h3 style="color:gray;">Notifications</h3>
 						<hr>
 					  {%for m in messages%}
 					  	{%if m.message_type == 1%}
@@ -117,6 +117,25 @@ Home | WPC
 						  <h5 style="color:green;"><img src="{{m.sender.get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em><a href="/{{m.sender.get().key.id()}}">{{m.sender.get().name}}</a> <span style="color:black;">  updated his status</span></em><p style="font-size:10px;">{{m.updated.strftime("%c")}}</p></h5>
 						  <p>"{{m.message}}"</p>
 						 {%endif%}
+						 {%if m.message_type == 12%}
+						  <h5 style="color:green;"><img src="{{m.sender.get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em><a href="/{{m.sender.get().key.id()}}">{{m.sender.get().name}}</a> <span style="color:black;">  added your photo to his Ideabook</span></em><p style="font-size:10px;">{{m.updated.strftime("%c")}}</p></h5>
+						  <a href="/photo/{{m.message_photo.get().key.urlsafe()}}"><div class="panel-thumbnail"><img src="{{get_serving_url(m.message_photo.get().blobKey)}}" class="img-responsive"></div></a>
+						 {%endif%}
+						 {%if m.message_type == 13%}
+						  <h5 style="color:green;"><img src="{{m.sender.get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em><a href="/{{m.sender.get().key.id()}}">{{m.sender.get().name}}</a> <span style="color:black;">  commented on your photo</span></em><p style="font-size:10px;">{{m.updated.strftime("%c")}}</p></h5>
+						  <a href="/photo/{{m.message_photo.get().key.urlsafe()}}"><div class="panel-thumbnail"><img src="{{get_serving_url(m.message_photo.get().blobKey)}}" class="img-responsive"></div></a>
+						  <p>"{{m.message}}"</p>
+						 {%endif%}
+						 {%if m.message_type == 14%}
+						  <h5 style="color:green;"><img src="{{m.sender.get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em><a href="/{{m.sender.get().key.id()}}">{{m.sender.get().name}}</a> <span style="color:black;"> commented on your blog {{m.message_blog.get().title}}</span></em><p style="font-size:10px;">{{m.updated.strftime("%c")}}</p></h5>
+						   <a href="/blog/{{m.message_blog.get().key.urlsafe()}}"><p>Go to blog "{{m.message_blog.get().title}}"</p><img src="{{m.message_blog.get().cover}}" class="img-responsive"></a>
+						  <p>"{{m.message}}"</p>
+						 {%endif%}
+						  {%if m.message_type == 15%}
+						  <h5 style="color:green;"><img src="{{m.sender.get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em><a href="/{{m.sender.get().key.id()}}">{{m.sender.get().name}}</a> <span style="color:black;"> sent a message to the group {{m.message_group.get().name}}</span></em><p style="font-size:10px;">{{m.updated.strftime("%c")}}</p></h5>
+						   <a href="/group/{{m.message_group.get().key.urlsafe()}}"><p>Go to group "{{m.message_group.get().name}}"</p><img src="{{m.message_group.get().cover_photo}}" class="img-responsive"></a>
+						   <p>"{{m.message}}"</p>
+						 {%endif%}
 						  <hr>
 					  {%endfor%}
 					</div>
@@ -124,16 +143,6 @@ Home | WPC
 			  </ul>
 		  </li>
 	</ul>
-	<div style="display:none;">
-	  <div id="count">
-
-	  </div>
-	</div>
-	<script>
-	//setInterval(function(){ 
-    // $( "#notification_count" ).load( "/ #count" );  
-	//}, 5000);
-	</script>
 {%endblock%}
 {%block signup_links%}  
 {%endblock%}

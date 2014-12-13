@@ -49,7 +49,6 @@
                <a href="/{{user.key.id()}}/about" style="color:white;"><button type="button" title="About {{user.name}}" style="margin:5px;" class="btn btn-info btn-sm photographer_options"><i class="fa fa-key"></i></button></a>
                <button type="button" title="Share {{portfolio.name}} portfolio" style="margin:5px;" class="btn btn-info btn-sm photographer_options" data-toggle="modal" data-target=".share_modal"><i class="fa fa-share"></i></button>
                <button type="button" title="Delete {{portfolio.name}} portfolio" style="margin:5px;" class="btn btn-info btn-sm photographer_options" data-toggle="modal" data-target=".delete_modal"><span class="glyphicon glyphicon-trash" style="color:white;"></span></button>
-               <a href="/signin"><button class="btn btn-sm btn-danger" type="button"><i class="fa fa-register" style="color:white;"></i>Send for Review</button></a>
             {%else%} 
               <a href="/{{user.key.id()}}/about" style="color:white;"><button type="button" title="About {{user.name}}" style="margin:5px;" class="btn btn-info btn-sm photographer_options"><i class="fa fa-key"></i></button></a>
               <button type="button" title="Send Private Message to {{user.name}}" style="margin:5px;" class="btn btn-info btn-sm photographer_options" data-toggle="modal" data-target=".personal_message"><i class="fa fa-envelope"></i></button>
@@ -452,7 +451,14 @@ function select_cover2(img_src) {
 </script>
     <br>
     <h2>{{portfolio.name}}</h2>{%if me == user%}
-            <a href="/newphoto">Add Photos</a>
+     <form method="post">
+        <input type="hidden" name="formType" value="portfolio">
+        <input type="hidden" id="userid" name="user" value="{{user.key.id()}}">
+        <input type="hidden" name="actionType" value="portfolio_edit">
+        <input type="hidden" name="portfolioKey" value="{{portfolio.key.urlsafe()}}">
+        <button type="submit" title="Edit {{portfolio.name}} portfolio" style="margin:5px;" class="btn btn-info btn-sm photographer_options"><span class="glyphicon glyphicon-edit" style="color:white;"> Edit</span></button>
+      </form>
+            <a href="" data-toggle="modal" data-target="#add_image">Add Photos</a>
             {%endif%}<hr>
   <div class="row" style="margin-top:20px;z-index:1;"> 
     <div class="container">
@@ -483,7 +489,7 @@ function select_cover2(img_src) {
                     <button class="btn btn-primary btn-xs" type="submit" title="Edit Image" value="Edit"><span class="glyphicon glyphicon-edit" style="color:white;"></span></button>
                   </form>
                   <form method="post">
-                    <input type="hidden" name="actionType" value="delete">
+                    <input type="hidden" name="actionType" value="delete_photo">
                     <input type="hidden" name="photoKey" value="{{p.get().key.urlsafe()}}">
                     <button class="btn btn-primary btn-xs" type="submit" title="Delete Image" value="Delete"><span class="glyphicon glyphicon-trash" style="color:white;"></span></button>
                   </form>
@@ -493,16 +499,8 @@ function select_cover2(img_src) {
                     <button class="btn btn-primary btn-xs" type="submit"title="Download Image"  value="Delete"><i class="fa fa-download fa-1x"></i></button>
                   </form>
                   {%else%}
-                  <form method="post">
-                    <input type="hidden" name="actionType" value="like">
-                    <input type="hidden" name="photoKey" value="{{p.get().key.urlsafe()}}">
-                    <button class="btn btn-info btn-xs" type="submit" title="Like This Image"><i class="fa fa-thumbs-up fa-1x"></i></button>
-                 </form>
-                  <form method="post">
-                      <input type="hidden" name="actionType" value="add">
-                      <input type="hidden" name="photoKey" value="{{p.get().key.urlsafe()}}">
-                      <button class="btn btn-primary btn-xs" type="submit" title="Add Image to Ideabook"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
-                  </form>
+                  <button class="btn btn-info btn-xs" id="after_photo_list_like_{{loop.index}}" type="submit" title="Like This Image"><a onclick="photo_list_like_button('{{p.get().key.urlsafe()}}', 'after_photo_list_like_{{loop.index}}');" href="javascript:void(0);"><i style="color:white;" class="fa fa-thumbs-up fa-1x"></i></a></button>
+                  <button class="btn btn-primary btn-xs" id="after_photo_list_add_{{loop.index}}" type="submit" title="Like This Image"><a onclick="photo_list_add_button('{{p.get().key.urlsafe()}}', 'after_photo_list_add_{{loop.index}}');" href="javascript:void(0);"><i style="color:white;" class="fa fa-plus fa-1x"></i></a></button>
                   {%endif%}
                 </div>
                 <hr>
@@ -524,7 +522,7 @@ function select_cover2(img_src) {
                     <button class="btn btn-primary btn-xs" type="submit" title="Edit Image" value="Edit"><span class="glyphicon glyphicon-edit" style="color:white;"></span></button>
                   </form>
                   <form method="post">
-                    <input type="hidden" name="actionType" value="delete">
+                    <input type="hidden" name="actionType" value="delete_photo">
                     <input type="hidden" name="photoKey" value="{{p.get().key.urlsafe()}}">
                     <button class="btn btn-primary btn-xs" type="submit" title="Delete Image" value="Delete"><span class="glyphicon glyphicon-trash" style="color:white;"></span></button>
                   </form>
@@ -534,16 +532,8 @@ function select_cover2(img_src) {
                     <button class="btn btn-primary btn-xs" type="submit"title="Download Image"  value="Delete"><i class="fa fa-download fa-1x"></i></button>
                   </form>
                   {%else%}
-                  <form method="post">
-                    <input type="hidden" name="actionType" value="like">
-                    <input type="hidden" name="photoKey" value="{{p.get().key.urlsafe()}}">
-                    <button class="btn btn-info btn-xs" type="submit" title="Like This Image"><i class="fa fa-thumbs-up fa-1x"></i></button>
-                 </form>
-                  <form method="post">
-                      <input type="hidden" name="actionType" value="add">
-                      <input type="hidden" name="photoKey" value="{{p.get().key.urlsafe()}}">
-                      <button class="btn btn-primary btn-xs" type="submit" title="Add Image to Ideabook"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
-                  </form>
+                  <button class="btn btn-info btn-xs" id="after_photo_list_like_{{loop.index}}" type="submit" title="Like This Image"><a onclick="photo_list_like_button('{{p.get().key.urlsafe()}}', 'after_photo_list_like_{{loop.index}}');" href="javascript:void(0);"><i style="color:white;" class="fa fa-thumbs-up fa-1x"></i></a></button>
+                  <button class="btn btn-primary btn-xs" id="after_photo_list_add_{{loop.index}}" type="submit" title="Like This Image"><a onclick="photo_list_add_button('{{p.get().key.urlsafe()}}', 'after_photo_list_add_{{loop.index}}');" href="javascript:void(0);"><i style="color:white;" class="fa fa-plus fa-1x"></i></a></button>
                   {%endif%}
                 </div>
                 <hr>
@@ -565,7 +555,7 @@ function select_cover2(img_src) {
                     <button class="btn btn-primary btn-xs" type="submit" title="Edit Image" value="Edit"><span class="glyphicon glyphicon-edit" style="color:white;"></span></button>
                   </form>
                   <form method="post">
-                    <input type="hidden" name="actionType" value="delete">
+                    <input type="hidden" name="actionType" value="delete_photo">
                     <input type="hidden" name="photoKey" value="{{p.get().key.urlsafe()}}">
                     <button class="btn btn-primary btn-xs" type="submit" title="Delete Image" value="Delete"><span class="glyphicon glyphicon-trash" style="color:white;"></span></button>
                   </form>
@@ -575,16 +565,8 @@ function select_cover2(img_src) {
                     <button class="btn btn-primary btn-xs" type="submit"title="Download Image"  value="Delete"><i class="fa fa-download fa-1x"></i></button>
                   </form>
                   {%else%}
-                  <form method="post">
-                    <input type="hidden" name="actionType" value="like">
-                    <input type="hidden" name="photoKey" value="{{p.get().key.urlsafe()}}">
-                    <button class="btn btn-info btn-xs" type="submit" title="Like This Image"><i class="fa fa-thumbs-up fa-1x"></i></button>
-                 </form>
-                  <form method="post">
-                      <input type="hidden" name="actionType" value="add">
-                      <input type="hidden" name="photoKey" value="{{p.get().key.urlsafe()}}">
-                      <button class="btn btn-primary btn-xs" type="submit" title="Add Image to Ideabook"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
-                  </form>
+                  <button class="btn btn-info btn-xs" id="after_photo_list_like_{{loop.index}}" type="submit" title="Like This Image"><a onclick="photo_list_like_button('{{p.get().key.urlsafe()}}', 'after_photo_list_like_{{loop.index}}');" href="javascript:void(0);"><i style="color:white;" class="fa fa-thumbs-up fa-1x"></i></a></button>
+                  <button class="btn btn-primary btn-xs" id="after_photo_list_add_{{loop.index}}" type="submit" title="Like This Image"><a onclick="photo_list_add_button('{{p.get().key.urlsafe()}}', 'after_photo_list_add_{{loop.index}}');" href="javascript:void(0);"><i style="color:white;" class="fa fa-plus fa-1x"></i></a></button>
                   {%endif%}
                 </div>
                 <hr>
@@ -606,7 +588,7 @@ function select_cover2(img_src) {
                     <button class="btn btn-primary btn-xs" type="submit" title="Edit Image" value="Edit"><span class="glyphicon glyphicon-edit" style="color:white;"></span></button>
                   </form>
                   <form method="post">
-                    <input type="hidden" name="actionType" value="delete">
+                    <input type="hidden" name="actionType" value="delete_photo">
                     <input type="hidden" name="photoKey" value="{{p.get().key.urlsafe()}}">
                     <button class="btn btn-primary btn-xs" type="submit" title="Delete Image" value="Delete"><span class="glyphicon glyphicon-trash" style="color:white;"></span></button>
                   </form>
@@ -616,16 +598,8 @@ function select_cover2(img_src) {
                     <button class="btn btn-primary btn-xs" type="submit"title="Download Image"  value="Delete"><i class="fa fa-download fa-1x"></i></button>
                   </form>
                   {%else%}
-                  <form method="post">
-                    <input type="hidden" name="actionType" value="like">
-                    <input type="hidden" name="photoKey" value="{{p.get().key.urlsafe()}}">
-                    <button class="btn btn-info btn-xs" type="submit" title="Like This Image"><i class="fa fa-thumbs-up fa-1x"></i></button>
-                 </form>
-                  <form method="post">
-                      <input type="hidden" name="actionType" value="add">
-                      <input type="hidden" name="photoKey" value="{{p.get().key.urlsafe()}}">
-                      <button class="btn btn-primary btn-xs" type="submit" title="Add Image to Ideabook"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
-                  </form>
+                  <button class="btn btn-info btn-xs" id="after_photo_list_like_{{loop.index}}" type="submit" title="Like This Image"><a onclick="photo_list_like_button('{{p.get().key.urlsafe()}}', 'after_photo_list_like_{{loop.index}}');" href="javascript:void(0);"><i style="color:white;" class="fa fa-thumbs-up fa-1x"></i></a></button>
+                  <button class="btn btn-primary btn-xs" id="after_photo_list_add_{{loop.index}}" type="submit" title="Like This Image"><a onclick="photo_list_add_button('{{p.get().key.urlsafe()}}', 'after_photo_list_add_{{loop.index}}');" href="javascript:void(0);"><i style="color:white;" class="fa fa-plus fa-1x"></i></a></button>
                   {%endif%}
                 </div>
                 <hr>
@@ -637,7 +611,35 @@ function select_cover2(img_src) {
     </div>
   </div>
  <hr>
-
+  <div class="modal fade bs-example-modal-lg" id="add_image" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+          <h4 class="modal-title">Select and Add Photo</h4>
+        </div>
+        <form method="post">
+              <div class="col-md-12 col-sm-12 col-xs-12" id="photo_select">
+                <div class="">
+                      {%for p in photos%}
+                        <div class="col-md-3">
+                          <a href="javascript:void(0);"><img onclick="change_border_insert_input(this, '{{p.key.urlsafe()}}');" src="{{get_serving_url(p.blobKey)}}" height="100px" alt="photo"></a>
+                          </div>
+                      {%endfor%}
+                </div><br>
+                
+                  <input type="hidden" id="" name="actionType" value="add_photos">
+                  <div class="selected_photos"></div>
+                  <div class="unselected_photos"></div>
+               
+              </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-xs btn-primary">Select and Close</button>
+        </div>
+         </form>
+      </div>
+    </div>
+  </div>
     <div class="col-md-12 text-center">
         <p>Ads</p>
         <img src="/images/img_2.jpg" height="250px" width="300px">
@@ -660,6 +662,20 @@ function select_cover2(img_src) {
     } else {
       element.style.color = 'blue';
       document.getElementById(type).innerHTML = "<input type='hidden' name='photoType' value='"+type+"'>";
+    }
+  }
+</script>
+<script type="text/javascript">
+  function change_border_insert_input(element, photo_key) {
+    
+    if (element.style.border == "") {
+        element.style.border = '3px solid blue';
+        $( ".selected_photos" ).append( "<input type='hidden' name='photoSelect' value='"+photo_key+"'>" );
+        //document.getElementById('selected_photos').innerHTML = "<input type='hidden' name='photoSelect' value='"+photo_key+"'>";
+    } else if (element.style.border == "3px solid blue") {
+      element.style.border = "";
+      $( ".unselected_photos" ).append( "<input type='hidden' name='photoSelectDelete' value='"+photo_key+"'>" );
+      //document.getElementById('unselected_photos').innerHTML = "<input type='hidden' name='photoSelectDelete' value='"+photo_key+"'>";
     }
   }
 </script>

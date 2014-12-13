@@ -16,6 +16,7 @@
 <!-- Bootstrap core CSS -->
 <link href="/css/bootstrap.css" rel="stylesheet">
 <!-- Add custom CSS here -->
+<link href="/css/carousel.css" rel="stylesheet">
 <link href="/css/my_studio.css" rel="stylesheet">
 <link href="/css/font.css" rel="stylesheet">
 <link href="/css/new_group.css" rel="stylesheet">
@@ -24,7 +25,8 @@
   
 {%block carousel%}
 {%endblock%}
-
+{%block signup_links%}  
+ {%endblock%} 
 {%block pageContent%}
     <div class="post">
       <div class="post-heading">
@@ -61,7 +63,11 @@
       {%if me.key in group.members%}
       <button type="button" class="btn btn-xs btn-info" disabled="disabled">Member</button>
       {%else%}
-      <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#join_group">Join Group</button>
+      {%if me%}
+        <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target="#join_group">Join Group</button>
+      {%else%}
+        <button type="button" class="btn btn-xs btn-info" data-toggle="modal" data-target=".login_for_action">Join Group</button>
+        {%endif%}
       {%endif%}
     </div>
 
@@ -112,7 +118,19 @@
       </div>
     </div>
   </div>
-
+     <div class="modal fade login_for_action" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title">You have to Signin/signup to perform this action</h4>
+          </div>
+          <br>
+          <a href="/signin"><button class="btn btn-lg btn-success" type="button"><i class="fa fa-envelope" style="color:white;"></i>  Signin/Signup</button></a>
+          <hr>
+        </div>
+      </div>
+    </div>
 <script type="text/javascript">
   function change_border_insert_input(element, photo_key) {
     
@@ -139,7 +157,7 @@
     <li class="active"><a onclick="photos();" href="javascript:void(0);"><h4>Photos</h4></a></li>
     <li><a onclick="members();" href="javascript:void(0);"><h4>Members</h4></a></li>
     <li><a onclick="calendar();" href="javascript:void(0);"><h4>Calendar</h4></a></li>
-    <li><a onclick="calendar();" href="javascript:void(0);"><h4>Messages</h4></a></li>
+    <li><a onclick="messages();" href="javascript:void(0);"><h4>Messages</h4></a></li>
   </ul>
   <hr>
 
@@ -170,17 +188,8 @@
                           </form>
                       {%endif%}
                   {%endif%}
-                  <form method="post">
-                    <input type="hidden" name="actionType" value="like">
-                    <input type="hidden" name="photoKey" value="{{p.get().key.urlsafe()}}">
-                    <button class="btn btn-info btn-xs" type="submit" title="Like This Image"><i class="fa fa-thumbs-up fa-1x"></i></button>
-                 </form>
-                  <form method="post">
-                      <input type="hidden" name="actionType" value="add">
-                      <input type="hidden" name="photoKey" value="{{p.get().key.urlsafe()}}">
-                      <button class="btn btn-primary btn-xs" type="submit" title="Add Image to Ideabook"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
-                  </form>
-                  
+              <button class="btn btn-info btn-xs" id="after_photo_list_like_{{loop.index}}" type="submit" title="Like This Image"><a onclick="photo_list_like_button('{{p.get().key.urlsafe()}}', 'after_photo_list_like_{{loop.index}}');" href="javascript:void(0);"><i style="color:white;" class="fa fa-thumbs-up fa-1x"></i></a></button>
+              <button class="btn btn-primary btn-xs" id="after_photo_list_add_{{loop.index}}" type="submit" title="Like This Image"><a onclick="photo_list_add_button('{{p.get().key.urlsafe()}}', 'after_photo_list_add_{{loop.index}}');" href="javascript:void(0);"><i style="color:white;" class="fa fa-plus fa-1x"></i></a></button>
                 </div>
                 <hr>
         {%endif%}
@@ -203,17 +212,8 @@
                           </form>
                       {%endif%}
                   {%endif%}
-                  <form method="post">
-                    <input type="hidden" name="actionType" value="like">
-                    <input type="hidden" name="photoKey" value="{{p.get().key.urlsafe()}}">
-                    <button class="btn btn-info btn-xs" type="submit" title="Like This Image"><i class="fa fa-thumbs-up fa-1x"></i></button>
-                 </form>
-                  <form method="post">
-                      <input type="hidden" name="actionType" value="add">
-                      <input type="hidden" name="photoKey" value="{{p.get().key.urlsafe()}}">
-                      <button class="btn btn-primary btn-xs" type="submit" title="Add Image to Ideabook"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
-                  </form>
-                  
+                  <button class="btn btn-info btn-xs" id="after_photo_list_like_{{loop.index}}" type="submit" title="Like This Image"><a onclick="photo_list_like_button('{{p.get().key.urlsafe()}}', 'after_photo_list_like_{{loop.index}}');" href="javascript:void(0);"><i style="color:white;" class="fa fa-thumbs-up fa-1x"></i></a></button>
+                  <button class="btn btn-primary btn-xs" id="after_photo_list_add_{{loop.index}}" type="submit" title="Like This Image"><a onclick="photo_list_add_button('{{p.get().key.urlsafe()}}', 'after_photo_list_add_{{loop.index}}');" href="javascript:void(0);"><i style="color:white;" class="fa fa-plus fa-1x"></i></a></button>
                 </div>
                 <hr>
         {%endif%}
@@ -236,17 +236,8 @@
                           </form>
                       {%endif%}
                   {%endif%}
-                  <form method="post">
-                    <input type="hidden" name="actionType" value="like">
-                    <input type="hidden" name="photoKey" value="{{p.get().key.urlsafe()}}">
-                    <button class="btn btn-info btn-xs" type="submit" title="Like This Image"><i class="fa fa-thumbs-up fa-1x"></i></button>
-                 </form>
-                  <form method="post">
-                      <input type="hidden" name="actionType" value="add">
-                      <input type="hidden" name="photoKey" value="{{p.get().key.urlsafe()}}">
-                      <button class="btn btn-primary btn-xs" type="submit" title="Add Image to Ideabook"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
-                  </form>
-                  
+                  <button class="btn btn-info btn-xs" id="after_photo_list_like_{{loop.index}}" type="submit" title="Like This Image"><a onclick="photo_list_like_button('{{p.get().key.urlsafe()}}', 'after_photo_list_like_{{loop.index}}');" href="javascript:void(0);"><i style="color:white;" class="fa fa-thumbs-up fa-1x"></i></a></button>
+                  <button class="btn btn-primary btn-xs" id="after_photo_list_add_{{loop.index}}" type="submit" title="Like This Image"><a onclick="photo_list_add_button('{{p.get().key.urlsafe()}}', 'after_photo_list_add_{{loop.index}}');" href="javascript:void(0);"><i style="color:white;" class="fa fa-plus fa-1x"></i></a></button>
                 </div>
                 <hr>
         {%endif%}
@@ -272,17 +263,8 @@
                           </form>
                       {%endif%}
                   {%endif%}
-                  <form method="post">
-                    <input type="hidden" name="actionType" value="like">
-                    <input type="hidden" name="photoKey" value="{{p.get().key.urlsafe()}}">
-                    <button class="btn btn-info btn-xs" type="submit" title="Like This Image"><i class="fa fa-thumbs-up fa-1x"></i></button>
-                 </form>
-                  <form method="post">
-                      <input type="hidden" name="actionType" value="add">
-                      <input type="hidden" name="photoKey" value="{{p.get().key.urlsafe()}}">
-                      <button class="btn btn-primary btn-xs" type="submit" title="Add Image to Ideabook"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
-                  </form>
-                  
+                  <button class="btn btn-info btn-xs" id="after_photo_list_like_{{loop.index}}" type="submit" title="Like This Image"><a onclick="photo_list_like_button('{{p.get().key.urlsafe()}}', 'after_photo_list_like_{{loop.index}}');" href="javascript:void(0);"><i style="color:white;" class="fa fa-thumbs-up fa-1x"></i></a></button>
+                  <button class="btn btn-primary btn-xs" id="after_photo_list_add_{{loop.index}}" type="submit" title="Like This Image"><a onclick="photo_list_add_button('{{p.get().key.urlsafe()}}', 'after_photo_list_add_{{loop.index}}');" href="javascript:void(0);"><i style="color:white;" class="fa fa-plus fa-1x"></i></a></button>
                 </div>
                 <hr>
         {%endif%}
@@ -316,12 +298,16 @@
             <a href="/{{fl.get().key.id()}}"><h5 style="color:black;"><em>{{fl.get().name}}<em></h5>
             <img src="/fonts/Flags/{{fl.get().country}}.png" alt="country" width="40px"></a>
             <h5 style="color:green"><em>#{{fl.get().wpc_score}}</em></h5>
-            <a href="/{{fl.get().key.id()}}/photos"><button type="button" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-picture" style="color:white;"></span></button></a>
-            {%if fl.get().key.id() == user.key.id()%}
-              <button type="button" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
-            {%else%}
-              <button type="button" class="btn btn-info btn-xs" disabled="disabled"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
-            {%endif%}
+            {%if me%}
+                <div class="button-container">
+                <a href="/{{fl.get().key.id()}}/photos"><button type="button" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-picture" style="color:white;"></span></button></a>
+                  {%if fl.get().key.id() == me.key.id()%}
+                    <button type="button" class="btn btn-info btn-xs"  disabled="disabled"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
+                  {%else%}
+                    <button class="btn btn-primary btn-xs" id="after_photographer_add_{{loop.index}}" type="submit" title="Follow this Photographer"><a onclick="photographer_add_button('{{fl.get().key.id()}}', '{{me.key.id()}}', 'after_photographer_add_{{loop.index}}');" href="javascript:void(0);"><i style="color:white;" class="fa fa-plus fa-1x"></i></a></button>
+                  {%endif%}
+              </div>
+              {%endif%}
         </div><!-- /.col-lg-4 -->
    {%endfor%}
     </div>
@@ -486,7 +472,35 @@
     </div>
 </div>
 </div>
-
+   <div style="display:none;">
+      <div id="messages">
+        <div class="row"><hr></div>
+          <div class="col-md-8 col-md-offset-2">
+              <form method="post">
+                <div class="input-group">
+                  <input type="hidden" name="actionType" value="add_comment">
+                  <input type="text" class="form-control" name="comment" placeholder="Say something about the Group">
+                  <div class="input-group-btn">
+                    <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
+                  </div><!-- /btn-group -->
+                </div><!-- /input-group -->
+              </form>
+            </div>
+            <div class="row"><hr></div>
+        <div class="col-md-8 col-md-offset-2">
+            {%for comment in group.comments|reverse%}
+            <div class="col-md-3" style="margin:0px">
+              <h5 style="color:green;"><img src="{{comment.parent().get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em><a href="/{{comment.parent().get().wpc_name}}">{{comment.parent().get().name}}</a></em><p style="font-size:10px;">{{comment.get().created.strftime("%c")}}</p></h5>
+            </div>
+            <div class="col-md-8 col-md-offset-1" style="margin:0px;text-align:left;">
+              <p>{{comment.get().content}}</p>
+              
+            </div>
+            <div class="row col-md-12" style="margin:0px"><hr></div>
+            {%endfor%}
+          </div>
+      </div>
+   </div>
 <script>
  function photos() {
     $( "#photo_member_area" ).load( "/group/{{group.key.urlsafe()}} #photos" );
@@ -504,7 +518,7 @@
   }
 
   function messages() {
-    $( "#photo_member_area" ).load( "/group/{{group.key.urlsafe()}} #calendar" );
+    $( "#photo_member_area" ).load( "/group/{{group.key.urlsafe()}} #messages" );
     document.getElementById("photo_member_list").innerHTML = "<li><a onclick='photos();'' href='javascript:void(0);''><h4>Photos</h4></a></li><li><a onclick='members();'' href='javascript:void(0);''><h4>Members</h4></a></li><li ><a onclick='calendar();' href='javascript:void(0);'><h4>Calendar</h4></a></li><li class='active'><a onclick='messages();' href='javascript:void(0);'><h4>Messages</h4></a></li>";
   }
 </script>

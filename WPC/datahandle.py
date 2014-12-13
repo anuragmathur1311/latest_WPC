@@ -86,6 +86,11 @@ def create_message(message_type, message, sender, message_photo, message_blog, m
 	user = parent_key.get()
 	userKey = user.put()
 
+def create_comment(content, parent_key):
+	comment = Comment(content=content, parent=parent_key)
+	commentKey = comment.put()
+	return comment
+	
 def add_member(grpKey, userKey):
 	grp = grpKey.get()
 	user = userKey.get()

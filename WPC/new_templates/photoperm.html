@@ -1,7 +1,13 @@
-{%extends "user_studio.html"%}
+{%if me%}
+    {%extends "index_user.html"%}
+{%else%}
+    {%extends "index.html"%}
+{%endif%}
 
 {%block signup_links%}  
  {%endblock%} 
+{%block carousel%}
+{%endblock%}
 {%block pageContent%}
  
     <div class="transbox_right_permapage">
@@ -51,44 +57,37 @@
           <form method="post">
             <input type="hidden" name="actionType" value="edit">
             <input type="hidden" name="photoKey" value="{{photo.key.urlsafe()}}">
-            <button class="btn btn-success btn-md" type="submit"><i class="fa fa-edit fa-2x"></i></button>
+            <button class="btn btn-success btn-md" type="submit"><i class="fa fa-edit fa-1x"></i></button>
           </form>
 	    </div>
 	    <div class="col-md-2">
           <form method="post">
             <input type="hidden" name="actionType" value="delete">
             <input type="hidden" name="photoKey" value="{{photo.key.urlsafe()}}">
-            <button class="btn btn-success btn-md" type="submit"><i class="fa fa-trash-o fa-2x"></i></button>
+            <button class="btn btn-success btn-md" type="submit"><i class="fa fa-trash-o fa-1x"></i></button>
           </form>
 	    </div>
 		<div class="col-md-2">
-          <button class="btn btn-success" data-toggle="modal" data-target=".share_modal"><i class="fa fa-share fa-2x"></i></button>
+          <button class="btn btn-success" data-toggle="modal" data-target=".share_modal"><i class="fa fa-share fa-1x"></i></button>
       </div>
 	  <div class="col-md-2">
         <form method="post">
           <input type="hidden" name="actionType" value="download">
-          <button class="btn btn-success" type="submit"><i class="fa fa-download fa-2x"></i></button>
+          <button class="btn btn-success" type="submit"><i class="fa fa-download fa-1x"></i></button>
         </form>
       </div>
 		  {%else%}
 		<div class="col-md-2 col-md-offset-2">
-          <form method="post">
-            <input type="hidden" name="actionType" value="like">
-            <button class="btn btn-info btn-md" type="submit" value="Delete"><i class="fa fa-thumbs-up fa-2x"></i></button>
-          </form>
+          <button class="btn btn-info btn-md" id="after_photo_list_like_1" type="submit" title="Like This Image"><a onclick="photo_list_like_button('{{photo.key.urlsafe()}}', 'after_photo_list_like_1');" href="javascript:void(0);"><i style="color:white;" class="fa fa-thumbs-up fa-1x"></i></a></button>
 	    </div>
 		<div class="col-md-2">
-          <button class="btn btn-success" data-toggle="modal" data-target=".share_modal"><i class="fa fa-share fa-2x"></i></button>
+          <button class="btn btn-success btn-md" data-toggle="modal" data-target=".share_modal"><i class="fa fa-share fa-1x"></i></button>
       </div>
 	  <div class="col-md-2">
-        <form method="post">
-          <input type="hidden" name="actionType" value="add">
-          <input type="hidden" name="photoKey" value="{{photo.key.urlsafe()}}">
-          <button class="btn btn-success" type="submit" value="plus"><i class="fa fa-plus fa-2x"></i></button>
-        </form>
+        	<button class="btn btn-primary btn-md" id="after_photo_list_add_1" type="submit" title="Like This Image"><a onclick="photo_list_add_button('{{photo.key.urlsafe()}}', 'after_photo_list_add_1');" href="javascript:void(0);"><i style="color:white;" class="fa fa-plus fa-1x"></i></a></button>
       </div>
 	  <div class="col-md-2">
-          <button class="btn btn-success" data-toggle="modal" data-target=".photography_awards"><i class="fa fa-trophy fa-2x"></i></button>
+          <button class="btn btn-success btn-md" data-toggle="modal" data-target=".photography_awards"><i class="fa fa-trophy fa-1xx"></i></button>
       </div>
 		 {% endif %}
     </div>
@@ -111,7 +110,7 @@
 	              <h1 style="font-size:55px;">{{photo.likes}}</h1><i class="fa fa-thumbs-o-up fa-2x"></i><h4 style="color:blue;">likes</h4>
 	        </div><!-- /.col-lg-4 -->
 	        <div class="col-md-2 col-xs-6 btn_padding_right">
-	            <h1 style="font-size:55px;">10</h1><i class="fa fa-pencil fa-2x"></i><h4 style="color:blue;">comments</h4>
+	            <h1 style="font-size:55px;">{{len(photo.comments)}}</h1><i class="fa fa-pencil fa-2x"></i><h4 style="color:blue;">comments</h4>
 	        </div><!-- /.col-lg-4 -->
 	        <div class="col-md-2 col-xs-6 btn_padding_right">
 	            <h1 style="font-size:55px;">{{len(photo.awards)}}</h1><i class="fa fa-trophy fa-2x"></i><h4 style="color:blue;">awards</h4>
@@ -133,11 +132,18 @@
 			<div class="panel panel-default">
 				<div class="panel-heading"><h4>Comments on this Photo</h4></div><hr>
 				<div class="panel-body">
-					<div class="clearfix"></div>
+					<div class="col-md-12" style="margin:0px">
 						{%for comment in photo.comments%}
-						<p>{{comment}}</p>
-						<hr>
+						<div class="col-md-3" style="margin:0px">
+							<h5 style="color:green;"><img src="{{comment.parent().get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em><a href="/{{comment.parent().get().wpc_name}}">{{comment.parent().get().name}}</a></em><p style="font-size:10px;">{{comment.get().created.strftime("%c")}}</p></h5>
+						</div>
+						<div class="col-md-8 col-md-offset-1" style="margin:0px;text-align:left;">
+							<p>{{comment.get().content}}</p>
+							
+						</div>
+						<div class="row col-md-12" style="margin:0px"><hr></div>
 						{%endfor%}
+					</div>
 					<hr>
 				  <div class="input-group">
 					<div  class="photo_albums"></div>
@@ -329,6 +335,7 @@
     f.parentNode.insertBefore(p, f);
 }(document));
 </script>
+
     <div class="modal fade share_modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -340,26 +347,30 @@
             <input type="hidden" name="formType" value="share_links">
             <br>
                 <h4>Link to Photo</h4>
-                <a href="{{get_serving_url(photo.blobKey)}}"><h4 style="color:blue;"><em>{{get_serving_url(photo.blobKey)}}</em></h4></a><br>
-                <p>or</p>
-              <ul class="list-inline">
-                <li><a class="fb-share-button" data-href="https://developers.facebook.com/docs/plugins/" data-layout="button_count" data-width="100"></a></li>
-                <li><a href="https://twitter.com/share" class="twitter-share-button" data-size="large">Tweet</a></li>
-                <li><div class="g-plus" data-action="share" data-height="30"></div></li>
-                 <li><a href="http://www.pinterest.com/pin/create/button/
-                    ?url=http%3A%2F%2Fwww.flickr.com%2Fphotos%2Fkentbrew%2F6851755809%2F
-                    &media=http%3A%2F%2Ffarm8.staticflickr.com%2F7027%2F6851755809_df5b2051c9_z.jpg
-                    &description=Next%20stop%3A%20Pinterest"
-                    data-pin-do="buttonPin"
-                    data-pin-config="above">
-                    <img src="//assets.pinterest.com/images/pidgets/pin_it_button.png" />
-                </a></li>
-              </ul>
+                <h4 style="color:blue;"><em>{{get_serving_url(photo.blobKey)}}</em></h4><br>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="photo_select" align="center">
+                  <p>or</p>
+                      <div class="col-md-2 col-md-offset-2">
+                        <a class="fb-share-button" data-href="https://developers.facebook.com/docs/plugins/" data-layout="button_count" data-width="100"></a>
+                      </div>
+                      <div class="col-md-2">
+                        <a href="https://twitter.com/share" class="twitter-share-button" data-size="large">Tweet</a>
+                      </div>
+                      <div class="col-md-2">
+                        <div class="g-plus" data-action="share" data-height="30"></div>
+                      </div>
+                      <div class="col-md-2">
+                        <a href="http://www.pinterest.com/pin/create/button/?url=http%3A%2F%2Fwww.flickr.com%2Fphotos%2Fkentbrew%2F6851755809%2F&media=http%3A%2F%2Ffarm8.staticflickr.com%2F7027%2F6851755809_df5b2051c9_z.jpg&description=Next%20stop%3A%20Pinterest" data-pin-do="buttonPin" data-pin-config="above">
+                        <img src="//assets.pinterest.com/images/pidgets/pin_it_button.png" />
+                        </a>
+                      </div>
+                </div>
           </form>
+          <div class="modal-footer">
+        </div>
         </div>
       </div>
     </div>
-
      <div class="modal fade photography_awards" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -421,7 +432,8 @@
         </div>
       </div>
     </div>
-
+{%block footer%}
+    {%endblock%}
 	<footer>
 	<div class="row">
 		<div class="col-md-6 col-md-offset-3 text-center">

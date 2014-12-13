@@ -80,16 +80,17 @@ Home | WPC
 				{%if loop.index % 2 == 1%}	
 					<div class="card">
 						{%if m.message_type == 1 or m.message_type == 4 or m.message_type == 5 or m.message_type == 6 or m.message_type == 7%}
-							<a href="/photo/{{m.message_photo.get().key.urlsafe()}}"><div class="panel-thumbnail"><img src="{{get_serving_url(m.message_photo.get().blobKey)}}" class="img-responsive"></div></a>
+							{%if m.message_photo == None%}
+								<a href=""><div class="panel-thumbnail"><img src="{{m.sender.get().avatar_url}}" class="img-responsive"></div></a>
+							{%else%}
+								<a href="/photo/{{m.message_photo.get().key.urlsafe()}}"><div class="panel-thumbnail"><img src="{{get_serving_url(m.message_photo.get().blobKey)}}" class="img-responsive"></div></a>
+							{%endif%}
 						{%elif m.message_type == 2%}
 							<div class="panel-thumbnail"><img src="{{m.message_blog.get().cover}}" class="img-responsive"></div>
 						{%elif m.message_type == 3%}
 							<div class="panel-thumbnail"><img src="{{m.message_group.get().cover_photo}}" class="img-responsive"></div>
 						{%endif%}
 						<p><a href="my_studio.html" style="color:black;"></a></p>
-						<button type="button" class="btn btn-success btn-xs photographer_options" title="Go to {{m.sender.get().name}}'s photos"><span class="glyphicon glyphicon-picture" style="color:white;"></span></button>
-						<button type="button" class="btn btn-info btn-xs photographer_options" title="Like this postcard"><span class="glyphicon glyphicon-thumbs-up" style="color:white;"></span></button>
-						<button type="button" class="btn btn-success btn-xs photographer_options" title="Add {{m.sender.get().name}} to ideabook"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
 						<p>{{m.likes}} <i class="fa fa-thumbs-o-up fa-1x"></i> | {{m.updated.strftime("%c")}}</p>
 						<div class="panel-body">
 							{%if m.message_type == 1%}
@@ -142,16 +143,6 @@ Home | WPC
                       		{%elif m.message_type == 7%}
 								<p><em  style="color:blue">{{m.sender.get().name}}</em> liked your photo</p>
 								<p class="lead">{{m.message}}</p>
-								    <form method="post">
-						              	<div class="input-group">
-						              		<input type="hidden" name="actionType" value="comment">
-							              	<input type="hidden" name="messageKey" value="{{m.key.urlsafe()}}">
-							                <input type="text" class="form-control" name="comment" placeholder="Comment...">
-						                <div class="input-group-btn">
-						                	<button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
-						                </div><!-- /btn-group -->
-						              	</div><!-- /input-group -->
-						            </form>
 						            {%for c in m.comments%}
 										<p>{{c}}</p>
 									{%endfor%}
@@ -170,16 +161,17 @@ Home | WPC
 				{%if loop.index % 2 == 0%}
 					<div class="card">
 						{%if m.message_type == 1 or m.message_type == 4 or m.message_type == 5 or m.message_type == 6 or m.message_type == 7%}
-							<a href="/photo/{{m.message_photo.get().key.urlsafe()}}"><div class="panel-thumbnail"><img src="{{get_serving_url(m.message_photo.get().blobKey)}}" class="img-responsive"></div></a>
+							{%if m.message_photo == None%}
+								<a href=""><div class="panel-thumbnail"><img src="{{m.sender.get().avatar_url}}" class="img-responsive"></div></a>
+							{%else%}
+								<a href="/photo/{{m.message_photo.get().key.urlsafe()}}"><div class="panel-thumbnail"><img src="{{get_serving_url(m.message_photo.get().blobKey)}}" class="img-responsive"></div></a>
+							{%endif%}
 						{%elif m.message_type == 2%}
 							<div class="panel-thumbnail"><img src="{{m.message_blog.get().cover}}" class="img-responsive"></div>
 						{%elif m.message_type == 3%}
 							<div class="panel-thumbnail"><img src="{{m.message_group.get().cover_photo}}" class="img-responsive"></div>
 						{%endif%}
 						<p><a href="my_studio.html" style="color:black;"></a></p>
-						<button type="button" class="btn btn-success btn-xs photographer_options" title="Go to {{m.sender.get().name}}'s photos"><span class="glyphicon glyphicon-picture" style="color:white;"></span></button>
-						<button type="button" class="btn btn-info btn-xs photographer_options" title="Like this postcard"><span class="glyphicon glyphicon-thumbs-up" style="color:white;"></span></button>
-						<button type="button" class="btn btn-success btn-xs photographer_options" title="Add {{m.sender.get().name}} to ideabook"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
 						<p>{{m.likes}} <i class="fa fa-thumbs-o-up fa-1x"></i> | {{m.updated.strftime("%c")}}</p>
 						<div class="panel-body">
 							{%if m.message_type == 1%}

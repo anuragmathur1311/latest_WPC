@@ -102,6 +102,12 @@
                       <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
                       <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{b.key.parent().get().name}}</em></h5></a>
                       <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
+                      <form method="post">
+                        <input type="hidden" name="actionType" value="delete_blog">
+                        <input type="hidden" id="userid" name="user" value="{{user.key.id()}}">
+                        <input type="hidden" name="blogKey" value="{{b.key.urlsafe()}}">
+                        <button class="btn btn-primary btn-xs" type="submit" title="Delete Blog"><span class="glyphicon glyphicon-trash" style="color:white;"></span></button>
+                      </form>
                       <hr class="horizontal-line">
                 </div>
               {%endif%}
@@ -110,6 +116,12 @@
                       <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
                       <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{b.key.parent().get().name}}</em></h5></a> 
                        <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
+                       <form method="post">
+                        <input type="hidden" name="actionType" value="delete_blog">
+                        <input type="hidden" id="userid" name="user" value="{{user.key.id()}}">
+                        <input type="hidden" name="blogKey" value="{{b.key.urlsafe()}}">
+                        <button class="btn btn-primary btn-xs" type="submit" title="Delete Blog"><span class="glyphicon glyphicon-trash" style="color:white;"></span></button>
+                      </form>
                        <hr class="horizontal-line">
                 </div>
               {%endif%}
@@ -118,6 +130,12 @@
                       <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
                       <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{b.key.parent().get().name}}</em></h5></a> 
                       <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
+                      <form method="post">
+                        <input type="hidden" name="actionType" value="delete_blog">
+                        <input type="hidden" id="userid" name="user" value="{{user.key.id()}}">
+                        <input type="hidden" name="blogKey" value="{{b.key.urlsafe()}}">
+                        <button class="btn btn-primary btn-xs" type="submit" title="Delete Blog"><span class="glyphicon glyphicon-trash" style="color:white;"></span></button>
+                      </form>
                        <hr class="horizontal-line">
                 </div>
                 <div class="row"></div>

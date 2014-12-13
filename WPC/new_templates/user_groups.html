@@ -160,7 +160,7 @@
                   <form method="post">
                     <input type="hidden" name="actionType" value="delete_group">
                     <input type="hidden" id="userid" name="user" value="{{user.key.id()}}">
-                    <input type="hidden" name="groupKey" value="{{b.key.urlsafe()}}">
+                    <input type="hidden" name="groupKey" value="{{b.get().key.urlsafe()}}">
                     <button class="btn btn-primary btn-xs" type="submit" title="Delete Group"><span class="glyphicon glyphicon-trash" style="color:white;"></span></button>
                   </form>
                   {%endif%}
@@ -183,7 +183,7 @@
                   <form method="post">
                     <input type="hidden" name="actionType" value="delete_group">
                     <input type="hidden" id="userid" name="user" value="{{user.key.id()}}">
-                    <input type="hidden" name="groupKey" value="{{b.key.urlsafe()}}">
+                    <input type="hidden" name="groupKey" value="{{b.get().key.urlsafe()}}">
                     <button class="btn btn-primary btn-xs" type="submit" title="Delete Group"><span class="glyphicon glyphicon-trash" style="color:white;"></span></button>
                   </form>
                   {%endif%}

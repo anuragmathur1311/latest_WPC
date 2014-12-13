@@ -138,7 +138,7 @@
 		{%block carousel%}
     <div id="myCarousel" class="carousel slide" data-ride="carousel">
       <div class="carousel-inner">
-        {%for p in most_viewed%}
+        {%for p in new_photos%}
 		     {%if loop.first%}
 	          <div class="item active">
 	        {%else%}
@@ -156,33 +156,38 @@
 							</div>
 							<div class="navbar-collapse collapse">
 							{%if me%}
-							  <ul class="nav navbar-nav">
-							  	<!--
-								<li style="margin:13px;"><form role="form" method="post">
-						            <input type="hidden" name="actionType" value="like">
-						            <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
-						            <button class="btn_genre" type="submit" title="Like This Image"><i class="fa fa-thumbs-o-up" style="color:white;"></i></button>
-						         </form></li>-->
-						         <li style="margin:13px;">
-						         	<button class="btn_genre" id="after_like_{{loop.index}}" title="Like This Image">
-						         		<a onclick="like_button('{{p.key.urlsafe()}}', 'after_like_{{loop.index}}');" href="javascript:void(0);">
-						         			<i class="fa fa-thumbs-o-up" style="color:white;"></i>
-						         		</a>
-						         	</button>
-						         </li>
-						         <!--
-								<li style="margin:13px;"><form method="post">
-						            <input type="hidden" name="actionType" value="add">
-						            <input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
-						            <button class="btn_genre" type="submit" title="Add this Image to Ideabook"><i class="fa fa-plus" style="color:white;"></i></button>
-						         </form></li>-->
-						          <li style="margin:13px;">
-						          	<button class="btn_genre" id="after_add_{{loop.index}}" title="Add this Image to Ideabook">
-						          		<a onclick="add_button('{{p.key.urlsafe()}}', 'after_add_{{loop.index}}');" href="javascript:void(0);">
-						          			<i class="fa fa-plus" style="color:white;"></i>
-						          		</a>
-						          	</button>
-						          </li>
+							<ul class="nav navbar-nav">
+								{%if me.key == p.key.parent().get().key%}
+							         <li style="margin:13px;">
+							         	<button class="btn_genre" disabled="disabled" id="after_like_{{loop.index}}" title="Like This Image">
+							         		<a onclick="like_button('{{p.key.urlsafe()}}', 'after_like_{{loop.index}}');" href="javascript:void(0);">
+							         			<i class="fa fa-thumbs-o-up" style="color:white;"></i>
+							         		</a>
+							         	</button>
+							         </li>
+							          <li style="margin:13px;">
+							          	<button class="btn_genre" disabled="disabled" id="after_add_{{loop.index}}" title="Add this Image to Ideabook">
+							          		<a onclick="add_button('{{p.key.urlsafe()}}', 'after_add_{{loop.index}}');" href="javascript:void(0);">
+							          			<i class="fa fa-plus" style="color:white;"></i>
+							          		</a>
+							          	</button>
+							          </li>
+						          {%else%}
+							          <li style="margin:13px;">
+							         	<button class="btn_genre" id="after_like_{{loop.index}}" title="Like This Image">
+							         		<a onclick="like_button('{{p.key.urlsafe()}}', 'after_like_{{loop.index}}');" href="javascript:void(0);">
+							         			<i class="fa fa-thumbs-o-up" style="color:white;"></i>
+							         		</a>
+							         	</button>
+							         </li>
+							          <li style="margin:13px;">
+							          	<button class="btn_genre" id="after_add_{{loop.index}}" title="Add this Image to Ideabook">
+							          		<a onclick="add_button('{{p.key.urlsafe()}}', 'after_add_{{loop.index}}');" href="javascript:void(0);">
+							          			<i class="fa fa-plus" style="color:white;"></i>
+							          		</a>
+							          	</button>
+							          </li>
+						          {%endif%}
 						         <li style="margin:13px;">
 						            <button class="btn_genre" type="submit" title="Go to {{p.key.parent().get().wpc_name}}'s photos"><a href="/{{p.key.parent().get().wpc_name}}/photos"><span style="color:white;"class="glyphicon glyphicon-picture"></span></a></button>
 						         </li>	
@@ -363,33 +368,10 @@
 					{%if me%}
 					<div class="col-md-4 button-container" style="padding:10px;">
 						{%if me.key == p.key.parent().get().key%}
-							<form method="post">
-								<input type="hidden" name="actionType" value="edit">
-								<input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
-								<button class="btn btn-primary btn-xs" type="submit" title="Edit Image" value="Edit"><span class="glyphicon glyphicon-edit" style="color:white;"></span></button>
-							</form>
-							<form method="post">
-								<input type="hidden" name="actionType" value="delete">
-								<input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
-								<button class="btn btn-primary btn-xs" type="submit" title="Delete Image" value="Delete"><span class="glyphicon glyphicon-trash" style="color:white;"></span></button>
-							</form>
-							<form method="post">
-								<input type="hidden" name="actionType" value="download">
-								<input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
-								<button class="btn btn-primary btn-xs" type="submit"title="Download Image"  value="Delete"><i class="fa fa-download fa-1x"></i></button>
-							</form>
+							<button class="btn btn-info btn-xs" disabled="disabled" id="after_photo_list_like_{{loop.index}}" type="submit" title="Like This Image"><i style="color:white;" class="fa fa-thumbs-up fa-1x"></i></button>
+							<button class="btn btn-primary btn-xs" disabled="disabled" id="after_photo_list_add_{{loop.index}}" type="submit" title="Like This Image"><i style="color:white;" class="fa fa-plus fa-1x"></i></button>
 						{%else%}
-							<!--<form method="post">
-								<input type="hidden" name="actionType" value="like">
-								<input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
-								<button class="btn btn-info btn-xs" type="submit" title="Like This Image"><i class="fa fa-thumbs-up fa-1x"></i></button>
-							</form>-->
 							<button class="btn btn-info btn-xs" id="after_photo_list_like_{{loop.index}}" type="submit" title="Like This Image"><a onclick="photo_list_like_button('{{p.key.urlsafe()}}', 'after_photo_list_like_{{loop.index}}');" href="javascript:void(0);"><i style="color:white;" class="fa fa-thumbs-up fa-1x"></i></a></button>
-							<!--<form method="post">
-								<input type="hidden" name="actionType" value="add">
-								<input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
-								<button class="btn btn-primary btn-xs" type="submit" title="Add Image to Ideabook"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
-							</form>-->
 							<button class="btn btn-primary btn-xs" id="after_photo_list_add_{{loop.index}}" type="submit" title="Like This Image"><a onclick="photo_list_add_button('{{p.key.urlsafe()}}', 'after_photo_list_add_{{loop.index}}');" href="javascript:void(0);"><i style="color:white;" class="fa fa-plus fa-1x"></i></a></button>
 						{%endif%}
 					</div>
@@ -412,33 +394,10 @@
 					{%if me%}
 					<div class="col-md-4 button-container" style="padding:10px;">
 						{%if me.key == p.key.parent().get().key%}
-							<form method="post">
-								<input type="hidden" name="actionType" value="edit">
-								<input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
-								<button class="btn btn-primary btn-xs" type="submit" title="Edit Image" value="Edit"><span class="glyphicon glyphicon-edit" style="color:white;"></span></button>
-							</form>
-							<form method="post">
-								<input type="hidden" name="actionType" value="delete">
-								<input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
-								<button class="btn btn-primary btn-xs" type="submit" title="Delete Image" value="Delete"><span class="glyphicon glyphicon-trash" style="color:white;"></span></button>
-							</form>
-							<form method="post">
-								<input type="hidden" name="actionType" value="download">
-								<input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
-								<button class="btn btn-primary btn-xs" type="submit"title="Download Image"  value="Delete"><i class="fa fa-download fa-1x"></i></button>
-							</form>
+							<button class="btn btn-info btn-xs" disabled="disabled" id="after_photo_list_like_{{loop.index}}" type="submit" title="Like This Image"><i style="color:white;" class="fa fa-thumbs-up fa-1x"></i></button>
+							<button class="btn btn-primary btn-xs" disabled="disabled" id="after_photo_list_add_{{loop.index}}" type="submit" title="Like This Image"><i style="color:white;" class="fa fa-plus fa-1x"></i></button>
 						{%else%}
-							<!--<form method="post">
-								<input type="hidden" name="actionType" value="like">
-								<input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
-								<button class="btn btn-info btn-xs" type="submit" title="Like This Image"><i class="fa fa-thumbs-up fa-1x"></i></button>
-							</form>-->
 							<button class="btn btn-info btn-xs" id="after_photo_list_like_{{loop.index}}" type="submit" title="Like This Image"><a onclick="photo_list_like_button('{{p.key.urlsafe()}}', 'after_photo_list_like_{{loop.index}}');" href="javascript:void(0);"><i style="color:white;" class="fa fa-thumbs-up fa-1x"></i></a></button>
-							<!--<form method="post">
-								<input type="hidden" name="actionType" value="add">
-								<input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
-								<button class="btn btn-primary btn-xs" type="submit" title="Add Image to Ideabook"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
-							</form>-->
 							<button class="btn btn-primary btn-xs" id="after_photo_list_add_{{loop.index}}" type="submit" title="Like This Image"><a onclick="photo_list_add_button('{{p.key.urlsafe()}}', 'after_photo_list_add_{{loop.index}}');" href="javascript:void(0);"><i style="color:white;" class="fa fa-plus fa-1x"></i></a></button>
 						{%endif%}
 					</div>
@@ -461,37 +420,10 @@
 					{%if me%}
 					<div class="col-md-4 button-container" style="padding:10px;">
 						{%if me.key == p.key.parent().get().key%}
-							<form method="post">
-								<input type="hidden" name="actionType" value="edit">
-								<input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
-								<button class="btn btn-primary btn-xs" type="submit" title="Edit Image" value="Edit"><span class="glyphicon glyphicon-edit" style="color:white;"></span></button>
-							</form>
-							<form method="post">
-								<input type="hidden" name="actionType" value="delete">
-								<input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
-								<button class="btn btn-primary btn-xs" type="submit" title="Delete Image" value="Delete"><span class="glyphicon glyphicon-trash" style="color:white;"></span></button>
-							</form>
-							<form method="post">
-								<input type="hidden" name="actionType" value="download">
-								<input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
-								<button class="btn btn-primary btn-xs" type="submit"title="Download Image"  value="Delete"><i class="fa fa-download fa-1x"></i></button>
-							</form>
+							<button class="btn btn-info btn-xs" disabled="disabled" id="after_photo_list_like_{{loop.index}}" type="submit" title="Like This Image"><i style="color:white;" class="fa fa-thumbs-up fa-1x"></i></button>
+							<button class="btn btn-primary btn-xs" disabled="disabled" id="after_photo_list_add_{{loop.index}}" type="submit" title="Like This Image"><i style="color:white;" class="fa fa-plus fa-1x"></i></button>
 						{%else%}
-							<!--<form method="post">
-								<input type="hidden" name="actionType" value="like">
-								<input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
-								<button class="btn btn-info btn-xs" type="submit" title="Like This Image"><i class="fa fa-thumbs-up fa-1x"></i></button>
-							</form>-->
-							<button class="btn btn-info btn-xs" id="after_photo_list_like_{{loop.index}}" type="submit" title="Like This Image">
-								<a onclick="photo_list_like_button('{{p.key.urlsafe()}}', 'after_photo_list_like_{{loop.index}}');" href="javascript:void(0);">
-									<i style="color:white;" class="fa fa-thumbs-up fa-1x"></i>
-								</a>
-							</button>
-							<!--<form method="post">
-								<input type="hidden" name="actionType" value="add">
-								<input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
-								<button class="btn btn-primary btn-xs" type="submit" title="Add Image to Ideabook"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
-							</form>-->
+							<button class="btn btn-info btn-xs" id="after_photo_list_like_{{loop.index}}" type="submit" title="Like This Image"><a onclick="photo_list_like_button('{{p.key.urlsafe()}}', 'after_photo_list_like_{{loop.index}}');" href="javascript:void(0);"><i style="color:white;" class="fa fa-thumbs-up fa-1x"></i></a></button>
 							<button class="btn btn-primary btn-xs" id="after_photo_list_add_{{loop.index}}" type="submit" title="Like This Image"><a onclick="photo_list_add_button('{{p.key.urlsafe()}}', 'after_photo_list_add_{{loop.index}}');" href="javascript:void(0);"><i style="color:white;" class="fa fa-plus fa-1x"></i></a></button>
 						{%endif%}
 					</div>
@@ -514,33 +446,10 @@
 					{%if me%}
 					<div class="col-md-4 button-container" style="padding:10px;">
 						{%if me.key == p.key.parent().get().key%}
-							<form method="post">
-								<input type="hidden" name="actionType" value="edit">
-								<input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
-								<button class="btn btn-primary btn-xs" type="submit" title="Edit Image" value="Edit"><span class="glyphicon glyphicon-edit" style="color:white;"></span></button>
-							</form>
-							<form method="post">
-								<input type="hidden" name="actionType" value="delete">
-								<input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
-								<button class="btn btn-primary btn-xs" type="submit" title="Delete Image" value="Delete"><span class="glyphicon glyphicon-trash" style="color:white;"></span></button>
-							</form>
-							<form method="post">
-								<input type="hidden" name="actionType" value="download">
-								<input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
-								<button class="btn btn-primary btn-xs" type="submit"title="Download Image"  value="Delete"><i class="fa fa-download fa-1x"></i></button>
-							</form>
+							<button class="btn btn-info btn-xs" disabled="disabled" id="after_photo_list_like_{{loop.index}}" type="submit" title="Like This Image"><i style="color:white;" class="fa fa-thumbs-up fa-1x"></i></button>
+							<button class="btn btn-primary btn-xs" disabled="disabled" id="after_photo_list_add_{{loop.index}}" type="submit" title="Like This Image"><i style="color:white;" class="fa fa-plus fa-1x"></i></button>
 						{%else%}
-							<!--<form method="post">
-								<input type="hidden" name="actionType" value="like">
-								<input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
-								<button class="btn btn-info btn-xs" type="submit" title="Like This Image"><i class="fa fa-thumbs-up fa-1x"></i></button>
-							</form>-->
 							<button class="btn btn-info btn-xs" id="after_photo_list_like_{{loop.index}}" type="submit" title="Like This Image"><a onclick="photo_list_like_button('{{p.key.urlsafe()}}', 'after_photo_list_like_{{loop.index}}');" href="javascript:void(0);"><i style="color:white;" class="fa fa-thumbs-up fa-1x"></i></a></button>
-							<!--<form method="post">
-								<input type="hidden" name="actionType" value="add">
-								<input type="hidden" name="photoKey" value="{{p.key.urlsafe()}}">
-								<button class="btn btn-primary btn-xs" type="submit" title="Add Image to Ideabook"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
-							</form>-->
 							<button class="btn btn-primary btn-xs" id="after_photo_list_add_{{loop.index}}" type="submit" title="Like This Image"><a onclick="photo_list_add_button('{{p.key.urlsafe()}}', 'after_photo_list_add_{{loop.index}}');" href="javascript:void(0);"><i style="color:white;" class="fa fa-plus fa-1x"></i></a></button>
 						{%endif%}
 					</div>
@@ -568,12 +477,6 @@
 			            {%if fl.key.id() == me.key.id()%}
 			              <button type="button" class="btn btn-info btn-xs"  disabled="disabled"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
 			            {%else%}
-			            <!--<form method="post">
-							<input type="hidden" name="actionType" value="follow">
-							<input type="hidden" name="user_key" value="{{fl.key.id()}}">
-	                		<input type="hidden" name="self_user_key" value="{{me.key.id()}}">
-			        	    <button type="submit" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
-			              </form>-->
 			              <button class="btn btn-primary btn-xs" id="after_photographer_add_{{loop.index}}" type="submit" title="Follow this Photographer"><a onclick="photographer_add_button('{{fl.key.id()}}', '{{me.key.id()}}', 'after_photographer_add_{{loop.index}}');" href="javascript:void(0);"><i style="color:white;" class="fa fa-plus fa-1x"></i></a></button>
 			            {%endif%}
 		        	</div>
@@ -624,7 +527,7 @@
 		<script>
 		  function add_button(photo_key, div_count) {
 		    document.getElementById('loading').innerHTML = "<p style='color:white;'>Adding Photo...</p>";
-		    var output = $.post( "/", {actionType : 'carousel_add', photoKey : photo_key} );
+		    var output = $.post( "/options", {actionType : 'carousel_add', photoKey : photo_key} );
 	    	output.done(function( data ) {
 			    document.getElementById('loading').innerHTML = "<p style='color:white;'>Added Photo</p>";
 			    document.getElementById('loading').innerHTML = ""; 
@@ -635,7 +538,7 @@
 		  }
 		  function photo_list_add_button(photo_key, div_count) {
 		    document.getElementById('loading').innerHTML = "<p style='color:white;'>Adding Photo...</p>";
-		    var output = $.post( "/", {actionType : 'photo_list_add', photoKey : photo_key} );
+		    var output = $.post( "/options", {actionType : 'photo_list_add', photoKey : photo_key} );
 	    	output.done(function( data ) {
 			    document.getElementById('loading').innerHTML = "<p style='color:white;'>Added Photo</p>";
 			    document.getElementById('loading').innerHTML = ""; 
@@ -646,7 +549,7 @@
 		  }
 		  function like_button(photo_key, div_count) {
 		    document.getElementById('loading').innerHTML = "<p style='color:white;'>Liking Photo...</p>";
-		    var output = $.post( "/", {actionType : 'carousel_like', photoKey : photo_key} );
+		    var output = $.post( "/options", {actionType : 'carousel_like', photoKey : photo_key} );
 		    output.done(function( data ) {
 			    document.getElementById('loading').innerHTML = "<p style='color:white;'>Liked Photo</p>";
 			    document.getElementById('loading').innerHTML = ""; 
@@ -657,7 +560,7 @@
 		  }
 		  function photo_list_like_button(photo_key, div_count) {
 		    document.getElementById('loading').innerHTML = "<p style='color:white;'>Liking Photo...</p>";
-		    var output = $.post( "/", {actionType : 'photo_list_like', photoKey : photo_key} );
+		    var output = $.post( "/options", {actionType : 'photo_list_like', photoKey : photo_key} );
 		    output.done(function( data ) {
 			    document.getElementById('loading').innerHTML = "<p style='color:white;'>Liked Photo</p>";
 			    document.getElementById('loading').innerHTML = ""; 
@@ -668,7 +571,7 @@
 		  }
 		  function photographer_add_button(user_key, me_key, div_count) {
 		    document.getElementById('loading').innerHTML = "<p style='color:white;'>Following...</p>";
-		    var output = $.post( "/", {user_key : user_key, self_user_key : me_key,  actionType : 'follow'} );
+		    var output = $.post( "/options", {user_key : user_key, self_user_key : me_key,  actionType : 'follow'} );
 		    output.done(function( data ) {
 			    document.getElementById('loading').innerHTML = "<p style='color:white;'>Liked Photo</p>";
 			    document.getElementById('loading').innerHTML = ""; 
@@ -678,6 +581,31 @@
 		  	});
 		  }
 		</script>
+		<script>
+			function mark_read() {
+			    var output = $.post( "/options", {actionType : 'mark_read'} );
+			    output.done(function( data ) {
+				    if (data.success == 1) {
+				    	document.getElementById('notification_count').innerHTML = "";
+					}
+			  	});
+			  }
+		</script>
+		{%if me%}
+		<script>
+			setInterval(function notification_count() {
+			    var output = $.post( "/options", {actionType : 'notification_count'} );
+			    output.done(function( data ) {
+				    if (data.success == 1) {
+				    	document.getElementById('notification_count').innerHTML = data.notification_count;
+					}
+			  	});
+			  }, 30000);
+		//setInterval(function(){ 
+	    // $( "#notification_count" ).load( "/ #count" );  
+		//}, 5000);	
+		</script>
+		{%endif%}
 		<script>
 			jQuery(document).ready(function() {
 				var offset = 220;

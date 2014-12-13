@@ -138,18 +138,66 @@
         </div>
       </div>
     </div>
-  <ul class="nav nav-pills nav-justified" role="tablist" id="photo_member_list">
-    <li class="active"><a onclick="photos();" href="javascript:void(0);"><h4>Blog</h4></a></li>
-    <li><a onclick="members();" href="javascript:void(0);"><h4>Comments</h4></a></li>
+  <ul class="nav nav-pills nav-justified" role="tablist" id="blog_comment_option">
+    <li class="active"><a onclick="blogs();" href="javascript:void(0);"><h4>Blog</h4></a></li>
+    <li><a onclick="comments();" href="javascript:void(0);"><h4>Comments</h4></a></li>
   </ul>
-  <div class="row">   
-    </div>
+  <div class="row"><hr></div>
+  <div id="content">
     <div class="col-md-8 col-sm-10 col-xs-10 post-content blog_content" style="text-align:left;font-family:serif;" id="blog_content">
       <h4>{{blog.content | safe}}</h4>
     </div>
-   <div class="row"><hr></div>
+  </div>
+   <div class="row"></div>
+   <div style="display:none;">
+      <div id="comments">
+        <div class="row"><hr></div>
+          <div class="col-md-8 col-md-offset-2">
+              <form method="post">
+                <div class="input-group">
+                  <input type="hidden" name="actionType" value="add_comment">
+                  <input type="text" class="form-control" name="comment" placeholder="Say something about the blog">
+                  <div class="input-group-btn">
+                    <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
+                  </div><!-- /btn-group -->
+                </div><!-- /input-group -->
+              </form>
+            </div>
+            <div class="row"><hr></div>
+        <div class="col-md-8 col-md-offset-2">
+            {%for comment in blog.comments|reverse%}
+            <div class="col-md-3" style="margin:0px">
+              <h5 style="color:green;"><img src="{{comment.parent().get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em><a href="/{{comment.parent().get().wpc_name}}">{{comment.parent().get().name}}</a></em><p style="font-size:10px;">{{comment.get().created.strftime("%c")}}</p></h5>
+            </div>
+            <div class="col-md-8 col-md-offset-1" style="margin:0px;text-align:left;">
+              <p>{{comment.get().content}}</p>
+              
+            </div>
+            <div class="row col-md-12" style="margin:0px"><hr></div>
+            {%endfor%}
+          </div>
+      </div>
+   </div>
+   <div style="display:none;">
+      <div id="blogs">
+        <div class="col-md-8 col-sm-10 col-xs-10 post-content blog_content" style="text-align:left;font-family:serif;" id="blog_content">
+          <h4>{{blog.content | safe}}</h4>
+        </div>
+      </div>
+    </div>
 <div class="col-md-12 text-center">
         <p>Ads</p>
         <img src="/images/img_2.jpg"  height="90px" width="728px">
     </div>
+<script>
+  function comments() {
+    $( "#content" ).load( "/blog/{{blog.key.urlsafe()}} #comments" );
+    document.getElementById("blog_comment_option").innerHTML = "<li><a onclick='blogs();' href='javascript:void(0);'><h4>Blog</h4></a></li><li class='active'><a onclick='comments();' href='javascript:void(0);'><h4>Comments</h4></a></li>";
+  }
+
+  function blogs() {
+    $( "#content" ).load( "/blog/{{blog.key.urlsafe()}} #blogs" );
+    document.getElementById("blog_comment_option").innerHTML = "<li class='active'><a onclick='blogs();' href='javascript:void(0);'><h4>Blog</h4></a></li><li><a onclick='comments();' href='javascript:void(0);'><h4>Comments</h4></a></li>";
+  }
+  </script>
 {%endblock%}

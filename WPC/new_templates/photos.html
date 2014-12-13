@@ -217,8 +217,16 @@
             <a href="/{{fl.key.id()}}"><h5 style="color:black;"><em>{{fl.name}}<em></h5>
             <img src="/fonts/Flags/{{fl.country}}.png" alt="country" width="40px"></a>
             <h5 style="color:green"><em>#{{fl.wpc_score}}</em></h5>
-            <button type="button" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-picture" style="color:white;"></span></button>
-            <button type="button" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
+            {%if me%}
+                <div class="button-container">
+                <a href="/{{fl.key.id()}}/photos"><button type="button" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-picture" style="color:white;"></span></button></a>
+                  {%if fl.key.id() == me.key.id()%}
+                    <button type="button" class="btn btn-info btn-xs"  disabled="disabled"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
+                  {%else%}
+                    <button class="btn btn-primary btn-xs" id="after_photographer_add_{{loop.index}}" type="submit" title="Follow this Photographer"><a onclick="photographer_add_button('{{fl.key.id()}}', '{{me.key.id()}}', 'after_photographer_add_{{loop.index}}');" href="javascript:void(0);"><i style="color:white;" class="fa fa-plus fa-1x"></i></a></button>
+                  {%endif%}
+              </div>
+              {%endif%}
         </div><!-- /.col-lg-4 -->
    {%endfor%}
     </div>
@@ -239,6 +247,62 @@
     <div class="row">
       <hr>
     </div>
-
+    <script>
+      function add_button(photo_key, div_count) {
+        document.getElementById('loading').innerHTML = "<p style='color:white;'>Adding Photo...</p>";
+        var output = $.post( "/options", {actionType : 'carousel_add', photoKey : photo_key} );
+        output.done(function( data ) {
+          document.getElementById('loading').innerHTML = "<p style='color:white;'>Added Photo</p>";
+          document.getElementById('loading').innerHTML = ""; 
+          if (data.success == 1) {
+            document.getElementById(div_count).innerHTML = "<a><i class='fa fa-plus' style='color:yellow;'></i></a>";
+        }
+        });
+      }
+      function photo_list_add_button(photo_key, div_count) {
+        document.getElementById('loading').innerHTML = "<p style='color:white;'>Adding Photo...</p>";
+        var output = $.post( "/options", {actionType : 'photo_list_add', photoKey : photo_key} );
+        output.done(function( data ) {
+          document.getElementById('loading').innerHTML = "<p style='color:white;'>Added Photo</p>";
+          document.getElementById('loading').innerHTML = ""; 
+          if (data.success == 1) {
+            document.getElementById(div_count).innerHTML = "<a style='color:yellow;'><i class='fa fa-plus' style='color:yellow;'></i></a>";
+        }
+        });
+      }
+      function like_button(photo_key, div_count) {
+        document.getElementById('loading').innerHTML = "<p style='color:white;'>Liking Photo...</p>";
+        var output = $.post( "/options", {actionType : 'carousel_like', photoKey : photo_key} );
+        output.done(function( data ) {
+          document.getElementById('loading').innerHTML = "<p style='color:white;'>Liked Photo</p>";
+          document.getElementById('loading').innerHTML = ""; 
+          if (data.success == 1) {
+            document.getElementById(div_count).innerHTML = "<a><i class='fa fa-thumbs-o-up' style='color:yellow;'></i></a>";
+        }
+        });
+      }
+      function photo_list_like_button(photo_key, div_count) {
+        document.getElementById('loading').innerHTML = "<p style='color:white;'>Liking Photo...</p>";
+        var output = $.post( "/options", {actionType : 'photo_list_like', photoKey : photo_key} );
+        output.done(function( data ) {
+          document.getElementById('loading').innerHTML = "<p style='color:white;'>Liked Photo</p>";
+          document.getElementById('loading').innerHTML = ""; 
+          if (data.success == 1) {
+            document.getElementById(div_count).innerHTML = "<a style='color:yellow;'><i class='fa fa-thumbs-up fa-1x'></i></a>";
+        }
+        });
+      }
+      function photographer_add_button(user_key, me_key, div_count) {
+        document.getElementById('loading').innerHTML = "<p style='color:white;'>Following...</p>";
+        var output = $.post( "/options", {user_key : user_key, self_user_key : me_key,  actionType : 'follow'} );
+        output.done(function( data ) {
+          document.getElementById('loading').innerHTML = "<p style='color:white;'>Liked Photo</p>";
+          document.getElementById('loading').innerHTML = ""; 
+          if (data.success == 1) {
+            document.getElementById(div_count).innerHTML = "<a style='color:yellow;'><i class='fa fa-plus fa-1x'></i></a>";
+        }
+        });
+      }
+    </script>
 
 {%endblock%}

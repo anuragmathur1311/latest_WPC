@@ -82,6 +82,7 @@ class Group(ndb.Model): # Parent=User (Admin)
 	created = ndb.DateTimeProperty(auto_now_add=True)
 	description = ndb.TextProperty()
 	cover_photo = ndb.StringProperty()
+	comments = ndb.KeyProperty(kind='Comment', repeated=True)
 
 class Portfolio(ndb.Model): # Parent=User (Admin)
 	name = ndb.StringProperty(required=True)
@@ -128,7 +129,7 @@ class Post(ndb.Model):
 		return cls.query(ancestor=ancestor_key).order(-cls.updated)
 
 class Item(Post):
-	#comments = ndb.KeyProperty(kind='Comment', repeated=True)
+	comments = ndb.KeyProperty(kind='Comment', repeated=True)
 	permission = ndb.StringProperty(default='Public')
 	visibleTo = ndb.KeyProperty(kind='User', repeated=True)
 	followed = ndb.KeyProperty(kind='User', repeated=True)
@@ -156,6 +157,7 @@ class Messages(Item):
 	message_blog = ndb.KeyProperty(kind='Blog')
 	message_group = ndb.KeyProperty(kind='Group')
 	comments = ndb.TextProperty(repeated=True)
+	read = ndb.IntegerProperty(default=0)
 
 class Blog(Item): # Parent=User
 	title = ndb.StringProperty(required=True)
@@ -174,7 +176,7 @@ class Question(Post): # Parent=User
 	answers = ndb.KeyProperty(kind='Answer', repeated=True)
 	followed = ndb.KeyProperty(kind='User', repeated=True)
 
-class Answer(Post): # Parent=User
+class Answer(Post): # Parent=default_user_cover2
 	content = ndb.TextProperty(required=True)
 	comments = ndb.KeyProperty(kind='Comment', repeated=True)
 

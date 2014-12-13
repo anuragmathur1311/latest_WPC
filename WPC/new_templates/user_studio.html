@@ -525,6 +525,17 @@
               <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
               <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="/images/image-2.jpg" alt="Profile Image" class="img-circle" width="25px"> <em>{{user.name}}</em></h5></a>
               <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
+              <div class="button-container post-action padding_top padding_bottom">
+                 {%if me == user%}
+                  <form method="post">
+                    <input type="hidden" name="formType" value="blog">
+                    <input type="hidden" name="actionType" value="delete_blog">
+                    <input type="hidden" id="userid" name="user" value="{{user.key.id()}}">
+                    <input type="hidden" name="blogKey" value="{{b.key.urlsafe()}}">
+                    <button class="btn btn-primary btn-xs" type="submit" title="Delete Blog"><span class="glyphicon glyphicon-trash" style="color:white;"></span></button>
+                  </form>
+                  {%endif%}
+              </div>
               <hr>
       {%endif%}
       {% endfor %}
@@ -1459,7 +1470,7 @@ function select_cover2(img_key, img_src) {
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-            <h4 class="modal-title">Share Photo</h4>
+            <h4 class="modal-title">Share Profile</h4>
           </div>
           <form role="form" method="post">
             <input type="hidden" name="formType" value="share_links">
@@ -1495,8 +1506,36 @@ function select_cover2(img_key, img_src) {
 {%block javaScripts%}
 <!-- JavaScript -->
 <script src="https://maps.googleapis.com/maps/api/js"></script>
-<script src="/js/jquery-1.10.2.js"></script>
-<script src="/js/bootstrap.js"></script>
+<script type ="text/javascript" src="/js/login.js"> </script>
+<script type ="text/javascript" src="/js/jquery.min.js"></script>
+<script type ="text/javascript" src="/js/bootstrap.min.js"></script>
+<script type ="text/javascript" src="/js/docs.min.js"></script>
+<script src="https://apis.google.com/js/client.js"></script>
+<script>
+  function mark_read() {
+      var output = $.post( "/options", {actionType : 'mark_read'} );
+      output.done(function( data ) {
+        if (data.success == 1) {
+          document.getElementById('notification_count').innerHTML = "";
+      }
+      });
+    }
+</script>
+{%if me%}
+<script>
+  setInterval(function notification_count() {
+      var output = $.post( "/options", {actionType : 'notification_count'} );
+      output.done(function( data ) {
+        if (data.success == 1) {
+          document.getElementById('notification_count').innerHTML = data.notification_count;
+      }
+      });
+    }, 30000);
+//setInterval(function(){ 
+  // $( "#notification_count" ).load( "/ #count" );  
+//}, 5000); 
+</script>
+{%endif%}
 <script>
   function change_color_n_add_input(element, type) {
     

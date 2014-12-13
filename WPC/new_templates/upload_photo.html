@@ -15,6 +15,7 @@ Upload Photos | WPC
   <h1>Add New Photos</h1>
   <hr class="horizontal-line">
 			<form id="photoupload" action="{{uploadUrl}}" method="post" enctype="multipart/form-data">
+				<input type="hidden" name="actionType" value="file_upload">
 				<div class="column fileupload-buttonbar">
 					<div class="row col-sm-3">
 						<!-- The fileinput-button span is used to style the file input field as button -->
@@ -33,9 +34,8 @@ Upload Photos | WPC
 					</div>
 					<h3 id="num_photos">Uploaded 0/0 Photos</h3>
 					<!-- The global progress state -->
-					<div class="progress">
+					<div class="progress" id="progress_bar">
 					  <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
-					    0%
 					  </div>
 					</div>
 				</div>
@@ -201,11 +201,46 @@ window.onload = function(){
     }
 }
 </script>
-		<script type ="text/javascript" src="/js/login.js"> </script>
-		<script type ="text/javascript" src="/js/jquery.min.js"></script>
-		<script type ="text/javascript" src="/js/bootstrap.min.js"></script>
-		<script type ="text/javascript" src="/js/docs.min.js"></script>
 
+<script type ="text/javascript" src="/js/login.js"> </script>
+<script type ="text/javascript" src="/js/jquery.min.js"></script>
+<script type ="text/javascript" src="/js/bootstrap.min.js"></script>
+<script type ="text/javascript" src="/js/docs.min.js"></script>
+
+		<script>
+			function mark_read() {
+			    var output = $.post( "/options", {actionType : 'mark_read'} );
+			    output.done(function( data ) {
+				    if (data.success == 1) {
+				    	document.getElementById('notification_count').innerHTML = "";
+					}
+			  	});
+			  }
+		</script>
+		<script>
+			setInterval(function notification_count() {
+			    var output = $.post( "/options", {actionType : 'notification_count'} );
+			    output.done(function( data ) {
+				    if (data.success == 1) {
+				    	document.getElementById('notification_count').innerHTML = data.notification_count;
+					}
+			  	});
+			  }, 30000);
+		//setInterval(function(){ 
+	    // $( "#notification_count" ).load( "/ #count" );  
+		//}, 5000);
+		</script>
+		<script>
+		//	setInterval(function progress() {
+		//	    var output = $.post( "/newphoto", {actionType : 'track_progress' , initial_photo_count : '{{photos.count()}}'} );
+		//	    output.done(function( data ) {
+		//		    	document.getElementById('progress_bar').innerHTML = "<div class='progress-bar' role='progressbar' aria-valuenow='60' aria-valuemin='0' aria-valuemax='100' style='width: "+data.progress+"%;'>"+data.progress+"</div>";
+		//	  	});
+		//	  }, 10000000000);
+		//setInterval(function(){ 
+	    // $( "#notification_count" ).load( "/ #count" );  
+		//}, 5000);	
+		</script>	
 {%endblock%}
 {%block javascript%}
 {%endblock%}

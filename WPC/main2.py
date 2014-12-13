@@ -29,7 +29,7 @@ from google.appengine.ext import blobstore
 from google.appengine.ext.webapp import blobstore_handlers
 from google.appengine.api import images
 from google.appengine.ext import ndb
-
+from google.appengine.ext.db import stats
 import utils
 
 template_dir = os.path.join(os.path.dirname(__file__), "new_templates")
@@ -113,155 +113,120 @@ class MainHandler(PageHandler):
 			qry5 = qry4.order(-User.joined)
 			new_users = qry5.fetch(6)
 			most_viewed = qry1.fetch(10)
-			messages = qry2.fetch()
+			messages = qry2.fetch(25)
 			new_photos = qry3.fetch(20)
 			templateVals['new_users'] = new_users
 			templateVals['new_photos'] = new_photos
 			templateVals['most_viewed'] = most_viewed
 			templateVals['messages'] = messages
 			self.render('index_user.html', **templateVals)
-
-	def post(self):
-		if not self.user:
-			templateVals = {'me': "null"}
-			qry = Picture.query()
-			qry1 = qry.order(-Picture.viewed)
-			qry3 = qry.order(-Picture.created)
-			most_viewed = qry1.fetch(10)
-			new_photos = qry3.fetch(20)
-			qry4 = User.query(ndb.AND(User.wpc_score >= 5000 , User.wpc_score <= 10000)).order(-User.wpc_score)
-			qry5 = qry4.order(-User.joined)
-			new_users = qry5.fetch(6)
-			templateVals['new_users'] = new_users
-			templateVals['new_photos'] = new_photos
-			templateVals['most_viewed'] = most_viewed
-			errorMsg = "Please signup/login to perform this action" 
-			self.render('index.html', **templateVals)
-		else:
-			action = self.request.get('actionType')
-			templateVals = {'me': self.user}
-			qry = Picture.query()
-			qry2 = Messages.query(ancestor=self.user.key).order(-Messages.created)
-			qry1 = qry.order(-Picture.viewed)
-			qry3 = qry.order(-Picture.created)
-			most_viewed = qry1.fetch(10)
-			messages = qry2.fetch()
-			new_photos = qry3.fetch(20)
-			qry4 = User.query(ndb.AND(User.wpc_score >= 5000 , User.wpc_score <= 10000)).order(-User.wpc_score)
-			qry5 = qry4.order(-User.joined)
-			new_users = qry5.fetch(6)
-			templateVals['new_users'] = new_users
-			templateVals['new_photos'] = new_photos
-			templateVals['most_viewed'] = most_viewed
-			templateVals['messages'] = messages
-			data = ""
-			if action == 'like':
-				photoKey = get_key_urlunsafe(self.request.get('photoKey'))
-				photo = photoKey.get()
-				photo.likes += 1
-				photo.put()
-				self.user.wpc_score += 100
-				self.user.put()
-				userKey = photoKey.parent()
-				user = userKey.get()
-				resultphotoList = []
-				blog = create_blog("", "", "", self.user.key)
-				group = create_group("", "", "", resultphotoList, self.user.key)
-				message_type = 7
-				create_message(message_type, 'Photographer liked your photo', self.user.key, photo.key, blog.key, group.key, user.key)
-				self.render('index_user.html', **templateVals)
-			if action == 'carousel_like':
-				print "########## IN LIKE ####################"
-				photoKey = get_key_urlunsafe(self.request.get('photoKey'))
-				photo = photoKey.get()
-				photo.likes += 1
-				photo.put()
-				self.user.wpc_score += 100
-				self.user.put()
-				userKey = photoKey.parent()
-				user = userKey.get()
-				resultphotoList = []
-				blog = create_blog("", "", "", self.user.key)
-				group = create_group("", "", "", resultphotoList, self.user.key)
-				message_type = 7
-				create_message(message_type, 'Photographer liked your photo', self.user.key, photo.key, blog.key, group.key, user.key)
-				#data = "<a href='#'></i><i class='fa fa-thumbs-o-up' style='color:yellow;'></i></a>"
-				data = {'success': 1}
-				print data
-				self.response.headers['Content-Type'] = 'text/json'
-				self.response.out.write(json.dumps(data))
-			if action == 'photo_list_like':
-				print "########## IN List LIKE ####################"
-				photoKey = get_key_urlunsafe(self.request.get('photoKey'))
-				photo = photoKey.get()
-				photo.likes += 1
-				photo.put()
-				self.user.wpc_score += 100
-				self.user.put()
-				userKey = photoKey.parent()
-				user = userKey.get()
-				resultphotoList = []
-				blog = create_blog("", "", "", self.user.key)
-				group = create_group("", "", "", resultphotoList, self.user.key)
-				message_type = 7
-				create_message(message_type, 'Photographer liked your photo', self.user.key, photo.key, blog.key, group.key, user.key)
-				#data = "<a href='#'></i><i class='fa fa-thumbs-o-up' style='color:yellow;'></i></a>"
-				data = {'success': 1}
-				print data
-				self.response.headers['Content-Type'] = 'text/json'
-				self.response.out.write(json.dumps(data))
-			if action == 'add':
-				photoKey = get_key_urlunsafe(self.request.get('photoKey'))
-				self.user.pinned_photos.append(photoKey)
-				self.user.put()
-				self.render('index_user.html', **templateVals)
-			if action == 'carousel_add':
-				print "########## IN ADD ####################"
-				photoKey = get_key_urlunsafe(self.request.get('photoKey'))
-				self.user.pinned_photos.append(photoKey)
-				self.user.put()
-				#add_output = "<a></i><i class='fa fa-plus' style='color:yellow;'></i></a>"
-				data = {'success': 1}
-				print data
-				self.response.headers['Content-Type'] = 'text/json'
-				self.response.out.write(json.dumps(data))
-			if action == 'photo_list_add':
-				print "########## IN ADD ####################"
-				photoKey = get_key_urlunsafe(self.request.get('photoKey'))
-				self.user.pinned_photos.append(photoKey)
-				self.user.put()
-				#add_output = "<a></i><i class='fa fa-plus' style='color:yellow;'></i></a>"
-				data = {'success': 1}
-				print data
-				self.response.headers['Content-Type'] = 'text/json'
-				self.response.out.write(json.dumps(data))
-			if action == 'follow':
-				user = self.request.get('user_key')
-				self_user = self.request.get('self_user_key')
-				user_key = User.get_by_id(user)
-				self_user_key = User.get_by_id(self_user)
-				userKey = [user_key.key]
-				self_userKey = [self_user_key.key]
-				user_key.followers+= self_userKey
-				self_user_key.following += userKey
-				self.user.wpc_score += 100
-				user_key.put()
-				self.user.put()
-				resultphotoList = []
-				blog = create_blog("", "", "", self.user.key)
-				group = create_group("", "", "", resultphotoList, self.user.key)
-				message_type = 8
-				create_message(message_type, 'Photographer is following you', self.user.key, self.user.avatar, blog.key, group.key, user_key.key)
-				data = {'success': 1}
-				print data
-				self.response.headers['Content-Type'] = 'text/json'
-				self.response.out.write(json.dumps(data))
-			if action == 'delete':
-				photoKey = get_key_urlunsafe(self.request.get('photoKey'))
-				delete_photo(photoKey, self.user.key)
-				self.render('index_user.html', **templateVals)
-
 			
+class OptionsPhotosPhotographersHandler(PageHandler):
+	def post(self):
+		action = self.request.get('actionType')
+		if action == 'carousel_like':
+			print "########## IN LIKE ####################"
+			photoKey = get_key_urlunsafe(self.request.get('photoKey'))
+			photo = photoKey.get()
+			photo.likes += 1
+			photo.put()
+			self.user.wpc_score += 100
+			self.user.put()
+			userKey = photoKey.parent()
+			user = userKey.get()
+			message_type = 7
+			create_message(message_type, 'Photographer liked your photo', self.user.key, photo.key, None, None, user.key)
+			#data = "<a href='#'></i><i class='fa fa-thumbs-o-up' style='color:yellow;'></i></a>"
+			data = {'success': 1}
+			print data
+			self.response.headers['Content-Type'] = 'text/json'
+			self.response.out.write(json.dumps(data))
+		if action == 'photo_list_like':
+			print "########## IN List LIKE ####################"
+			photoKey = get_key_urlunsafe(self.request.get('photoKey'))
+			photo = photoKey.get()
+			photo.likes += 1
+			photo.put()
+			self.user.wpc_score += 100
+			self.user.put()
+			userKey = photoKey.parent()
+			user = userKey.get()
+			message_type = 7
+			create_message(message_type, 'Photographer liked your photo', self.user.key, photo.key, None, None, user.key)
+			#data = "<a href='#'></i><i class='fa fa-thumbs-o-up' style='color:yellow;'></i></a>"
+			data = {'success': 1}
+			print data
+			self.response.headers['Content-Type'] = 'text/json'
+			self.response.out.write(json.dumps(data))
+		if action == 'carousel_add':
+			print "########## IN ADD ####################"
+			photoKey = get_key_urlunsafe(self.request.get('photoKey'))
+			self.user.pinned_photos.append(photoKey)
+			self.user.put()
+			userKey = photoKey.parent()
+			user = userKey.get()
+			#add_output = "<a></i><i class='fa fa-plus' style='color:yellow;'></i></a>"
+			message_type = 12
+			create_message(message_type, 'Photographer added your photo to his ideabook', self.user.key, photoKey, None, None, user.key)
+			data = {'success': 1}
+			print data
+			self.response.headers['Content-Type'] = 'text/json'
+			self.response.out.write(json.dumps(data))
+		if action == 'photo_list_add':
+			print "########## IN ADD ####################"
+			photoKey = get_key_urlunsafe(self.request.get('photoKey'))
+			self.user.pinned_photos.append(photoKey)
+			self.user.put()
+			userKey = photoKey.parent()
+			user = userKey.get()
+			#add_output = "<a></i><i class='fa fa-plus' style='color:yellow;'></i></a>"
+			message_type = 12
+			create_message(message_type, 'Photographer added your photo to his ideabook', self.user.key, photoKey, None, None, user.key)
+			data = {'success': 1}
+			print data
+			self.response.headers['Content-Type'] = 'text/json'
+			self.response.out.write(json.dumps(data))
+		if action == 'follow':
+			user = self.request.get('user_key')
+			self_user = self.request.get('self_user_key')
+			user_key = User.get_by_id(user)
+			self_user_key = User.get_by_id(self_user)
+			userKey = [user_key.key]
+			self_userKey = [self_user_key.key]
+			user_key.followers+= self_userKey
+			self_user_key.following += userKey
+			self.user.wpc_score += 100
+			user_key.put()
+			self.user.put()
+			message_type = 8
+			create_message(message_type, 'Photographer is following you', self.user.key, self.user.avatar, None, None, user_key.key)
+			data = {'success': 1}
+			print data
+			self.response.headers['Content-Type'] = 'text/json'
+			self.response.out.write(json.dumps(data))
+		if action == 'mark_read':
+			print "####### in mark read ###############"
+			qry2 = Messages.query(Messages.read == 0, ancestor=self.user.key)
+			unread_msgs = qry2.fetch()
+			for msgs in unread_msgs:
+				print msgs
+				print msgs.read
+				msgs.read = 1
+				msgs.put()
+				print msgs.read
+			data = {'success': 1}
+			print data
+			self.response.headers['Content-Type'] = 'text/json'
+			self.response.out.write(json.dumps(data))
+		if action == 'notification_count':
+			qry2 = Messages.query(Messages.read == 0, ancestor=self.user.key)
+			unread_msgs = qry2.fetch()
+			count = qry2.count()
+			data = {'success': 1, 'notification_count' : count}
+			print data
+			self.response.headers['Content-Type'] = 'text/json'
+			self.response.out.write(json.dumps(data))
+
 
 class UserHomeHandler(PageHandler):
 	def get(self):
@@ -286,12 +251,9 @@ class UserHomeHandler(PageHandler):
 				update_status = self.request.get('update_status')
 				self.user.status = update_status
 				self.user.put()
-				blog = create_blog("", "", "", self.user.key)
-				resultphotoList = []
-				group = create_group("", "", "", resultphotoList, self.user.key)
 				message_type = 11
 				for f in self.user.followers:
-					create_message(message_type, update_status, self.user.key, self.user.avatar, blog.key, group.key, f.get().key)
+					create_message(message_type, update_status, self.user.key, self.user.avatar, None, None, f.get().key)
 			if action == 'comment':
 				comment = self.request.get('comment')
 				messageKey = get_key_urlunsafe(self.request.get('messageKey'))
@@ -401,15 +363,18 @@ class SearchResultsHandler(PageHandler):           ## TODO
 		search_string = self.request.get('search_string')
 		search_string_lower = search_string.lower()
 		search_string_upper = search_string.upper()
-		photos_qry = Picture.query(ndb.OR(Picture.caption == search_string, Picture.tags == search_string, Picture.albums == search_string)).order(-Picture.viewed)
-		blogs_qry = Blog.query(Blog.title == search_string)
-		groups_qry = Group.query(Group.name == search_string)
-		users_qry = User.query(ndb.OR(User.name == search_string, User.name == search_string_lower, User.name == search_string_upper, User.wpc_name == search_string, User.email == search_string, User.photography_interests == search_string))
-
-		photos = photos_qry.fetch(100)
-		blogs = blogs_qry.fetch(100)
-		groups = groups_qry.fetch(100)
-		users = users_qry.fetch(100)
+		search_string_title = search_string.title()
+		photos_qry = Picture.query(ndb.OR(Picture.caption == search_string, Picture.tags == search_string, Picture.albums == search_string, Picture.caption == search_string_lower, Picture.tags == search_string_lower, Picture.albums == search_string_lower, Picture.caption == search_string_upper, Picture.tags == search_string_upper, Picture.albums == search_string_upper, Picture.caption == search_string_title, Picture.tags == search_string_title, Picture.albums == search_string_title)).order(-Picture.viewed)
+		blogs_qry = Blog.query(ndb.OR(Blog.title == search_string , Blog.title == search_string_lower, Blog.title == search_string_upper, Blog.title == search_string_title))
+		groups_qry = Group.query(ndb.OR(Group.name == search_string, Group.name == search_string_lower, Group.name == search_string_upper, Group.name == search_string_title))
+		users_qry = User.query(ndb.OR(User.name == search_string, User.name == search_string_lower, User.name == search_string_upper, User.name == search_string_title, User.wpc_name == search_string, User.email == search_string, User.photography_interests == search_string, User.wpc_name == search_string_lower, User.email == search_string_lower, User.photography_interests == search_string_lower, User.wpc_name == search_string_upper, User.email == search_string_upper, User.photography_interests == search_string_upper, User.wpc_name == search_string_title, User.email == search_string_title, User.photography_interests == search_string_title))
+		global_stat = stats.GlobalStat.all().get()
+		print 'Total bytes stored: %d' % global_stat.bytes
+		print 'Total entities stored: %d' % global_stat.count
+		photos = photos_qry.fetch(50)
+		blogs = blogs_qry.fetch(50)
+		groups = groups_qry.fetch(50)
+		users = users_qry.fetch(50)
 
 		templateVals['photos'] = photos
 		templateVals['blogs'] = blogs
@@ -541,37 +506,7 @@ class PhotoListPageHandler(PageHandler):
 			qry2 = Messages.query(ancestor=self.user.key).order(-Messages.created)
 			messages = qry2.fetch()
 			templateVals['messages'] = messages
-			action = self.request.get('actionType')
-			print action
-			if action == "like":
-				print "########## IN LIKE ####################"
-				photoKey = get_key_urlunsafe(self.request.get('photoKey'))
-				photo = photoKey.get()
-				photo.likes += 1
-				photo.put()
-				self.user.wpc_score += 100
-				self.user.put()
-				userKey = photoKey.parent()
-				user = userKey.get()
-				resultphotoList = []
-				blog = create_blog("", "", "", self.user.key)
-				group = create_group("", "", "", resultphotoList, self.user.key)
-				message_type = 7
-				create_message(message_type, 'Photographer liked your photo', self.user.key, photo.key, blog.key, group.key, user.key)
-				data = "<a href='#'></i><i class='fa fa-thumbs-o-up' style='color:yellow;'></i></a>"
-				print data
-				self.response.headers['Content-Type'] = 'application/json'
-        		self.response.write(json.dumps(data))
-			if action == "add":
-				photoKey = get_key_urlunsafe(self.request.get('photoKey'))
-				self.user.pinned_photos.append(photoKey)
-				self.user.put()
-				qry = Picture.query()
-				qry1 = qry.order(-Picture.awards)
-				photos = qry1.fetch(1000)
-				templateVals['photos'] = photos
-				templateVals['list_name'] = 'Top 1000 Most Viewed photos on WPC'
-				self.render('photo_list.html', **templateVals)
+			self.render('photo_list.html', **templateVals)
 
 
 class BlogsHandler(PageHandler):
@@ -758,6 +693,13 @@ class UserStudioHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler):
 					print groupKey
 					delete_group(groupKey, self.user.key)
 					self.redirect('/' + userid)
+			elif form == "blog":
+				print "##################### In delete group ##########################"
+				if action == "delete_blog":
+					blogKey = get_key_urlunsafe(self.request.get('blogKey'))
+					print "###############################################"
+					delete_blog(blogKey, self.user.key)
+					self.redirect('/' + userid)
 			elif form == "portfolio":
 				if action == "delete":
 					if self.user:
@@ -765,6 +707,10 @@ class UserStudioHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler):
 						portfolio = get_key_urlunsafe(portfolioKey)
 						delete_portfolio(portfolio, self.user.key)
 					self.redirect('/' + userid)
+				if action == "edit":
+					portfolioKey = self.request.get('portfolioKey')
+					portfolio = get_key_urlunsafe(portfolioKey)
+					self.redirect('/editportfolio/%s' % portfolioKey)
 			else:
 				self.redirect('/' + userid)
 		elif user != self.user:
@@ -772,22 +718,24 @@ class UserStudioHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler):
 			form = self.request.get('formType')
 			action = self.request.get('actionType')
 			if form == "personal_message":
+				print "In awards"
 				message = self.request.get('message')
-				blog = create_blog("", "", "", self.user.key)
-				resultphotoList = []
-				group = create_group("", "", "", resultphotoList, self.user.key)
 				message_type = 4
-				create_message(message_type, message, self.user.key, self.user.avatar, blog.key, group.key, user.key)
+				if self.user.avatar == None:
+					create_message(message_type, message, self.user.key, self.user.avatar, None, None, user.key)
+				else:
+					create_message(message_type, message, self.user.key, None, None, None, user.key)
 			if form == "photography_awards":
 				photoAward = self.request.get_all('photoAward')
 				user.awards += photoAward
 				self.user.wpc_score += 100
-				blog = create_blog("", "", "", self.user.key)
-				resultphotoList = []
-				group = create_group("", "", "", resultphotoList, self.user.key)
 				message_type = 5
 				for a in photoAward:
-					create_message(message_type, 'Photographer has given you an Award', self.user.key, self.user.avatar, blog.key, group.key, user.key)
+					if self.user.avatar:
+						create_message(message_type, a, self.user.key, self.user.avatar, None, None, user.key)
+					else:
+						create_message(message_type, a, self.user.key, None, None, None, user.key)
+				print self.user.avatar
 			if form == "follow":
 				user_key = self.request.get('user_key')
 				self_user_key = self.request.get('self_user_key')
@@ -796,11 +744,8 @@ class UserStudioHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler):
 				user.followers += self_user_key
 				self.user.following += user_key
 				self.user.wpc_score += 100
-				blog = create_blog("", "", "", self.user.key)
-				resultphotoList = []
-				group = create_group("", "", "", resultphotoList, self.user.key)
 				message_type = 8
-				create_message(message_type, 'Photographer is following you', self.user.key, self.user.avatar, blog.key, group.key, user.key)
+				create_message(message_type, 'Photographer is following you', self.user.key, self.user.avatar, None, None, user.key)
 			if form == "photo":
 				if action == "like":
 					photoKey = get_key_urlunsafe(self.request.get('photoKey'))
@@ -811,15 +756,14 @@ class UserStudioHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler):
 					self.user.put()
 					userKey = photoKey.parent()
 					user = userKey.get()
-					resultphotoList = []
-					blog = create_blog("", "", "", self.user.key)
-					group = create_group("", "", "", resultphotoList, self.user.key)
 					message_type = 7
-					create_message(message_type, 'Photographer liked your photo', self.user.key, photo.key, blog.key, group.key, user.key)
+					create_message(message_type, 'Photographer liked your photo', self.user.key, photo.key, None, None, user.key)
 				elif action == "add":
 					photoKey = get_key_urlunsafe(self.request.get('photoKey'))
 					self.user.pinned_photos.append(photoKey)
 					self.user.put()
+					message_type = 12
+					create_message(message_type, 'Photographer added your photo to his ideabook', self.user.key, photoKey, None, None, user.key)
 			else:
 				self.redirect('/' + userid)
 			user.put()
@@ -883,11 +827,12 @@ class UserAboutHandler(PageHandler):
 		if user:
 			templateVals = {'me': self.user}
 			templateVals['user'] = user
-			photos = Picture.of_ancestor(user.key)
-			templateVals['photos'] = photos
-			qry2 = Messages.query(ancestor=self.user.key).order(-Messages.created)
-			messages = qry2.fetch()
-			templateVals['messages'] = messages
+			if self.user:
+				photos = Picture.of_ancestor(self.user.key)
+				templateVals['photos'] = photos
+				qry2 = Messages.query(ancestor=self.user.key).order(-Messages.created)
+				messages = qry2.fetch()
+				templateVals['messages'] = messages
 			self.render('user_about.html', **templateVals)
 		else:
 			self.redirect('/')
@@ -899,11 +844,12 @@ class UserAboutEditHandler(PageHandler):
 		if user:
 			templateVals = {'me': self.user}
 			templateVals['user'] = user
-			photos = Picture.of_ancestor(user.key)
-			templateVals['photos'] = photos
-			qry2 = Messages.query(ancestor=self.user.key).order(-Messages.created)
-			messages = qry2.fetch()
-			templateVals['messages'] = messages
+			if self.user:
+				photos = Picture.of_ancestor(self.user.key)
+				templateVals['photos'] = photos
+				qry2 = Messages.query(ancestor=self.user.key).order(-Messages.created)
+				messages = qry2.fetch()
+				templateVals['messages'] = messages
 			self.render('user_about_edit.html', **templateVals)
 		else:
 			self.redirect('/')
@@ -987,24 +933,7 @@ class UserPhotosHandler(PageHandler):
 				self.render('user_photos.html', **templateVals)
 		elif self.user != user:
 			action = self.request.get('actionType')
-			if action == "like":
-				photoKey = get_key_urlunsafe(self.request.get('photoKey'))
-				photo = photoKey.get()
-				photo.likes += 1
-				photo.put()
-				userKey = photoKey.parent()
-				user = userKey.get()
-				self.user.wpc_score += 100
-				self.user.put()
-				resultphotoList = []
-				blog = create_blog("", "", "", self.user.key)
-				group = create_group("", "", "", resultphotoList, self.user.key)
-				message_type = 7
-				create_message(message_type, 'Photographer liked your photo', self.user.key, photo.key, blog.key, group.key, user.key)
-				self.user.wpc_score += 100
-				self.user.put()
-				self.redirect('/%s/photos' % resource)
-			elif action == "filter_tag":
+			if action == "filter_tag":
 				tag_name = self.request.get('tag_name')
 				photos = Picture.query(Picture.tags == tag_name, ancestor=user.key)
 				templateVals['photos'] = photos
@@ -1014,11 +943,6 @@ class UserPhotosHandler(PageHandler):
 				photos = Picture.query(Picture.albums == album_name, ancestor=user.key)
 				templateVals['photos'] = photos
 				self.render('user_photos.html', **templateVals)
-			elif action == "add":
-				photoKey = get_key_urlunsafe(self.request.get('photoKey'))
-				self.user.pinned_photos.append(photoKey)
-				self.user.put()
-				self.redirect('/%s/photos' % resource)
 			elif action == "search":
 				print "in search"
 				search_string = self.request.get('search_string')
@@ -1038,9 +962,10 @@ class UserBlogsHandler(PageHandler):
 			templateVals['user'] = user
 			blogs = Blog.of_ancestor(user.key)
 			templateVals['blogs'] = blogs
-			qry2 = Messages.query(ancestor=self.user.key).order(-Messages.created)
-			messages = qry2.fetch()
-			templateVals['messages'] = messages
+			if self.user:
+				qry2 = Messages.query(ancestor=self.user.key).order(-Messages.created)
+				messages = qry2.fetch()
+				templateVals['messages'] = messages
 			self.render('user_blogs.html', **templateVals)
 		else:
 			self.redirect('/')
@@ -1048,14 +973,20 @@ class UserBlogsHandler(PageHandler):
 	def post(self, resource):
 		userid = resource
 		user = User.get_by_id(userid)
+		templateVals = {'me': self.user}
+		templateVals['user'] = user
+		blogs = Blog.of_ancestor(user.key)
+		templateVals['blogs'] = blogs
+		if self.user:
+			qry2 = Messages.query(ancestor=self.user.key).order(-Messages.created)
+			messages = qry2.fetch()
+			templateVals['messages'] = messages
 		if self.user == user:
 			action = self.request.get('actionType')
 			blogKey = get_key_urlunsafe(self.request.get('blogKey'))
-			if action == "delete":
+			if action == "delete_blog":
 				delete_blog(blogKey, self.user.key)
-				self.redirect('/%s/blogs' % resource)
-			elif action == "edit":
-				self.redirect('/editblog/%s' % blogKey.urlsafe())
+				self.render('user_blogs.html', **templateVals)
 		else:
 			self.redirect('/')
 
@@ -1115,9 +1046,12 @@ class PortfolioPermpageHandler(PageHandler):
 			templateVals = {'me': self.user}
 			templateVals['user'] = user
 			templateVals['portfolio'] = portfolio
-			qry2 = Messages.query(ancestor=self.user.key).order(-Messages.created)
-			messages = qry2.fetch()
-			templateVals['messages'] = messages
+			if self.user:
+				photos = Picture.of_ancestor(self.user.key)
+				templateVals['photos'] = photos
+				qry2 = Messages.query(ancestor=self.user.key).order(-Messages.created)
+				messages = qry2.fetch()
+				templateVals['messages'] = messages
 			self.render('portfolioperm.html', **templateVals)
 		else:
 			self.redirect('/')
@@ -1130,9 +1064,13 @@ class PortfolioPermpageHandler(PageHandler):
 		user = userKey.get()
 		templateVals = {'me': self.user}
 		templateVals['user'] = user
+		if self.user:
+			photos = Picture.of_ancestor(self.user.key)
+			templateVals['photos'] = photos
+			qry2 = Messages.query(ancestor=self.user.key).order(-Messages.created)
+			messages = qry2.fetch()
+			templateVals['messages'] = messages
 		templateVals['portfolio'] = portfolio
-		photos = Picture.of_ancestor(self.user.key)
-		templateVals['photos'] = photos
 		if action == "delete":
 			if self.user:
 				delete_portfolio(portfolioKey, self.user.key)
@@ -1143,12 +1081,12 @@ class PortfolioPermpageHandler(PageHandler):
 			user.put()
 			self.user.wpc_score += 100
 			self.user.put()
-			blog = create_blog("", "", "", self.user.key)
-			resultphotoList = []
-			group = create_group("", "", "", resultphotoList, self.user.key)
 			message_type = 5
 			for a in photoAward:
-				create_message(message_type, a, self.user.key, self.user.avatar, blog.key, group.key, user.key)
+				if self.user.avatar:
+					create_message(message_type, a, self.user.key, self.user.avatar, None, None, user.key)
+				else:
+					create_message(message_type, a, self.user.key, None, None, None, user.key)
 			self.render('portfolioperm.html', **templateVals)
 		if action == "select1":
 			cover1 = self.request.get('cover1Key')
@@ -1182,6 +1120,33 @@ class PortfolioPermpageHandler(PageHandler):
 			photoKey = get_key_urlunsafe(self.request.get('photoKey'))
 			self.user.pinned_photos.append(photoKey)
 			self.user.put()
+			self.render('portfolioperm.html', **templateVals)
+		if action == "portfolio_edit":
+			portfolioKey = self.request.get('portfolioKey')
+			portfolio = get_key_urlunsafe(portfolioKey)
+			self.redirect('/editportfolio/%s' % portfolioKey)
+		if action == "delete_photo":
+			photoKey = get_key_urlunsafe(self.request.get('photoKey'))
+			portfolio.photos.remove(photoKey)
+			portfolio.put()
+			self.render('portfolioperm.html', **templateVals)
+		if action == "add_photos":
+			resultphotoList = []
+			temp1 = []
+			temp2 = []
+			photoSelect = self.request.get_all('photoSelect')
+			photoSelectDelete = self.request.get_all('photoSelectDelete')
+			for w in photoSelect:
+				x = get_key_urlunsafe(w)
+				temp1.append(x)
+			for r in photoSelectDelete:
+				x = get_key_urlunsafe(r)
+				temp2.append(x)
+			resultphotoList += temp1
+			for i in temp2:
+				resultphotoList.remove(i)
+			portfolio.photos += resultphotoList
+			portfolio.put()
 			self.render('portfolioperm.html', **templateVals)
 
 class UserPortfolioHandler(PageHandler):
@@ -1310,32 +1275,126 @@ class PhotoNewHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler):
 
 	def post(self):
 		if self.user:
-			uploads = self.get_uploads('files')
-			captionList = self.request.get_all('caption')
-			descriptionList = self.request.get_all('description')
-			locationList = self.request.get_all('location')
-			#add_location = self.request.get('add_location')
-			tagList = self.request.get_all('add_tag')
-			albumList = self.request.get_all('add_album')
-			print tagList
-			print albumList
-			print "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"
-			if len(uploads)>0:
-				for i in range(len(uploads)):
-					blobInfo = uploads[i]
-					caption = captionList[i]
-					description = descriptionList[i]
-					location = locationList[i]
-					photo = create_multiple_picture(blobInfo.key(), caption, description, location, albumList, tagList, self.user.key)
-				message_type = 1
-				for f in self.user.followers:
-					create_message(message_type, 'Photographer added new photos', self.user.key, photo.key, None, None, f.get().key)
-				self.redirect('/%s/photos' % self.user.key.id())
-			else:
-				uploadUrl = blobstore.create_upload_url('/newphoto')
-				errorMsg = "Please choose a photo!"
-				templateVals = {'me': self.user, 'uploadUrl': uploadUrl, 'submitError': errorMsg}
-				self.render('upload_photo.html', **templateVals)
+			action = self.request.get('actionType')
+			qry2 = Picture.query(ancestor=self.user.key)
+			count = qry2.count()
+			print "in new photo post"
+			if action == "file_upload":
+				uploads = self.get_uploads('files')
+				captionList = self.request.get_all('caption')
+				descriptionList = self.request.get_all('description')
+				locationList = self.request.get_all('location')
+				#add_location = self.request.get('add_location')
+				tagList = self.request.get_all('add_tag')
+				albumList = self.request.get_all('add_album')
+				print tagList
+				print albumList
+				print "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"
+				if len(uploads)>0:
+					for i in range(len(uploads)):
+						blobInfo = uploads[i]
+						caption = captionList[i]
+						description = descriptionList[i]
+						location = locationList[i]
+						photo = create_multiple_picture(blobInfo.key(), caption, description, location, albumList, tagList, self.user.key)
+					message_type = 1
+					for f in self.user.followers:
+						create_message(message_type, 'Photographer added new photos', self.user.key, photo.key, None, None, f.get().key)
+					self.redirect('/%s/photos' % self.user.key.id())
+				else:
+					uploadUrl = blobstore.create_upload_url('/newphoto')
+					errorMsg = "Please choose a photo!"
+					templateVals = {'me': self.user, 'uploadUrl': uploadUrl, 'submitError': errorMsg}
+					self.render('upload_photo.html', **templateVals)
+			if action=="track_progress":
+				initial_photo_count = self.request.get('initial_photo_count')
+				print "in track_progress"
+				print count
+				if count > initial_photo_count:
+					increment = count - initial_photo_count
+					data = {'progress': increment}
+				else:
+					data = {'progress': 0}
+				print data
+				print "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"
+				self.response.headers['Content-Type'] = 'text/json'
+				self.response.out.write(json.dumps(data))
+		else:
+			self.redirect('/')
+
+class PortfolioEditHandler(PageHandler ,blobstore_handlers.BlobstoreUploadHandler):
+	def get(self, resource):
+		portfolioKey = get_key_urlunsafe(resource)
+		portfolio = portfolioKey.get()
+		print "####### in portfolio edit ############"
+		print portfolio
+		if self.user and portfolio and (self.user.key == portfolioKey.parent()):
+			templateVals = {'me': self.user}
+			photos = Picture.of_ancestor(self.user.key)
+			templateVals['photos'] = photos
+			uploadUrl = blobstore.create_upload_url('/editportfolio/resource')
+			templateVals['uploadUrl'] = uploadUrl
+			templateVals['portfolio'] = portfolio
+			qry2 = Messages.query(ancestor=self.user.key).order(-Messages.created)
+			messages = qry2.fetch()
+			templateVals['messages'] = messages
+			self.render('portfolio_edit.html', **templateVals)
+		else:
+			self.redirect('/')
+
+	def post(self, resource):
+		print "####### in portfolio edit post ############"
+		print resource
+		portfolioKey = self.request.get('portfolioKey')
+		portfolio = get_key_urlunsafe(portfolioKey)
+		#portfolioKey = get_key_urlunsafe(resource)
+		portfolio = portfolio.get()
+		print portfolio
+		if self.user:
+			resultphotoList = []
+			temp1 = []
+			temp2 = []
+			cover1 = None
+			cover2 = None
+			portfolio_title = self.request.get('portfolio_title')
+			cover_image_1_select = self.request.get('cover_image_1_select')
+			cover_image_2_select = self.request.get('cover_image_2_select')
+			cover_image_1_upload = self.get_uploads('cover_image_1_upload')
+			cover_image_2_upload = self.get_uploads('cover_image_2_upload')
+			photoSelect = self.request.get_all('photoSelect')
+			photoSelectDelete = self.request.get_all('photoSelectDelete')
+			if photoSelect or photoSelectDelete:
+				for w in photoSelect:
+					x = get_key_urlunsafe(w)
+					temp1.append(x)
+				for r in photoSelectDelete:
+					x = get_key_urlunsafe(r)
+					temp2.append(x)
+				resultphotoList += temp1
+				for i in temp2:
+					portfolio.photos.remove(i)
+				portfolio.photos += resultphotoList
+			if cover_image_1_select:
+				cover1 = self.request.get('cover_image_1_select')
+				portfolio.cover_photo1 = cover1
+			if cover_image_2_select:
+				cover2 = self.request.get('cover_image_2_select')
+				portfolio.cover_photo2 = cover2
+			if cover_image_1_upload:
+				blobInfo = cover_image_1_upload[0]
+				photo = create_picture(blobInfo.key(), None, None, None, self.user.key)
+				cover1 = images.get_serving_url(photo.blobKey)
+				portfolio.cover_photo1 = cover1
+			if cover_image_2_upload:
+				blobInfo = cover_image_2_upload[0]
+				photo = create_picture(blobInfo.key(), None, None, None, self.user.key)
+				cover2 = images.get_serving_url(photo.blobKey)
+				portfolio.cover_photo2 = cover2
+			if portfolio_title:
+				portfolio.name = portfolio_title
+			print portfolio.name
+			portfolio.put()
+			self.redirect('/portfolio/%s' % portfolio.key.urlsafe())
 		else:
 			self.redirect('/')
 
@@ -1441,9 +1500,8 @@ class GroupNewHandler(PageHandler ,blobstore_handlers.BlobstoreUploadHandler):
 			if name:
 				group = create_group(name, description, cover, resultphotoList, self.user.key)
 				message_type = 3
-				blog = create_blog("", "", "", self.user.key)
 				for f in self.user.followers:
-					create_message(message_type, 'Photographer added new Group', self.user.key, self.user.avatar, blog.key, group.key, f.get().key)
+					create_message(message_type, 'Photographer added new Group', self.user.key, self.user.avatar, None, group.key, f.get().key)
 				self.redirect('/group/%s' % group.key.urlsafe())
 			else:
 				errorMsg = "Please enter group's name!"
@@ -1538,11 +1596,12 @@ class GroupPermpageHandler(PageHandler):
 		if group:
 			templateVals = {'me': self.user}
 			templateVals['user'] = user
-			templateVals['photos'] = Picture.of_ancestor(self.user.key)
 			templateVals['group'] = group
-			qry2 = Messages.query(ancestor=self.user.key).order(-Messages.created)
-			messages = qry2.fetch()
-			templateVals['messages'] = messages
+			if self.user:
+				templateVals['photos'] = Picture.of_ancestor(self.user.key)
+				qry2 = Messages.query(ancestor=self.user.key).order(-Messages.created)
+				messages = qry2.fetch()
+				templateVals['messages'] = messages
 			self.render('groupperm.html', **templateVals)
 		else:
 			self.redirect('/')
@@ -1554,11 +1613,12 @@ class GroupPermpageHandler(PageHandler):
 		user = userKey.get()
 		templateVals = {'me': self.user}
 		templateVals['user'] = user
-		templateVals['photos'] = Picture.of_ancestor(self.user.key)
 		templateVals['group'] = group
-		qry2 = Messages.query(ancestor=self.user.key).order(-Messages.created)
-		messages = qry2.fetch()
-		templateVals['messages'] = messages
+		if self.user:
+			templateVals['photos'] = Picture.of_ancestor(self.user.key)
+			qry2 = Messages.query(ancestor=self.user.key).order(-Messages.created)
+			messages = qry2.fetch()
+			templateVals['messages'] = messages
 		temp1 = []
 		temp2 = []
 		resultphotoList = []
@@ -1578,6 +1638,8 @@ class GroupPermpageHandler(PageHandler):
 				x = get_key_urlunsafe(r)
 				temp2.append(x)
 			resultphotoList += temp1
+			for i in temp2:
+				resultphotoList.remove(i)
 			group.photos += resultphotoList
 			group.put()
 		elif action == "join_group":
@@ -1585,31 +1647,24 @@ class GroupPermpageHandler(PageHandler):
 			self_user_key = [self.user.key]
 			group.members += self_user_key
 			self.user.groups.append(groupKey)
-			blog = create_blog("", "", "", self.user.key)
 			message_type = 9
-			create_message(message_type, 'Photographer joined your group', self.user.key, self.user.avatar, blog.key, group.key, user.key)
-			self.user.put()
+			create_message(message_type, 'Photographer joined your group', self.user.key, self.user.avatar, None, group.key, user.key)
+			self.user.put()	
 			group.put()
 		elif action == "delete_photo":
 			photoKey = get_key_urlunsafe(self.request.get('photoKey'))
 			group.photos.remove(photoKey)
 			group.put()
-		elif action == "like":
-			photoKey = get_key_urlunsafe(self.request.get('photoKey'))
-			photo = photoKey.get()
-			photo.likes += 1
-			photo.put()
+		elif action == "add_comment":
+			content = self.request.get('comment')
+			comment = create_comment(content, self.user.key)
+			comment_list = [comment.key]
+			group.comments += comment_list
+			group.put()
 			self.user.wpc_score += 100
-			userKey = photoKey.parent()
-			user = userKey.get()
-			blog = create_blog("", "", "", self.user.key)
-			message_type = 7
-			create_message(message_type, 'Photographer liked your photo', self.user.key, photo.key, blog.key, group.key, user.key)
 			self.user.put()
-		elif action == "add":
-			photoKey = get_key_urlunsafe(self.request.get('photoKey'))
-			self.user.pinned_photos.append(photoKey)
-			self.user.put()
+			message_type = 15
+			create_message(message_type, content, self.user.key, None, None, group.key, user.key)
 		self.render('groupperm.html', **templateVals)
 
 class PhotoPermpageHandler(PageHandler):
@@ -1646,6 +1701,10 @@ class PhotoPermpageHandler(PageHandler):
 		templateVals = {'me': self.user}
 		templateVals['photo'] = photo
 		templateVals['user'] = user
+		if self.user:
+			qry2 = Messages.query(ancestor=self.user.key).order(-Messages.created)
+			messages = qry2.fetch()
+			templateVals['messages'] = messages
 		templateVals['photos'] = Picture.of_ancestor(userKey)
 		if user and self.user and (self.user == user):
 			action = self.request.get('actionType')
@@ -1654,12 +1713,6 @@ class PhotoPermpageHandler(PageHandler):
 				self.redirect('/%s/photos' % self.user.key.id())
 			elif action == "edit":
 				self.redirect('/editphoto/%s' % photoKey.urlsafe())
-			elif action == "add_comment":
-				comment = []
-				comment.append(self.request.get('comment'))
-				photo.comments = comment
-				photo.put()
-				self.render('photoperm.html', **templateVals)
 			elif action == "add_tag_album":
 				tagList = self.request.get_all('tags')
 				albumList = self.request.get_all('albums')
@@ -1668,49 +1721,38 @@ class PhotoPermpageHandler(PageHandler):
 				photo.put()
 				self.render('photoperm.html', **templateVals)
 			elif action == "add_comment":
-				comment = self.request.get('comment')
+				content = self.request.get('comment')
 				user_key = self.request.get('user_key')
-				photo.comments += comment
-				photo.put()
-				self.render('photoperm.html', **templateVals)
-		elif user != self.user:
-			action = self.request.get('actionType')
-			if action == "like":	
-				photo.likes += 1
+				comment = create_comment(content, self.user.key)
+				comment_list = [comment.key]
+				photo.comments += comment_list
 				photo.put()
 				self.user.wpc_score += 100
 				self.user.put()
-				resultphotoList = []
-				blog = create_blog("", "", "", self.user.key)
-				group = create_group("", "", "", resultphotoList, self.user.key)
-				message_type = 7
-				create_message(message_type, 'Photographer liked your photo', self.user.key, photo.key, blog.key, group.key, user.key)
 				self.render('photoperm.html', **templateVals)
-			elif action == "photography_awards":
+		elif user != self.user:
+			action = self.request.get('actionType')
+			if action == "photography_awards":
 				photoAward = self.request.get_all('photoAward')
 				photo.awards += photoAward
 				photo.put()
 				self.user.wpc_score += 100
 				self.user.put()
-				blog = create_blog("", "", "", self.user.key)
-				resultphotoList = []
-				group = create_group("", "", "", resultphotoList, self.user.key)
 				message_type = 6
 				for a in photoAward:
-					create_message(message_type, a, self.user.key, photo.key, blog.key, group.key, user.key)
+					create_message(message_type, a, self.user.key, photo.key, None, None, user.key)
 				self.render('photoperm.html', **templateVals)
 			elif action == "add_comment":
-				comment = self.request.get('comment')
+				content = self.request.get('comment')
 				user_key = self.request.get('user_key')
-				photo.comments += comment
+				comment = create_comment(content, self.user.key)
+				comment_list = [comment.key]
+				photo.comments += comment_list
 				photo.put()
 				self.user.wpc_score += 100
 				self.user.put()
-				self.render('photoperm.html', **templateVals)
-			elif action == "add":
-				photoKey = get_key_urlunsafe(self.request.get('photoKey'))
-				self.user.pinned_photos.append(photoKey)
-				self.user.put()
+				message_type = 13
+				create_message(message_type, content, self.user.key, photo.key, None, None, user.key)
 				self.render('photoperm.html', **templateVals)
 		else:
 			self.redirect('/')
@@ -1725,6 +1767,9 @@ class BlogPermpageHandler(PageHandler):
 			user = userKey.get()
 			templateVals['user'] = user
 			if self.user:
+				qry2 = Messages.query(ancestor=self.user.key).order(-Messages.created)
+				messages = qry2.fetch()
+				templateVals['messages'] = messages
 				if self.user != user:
 					blog.viewed += 1
 					blog.put()
@@ -1732,9 +1777,6 @@ class BlogPermpageHandler(PageHandler):
 				blog.viewed += 1
 				blog.put()
 			templateVals['blog'] = blog
-			qry2 = Messages.query(ancestor=self.user.key).order(-Messages.created)
-			messages = qry2.fetch()
-			templateVals['messages'] = messages
 			self.render('blogperm.html', **templateVals)
 		else:
 			self.redirect('/')
@@ -1746,6 +1788,10 @@ class BlogPermpageHandler(PageHandler):
 		user = userKey.get()
 		templateVals ={'blog': blog, 'me':self.user}
 		templateVals['user'] = user
+		if self.user:
+			qry2 = Messages.query(ancestor=self.user.key).order(-Messages.created)
+			messages = qry2.fetch()
+			templateVals['messages'] = messages
 		if self.user == user:
 			action = self.request.get('actionType')
 			if action == "delete":
@@ -1753,21 +1799,40 @@ class BlogPermpageHandler(PageHandler):
 				self.redirect('/%s/blogs' % self.user.key.id())
 			elif action == "edit":
 				self.redirect('/editblog/%s' % resource)
+			elif action == "add_comment":
+				content = self.request.get('comment')
+				comment = create_comment(content, self.user.key)
+				comment_list = [comment.key]
+				blog.comments += comment_list
+				blog.put()
+				self.user.wpc_score += 100
+				self.user.put()
+				self.render('blogperm.html', **templateVals)
 		else:
 			action = self.request.get('actionType')
 			if action == "like":	
 				blog.likes += 1
 				blog.put()
-				resultphotoList = []
-				group = create_group("", "", "", resultphotoList, self.user.key)
 				message_type = 10
-				create_message(message_type, 'Photographer liked your blog', self.user.key, self.user.avatar, blog.key, group.key, user.key)
+				create_message(message_type, 'Photographer liked your blog', self.user.key, self.user.avatar, blog.key, None, user.key)
 				self.render('blogperm.html', **templateVals)
 			if action == "add":
 				blogKey = get_key_urlunsafe(self.request.get('blogKey'))
 				self.user.pinned_blogs.append(blogKey)
 				self.user.put()
 				self.render('blogperm.html', **templateVals)
+			if action == "add_comment":
+				content = self.request.get('comment')
+				comment = create_comment(content, self.user.key)
+				comment_list = [comment.key]
+				blog.comments += comment_list
+				blog.put()
+				self.user.wpc_score += 100
+				self.user.put()
+				message_type = 14
+				create_message(message_type, content, self.user.key, None, blog.key, None, user.key)
+				self.render('blogperm.html', **templateVals)
+
 
 class PhotoServeHandler(blobstore_handlers.BlobstoreDownloadHandler):
 	def get(self, resource):
@@ -1850,6 +1915,7 @@ class DefaultHandler(PageHandler):
 
 app = webapp2.WSGIApplication([
 			('/', MainHandler),
+			('/options', OptionsPhotosPhotographersHandler),
 			('/signin', SigninHandler),
 			('/signup', SignupHandler),
 			('/login', LoginHandler),
@@ -1868,6 +1934,7 @@ app = webapp2.WSGIApplication([
 			('/blog/([^/]+)', BlogPermpageHandler),
 			('/portfolio/([^/]+)', PortfolioPermpageHandler),
 			('/editphoto/([^/]+)', PhotoEditHandler),
+			('/editportfolio/([^/]+)', PortfolioEditHandler),
 			('/editblog/([^/]+)', BlogEditHandler),
 			('/edituser', UserEditHandler),
 			('/newgroup', GroupNewHandler),
