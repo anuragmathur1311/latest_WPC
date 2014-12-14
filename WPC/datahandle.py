@@ -58,8 +58,10 @@ def create_picture(blobKey, caption, description, location, parent_key):
 
 def create_multiple_picture(blobKey, caption, description, location, tag, album, parent_key):
 	pic = Picture(blobKey=blobKey, caption=caption, description=description, location=location, parent=parent_key)
-	pic.tags += tag
-	pic.albums += album
+	if not tag:
+		pic.tags += tag
+	if not album:
+		pic.albums += album
 	picKey = pic.put()
 	return pic
 

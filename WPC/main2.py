@@ -22,7 +22,9 @@ import jinja2
 import logging
 import random
 import json
+import math
 
+from math import exp, expm1
 from datamodel import *
 from datahandle import *
 from google.appengine.ext import blobstore
@@ -161,6 +163,9 @@ class OptionsPhotosPhotographersHandler(PageHandler):
 		if action == 'carousel_add':
 			print "########## IN ADD ####################"
 			photoKey = get_key_urlunsafe(self.request.get('photoKey'))
+			photo = photoKey.get()
+			photo.ideabook_additions += 1
+			photo.put()
 			self.user.pinned_photos.append(photoKey)
 			self.user.put()
 			userKey = photoKey.parent()
@@ -175,6 +180,9 @@ class OptionsPhotosPhotographersHandler(PageHandler):
 		if action == 'photo_list_add':
 			print "########## IN ADD ####################"
 			photoKey = get_key_urlunsafe(self.request.get('photoKey'))
+			photo = photoKey.get()
+			photo.ideabook_additions += 1
+			photo.put()
 			self.user.pinned_photos.append(photoKey)
 			self.user.put()
 			userKey = photoKey.parent()
@@ -1689,6 +1697,33 @@ class PhotoPermpageHandler(PageHandler):
 				qry2 = Messages.query(ancestor=self.user.key).order(-Messages.created)
 				messages = qry2.fetch()
 				templateVals['messages'] = messages
+			if photo.likes > 0:
+				likes = math.log(photo.likes,10)
+			else:
+				likes = 0
+			if len(photo.comments) > 0:
+				comments = math.log(len(photo.comments),10)
+			else:
+				comments = 0
+			if len(photo.awards) > 0:
+				awards = math.log(len(photo.awards),10)
+			else:
+				awards = 0
+			if photo.shares > 0:
+				shares = math.log(photo.shares,10)
+			else:
+				shares = 0
+			if photo.viewed > 0:
+				views = math.log(photo.viewed,10)
+			else:
+				views = 0
+			if photo.ideabook_additions > 0:
+				ideabook_additions = math.log(photo.ideabook_additions,10)
+			else:
+				ideabook_additions = 0
+			photo.score = likes + comments + awards + shares + views + ideabook_additions
+			photo.score = round(photo.score, 2)
+			photo.put()
 			self.render('photoperm.html', **templateVals)
 		else:
 			self.redirect('/')

@@ -148,6 +148,9 @@ class Picture(Item): # Parent=User
 	albums = ndb.StringProperty(repeated=True)
 	awards = ndb.StringProperty(repeated=True)
 	align_genre = ndb.StringProperty(repeated=True)
+	score = ndb.FloatProperty(default=0)
+	ideabook_additions = ndb.IntegerProperty(default=0)
+	shares = ndb.IntegerProperty(default=0)
 
 class Messages(Item):
 	message_type = ndb.IntegerProperty()

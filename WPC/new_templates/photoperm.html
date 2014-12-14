@@ -119,7 +119,7 @@
 	            <h1 style="font-size:55px;">{{photo.viewed}}</h1><i class="fa fa-eye fa-2x"></i><h4 style="color:blue;">views</h4>
 	        </div><!-- /.col-lg-4 -->
 	        <div class="col-md-2 col-xs-6">
-	            <h1 style="font-size:55px;">4.5</h1><i class="fa fa-star fa-2x"></i><h4 style="color:blue;">rating</h4>
+	            <h1 style="font-size:55px;">{{photo.score}}</h1><i class="fa fa-star fa-2x"></i><h4 style="color:blue;">score</h4>
 	        </div><!-- /.col-lg-4 -->
 	    </div><!-- /.row -->
 	</div>
@@ -466,4 +466,16 @@
 		$( ".photo_albums" ).append( "<input type='hidden' name='albums' value='"+album+"'>" );
 	}
 	</script>
+	<script>
+  function change_color_n_add_input_awards(element, type) {
+    
+    if (element.style.color == "gold") {
+        element.style.color = 'gray';
+        document.getElementById(type).innerHTML = "<input type='hidden' name='photoAwardDelete' value='"+type+"'>";
+    } else {
+      element.style.color = 'gold';
+      document.getElementById(type).innerHTML = "<input type='hidden' name='photoAward' value='"+type+"'>";
+    }
+  }
+</script>
 {%endblock%}
