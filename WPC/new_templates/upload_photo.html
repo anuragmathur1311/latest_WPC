@@ -47,7 +47,7 @@ Upload Photos | WPC
 				<h3>Update properties for all photos or update later after uploading is done</h3>
 				   <div class="col-lg-4 col-lg-offset-4">
 				    <div class="input-group">
-				      <input type="text" class="form-control" id="add_album" name="add_album" value="" placeholder="Add New Album">
+				      <div id="album"><input type="text" class="form-control" id="add_album" name="add_album" value="" placeholder="Add New Album"></div>
 				      <div class="input-group-btn">
 				        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Existing Albums <span class="caret"></span></button>
 				        <ul class="dropdown-menu dropdown-menu-right" role="menu">
@@ -77,7 +77,7 @@ Upload Photos | WPC
 
 				   <div class="col-lg-4 col-lg-offset-4">
 				    <div class="input-group">
-				      <input type="text" class="form-control" id="add_tag" name="add_tag" value="" placeholder="Add New Tag">
+				      <div id="tag"><input type="text" class="form-control" id="add_tag" name="add_tag" value="" placeholder="Add New Tag"></div>
 				      <div class="input-group-btn">
 				        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Existing Tags <span class="caret"></span></button>
 				        <ul class="dropdown-menu dropdown-menu-right" role="menu">
@@ -134,16 +134,14 @@ Upload Photos | WPC
 {% block javaScripts%}
 <script type="text/javascript">
 function add_album(album_name) {
-	document.getElementById("add_album").value = album_name;
-	document.getElementById("add_album").placeholder = album_name;
+	document.getElementById("album").innerHTML = "<input type='text' class='form-control' id='add_album' name='add_album' value="+album_name+">";
 }
 function add_location(location_name) {
 	document.getElementById("add_location").value = location_name;
 	document.getElementById("add_location").placeholder = location_name;
 }
 function add_tag(tag_name) {
-	document.getElementById("add_tag").value = tag_name;
-	document.getElementById("add_tag").placeholder = tag_name;
+	document.getElementById("tag").innerHTML = "<input type='text' class='form-control' id='add_tag' name='add_tag' value="+tag_name+">";
 }
 </script>
 <script>

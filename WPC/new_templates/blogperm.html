@@ -40,7 +40,7 @@
 						<img class="img-circle" src="{{user.avatar_url}}" height="100px" alt="Generic placeholder image">
 						<a href="/{{user.key.id()}}"><h5 style="color:white;"><em>{{user.name}}<em></h5></a>
 						<hr>
-	                    <h3 style="color:black;">{{blog.likes}} <i class="fa fa-thumbs-o-up fa-1x"></i> | {{blog.viewed}} <i class="fa fa-eye fa-1x"></i></h3>
+	                    <h3 style="color:white;">{{blog.likes}} <i class="fa fa-thumbs-o-up fa-1x"></i> | {{blog.viewed}} <i class="fa fa-eye fa-1x"></i></h3>
 	                </div>
 	            </div>
 	        </div>
@@ -73,7 +73,10 @@
       </div>
     </div>
     <div class="post-date">
-      {{blog.updated.strftime("%b %d, %Y")}}
+      <p>{{blog.updated.strftime("%b %d, %Y")}}</p>
+      {%if me == user%}
+        <p>Score # {{blog.score}}</p>
+      {%endif%}
     </div>
     <div class="col-md-12 text-center">
         <p>Ads</p>
@@ -144,7 +147,7 @@
   </ul>
   <div class="row"><hr></div>
   <div id="content">
-    <div class="col-md-8 col-sm-10 col-xs-10 post-content blog_content" style="text-align:left;font-family:serif;" id="blog_content">
+    <div class="col-md-8 col-md-offset-2 col-sm-10 col-xs-10 post-content blog_content" style="text-align:left;font-family:serif;" id="blog_content">
       <h4>{{blog.content | safe}}</h4>
     </div>
   </div>
@@ -180,7 +183,7 @@
    </div>
    <div style="display:none;">
       <div id="blogs">
-        <div class="col-md-8 col-sm-10 col-xs-10 post-content blog_content" style="text-align:left;font-family:serif;" id="blog_content">
+        <div class="col-md-8 col-md-offset-2 col-sm-10 col-xs-10 post-content blog_content" style="text-align:left;font-family:serif;" id="blog_content">
           <h4>{{blog.content | safe}}</h4>
         </div>
       </div>

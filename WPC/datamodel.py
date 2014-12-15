@@ -150,7 +150,10 @@ class Picture(Item): # Parent=User
 	align_genre = ndb.StringProperty(repeated=True)
 	score = ndb.FloatProperty(default=0)
 	ideabook_additions = ndb.IntegerProperty(default=0)
+	ideabook_additions_users = ndb.KeyProperty(kind='User', repeated=True)
+	like_users = ndb.KeyProperty(kind='User', repeated=True)
 	shares = ndb.IntegerProperty(default=0)
+	viewed_by = ndb.KeyProperty(kind='User', repeated=True)
 
 class Messages(Item):
 	message_type = ndb.IntegerProperty()
@@ -166,6 +169,10 @@ class Blog(Item): # Parent=User
 	title = ndb.StringProperty(required=True)
 	content = ndb.TextProperty(required=True)
 	cover = ndb.StringProperty()
+	score = ndb.FloatProperty(default=0)
+	ideabook_additions = ndb.KeyProperty(kind='User', repeated=True)
+	shares = ndb.IntegerProperty(default=0)
+	viewed_by = ndb.KeyProperty(kind='User', repeated=True)
 
 	@property
 	def cover_url(self):

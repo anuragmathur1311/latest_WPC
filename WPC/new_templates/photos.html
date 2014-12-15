@@ -86,7 +86,7 @@
        <button class="btn_genre" type="submit" style="color:blue;">View All</button>
     </form>
     <div class="col-md-12 top_photos">
-      {%for p in recommended%}
+      {%for p in top_100%}
           <a href="/photo/{{p.key.urlsafe()}}"><img src="{{get_serving_url(p.blobKey, size=400)}}" alt="{{p.caption}}" class="img-rounded shadow_class" height="400px"></a>
       {%endfor%}
     </div>

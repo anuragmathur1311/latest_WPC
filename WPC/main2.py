@@ -131,6 +131,7 @@ class OptionsPhotosPhotographersHandler(PageHandler):
 			photoKey = get_key_urlunsafe(self.request.get('photoKey'))
 			photo = photoKey.get()
 			photo.likes += 1
+			photo.like_users += [self.user.key]
 			photo.put()
 			self.user.wpc_score += 100
 			self.user.put()
@@ -148,6 +149,7 @@ class OptionsPhotosPhotographersHandler(PageHandler):
 			photoKey = get_key_urlunsafe(self.request.get('photoKey'))
 			photo = photoKey.get()
 			photo.likes += 1
+			photo.like_users += [self.user.key]
 			photo.put()
 			self.user.wpc_score += 100
 			self.user.put()
@@ -165,6 +167,7 @@ class OptionsPhotosPhotographersHandler(PageHandler):
 			photoKey = get_key_urlunsafe(self.request.get('photoKey'))
 			photo = photoKey.get()
 			photo.ideabook_additions += 1
+			photo.ideabook_additions_users += [self.user.key]
 			photo.put()
 			self.user.pinned_photos.append(photoKey)
 			self.user.put()
@@ -182,6 +185,7 @@ class OptionsPhotosPhotographersHandler(PageHandler):
 			photoKey = get_key_urlunsafe(self.request.get('photoKey'))
 			photo = photoKey.get()
 			photo.ideabook_additions += 1
+			photo.ideabook_additions_users += [self.user.key]
 			photo.put()
 			self.user.pinned_photos.append(photoKey)
 			self.user.put()
@@ -376,9 +380,6 @@ class SearchResultsHandler(PageHandler):           ## TODO
 		blogs_qry = Blog.query(ndb.OR(Blog.title == search_string , Blog.title == search_string_lower, Blog.title == search_string_upper, Blog.title == search_string_title))
 		groups_qry = Group.query(ndb.OR(Group.name == search_string, Group.name == search_string_lower, Group.name == search_string_upper, Group.name == search_string_title))
 		users_qry = User.query(ndb.OR(User.name == search_string, User.name == search_string_lower, User.name == search_string_upper, User.name == search_string_title, User.wpc_name == search_string, User.email == search_string, User.photography_interests == search_string, User.wpc_name == search_string_lower, User.email == search_string_lower, User.photography_interests == search_string_lower, User.wpc_name == search_string_upper, User.email == search_string_upper, User.photography_interests == search_string_upper, User.wpc_name == search_string_title, User.email == search_string_title, User.photography_interests == search_string_title))
-		global_stat = stats.GlobalStat.all().get()
-		print 'Total bytes stored: %d' % global_stat.bytes
-		print 'Total entities stored: %d' % global_stat.count
 		photos = photos_qry.fetch(50)
 		blogs = blogs_qry.fetch(50)
 		groups = groups_qry.fetch(50)
@@ -439,14 +440,14 @@ class PhotosHandler(PageHandler):
 		qry = Picture.query()
 		qry_p = User.query()
 		qry1 = qry.order(-Picture.viewed)
-		qry2 = qry.order(-Picture.awards)
+		qry2 = qry.order(-Picture.score)
 		qry3 = qry.order(-Picture.likes)
 		qry4 = qry1
 		qry5 = qry.order(-Picture.tags)
 		qry6 = qry_p.order(-User.wpc_score)
 		
 		most_viewed = qry1.fetch(5)
-		top_100 = qry2.fetch(10)
+		top_100 = qry2.fetch(100)
 		most_liked = qry3.fetch(5)
 		recommended = qry4.fetch(5)
 		tags = qry5.fetch()
@@ -473,18 +474,21 @@ class PhotosHandler(PageHandler):
 		if list_type == 'default_list':
 			qry = Picture.query()
 			if photo_list == 'top_100':
-				qry1 = qry.order(-Picture.viewed)
+				qry1 = qry.order(-Picture.score)
 				templateVals['list_name'] = 'Top 100 photos on WPC'
+				photos = qry1.fetch(100)
 			elif photo_list == 'most_viewed':
 				qry1 = qry.order(-Picture.viewed)
 				templateVals['list_name'] = 'Top 1000 Most Viewed photos on WPC'
+				photos = qry1.fetch(1000)
 			elif photo_list == 'most_liked':
 				qry1 = qry.order(-Picture.likes)
 				templateVals['list_name'] = 'Top 1000 Most Liked photos on WPC'
+				photos = qry1.fetch(1000)
 			elif photo_list == 'recommended':
 				qry1 = qry.order(-Picture.viewed)
 				templateVals['list_name'] = 'WPC Recommended'
-			photos = qry1.fetch(1000)
+				photos = qry1.fetch(1000)
 			templateVals['photos'] = photos
 		elif list_type == 'genre':
 			photos_qry = Picture.query(Picture.align_genre == photo_list)
@@ -533,16 +537,22 @@ class BlogsHandler(PageHandler):
 		qry1 = qry.order(-Blog.created)
 		qry2 = qry.order(Blog.created)
 		qry3 = qry.order(-Blog.viewed)
+		qry4 = qry.order(-Blog.score)
+		qry5 = qry4.order(-Blog.created)
 
-		blogs = qry.fetch()
-		newest = qry1.fetch()
-		oldest = qry2.fetch()
+		blogs = qry.fetch(100)
+		newest = qry1.fetch(100)
+		oldest = qry2.fetch(100)
 		views = qry3.fetch(5)
+		highest_rating = qry4.fetch(100)
+		trendiest = qry5.fetch(100)
 
 		templateVals['blogs'] = blogs
 		templateVals['newest'] = newest
 		templateVals['oldest'] = oldest
 		templateVals['views'] = views
+		templateVals['highest_rating'] = highest_rating
+		templateVals['trendiest'] = trendiest
 		self.render('blogs.html', **templateVals)
 		
 
@@ -676,9 +686,9 @@ class UserStudioHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler):
 				print "photography_types"
 				photoType = self.request.get_all('photoType')
 				photoTypeDelete = self.request.get_all('photoTypeDelete')
-				user.photography_interests += photoType
 				for i in photoTypeDelete:
-					user.photography_interests.remove(i)
+					photoType.remove(i)
+				user.photography_interests += photoType
 				user.put()
 				self.redirect('/' + userid)	
 			elif form == "photo":
@@ -1284,19 +1294,16 @@ class PhotoNewHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler):
 	def post(self):
 		if self.user:
 			action = self.request.get('actionType')
-			qry2 = Picture.query(ancestor=self.user.key)
-			count = qry2.count()
-			print "in new photo post"
 			if action == "file_upload":
 				uploads = self.get_uploads('files')
 				captionList = self.request.get_all('caption')
 				descriptionList = self.request.get_all('description')
 				locationList = self.request.get_all('location')
 				#add_location = self.request.get('add_location')
-				tagList = self.request.get_all('add_tag')
-				albumList = self.request.get_all('add_album')
-				print tagList
-				print albumList
+				tag = self.request.get('add_tag')
+				album = self.request.get('add_album')
+				print tag
+				print album
 				print "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"
 				if len(uploads)>0:
 					for i in range(len(uploads)):
@@ -1304,7 +1311,7 @@ class PhotoNewHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler):
 						caption = captionList[i]
 						description = descriptionList[i]
 						location = locationList[i]
-						photo = create_multiple_picture(blobInfo.key(), caption, description, location, albumList, tagList, self.user.key)
+						photo = create_multiple_picture(blobInfo.key(), caption, description, location, album, tag, self.user.key)
 					message_type = 1
 					for f in self.user.followers:
 						create_message(message_type, 'Photographer added new photos', self.user.key, photo.key, None, None, f.get().key)
@@ -1687,6 +1694,7 @@ class PhotoPermpageHandler(PageHandler):
 			if self.user:
 				if self.user != user:
 					photo.viewed += 1
+					photo.viewed_by += [self.user.key]
 					photo.put()
 			else:
 				photo.viewed += 1
@@ -1702,7 +1710,10 @@ class PhotoPermpageHandler(PageHandler):
 			else:
 				likes = 0
 			if len(photo.comments) > 0:
+				print "in comments"
+				print len(photo.comments)
 				comments = math.log(len(photo.comments),10)
+				print comments
 			else:
 				comments = 0
 			if len(photo.awards) > 0:
@@ -1722,7 +1733,7 @@ class PhotoPermpageHandler(PageHandler):
 			else:
 				ideabook_additions = 0
 			photo.score = likes + comments + awards + shares + views + ideabook_additions
-			photo.score = round(photo.score, 2)
+			photo.score = round(photo.score, 3)
 			photo.put()
 			self.render('photoperm.html', **templateVals)
 		else:
@@ -1761,6 +1772,35 @@ class PhotoPermpageHandler(PageHandler):
 				comment = create_comment(content, self.user.key)
 				comment_list = [comment.key]
 				photo.comments += comment_list
+				if photo.likes > 0:
+					likes = math.log(photo.likes,10)
+				else:
+					likes = 0
+				if len(photo.comments) > 0:
+					print "in comments"
+					print len(photo.comments)
+					comments = math.log(len(photo.comments),10)
+					print comments
+				else:
+					comments = 0
+				if len(photo.awards) > 0:
+					awards = math.log(len(photo.awards),10)
+				else:
+					awards = 0
+				if photo.shares > 0:
+					shares = math.log(photo.shares,10)
+				else:
+					shares = 0
+				if photo.viewed > 0:
+					views = math.log(photo.viewed,10)
+				else:
+					views = 0
+				if photo.ideabook_additions > 0:
+					ideabook_additions = math.log(photo.ideabook_additions,10)
+				else:
+					ideabook_additions = 0
+				photo.score = likes + comments + awards + shares + views + ideabook_additions
+				photo.score = round(photo.score, 3)
 				photo.put()
 				self.user.wpc_score += 100
 				self.user.put()
@@ -1770,6 +1810,35 @@ class PhotoPermpageHandler(PageHandler):
 			if action == "photography_awards":
 				photoAward = self.request.get_all('photoAward')
 				photo.awards += photoAward
+				if photo.likes > 0:
+					likes = math.log(photo.likes,10)
+				else:
+					likes = 0
+				if len(photo.comments) > 0:
+					print "in comments"
+					print len(photo.comments)
+					comments = math.log(len(photo.comments),10)
+					print comments
+				else:
+					comments = 0
+				if len(photo.awards) > 0:
+					awards = math.log(len(photo.awards),10)
+				else:
+					awards = 0
+				if photo.shares > 0:
+					shares = math.log(photo.shares,10)
+				else:
+					shares = 0
+				if photo.viewed > 0:
+					views = math.log(photo.viewed,10)
+				else:
+					views = 0
+				if photo.ideabook_additions > 0:
+					ideabook_additions = math.log(photo.ideabook_additions,10)
+				else:
+					ideabook_additions = 0
+				photo.score = likes + comments + awards + shares + views + ideabook_additions
+				photo.score = round(photo.score, 3)
 				photo.put()
 				self.user.wpc_score += 100
 				self.user.put()
@@ -1783,6 +1852,35 @@ class PhotoPermpageHandler(PageHandler):
 				comment = create_comment(content, self.user.key)
 				comment_list = [comment.key]
 				photo.comments += comment_list
+				if photo.likes > 0:
+					likes = math.log(photo.likes,10)
+				else:
+					likes = 0
+				if len(photo.comments) > 0:
+					print "in comments"
+					print len(photo.comments)
+					comments = math.log(len(photo.comments),10)
+					print comments
+				else:
+					comments = 0
+				if len(photo.awards) > 0:
+					awards = math.log(len(photo.awards),10)
+				else:
+					awards = 0
+				if photo.shares > 0:
+					shares = math.log(photo.shares,10)
+				else:
+					shares = 0
+				if photo.viewed > 0:
+					views = math.log(photo.viewed,10)
+				else:
+					views = 0
+				if photo.ideabook_additions > 0:
+					ideabook_additions = math.log(photo.ideabook_additions,10)
+				else:
+					ideabook_additions = 0
+				photo.score = likes + comments + awards + shares + views + ideabook_additions
+				photo.score = round(photo.score, 3)
 				photo.put()
 				self.user.wpc_score += 100
 				self.user.put()
@@ -1807,6 +1905,7 @@ class BlogPermpageHandler(PageHandler):
 				templateVals['messages'] = messages
 				if self.user != user:
 					blog.viewed += 1
+					blog.viewed_by += [self.user.key]
 					blog.put()
 			else:
 				blog.viewed += 1
@@ -1839,6 +1938,31 @@ class BlogPermpageHandler(PageHandler):
 				comment = create_comment(content, self.user.key)
 				comment_list = [comment.key]
 				blog.comments += comment_list
+				if blog.likes > 0:
+					likes = math.log(blog.likes,10)
+				else:
+					likes = 0
+				if len(blog.comments) > 0:
+					print "in comments"
+					print len(blog.comments)
+					comments = math.log(len(blog.comments),10)
+					print comments
+				else:
+					comments = 0
+				if blog.shares > 0:
+					shares = math.log(blog.shares,10)
+				else:
+					shares = 0
+				if blog.viewed > 0:
+					views = math.log(blog.viewed,10)
+				else:
+					views = 0
+				if len(blog.ideabook_additions) > 0:
+					ideabook_additions = math.log(len(blog.ideabook_additions),10)
+				else:
+					ideabook_additions = 0
+				blog.score = likes + comments + shares + views + ideabook_additions
+				blog.score = round(blog.score, 3)
 				blog.put()
 				self.user.wpc_score += 100
 				self.user.put()
@@ -1847,6 +1971,31 @@ class BlogPermpageHandler(PageHandler):
 			action = self.request.get('actionType')
 			if action == "like":	
 				blog.likes += 1
+				if blog.likes > 0:
+					likes = math.log(blog.likes,10)
+				else:
+					likes = 0
+				if len(blog.comments) > 0:
+					print "in comments"
+					print len(blog.comments)
+					comments = math.log(len(blog.comments),10)
+					print comments
+				else:
+					comments = 0
+				if blog.shares > 0:
+					shares = math.log(blog.shares,10)
+				else:
+					shares = 0
+				if blog.viewed > 0:
+					views = math.log(blog.viewed,10)
+				else:
+					views = 0
+				if len(blog.ideabook_additions) > 0:
+					ideabook_additions = math.log(len(blog.ideabook_additions),10)
+				else:
+					ideabook_additions = 0
+				blog.score = likes + comments + shares + views + ideabook_additions
+				blog.score = round(blog.score, 3)
 				blog.put()
 				message_type = 10
 				create_message(message_type, 'Photographer liked your blog', self.user.key, self.user.avatar, blog.key, None, user.key)
@@ -1854,6 +2003,33 @@ class BlogPermpageHandler(PageHandler):
 			if action == "add":
 				blogKey = get_key_urlunsafe(self.request.get('blogKey'))
 				self.user.pinned_blogs.append(blogKey)
+				blog.ideabook_additions += [self.user.key]
+				if blog.likes > 0:
+					likes = math.log(blog.likes,10)
+				else:
+					likes = 0
+				if len(blog.comments) > 0:
+					print "in comments"
+					print len(blog.comments)
+					comments = math.log(len(blog.comments),10)
+					print comments
+				else:
+					comments = 0
+				if blog.shares > 0:
+					shares = math.log(blog.shares,10)
+				else:
+					shares = 0
+				if blog.viewed > 0:
+					views = math.log(blog.viewed,10)
+				else:
+					views = 0
+				if len(blog.ideabook_additions) > 0:
+					ideabook_additions = math.log(len(blog.ideabook_additions),10)
+				else:
+					ideabook_additions = 0
+				blog.score = likes + comments + shares + views + ideabook_additions
+				blog.score = round(blog.score, 3)
+				blog.put()
 				self.user.put()
 				self.render('blogperm.html', **templateVals)
 			if action == "add_comment":
@@ -1861,6 +2037,31 @@ class BlogPermpageHandler(PageHandler):
 				comment = create_comment(content, self.user.key)
 				comment_list = [comment.key]
 				blog.comments += comment_list
+				if blog.likes > 0:
+					likes = math.log(blog.likes,10)
+				else:
+					likes = 0
+				if len(blog.comments) > 0:
+					print "in comments"
+					print len(blog.comments)
+					comments = math.log(len(blog.comments),10)
+					print comments
+				else:
+					comments = 0
+				if blog.shares > 0:
+					shares = math.log(blog.shares,10)
+				else:
+					shares = 0
+				if blog.viewed > 0:
+					views = math.log(blog.viewed,10)
+				else:
+					views = 0
+				if len(blog.ideabook_additions) > 0:
+					ideabook_additions = math.log(len(blog.ideabook_additions),10)
+				else:
+					ideabook_additions = 0
+				blog.score = likes + comments + shares + views + ideabook_additions
+				blog.score = round(blog.score, 3)
 				blog.put()
 				self.user.wpc_score += 100
 				self.user.put()

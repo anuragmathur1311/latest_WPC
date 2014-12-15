@@ -84,7 +84,7 @@
           <button class="btn btn-success btn-md" data-toggle="modal" data-target=".share_modal"><i class="fa fa-share fa-1x"></i></button>
       </div>
 	  <div class="col-md-2">
-        	<button class="btn btn-primary btn-md" id="after_photo_list_add_1" type="submit" title="Like This Image"><a onclick="photo_list_add_button('{{photo.key.urlsafe()}}', 'after_photo_list_add_1');" href="javascript:void(0);"><i style="color:white;" class="fa fa-plus fa-1x"></i></a></button>
+        	<button class="btn btn-primary btn-md" id="after_photo_list_add_1" type="submit" title="Add this image to Ideabook"><a onclick="photo_list_add_button('{{photo.key.urlsafe()}}', 'after_photo_list_add_1');" href="javascript:void(0);"><i style="color:white;" class="fa fa-plus fa-1x"></i></a></button>
       </div>
 	  <div class="col-md-2">
           <button class="btn btn-success btn-md" data-toggle="modal" data-target=".photography_awards"><i class="fa fa-trophy fa-1xx"></i></button>
@@ -133,6 +133,16 @@
 				<div class="panel-heading"><h4>Comments on this Photo</h4></div><hr>
 				<div class="panel-body">
 					<div class="col-md-12" style="margin:0px">
+						<div class="row">
+							<div class="input-group">
+								<div  class="photo_albums"></div>
+								<input type="hidden" id="userid" name="user_key" value="{{user.key}}">
+								<input type="text" class="form-control" name="comment" id="comment" placeholder="Add a comment">
+								<div class="input-group-btn">
+								  <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
+							</div><!-- /btn-group -->
+						</div>
+						<br>
 						{%for comment in photo.comments%}
 						<div class="col-md-3" style="margin:0px">
 							<h5 style="color:green;"><img src="{{comment.parent().get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em><a href="/{{comment.parent().get().wpc_name}}">{{comment.parent().get().name}}</a></em><p style="font-size:10px;">{{comment.get().created.strftime("%c")}}</p></h5>
@@ -144,14 +154,7 @@
 						<div class="row col-md-12" style="margin:0px"><hr></div>
 						{%endfor%}
 					</div>
-					<hr>
-				  <div class="input-group">
-					<div  class="photo_albums"></div>
-					<input type="hidden" id="userid" name="user_key" value="{{user.key}}">
-					<input type="text" class="form-control" name="comment" id="comment" placeholder="Add a comment">
-					<div class="input-group-btn">
-					  <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-plus" style="color:white;"></span></button>
-					</div><!-- /btn-group -->
+					
 				  </div><!-- /input-group -->
 				</div>
 			</div> 

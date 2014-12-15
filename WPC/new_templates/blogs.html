@@ -82,7 +82,7 @@
     <hr class="horizontal-line">
     <div id="blog_sort">
     {%if me%}
-        <h4>Filter By :</h4><a href="">	Trendiest	</a>|<a onclick="newest_blogs();" href="javascript:void(0);">	Newest	</a>|<a onclick="oldest_blogs();" href="javascript:void(0);">	Oldest	</a>|<a href="">	Highest Rating	</a>|<a onclick="myblogs();" href="javascript:void(0);">	<em>My Blogs</em>	</a>
+        <h4>Filter By :</h4><a onclick="trendiest();" href="javascript:void(0);">	Trendiest	</a>|<a onclick="newest_blogs();" href="javascript:void(0);">	Newest	</a>|<a onclick="oldest_blogs();" href="javascript:void(0);">	Oldest	</a>|<a onclick="highest_rating();" href="javascript:void(0);">	Highest Rating	</a>|<a onclick="myblogs();" href="javascript:void(0);">	<em>My Blogs</em>	</a>
     {%else%}
         <h4>Filter By :</h4><a href=""> Trendiest </a>|<a onclick="newest_blogs();" href="javascript:void(0);"> Newest  </a>|<a onclick="oldest_blogs();" href="javascript:void(0);"> Oldest  </a>|<a href="">  Highest Rating  </a>
     {%endif%}
@@ -337,6 +337,128 @@
       <div class="col-md-12"><hr></div>
   </div>
 </div>
+
+<div style="display:none;">
+  <div id="highest_rating">
+    <br>
+    <div class="row col-md-12 col-sm-12" style="margin:0px;">
+      {%for b in highest_rating%}
+      {% else %}
+          <div>
+            <h2>No Blogs in {{me.name}} Portfolio</h2>
+            {%if me == user%}
+            <a href="/newblog">Add Blog</a>
+            {%endif%}
+          </div>
+          {%set no_blogs = 1%}
+      {% endfor %}
+      {%if no_blogs != 1%}
+      <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
+      {%for b in highest_rating%}
+      {%if loop.index % 4 == 1%}
+              <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
+             <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="{{b.key.parent().get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em>{{b.key.parent().get().name}}</em></h5></a>
+              <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
+              <hr>
+      {%endif%}
+      {% endfor %}
+      </div>
+      <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
+      {%for b in highest_rating%}
+      {%if loop.index % 4 == 2%}
+              <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
+              <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="{{b.key.parent().get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em>{{b.key.parent().get().name}}</em></h5></a>
+              <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
+              <hr>
+      {%endif%}
+      {% endfor %}
+      </div>
+      <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
+      {%for b in highest_rating%}
+      {%if loop.index % 4 == 3%}
+              <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
+              <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="{{b.key.parent().get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em>{{b.key.parent().get().name}}</em></h5></a>
+              <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
+              <hr>
+      {%endif%}
+      {% endfor %}
+      </div>
+      <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
+      {%for b in highest_rating%}
+      {%if loop.index % 4 == 0%}
+              <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
+              <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="{{b.key.parent().get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em>{{b.key.parent().get().name}}</em></h5></a>
+              <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
+              <hr>
+      {%endif%}
+      {% endfor %}
+      </div>
+      {%endif%}
+      </div>
+      <div class="col-md-12"><hr></div>
+  </div>
+</div>
+
+<div style="display:none;">
+  <div id="trendiest">
+    <br>
+    <div class="row col-md-12 col-sm-12" style="margin:0px;">
+      {%for b in trendiest%}
+      {% else %}
+          <div>
+            <h2>No Blogs in {{me.name}} Portfolio</h2>
+            {%if me == user%}
+            <a href="/newblog">Add Blog</a>
+            {%endif%}
+          </div>
+          {%set no_blogs = 1%}
+      {% endfor %}
+      {%if no_blogs != 1%}
+      <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
+      {%for b in trendiest%}
+      {%if loop.index % 4 == 1%}
+              <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
+             <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="{{b.key.parent().get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em>{{b.key.parent().get().name}}</em></h5></a>
+              <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
+              <hr>
+      {%endif%}
+      {% endfor %}
+      </div>
+      <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
+      {%for b in trendiest%}
+      {%if loop.index % 4 == 2%}
+              <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
+              <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="{{b.key.parent().get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em>{{b.key.parent().get().name}}</em></h5></a>
+              <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
+              <hr>
+      {%endif%}
+      {% endfor %}
+      </div>
+      <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
+      {%for b in trendiest%}
+      {%if loop.index % 4 == 3%}
+              <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
+              <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="{{b.key.parent().get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em>{{b.key.parent().get().name}}</em></h5></a>
+              <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
+              <hr>
+      {%endif%}
+      {% endfor %}
+      </div>
+      <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
+      {%for b in trendiest%}
+      {%if loop.index % 4 == 0%}
+              <a href="/blog/{{b.key.urlsafe()}}"><h3 style="color:black;word-wrap:normal;">{{b.title}}</h3>
+              <img src="{{b.cover}}" alt="Profile Image" class="img-rounded" width="80%"><h5 style="color:green;"><img src="{{b.key.parent().get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em>{{b.key.parent().get().name}}</em></h5></a>
+              <div class="blog_content thumb_blog_content">{{b.content | safe }}</div>...
+              <hr>
+      {%endif%}
+      {% endfor %}
+      </div>
+      {%endif%}
+      </div>
+      <div class="col-md-12"><hr></div>
+  </div>
+</div>
 <script>
   function myblogs() {
      $( "#my_blogs" ).load( "/blogs #my_blogs" );
@@ -352,5 +474,14 @@
      $( "#blogs_section" ).load( "/blogs #oldest_blogs" );
   }
 </script>
-
+<script>
+  function highest_rating() {
+     $( "#blogs_section" ).load( "/blogs #highest_rating" );
+  }
+</script>
+<script>
+  function trendiest() {
+     $( "#blogs_section" ).load( "/blogs #trendiest" );
+  }
+</script>
 {%endblock%}
