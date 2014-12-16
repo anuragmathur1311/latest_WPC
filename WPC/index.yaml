@@ -42,6 +42,12 @@ indexes:
 
 - kind: Picture
   properties:
+  - name: align_genre
+  - name: viewed
+    direction: desc
+
+- kind: Picture
+  properties:
   - name: caption
   - name: viewed
     direction: desc

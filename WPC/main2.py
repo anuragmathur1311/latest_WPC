@@ -376,7 +376,7 @@ class SearchResultsHandler(PageHandler):           ## TODO
 		search_string_lower = search_string.lower()
 		search_string_upper = search_string.upper()
 		search_string_title = search_string.title()
-		photos_qry = Picture.query(ndb.OR(Picture.caption == search_string, Picture.tags == search_string, Picture.albums == search_string, Picture.caption == search_string_lower, Picture.tags == search_string_lower, Picture.albums == search_string_lower, Picture.caption == search_string_upper, Picture.tags == search_string_upper, Picture.albums == search_string_upper, Picture.caption == search_string_title, Picture.tags == search_string_title, Picture.albums == search_string_title)).order(-Picture.viewed)
+		photos_qry = Picture.query(ndb.OR(Picture.align_genre == search_string, Picture.align_genre == search_string_lower, Picture.align_genre == search_string_upper, Picture.align_genre == search_string_title, Picture.caption == search_string, Picture.tags == search_string, Picture.albums == search_string, Picture.caption == search_string_lower, Picture.tags == search_string_lower, Picture.albums == search_string_lower, Picture.caption == search_string_upper, Picture.tags == search_string_upper, Picture.albums == search_string_upper, Picture.caption == search_string_title, Picture.tags == search_string_title, Picture.albums == search_string_title)).order(-Picture.viewed)
 		blogs_qry = Blog.query(ndb.OR(Blog.title == search_string , Blog.title == search_string_lower, Blog.title == search_string_upper, Blog.title == search_string_title))
 		groups_qry = Group.query(ndb.OR(Group.name == search_string, Group.name == search_string_lower, Group.name == search_string_upper, Group.name == search_string_title))
 		users_qry = User.query(ndb.OR(User.name == search_string, User.name == search_string_lower, User.name == search_string_upper, User.name == search_string_title, User.wpc_name == search_string, User.email == search_string, User.photography_interests == search_string, User.wpc_name == search_string_lower, User.email == search_string_lower, User.photography_interests == search_string_lower, User.wpc_name == search_string_upper, User.email == search_string_upper, User.photography_interests == search_string_upper, User.wpc_name == search_string_title, User.email == search_string_title, User.photography_interests == search_string_title))
@@ -1276,6 +1276,16 @@ class PortfolioNewHandler(PageHandler ,blobstore_handlers.BlobstoreUploadHandler
 		else:
 			self.redirect('/')
 
+class PhotoUploadStatusHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler):
+	def get(self):
+		if self.user:
+			data = {'progress': self.user.progress_bar_val}
+			print data
+			self.response.headers['Content-Type'] = 'text/json'
+			self.response.out.write(json.dumps(data))
+		else:
+			self.redirect('/')
+
 class PhotoNewHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler):
 	def get(self):
 		if self.user:
@@ -1305,16 +1315,24 @@ class PhotoNewHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler):
 				print tag
 				print album
 				print "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"
-				if len(uploads)>0:
+				num_files = len(uploads) 
+				increment = 100/num_files
+				progress = 0
+				if num_files > 0:
 					for i in range(len(uploads)):
 						blobInfo = uploads[i]
 						caption = captionList[i]
 						description = descriptionList[i]
 						location = locationList[i]
 						photo = create_multiple_picture(blobInfo.key(), caption, description, location, album, tag, self.user.key)
+						progress = progress + increment
+						self.user.progress_bar_val = progress
+						self.user.put()
 					message_type = 1
 					for f in self.user.followers:
 						create_message(message_type, 'Photographer added new photos', self.user.key, photo.key, None, None, f.get().key)
+					self.user.progress_bar_val = 0
+					self.user.put()
 					self.redirect('/%s/photos' % self.user.key.id())
 				else:
 					uploadUrl = blobstore.create_upload_url('/newphoto')
@@ -1468,8 +1486,11 @@ class PhotoEditHandler(PageHandler):
 				delete_photo(photoKey, self.user.key)
 				self.redirect('/%s/photos' % self.user.key.id())
 			elif action == "rotate_left":
-				photo = images.rotate(photoKey, 90)
+				img = images.Image(str(photo.blobKey))
+				img.resize(width=1920, height=1080)
+				thumbnail = img.execute_transforms(output_encoding=images.JPEG)
 				photo.put()
+				self.redirect('/%s/photos' % self.user.key.id())
 
 
 
@@ -2176,6 +2197,7 @@ app = webapp2.WSGIApplication([
 			('/newgroup', GroupNewHandler),
 			('/newportfolio', PortfolioNewHandler),
 			('/newphoto', PhotoNewHandler),
+			('/uploadstatus', PhotoUploadStatusHandler),
 			('/newblog', BlogNewHandler),
 			('/servephoto/([^/]+)', PhotoServeHandler),
 			('/([^/]+)/about', UserAboutHandler),

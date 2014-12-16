@@ -92,6 +92,7 @@ Remaining Work
 25) Recommendation option in studio									- to be implemented later
 26) Comments in blogs,groups and photos 							- done
 27) some prb after upload photo, tags albums not coming
+28) image rotate and resizing
 
 
 

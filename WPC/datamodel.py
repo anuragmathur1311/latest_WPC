@@ -42,6 +42,7 @@ class User(ndb.Model):
 	notifications = ndb.KeyProperty(kind='Story', repeated=True)
 	photography_interests = ndb.StringProperty(repeated=True)
 	total_likes = ndb.IntegerProperty(default=0)
+	progress_bar_val = ndb.IntegerProperty(default=0)
 	
 	@property
 	def avatar_url(self):
