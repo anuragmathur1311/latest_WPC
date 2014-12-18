@@ -73,14 +73,14 @@ Remaining Work
 7) search in photos and blogs page 									- removed
 8) explore button 													- done, may be need to optimize
 9) load more options in all pages									- going to implement this later after beta
-10) ratings algorithm of photos and blogs
+10) ratings algorithm of photos and blogs							- done
 11) correct the layout of options on studio bar in the middle 		- working correctly on large screens, not on phones might go ahead and 	
 																	  release beta with this only
 12) resize all uploaded images to 1920x1080p or 2k resolution		- cannot be done without PIL library (need to install it asap)
 13) options under all phtoos in home pages 							- removes options, not making much sense
 14) sort according to the tags or album buttons 					- done...tags and albums shud only appear once
 15) search photos and filter photos 								- search done....thinking of removing filter
-16) upload status on photos page
+16) upload status on photos page 									- done
 17) add details to all photos on phtoos upload page 				- done, removed location
 18) put ads on all pages properly									- done
 19) implement invite friends
@@ -91,8 +91,9 @@ Remaining Work
 24) My gear in about												- removing it, will add later
 25) Recommendation option in studio									- to be implemented later
 26) Comments in blogs,groups and photos 							- done
-27) some prb after upload photo, tags albums not coming
+27) some prb after upload photo, tags albums not coming 			- done
 28) image rotate and resizing
+29) create blog,group, portfolio if no photo selected 				- done
 
 
 

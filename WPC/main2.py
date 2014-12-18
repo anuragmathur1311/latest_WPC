@@ -114,7 +114,7 @@ class MainHandler(PageHandler):
 			qry4 = User.query(ndb.AND(User.wpc_score >= 5000 , User.wpc_score <= 10000)).order(-User.wpc_score)
 			qry5 = qry4.order(-User.joined)
 			new_users = qry5.fetch(6)
-			most_viewed = qry1.fetch(10)
+			most_viewed = qry1.fetch(12)
 			messages = qry2.fetch(25)
 			new_photos = qry3.fetch(20)
 			templateVals['new_users'] = new_users
@@ -327,29 +327,45 @@ class ExploreHandler(PageHandler):               ## TODO
 			if num == 1:
 				qry = Picture.query()
 				count = qry.count()
-				row_num = random.randint(1, count)
+				row_num = random.randint(0, count-1)
 				photo = qry.fetch(1, offset=row_num, keys_only=True)
+				print count 
+				print row_num
+				print photo
+				print "######################"
 				photo_key = photo[0].urlsafe()
 				self.redirect('/photo/%s' % photo_key)
 			if num == 2:
 				qry = User.query()
 				count = qry.count()
-				row_num = random.randint(1, count)
+				row_num = random.randint(0, count-1)
 				user = qry.fetch(1, offset=row_num)
+				print count 
+				print row_num
+				print user
+				print "######################"
 				user_key = user[0].wpc_name
 				self.redirect('/%s' % user_key)
 			if num == 3:
 				qry = Blog.query()
 				count = qry.count()
-				row_num = random.randint(1, count)
+				row_num = random.randint(0, count-1)
 				blog = qry.fetch(1, offset=row_num, keys_only=True)
+				print count 
+				print row_num
+				print blog
+				print "######################"
 				blog_key = blog[0].urlsafe()
 				self.redirect('/blog/%s' % blog_key)
 			if num == 4:
 				qry = Group.query()
 				count = qry.count()
-				row_num = random.randint(1, count)
+				row_num = random.randint(0, count-1)
 				group = qry.fetch(1, offset=row_num, keys_only=True)
+				print count 
+				print row_num
+				print group
+				print "######################"
 				group_key = group[0].urlsafe()
 				self.redirect('/group/%s' % group_key)
 
@@ -610,11 +626,15 @@ class UserStudioHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler):
 			templateVals['blogs'] = blogs
 			uploadUrl = blobstore.create_upload_url('/resource')
 			templateVals['uploadUrl'] = uploadUrl
-			if self.user:
+			if self.user == user:
 				qry2 = Messages.query(ancestor=self.user.key).order(-Messages.created)
 				messages = qry2.fetch()
 				templateVals['messages'] = messages
-			if not user:
+			elif self.user and user != self.user:
+				user.profile_views += 1
+				user.viewed_by += [self.user.key]
+				user.put()
+			else:
 				user.profile_views += 1
 				user.put()
 			print "2 in if user"
@@ -640,6 +660,8 @@ class UserStudioHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler):
 					uploads = self.get_uploads('avatarFile')
 					blobInfo = uploads[0]
 					photo = create_picture(blobInfo.key(), None, None, None, self.user.key)
+					photo.is_avatar_pic = 1
+					photo.put()
 					user.avatar = photo.key
 				elif action == "remove":
 					user.avatar = None
@@ -746,6 +768,7 @@ class UserStudioHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler):
 			if form == "photography_awards":
 				photoAward = self.request.get_all('photoAward')
 				user.awards += photoAward
+				user.awarded_by += [self.user.key]
 				self.user.wpc_score += 100
 				message_type = 5
 				for a in photoAward:
@@ -1227,8 +1250,8 @@ class PortfolioNewHandler(PageHandler ,blobstore_handlers.BlobstoreUploadHandler
 			resultphotoList = []
 			temp1 = []
 			temp2 = []
-			cover1 = None
-			cover2 = None
+			cover1 = ""
+			cover2 = ""
 			portfolio_title = self.request.get('portfolio_title')
 			cover_image_1_select = self.request.get('cover_image_1_select')
 			cover_image_2_select = self.request.get('cover_image_2_select')
@@ -1258,12 +1281,10 @@ class PortfolioNewHandler(PageHandler ,blobstore_handlers.BlobstoreUploadHandler
 				blobInfo = cover_image_2_upload[0]
 				photo = create_picture(blobInfo.key(), None, None, None, self.user.key)
 				cover2 = images.get_serving_url(photo.blobKey)
-			if cover1 == None:
-				cover1_photo = self.user.cover1.get()
-				cover1 = images.get_serving_url(cover1_photo.blobKey)
-			if cover2 == None:
-				cover2_photo = self.user.cover2.get()
-				cover2 = images.get_serving_url(cover2_photo.blobKey)
+			if cover1 == "":
+				cover1 = self.user.cover1_url
+			if cover2 == "":
+				cover2 = self.user.cover2_url
 			if portfolio_title:
 				portfolio = create_portfolio(portfolio_title, cover1, cover2, resultphotoList, self.user.key)
 				self.redirect('/portfolio/%s' % portfolio.key.urlsafe())
@@ -1517,6 +1538,7 @@ class GroupNewHandler(PageHandler ,blobstore_handlers.BlobstoreUploadHandler):
 			temp1 = []
 			temp2 = []
 			resultphotoList = []
+			cover = ""
 			if action == "select":
 				cover = self.request.get('cover_image')
 			elif action == "upload":
@@ -1533,6 +1555,8 @@ class GroupNewHandler(PageHandler ,blobstore_handlers.BlobstoreUploadHandler):
 				x = get_key_urlunsafe(r)
 				temp2.append(x)
 			resultphotoList += temp1
+			if cover == "":
+				cover = self.user.cover1_url
 			if name:
 				group = create_group(name, description, cover, resultphotoList, self.user.key)
 				message_type = 3
@@ -1545,6 +1569,73 @@ class GroupNewHandler(PageHandler ,blobstore_handlers.BlobstoreUploadHandler):
 				photos = Picture.of_ancestor(self.user.key)
 				templateVals['photos'] = photos
 				self.render('new_group.html', **templateVals)
+		else:
+			self.redirect('/')
+
+class GroupEditHandler(PageHandler ,blobstore_handlers.BlobstoreUploadHandler):
+	def get(self, resource):
+		groupKey = get_key_urlunsafe(resource)
+		group = groupKey.get()
+		userKey = groupKey.parent()
+		user = userKey.get()
+		templateVals = {'me': self.user}
+		uploadUrl = blobstore.create_upload_url('/editgroup/resource')
+		templateVals['uploadUrl'] = uploadUrl
+		if group:
+			templateVals['user'] = user
+			templateVals['group'] = group
+			if self.user:
+				templateVals['photos'] = Picture.of_ancestor(self.user.key)
+				qry2 = Messages.query(ancestor=self.user.key).order(-Messages.created)
+				messages = qry2.fetch()
+				templateVals['messages'] = messages
+			self.render('edit_group.html', **templateVals)
+		else:
+			self.redirect('/')
+
+	def post(self, resource):
+		groupKey = get_key_urlunsafe(self.request.get('groupKey'))
+		group = groupKey.get()
+		userKey = groupKey.parent()
+		user = userKey.get()
+		if self.user:
+			action = self.request.get('actionType')
+			name = self.request.get('name')
+			description = self.request.get('description')
+			temp1 = []
+			temp2 = []
+			resultphotoList = []
+			cover = ""
+			if action == "select":
+				print "########### in select ##############"
+				cover = self.request.get('cover_image')
+			elif action == "upload":
+				print "########### in upload ##############"
+				uploads = self.get_uploads('cover_photo')
+				blobInfo = uploads[0]
+				photo = create_picture(blobInfo.key(), None, None, None, self.user.key)
+				cover = images.get_serving_url(photo.blobKey)
+			photoSelect = self.request.get_all('photoSelect')
+			photoSelectDelete = self.request.get_all('photoSelectDelete')
+			if photoSelect:
+				for w in photoSelect:
+					x = get_key_urlunsafe(w)
+					temp1.append(x)
+			group.photos += temp1
+			if photoSelectDelete:
+				for r in photoSelectDelete:
+					x = get_key_urlunsafe(r)
+					group.photos.remove(x)
+			if name:
+				group.name = name
+			if description:
+				group.description = description
+			print cover
+			if cover:
+				print "########### in cover ############"
+				group.cover_photo = cover
+			group.put()
+			self.redirect('/group/%s' % group.key.urlsafe())
 		else:
 			self.redirect('/')
 
@@ -1568,6 +1659,7 @@ class BlogNewHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler):
 			action = self.request.get('actionType')
 			title = self.request.get('title')
 			content = self.request.get('content')
+			cover = ""
 			if action == "select":
 				cover = self.request.get('cover_image')
 			elif action == "upload":
@@ -1575,6 +1667,8 @@ class BlogNewHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler):
 				blobInfo = uploads[0]
 				photo = create_picture(blobInfo.key(), None, None, None, self.user.key)
 				cover = images.get_serving_url(photo.blobKey)
+			if cover == "":
+				cover = self.user.cover1_url
 			if title and content:
 				blog = create_blog(title, content, cover, self.user.key)
 				message_type = 2
@@ -1590,14 +1684,20 @@ class BlogNewHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler):
 		else:
 			self.redirect('/')
 
-class BlogEditHandler(PageHandler):
+class BlogEditHandler(PageHandler, blobstore_handlers.BlobstoreUploadHandler):
 	def get(self, resource):
 		blogKey = get_key_urlunsafe(resource)
 		blog = blogKey.get()
 		if self.user and blog and (self.user.key == blogKey.parent()):
 			templateVals = {'me': self.user}
+			uploadUrl = blobstore.create_upload_url('/editblog/resource')
+			templateVals['uploadUrl'] = uploadUrl
+			photos = Picture.of_ancestor(self.user.key)
+			templateVals['photos'] = photos
 			templateVals['title'] = blog.title
 			templateVals['content'] = blog.content
+			templateVals['cover'] = blog.cover
+			templateVals['blog'] = blog
 			qry2 = Messages.query(ancestor=self.user.key).order(-Messages.created)
 			messages = qry2.fetch()
 			templateVals['messages'] = messages
@@ -1606,20 +1706,28 @@ class BlogEditHandler(PageHandler):
 			self.redirect('/')
 
 	def post(self, resource):
-		blogKey = get_key_urlunsafe(resource)
+		blogKey = get_key_urlunsafe(self.request.get('blogKey'))
 		blog = blogKey.get()
 		if self.user and blog and (self.user.key == blogKey.parent()):
 			title = self.request.get('title')
 			content = self.request.get('content')
-			if title and content:
+			action = self.request.get('actionType')
+			cover = ""
+			if action == "select":
+				cover = self.request.get('cover_image')
+			elif action == "upload":
+				uploads = self.get_uploads('cover_photo')
+				blobInfo = uploads[0]
+				photo = create_picture(blobInfo.key(), None, None, None, self.user.key)
+				cover = images.get_serving_url(photo.blobKey)
+			if title:
 				blog.title = title
+			if content:
 				blog.content = content
-				blog.put()
-				self.redirect('/%s/blogs' % self.user.key.id())
-			else:
-				errorMsg = "Please enter both title and content!"
-				templateVals = {'me': self.user, 'title': title, 'content': content, 'submitError': errorMsg}
-				self.render('edit_blog.html', **templateVals)
+			if cover:
+				blog.cover = cover
+			blog.put()
+			self.redirect('/blog/%s' % blog.key.urlsafe())
 		else:
 			self.redirect('/')
 
@@ -1953,7 +2061,7 @@ class BlogPermpageHandler(PageHandler):
 				delete_blog(blogKey, self.user.key)
 				self.redirect('/%s/blogs' % self.user.key.id())
 			elif action == "edit":
-				self.redirect('/editblog/%s' % resource)
+				self.redirect('/editblog/%s' % blogKey.urlsafe())
 			elif action == "add_comment":
 				content = self.request.get('comment')
 				comment = create_comment(content, self.user.key)
@@ -2193,6 +2301,7 @@ app = webapp2.WSGIApplication([
 			('/editphoto/([^/]+)', PhotoEditHandler),
 			('/editportfolio/([^/]+)', PortfolioEditHandler),
 			('/editblog/([^/]+)', BlogEditHandler),
+			('/editgroup/([^/]+)', GroupEditHandler),
 			('/edituser', UserEditHandler),
 			('/newgroup', GroupNewHandler),
 			('/newportfolio', PortfolioNewHandler),

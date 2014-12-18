@@ -27,7 +27,7 @@
 {%block pageContent%}
     <!-- Full Page Image Header Area -->
     
-    <div id="top" class="header" style="background: url({{get_serving_url(portfolio.cover_photo1)}}) no-repeat center center fixed;background-size: cover;z-index:1;">
+    <div id="top" class="header" style="background: url({{portfolio.cover_photo1}}) no-repeat center center fixed;background-size: cover;z-index:1;">
       <div class="transbox_top_right">
         {%if me == user%}
         <a data-toggle="modal" data-target=".cover_image_1" title="Change Cover Image 1" style="color:white;"><i style="font-size:20px;" class="fa fa-edit"></i></a>
@@ -361,7 +361,7 @@ function select_cover1(img_src) {
   }
 </script>
     <!-- Callout -->
-    <div class="callout" id="callout" style="background: url({{get_serving_url(portfolio.cover_photo2)}}) no-repeat center center fixed;background-size: cover;z-index:2;">
+    <div class="callout" id="callout" style="background: url({{portfolio.cover_photo2}}) no-repeat center center fixed;background-size: cover;z-index:2;">
         <div class="vert-text">
             <div class="row col-md-12" style="margin:0px;">
               <div class="col-md-1">

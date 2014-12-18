@@ -126,7 +126,7 @@ My Photos | WPC
         {%if no_photos != 1%}
 		  <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
 	      {%for p in photos%}
-	      {%if loop.index % 4 == 1%}
+	      {%if loop.index % 4 == 1 and p.is_avatar_pic == 0%}
 	              <a href="/photo/{{p.key.urlsafe()}}"><img src="{{get_serving_url(p.blobKey,size=100)}}" width="98%" id="temp1" alt="photo"></a>
 					{%for tags in p.tags%}
 						<script>
@@ -169,7 +169,7 @@ My Photos | WPC
 	      </div>
 	      <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
 	      {%for p in photos%}
-	      {%if loop.index % 4 == 2%}
+	      {%if loop.index % 4 == 2 and p.is_avatar_pic == 0%}
 	              <a href="/photo/{{p.key.urlsafe()}}"><img src="{{get_serving_url(p.blobKey,size=100)}}" width="98%" id="temp1" alt="photo"></a>
 					{%for tags in p.tags%}
 						<script>
@@ -212,7 +212,7 @@ My Photos | WPC
 	      </div>
 	      <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
 	      {%for p in photos%}
-	      {%if loop.index % 4 == 3%}
+	      {%if loop.index % 4 == 3 and p.is_avatar_pic == 0%}
 	              <a href="/photo/{{p.key.urlsafe()}}"><img src="{{get_serving_url(p.blobKey,size=100)}}" width="98%" id="temp1" alt="photo"></a>
 					{%for tags in p.tags%}
 						<script>
@@ -255,7 +255,7 @@ My Photos | WPC
 	      </div>
 	      <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
 	      {%for p in photos%}
-	      {%if loop.index % 4 == 0%}
+	      {%if loop.index % 4 == 0 and p.is_avatar_pic == 0%}
 	              <a href="/photo/{{p.key.urlsafe()}}"><img src="{{get_serving_url(p.blobKey,size=100)}}" width="98%" id="temp1" alt="photo"></a>
 					{%for tags in p.tags%}
 						<script>

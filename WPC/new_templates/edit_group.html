@@ -1,0 +1,194 @@
+{%if me%}
+    {%extends "index_user.html"%}
+{%else%}
+    {%extends "index.html"%}
+{%endif%}
+
+{%set user = me%}
+
+{%block title%}
+{{me.name}} | WPC
+{%endblock%}
+
+{%block styleSheets%}
+<!-- Bootstrap core CSS -->
+<link href="/css/bootstrap.css" rel="stylesheet">
+<link href="/css/my_studio.css" rel="stylesheet">
+<link href="/css/font.css" rel="stylesheet">
+<link href="/css/blog.css" rel="stylesheet">
+<link href="/css/new_group.css" rel="stylesheet">
+{%endblock%}
+
+{%block carousel%}
+{%endblock%}
+
+
+{%block pageContent%}
+  <h1>Edit Group {{group.name}}</h1>
+  <hr class="horizontal-line">
+   <div class="col-md-7 col-md-offset-1 newblog_text">
+    <form action="{{uploadUrl}}" method="post" enctype="multipart/form-data">
+      <input type="hidden" name="groupKey" value="{{group.key.urlsafe()}}">
+      <h3>Edit Group Title</h3>
+      <textarea name="name" cols="80" rows="2" value="{{group.name}}" placeholder="{{group.name}}" ></textarea><br>
+      <h3>Edit Group Description</h3>
+      <textarea class="" cols="80" id="" name="description" rows="5" value="{{group.description}}" placeholder="{{group.description}}"></textarea><br>
+      <h3>Change Group's Main Image</h3>
+        <span class="btn btn-info btn-sm fileinput-button" data-toggle="modal" data-target="#select_photo">
+          <i class="fa fa-hand-o-up"></i>
+          <span style="color:white;">Select Photo</span>
+        </span>
+        <span class="btn btn-info btn-sm fileinput-button">
+          <i class="glyphicon glyphicon-plus"></i>
+          <span style="color:white;">Upload Photo</span>
+          <input type="file" id="myFile" name="cover_photo" multiple>
+        </span>
+        <div class="row">
+          <div class="container" id="thumb_img1">
+            <div class="col-lg-4"><img class="img-rounded" src="{{group.cover_photo}}" height="140px" alt="Group Cover Image"></div>
+          </div>
+        </div>
+        <div id="group_cover_image"></div>
+        <h3>Add Photos</h3>
+      <div class="col-md-8" style="margin:0px;">
+        <div class="photo_box">
+          {%for p in photos%}
+            {%if p.key in group.photos%}
+              <img onclick="change_border_insert_input(this, '{{p.key.urlsafe()}}');" style="border:3px solid blue;"src="{{get_serving_url(p.blobKey,size=30)}}" height="50px" style="margin:2px;" id="temp1" alt="photo">
+            {%else%}
+              <img onclick="change_border_insert_input(this, '{{p.key.urlsafe()}}');" src="{{get_serving_url(p.blobKey,size=30)}}" height="50px" style="margin:2px;" id="temp1" alt="photo">
+            {%endif%}
+          {%endfor%}
+        </div>
+        <p>Select photos to be added to this portfolio, you can add or remove photos later as well</p>
+      </div>
+        <div class="selected_photos"></div>
+        <div class="unselected_photos"></div>
+      <div class="row"></div>
+      <button class="btn btn-xs btn-success" type="submit">Update Group</button>
+    </form>
+  </div>
+  <div class="col-md-1">
+    <div class="vertical-line">&nbsp;</div>
+  </div>
+  <div class="col-md-3">
+    <div class="row">
+        <p>Ads</p>
+        <img src="/images/img_2.jpg" height="250px" width="300px">
+          <hr class="horizontal-line">
+      </div>
+      <div class="row">
+        <img src="/images/img_2.jpg" height="250px" width="300px">
+          <hr class="horizontal-line">
+      </div>
+      <div class="row">
+        <img src="/images/img_2.jpg" height="250px" width="300px">
+          <hr class="horizontal-line">
+      </div>
+  </div>
+
+  <div class="modal fade bs-example-modal-lg" id="select_photo" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+          <h4 class="modal-title">Select and Add Photo</h4>
+        </div>
+              <div class="col-lg-12 col-sm-12 col-xs-12" id="photo_select" align="center">
+                <div class="thumb_imgs">
+                      {%for p in photos%}
+                              <a onclick="change_main_image('/servephoto/{{p.blobKey}}');" href="javascript:void(0);"><img src="/servephoto/{{p.blobKey}}" height="100px" alt="photo"></a>
+                      {%endfor%}
+                </div><br>
+                <div id="main_img" class=""></div>
+              </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-xs btn-primary close" data-dismiss="modal">Select and Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script type="text/javascript">
+function change_main_image(img_key) {
+    document.getElementById("main_img").innerHTML = "<img alt='' src='"+img_key+"' height='100%' class='img_display'/>";
+    document.getElementById("group_cover_image").innerHTML = "<input type='hidden' name='cover_image' value='"+img_key+"'><input type='hidden' name='actionType' value='select'>";
+  document.getElementById("thumb_img1").innerHTML = "<div class='col-lg-4'><img class='img-rounded' src='" + img_key + "' height='140px' alt='"+img_key+"'></div>";
+} 
+</script>
+<script type="text/javascript">
+function back_to_image_selector() {
+    document.getElementById("photo_select").innerHTML = "{%for p in photos%}<div class='col-xs-3'><a onclick='change_main_image('{{get_serving_url(p.blobKey)}}');' href='javascript:void(0);'><img src='{{get_serving_url(p.blobKey)}}' height='100px' alt='photo'></a></div>{%endfor%}";
+} 
+</script>
+<script type="text/javascript">
+  function change_border_insert_input(element, photo_key) {
+    
+    if (element.style.border == "") {
+        element.style.border = '3px solid blue';
+        $( ".selected_photos" ).append( "<input type='hidden' name='photoSelect' value='"+photo_key+"'>" );
+        //document.getElementById('selected_photos').innerHTML = "<input type='hidden' name='photoSelect' value='"+photo_key+"'>";
+    } else if (element.style.border == "3px solid blue") {
+      element.style.border = "";
+      $( ".unselected_photos" ).append( "<input type='hidden' name='photoSelectDelete' value='"+photo_key+"'>" );
+      //document.getElementById('unselected_photos').innerHTML = "<input type='hidden' name='photoSelectDelete' value='"+photo_key+"'>";
+    }
+  }
+</script>
+<script>
+window.onload = function(){  
+    //Check File API support
+
+  //<label for="files">Select multiple files: </label>
+  //<input id="files" type="file" multiple/>
+  //<output id="result" />
+    if(window.File && window.FileList && window.FileReader)
+    {
+        var filesInput = document.getElementById("myFile");
+        filesInput.addEventListener("change", function(event){
+            var files = event.target.files; //FileList object
+            var output = document.getElementById("thumb_img1");
+            var num_files = files.length;
+            var txt = "";
+            var file_name_size = [];
+            var file_name = [];
+            var total_size = 0;
+            for(var i = 0; i< files.length; i++)
+            {
+              txt = "";
+                var file = files[i];
+                if ('name' in files[i]) {
+                    txt += "" + files[i].name + "<br>";
+                }
+                if ('size' in files[i]) {
+                    //txt += "Size: " + file.size/1000000 + " Mbytes <br>";
+                    txt += "Size: " + Math.ceil((files[i].size/1000000) * 100)/100 + " Mbytes <br>";
+                }
+                //Only pics
+                file_name_size.push(txt);
+                file_name.push(files[i].name)
+                total_size = total_size + Math.ceil((files[i].size/1000000) * 100)/100;
+                if(!file.type.match('image'))
+                  continue;
+                var picReader = new FileReader();
+                var w = 0;
+                picReader.addEventListener("load",function(event){
+                  var picFile = event.target;
+                    var div = document.createElement("div");
+                    div.innerHTML = "<div class='col-lg-4'><img class='img-rounded' src='" + picFile.result + "' height='140px' alt='"+file_name[w]+"'><h4 style='color:black;'>"+file_name_size[w]+"</h4></div><input type='hidden' name='actionType' value='upload'>";
+                    w++;
+                    output.insertBefore(div,null);            
+                });
+                 //Read the image
+                picReader.readAsDataURL(file);
+            }                         
+        });
+    }
+    else
+    {
+        console.log("Your browser does not support File API");
+    }
+}
+</script>
+{%endblock%}
+

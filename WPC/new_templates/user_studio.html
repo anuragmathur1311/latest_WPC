@@ -12,7 +12,7 @@
 <!-- Bootstrap core CSS -->
 <link href="/css/bootstrap.css" rel="stylesheet">
 <!-- Add custom CSS here -->
-<link href="/css/carousel.css" rel="stylesheet">
+<link href="/css/carousel1.css" rel="stylesheet">
 <link href="/css/my_studio.css" rel="stylesheet">
 <link href="/css/font.css" rel="stylesheet">
 <link href="/css/camera_lenses.css" rel="stylesheet">
@@ -300,7 +300,7 @@
         {%if no_photos != 1%}
             <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
         {%for p in photos%}
-        {%if loop.index % 4 == 1%}
+        {%if loop.index % 4 == 1 and p.is_avatar_pic == 0%}
                 <a href="/photo/{{p.key.urlsafe()}}"><img src="{{get_serving_url(p.blobKey,size=100)}}" width="98%" id="temp1" alt="photo"></a>
           <br>
           
@@ -351,7 +351,7 @@
         </div>
         <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
         {%for p in photos%}
-        {%if loop.index % 4 == 2%}
+        {%if loop.index % 4 == 2 and p.is_avatar_pic == 0%}
                 <a href="/photo/{{p.key.urlsafe()}}"><img src="{{get_serving_url(p.blobKey,size=100)}}" width="98%" id="temp1" alt="photo"></a>
           <br>
           
@@ -402,7 +402,7 @@
         </div>
         <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
         {%for p in photos%}
-        {%if loop.index % 4 == 3%}
+        {%if loop.index % 4 == 3 and p.is_avatar_pic == 0%}
                 <a href="/photo/{{p.key.urlsafe()}}"><img src="{{get_serving_url(p.blobKey,size=100)}}" width="98%" id="temp1" alt="photo"></a>
           <br>
           
@@ -453,7 +453,7 @@
         </div>
         <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
         {%for p in photos%}
-        {%if loop.index % 4 == 0%}
+        {%if loop.index % 4 == 0 and p.is_avatar_pic == 0%}
                 <a href="/photo/{{p.key.urlsafe()}}"><img src="{{get_serving_url(p.blobKey,size=100)}}" width="98%" id="temp1" alt="photo"></a>
           <br>
           
@@ -1439,15 +1439,13 @@ function select_cover2(img_key, img_src) {
       </div>
     </div>
 <div id="fb-root"></div>
-<script>
-(function(d, s, id) {
+<script>(function(d, s, id) {
   var js, fjs = d.getElementsByTagName(s)[0];
   if (d.getElementById(id)) return;
   js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.0";
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=574055306062401&version=v2.0";
   fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));
-</script>
+}(document, 'script', 'facebook-jssdk'));</script>
 
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 
@@ -1481,7 +1479,7 @@ function select_cover2(img_key, img_src) {
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="photo_select" align="center">
                   <p>or</p>
                       <div class="col-md-2 col-md-offset-2">
-                        <a class="fb-share-button" data-href="https://developers.facebook.com/docs/plugins/" data-layout="button_count" data-width="100"></a>
+                        <iframe src="//www.facebook.com/plugins/share_button.php?href=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2Fplugins%2F&amp;layout=box_count&amp;appId=574055306062401" scrolling="no" frameborder="0" style="border:none; overflow:hidden;" allowTransparency="true"></iframe>
                       </div>
                       <div class="col-md-2">
                         <a href="https://twitter.com/share" class="twitter-share-button" data-size="large">Tweet</a>
@@ -1864,5 +1862,85 @@ function start() {
   window.scrollBy(0, Math.floor(0.4 * height));
 }
 window.onload = start;
+</script>
+<script>
+  // This is called with the results from from FB.getLoginStatus().
+  function statusChangeCallback(response) {
+    console.log('statusChangeCallback');
+    console.log(response);
+    // The response object is returned with a status field that lets the
+    // app know the current login status of the person.
+    // Full docs on the response object can be found in the documentation
+    // for FB.getLoginStatus().
+    if (response.status === 'connected') {
+      // Logged into your app and Facebook.
+      testAPI();
+    } else if (response.status === 'not_authorized') {
+      // The person is logged into Facebook, but not your app.
+      document.getElementById('status').innerHTML = 'Please log ' +
+        'into this app.';
+    } else {
+      // The person is not logged into Facebook, so we're not sure if
+      // they are logged into this app or not.
+      document.getElementById('status').innerHTML = 'Please log ' +
+        'into Facebook.';
+    }
+  }
+
+  // This function is called when someone finishes with the Login
+  // Button.  See the onlogin handler attached to it in the sample
+  // code below.
+  function checkLoginState() {
+    FB.getLoginStatus(function(response) {
+      statusChangeCallback(response);
+    });
+  }
+
+  window.fbAsyncInit = function() {
+  FB.init({
+    appId      : '574055306062401',
+    cookie     : true,  // enable cookies to allow the server to access 
+                        // the session
+    xfbml      : true,  // parse social plugins on this page
+    version    : 'v2.1' // use version 2.1
+  });
+
+  // Now that we've initialized the JavaScript SDK, we call 
+  // FB.getLoginStatus().  This function gets the state of the
+  // person visiting this page and can return one of three states to
+  // the callback you provide.  They can be:
+  //
+  // 1. Logged into your app ('connected')
+  // 2. Logged into Facebook, but not your app ('not_authorized')
+  // 3. Not logged into Facebook and can't tell if they are logged into
+  //    your app or not.
+  //
+  // These three cases are handled in the callback function.
+
+  FB.getLoginStatus(function(response) {
+    statusChangeCallback(response);
+  });
+
+  };
+
+  // Load the SDK asynchronously
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/sdk.js";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+
+  // Here we run a very simple test of the Graph API after login is
+  // successful.  See statusChangeCallback() for when this call is made.
+  function testAPI() {
+    console.log('Welcome!  Fetching your information.... ');
+    FB.api('/me', function(response) {
+      console.log('Successful login for: ' + response.name);
+      document.getElementById('status').innerHTML =
+        'Thanks for logging in, ' + response.name + '!';
+    });
+  }
 </script>
 {%endblock%}

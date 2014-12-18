@@ -905,3 +905,46 @@ footer a {
   bottom: 0; 
   left: 10px;
 }
+
+.btn-transparent {
+  color: black;
+  background-color: black;
+  border-color: white;
+  opacity: .5;
+}
+.btn-transparent:hover,
+.btn-transparent:focus,
+.btn-transparent:active,
+.btn-transparent.active,
+.open > .dropdown-toggle.btn-transparent {
+  color: #ffffff;
+  background-color: black;
+  border-color: white;
+}
+.btn-transparent:active,
+.btn-transparent.active,
+.open > .dropdown-toggle.btn-transparent {
+  background-image: none;
+}
+.btn-transparent.disabled,
+.btn-transparent[disabled],
+fieldset[disabled] .btn-transparent,
+.btn-transparent.disabled:hover,
+.btn-transparent[disabled]:hover,
+fieldset[disabled] .btn-transparent:hover,
+.btn-transparent.disabled:focus,
+.btn-transparent[disabled]:focus,
+fieldset[disabled] .btn-transparent:focus,
+.btn-transparent.disabled:active,
+.btn-transparent[disabled]:active,
+fieldset[disabled] .btn-transparent:active,
+.btn-transparent.disabled.active,
+.btn-transparent[disabled].active,
+fieldset[disabled] .btn-transparent.active {
+  background-color: #5cb85c;
+  border-color: #4cae4c;
+}
+.btn-transparent .badge {
+  color: #5cb85c;
+  background-color: #ffffff;
+}

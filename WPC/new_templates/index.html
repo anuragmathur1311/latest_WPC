@@ -122,14 +122,14 @@
       </nav>
 {%block signup_links%}  
     <div class="carousel-caption carousel-caption-welcome-text">
-        <h1 style="text-align:center;">Aloha !!<br><em>World Photographer's Club</em></h1>
+        <h1 style="text-align:center;font-family:Tahoma, Geneva, sans-serif;">World Photographer's Club</h1><br>
     </div>
 
     <div class="carousel-caption carousel-caption-welcome-text carousel-signup">
         <div class="signup_buttons">
-		<a href="/signin"><button class="btn btn-lg btn-success" type="button"><i class="fa fa-envelope" style="color:white;"></i>  Sign in with Email</button></a>
-		<a href="/signin"><button class="btn btn-lg btn-primary" type="button"><i class="fa fa-facebook" style="color:white;"></i>  Sign in with Facebook</button></a>
-		<a href="/signin"><button class="btn btn-lg btn-danger" type="button"><i class="fa fa-google-plus" style="color:white;"></i>  Sign in with Google</button></a>
+		<a href="/signin"><button class="btn btn-lg btn-transparent" type="button" style="color:white;"><i class="fa fa-envelope" style="color:white;"></i>  Sign in with Email</button></a>
+		<a href="/signin"><button class="btn btn-lg btn-transparent" type="button" style="color:white;"><i class="fa fa-facebook" style="color:white;"></i>  Sign in with Facebook</button></a>
+		<a href="/signin"><button class="btn btn-lg btn-transparent" type="button" style="color:white;"><i class="fa fa-google-plus" style="color:white;"></i>  Sign in with Google</button></a>
         </div>
     </div>
  {%endblock%}   
@@ -160,14 +160,14 @@
 								{%if me.key == p.key.parent().get().key%}
 							         <li style="margin:13px;">
 							         	<button class="btn_genre" disabled="disabled" id="after_like_{{loop.index}}" title="Like This Image">
-							         		<a onclick="like_button('{{p.key.urlsafe()}}', 'after_like_{{loop.index}}');" href="javascript:void(0);">
+							         		<a onclick="own_like_button();" href="javascript:void(0);">
 							         			<i class="fa fa-thumbs-o-up" style="color:white;"></i>
 							         		</a>
 							         	</button>
 							         </li>
 							          <li style="margin:13px;">
 							          	<button class="btn_genre" disabled="disabled" id="after_add_{{loop.index}}" title="Add this Image to Ideabook">
-							          		<a onclick="add_button('{{p.key.urlsafe()}}', 'after_add_{{loop.index}}');" href="javascript:void(0);">
+							          		<a onclick="own_add_button();" href="javascript:void(0);">
 							          			<i class="fa fa-plus" style="color:white;"></i>
 							          		</a>
 							          	</button>
@@ -273,22 +273,31 @@
 			{%if not me%}
 			<div class="row col-md-12" style="text-align:center;">
 				<div class="col-md-3">
-					<img class="img-circle" src="/js/holder.js/140x140/sky/text:Get Inspired" alt="Generic placeholder image">
+					<div class="service-item">
+                      <a href="#photos"><div class="service-icon-search"><h6><br><h2>Inspire</h2></h6></div></a>
+                  </div>
 					<h2>Get Inspired</h2>
 					<p>Browse thousands of photographs and connect with inspiring photographers.</p>
 				</div><!-- /.col-lg-4 -->
 				<div class="col-md-3">
-					<img class="img-circle" data-src="/js/holder.js/140x140/sky/text:Find" alt="Generic placeholder image">
+					<div class="service-item">
+                      <a href="#photos"><div class="service-icon-search"><h6><br><h2>Find</h2></h6></div></a>
+                  </div>
+
 					<h2>Find Photographers</h2>
 					<p>Find photographers with similar interests, passions and help each other.</p>
 				</div><!-- /.col-lg-4 -->
 				<div class="col-md-3">
-					<img class="img-circle" data-src="/js/holder.js/140x140/sky/text:Explore" alt="Generic placeholder image">
+					<div class="service-item">
+                      <a href="#photos"><div class="service-icon-search"><h6><br><h2>Explore</h2></h6></div></a>
+                  </div>
 					<h2>Explore the world of photography</h2>
 					<p>With a simple tap of a button (EXPLORE) browse random pages of photographs, photographers profile, blogs and groups</p>
 				</div><!-- /.col-lg-4 -->
 				<div class="col-md-3">
-					<img class="img-circle" data-src="/js/holder.js/140x140/sky/text:Promote" alt="Generic placeholder image">
+					<div class="service-item">
+                      <a href="#photos"><div class="service-icon-search"><h6><br><h2>Promote</h2></h6></div></a>
+                  </div>
 					<h2>Promote</h2>
 					<p>Promote your photography and yourself</p>
 				</div><!-- /.col-lg-4 -->
@@ -356,7 +365,7 @@
 			<h1 style="text-align:center;">Newly added Photos</h1>
 	     <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
 	      {%for p in new_photos%}
-	      {%if loop.index % 4 == 1%}
+	      {%if loop.index % 4 == 1 and p.is_avatar_pic == 0%}
 				<a href="/photo/{{p.key.urlsafe()}}"><img src="{{get_serving_url(p.blobKey,size=100)}}" width="98%" id="temp1" alt="photo"></a>
 				<div class=" col-md-12" style="margin:0px;">
 					<div class="col-md-4" style="padding:0px;">
@@ -382,7 +391,7 @@
 	      </div>
 	      <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
 	      {%for p in new_photos%}
-	      {%if loop.index % 4 == 2%}
+	      {%if loop.index % 4 == 2 and p.is_avatar_pic == 0%}
 				<a href="/photo/{{p.key.urlsafe()}}"><img src="{{get_serving_url(p.blobKey,size=100)}}" width="98%" id="temp1" alt="photo"></a>
 				<div class=" col-md-12" style="margin:0px;">
 					<div class="col-md-4" style="padding:0px;">
@@ -408,7 +417,7 @@
 	      </div>
 	      <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
 	      {%for p in new_photos%}
-	      {%if loop.index % 4 == 3%}
+	      {%if loop.index % 4 == 3 and p.is_avatar_pic == 0%}
 				<a href="/photo/{{p.key.urlsafe()}}"><img src="{{get_serving_url(p.blobKey,size=100)}}" width="98%" id="temp1" alt="photo"></a>
 				<div class=" col-md-12" style="margin:0px;">
 					<div class="col-md-4" style="padding:0px;">
@@ -434,7 +443,7 @@
 	      </div>
 	      <div class="row col-md-3 col-sm-4 col-xs-12" style="margin:0px;">
 	      {%for p in new_photos%}
-	      {%if loop.index % 4 == 0%}
+	      {%if loop.index % 4 == 0 and p.is_avatar_pic == 0%}
 				<a href="/photo/{{p.key.urlsafe()}}"><img src="{{get_serving_url(p.blobKey,size=100)}}" width="98%" id="temp1" alt="photo"></a>
 				<div class=" col-md-12" style="margin:0px;">
 					<div class="col-md-4" style="padding:0px;">
@@ -557,6 +566,18 @@
 			    	document.getElementById(div_count).innerHTML = "<a><i class='fa fa-thumbs-o-up' style='color:yellow;'></i></a>";
 				}
 		  	});
+		  }
+		  function own_like_button() {
+		    document.getElementById('loading').innerHTML = "<p style='color:white;'>Cannot Like your own photo</p>";
+		    setTimeout(function() {
+		    	document.getElementById('loading').innerHTML = "";
+			}, 1000);
+		  }
+		  function own_add_button() {
+		    document.getElementById('loading').innerHTML = "<p style='color:white;'>Cannot Add your own photo</p>";
+		    setTimeout(function() {
+		    	document.getElementById('loading').innerHTML = "";
+			}, 1000);
 		  }
 		  function photo_list_like_button(photo_key, div_count) {
 		    document.getElementById('loading').innerHTML = "<p style='color:white;'>Liking Photo...</p>";

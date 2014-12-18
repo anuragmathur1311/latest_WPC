@@ -53,7 +53,14 @@
       </div>
     </div>
     <br>
-    <div style="text-align:right;margin-right:10px;">
+    <div class="button-container" style="text-align:right;margin-right:10px;">
+      {%if me.key == user.key%}
+      <form method="post">
+          <input type="hidden" name="actionType" value="edit">
+          <input type="hidden" name="groupKey" value="{{group.key.urlsafe()}}">
+          <button class="btn btn-success btn-xs" type="submit"><span class="glyphicon glyphicon-edit" style="color:white;"></span> Edit</button>
+        </form>
+      {%endif%}
       {%if me.key in group.members%}
       <button type="button" style="margin-left:5px;" data-toggle="modal" data-target="#add_image" class="btn btn-xs btn-info" >Add Photos</button>
       {%else%}

@@ -91,7 +91,7 @@ Home | WPC
 							<div class="panel-thumbnail"><img src="{{m.message_group.get().cover_photo}}" class="img-responsive"></div>
 						{%endif%}
 						<p><a href="my_studio.html" style="color:black;"></a></p>
-						<p>{{m.likes}} <i class="fa fa-thumbs-o-up fa-1x"></i> | {{m.updated.strftime("%c")}}</p>
+						<p>{{m.updated.strftime("%c")}}</p>
 						<div class="panel-body">
 							{%if m.message_type == 1%}
 								<p><em style="color:blue">{{m.sender.get().name}}</em> added new Photos</p>
@@ -172,7 +172,7 @@ Home | WPC
 							<div class="panel-thumbnail"><img src="{{m.message_group.get().cover_photo}}" class="img-responsive"></div>
 						{%endif%}
 						<p><a href="my_studio.html" style="color:black;"></a></p>
-						<p>{{m.likes}} <i class="fa fa-thumbs-o-up fa-1x"></i> | {{m.updated.strftime("%c")}}</p>
+						<p>{{m.updated.strftime("%c")}}</p>
 						<div class="panel-body">
 							{%if m.message_type == 1%}
 								<p><em  style="color:blue">{{m.sender.get().name}}</em> added new Photos</p>
@@ -263,7 +263,7 @@ Home | WPC
 				<a href="/{{me.key.id()}}/groups" style="text-align:center;"><p>Show All</p></a>
 				<hr>
 			</div>
-
+<!--
 			<div class="col-md-9 col-md-offset-3 col-sm-2 col-sm-offset-2 col-xs-2">
 			<p>Suggestions</p>
 			<img src="/images/img_2.jpg" class="img-responsive">
@@ -287,7 +287,7 @@ Home | WPC
 
 			<img src="/images/img_2.jpg" class="profile-img" width="100%">
 			<p><a href="my_studio.html" style="color:black;"></a></p>
-			</div>
+			</div>-->
 		</div><!--/col-->  
 	</div>
  <hr>

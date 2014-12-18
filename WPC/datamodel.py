@@ -34,8 +34,10 @@ class User(ndb.Model):
 	wpc_score = ndb.IntegerProperty(default=50)
 	phone_num = ndb.StringProperty()
 	awards = ndb.StringProperty(repeated=True)
+	awarded_by = ndb.KeyProperty(kind='User', repeated=True)
 	profile_shares = ndb.IntegerProperty(default=0)
 	profile_views = ndb.IntegerProperty(default=0)
+	viewed_by = ndb.KeyProperty(kind='User', repeated=True)
 	favourites = ndb.KeyProperty(repeated=True)
 	interests = ndb.KeyProperty(kind='Tag', repeated=True)
 	storybook = ndb.KeyProperty(kind='Story', repeated=True)
@@ -155,6 +157,7 @@ class Picture(Item): # Parent=User
 	like_users = ndb.KeyProperty(kind='User', repeated=True)
 	shares = ndb.IntegerProperty(default=0)
 	viewed_by = ndb.KeyProperty(kind='User', repeated=True)
+	is_avatar_pic = ndb.IntegerProperty(default=0)
 
 class Messages(Item):
 	message_type = ndb.IntegerProperty()
