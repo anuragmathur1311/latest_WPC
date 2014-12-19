@@ -38,7 +38,8 @@
                       <span class="icon-bar"></span>
                       <span class="icon-bar"></span>
                   </button>
-                  <a class="navbar-brand" href="/" style="font-family:arial;color:yellow;font-size:30px;">WPC</a>
+                  <!--<a class="navbar-brand" href="/" style="font-family:arial;color:yellow;font-size:30px;">wpc</a>-->
+                  <a class="navbar-brand" href="/" style="margin:0px;padding:1px;"><img style="margin:0px;" src="/images/logo7.png" height="70px" alt="WPC Logo"/></a>
               </div>
               
               <!-- Collect the nav links, forms, and other content for toggling -->
@@ -138,7 +139,7 @@
 		{%block carousel%}
     <div id="myCarousel" class="carousel slide" data-ride="carousel">
       <div class="carousel-inner">
-        {%for p in new_photos%}
+        {%for p in top_score%}
 		     {%if loop.first%}
 	          <div class="item active">
 	        {%else%}
@@ -149,7 +150,7 @@
 	            <div class="carousel-caption">
 					<div class="navbar-wrapper">
 					  <div class="container">
-						<div class="navbar navbar-transparent navbar-static-top padding-top" role="navigation">
+						<div class="navbar navbar-transparent navbar-static-top" style="margin-top:70px" role="navigation">
 						  <div class="container">
 							<div class="navbar-header">
 							  <a class="navbar-brand" href="/{{p.key.parent().get().wpc_name}}" style="color:white"><img src="{{p.key.parent().get().avatar_url}}" alt="Profile Image" class="img-circle" width="20px">{{p.key.parent().get().name}}</a>
@@ -225,7 +226,7 @@
 	            <div class="carousel-caption">
 					<div class="navbar-wrapper">
 					  <div class="container">
-						<div class="navbar navbar-transparent navbar-static-top padding-top" role="navigation">
+						<div class="navbar navbar-transparent navbar-static-top" style="margin-top:70px" role="navigation">
 						  <div class="container">
 							<div class="navbar-header">
 							  <a class="navbar-brand" href="#" style="color:white">ADs</a>
@@ -315,41 +316,37 @@
 			<h1 style="text-align:center;">Updates</h1>
 		<div class="col-md-12" style="margin:0px;padding:0px;">
 		  <div class="col-md-4 col-sm-4 col-xs-12" style="margin:0px;padding:0px;">
-		  {%for p in most_viewed%}
-	      {%if loop.index % 3 == 1%}
+		  {%for b in top_blogs%}
 			<div class="imageAndText">
-			     <a href="/photo/{{p.key.urlsafe()}}"><img src="{{get_serving_url(p.blobKey,size=100)}}" width="100%" id="temp1" alt="photo" style="-webkit-filter: brightness(50%);"></a>
+			     <a href="/blog/{{b.key.urlsafe()}}"><img src="{{b.cover}}" width="100%" id="temp1" alt="photo" style="-webkit-filter: brightness(50%);"></a>
 			    <div class="col">
 			        <div class="col-md-12">
-			            <h2 style="color:white;">this is a test</h2>
+			            <h2 style="color:white;">{{b.title}}</h2>
 			        </div>
 			    </div>
 			</div>
-	      {%endif%}
 	      {% endfor %}
 	      </div>
 	      <div class="row col-md-4 col-sm-4 col-xs-12" style="margin:0px;padding:0px;">
-	      {%for p in most_viewed%}
-	      {%if loop.index % 3 == 2%}
+	      {%for b in top_groups%}
 			<div class="imageAndText">
-			     <a href="/photo/{{p.key.urlsafe()}}"><img src="{{get_serving_url(p.blobKey,size=100)}}" width="100%" id="temp1" alt="photo" style="-webkit-filter: brightness(50%);"></a>
+			     <a href="/group/{{b.key.urlsafe()}}"><img src="{{b.cover_photo}}" width="100%" id="temp1" alt="photo" style="-webkit-filter: brightness(50%);"></a>
 			    <div class="col">
 			        <div class="col-md-12">
-			            <h2 style="color:white;">this is a test</h2>
+			            <h2 style="color:white;">{{b.name}}</h2>
 			        </div>
 			    </div>
 			</div>
-	      {%endif%}
 	      {% endfor %}
 	      </div>
 	      <div class="row col-md-4 col-sm-4 col-xs-12" style="margin:0px;padding:0px;">
-	      {%for p in most_viewed%}
-	      {%if loop.index % 3 == 0%}
+	      {%for p in top_score%}
+	      {%if loop.index <= 4 %}
 			<div class="imageAndText">
 			     <a href="/photo/{{p.key.urlsafe()}}"><img src="{{get_serving_url(p.blobKey,size=100)}}" width="100%" id="temp1" alt="photo" style="-webkit-filter: brightness(50%);"></a>
 			    <div class="col">
 			        <div class="col-md-12">
-			            <h2 style="color:white;">this is a test</h2>
+			            <h2 style="color:white;">{{p.caption}}</h2>
 			        </div>
 			    </div>
 			</div>

@@ -23,6 +23,13 @@ indexes:
   - name: updated
     direction: desc
 
+- kind: Group
+  properties:
+  - name: members
+    direction: desc
+  - name: photos
+    direction: desc
+
 - kind: Messages
   ancestor: yes
   properties:

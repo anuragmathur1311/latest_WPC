@@ -94,33 +94,51 @@ class MainHandler(PageHandler):
 		if not self.user:
 			templateVals = {'me': ""}
 			qry = Picture.query()
-			qry1 = qry.order(-Picture.viewed)
+			qry_g = Group.query()
+			qry_b = Blog.query()
+			qry1 = qry.order(-Picture.score)
 			qry3 = qry.order(-Picture.created)
 			qry4 = User.query(ndb.AND(User.wpc_score >= 5000 , User.wpc_score <= 10000)).order(-User.wpc_score)
 			qry5 = qry4.order(-User.joined)
+			qry6 = qry_g.order(-Group.members)
+			qry8 = qry6.order(-Group.photos)
+			qry7 = qry_b.order(-Blog.score)
 			new_users = qry5.fetch(6)
-			most_viewed = qry1.fetch(10)
+			top_score = qry1.fetch(10)
 			new_photos = qry3.fetch(20)
+			top_blogs = qry7.fetch(3)
+			top_groups = qry8.fetch(3)
 			templateVals['new_users'] = new_users
 			templateVals['new_photos'] = new_photos
-			templateVals['most_viewed'] = most_viewed
+			templateVals['top_score'] = top_score
+			templateVals['top_blogs'] = top_blogs
+			templateVals['top_groups'] = top_groups
 			self.render('index.html', **templateVals)
 		else:
 			templateVals = {'me': self.user}
 			qry = Picture.query()
+			qry_g = Group.query()
+			qry_b = Blog.query()
 			qry2 = Messages.query(ancestor=self.user.key).order(-Messages.created)
-			qry1 = qry.order(-Picture.viewed)
+			qry1 = qry.order(-Picture.score)
 			qry3 = qry.order(-Picture.created)
 			qry4 = User.query(ndb.AND(User.wpc_score >= 5000 , User.wpc_score <= 10000)).order(-User.wpc_score)
 			qry5 = qry4.order(-User.joined)
+			qry6 = qry_g.order(-Group.members)
+			qry8 = qry6.order(-Group.photos)
+			qry7 = qry_b.order(-Blog.score)
 			new_users = qry5.fetch(6)
-			most_viewed = qry1.fetch(12)
+			top_score = qry1.fetch(12)
 			messages = qry2.fetch(25)
 			new_photos = qry3.fetch(20)
+			top_blogs = qry7.fetch(4)
+			top_groups = qry8.fetch(4)
 			templateVals['new_users'] = new_users
 			templateVals['new_photos'] = new_photos
-			templateVals['most_viewed'] = most_viewed
+			templateVals['top_score'] = top_score
 			templateVals['messages'] = messages
+			templateVals['top_blogs'] = top_blogs
+			templateVals['top_groups'] = top_groups
 			self.render('index_user.html', **templateVals)
 			
 class OptionsPhotosPhotographersHandler(PageHandler):
