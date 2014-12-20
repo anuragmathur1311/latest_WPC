@@ -96,6 +96,14 @@ Remaining Work
 29) create blog,group, portfolio if no photo selected 				- done
 
 
+				var output = $.post( "/options", {actionType : 'get_unseen_msgs'});
+				output.done(function( data ) {
+				    if (data.success == 1) {
+				    	document.getElementById('unread_messages_list').innerHTML = "{"+"% set unread_messages = " +data.unread_msgs+"%"+"}";
+				    	$( "#unseen_msgs" ).load( "/ #messages_container_update" );
+					}
+			  	});
+
 
 
 

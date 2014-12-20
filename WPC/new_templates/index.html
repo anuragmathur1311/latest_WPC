@@ -519,7 +519,6 @@
 				
 			</footer>
 			{%endblock%}
-		</div><!-- /.container -->
 
 		{%block javaScripts%}
 		<!-- Bootstrap core JavaScript
@@ -611,17 +610,17 @@
 		</script>
 		{%if me%}
 		<script>
-			setInterval(function notification_count() {
+		 $(document).ready(function () {
+	        notification_count();
+	    });
+			function notification_count() {
 			    var output = $.post( "/options", {actionType : 'notification_count'} );
 			    output.done(function( data ) {
 				    if (data.success == 1) {
 				    	document.getElementById('notification_count').innerHTML = data.notification_count;
 					}
 			  	});
-			  }, 30000);
-		//setInterval(function(){ 
-	    // $( "#notification_count" ).load( "/ #count" );  
-		//}, 5000);	
+			  }
 		</script>
 		{%endif%}
 		<script>

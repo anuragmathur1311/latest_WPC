@@ -42,9 +42,10 @@ Home | WPC
 			  <a onclick="mark_read()" href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-envelope"></span><b class="caret"></b><span id="notification_count" class="badge pull-right"></span></a>
 			  <ul class="dropdown-menu">
 				  <li id="notification_messages">
-					<div class="messages_container">
+					<div id="messages_all" class="messages_container">
 						<h3 style="color:gray;">Notifications</h3>
 						<hr>
+						<div id="unseen_msgs"></div>
 					  {%for m in messages%}
 					  	{%if m.message_type == 1%}
 						  <h5 style="color:green;"><img src="{{m.sender.get().avatar_url}}" alt="Profile Image" class="img-circle" width="25px"> <em><a href="/{{m.sender.get().key.id()}}">{{m.sender.get().name}}</a> <span style="color:black;">added new photos</span></em><p style="font-size:10px;">{{m.updated.strftime("%c")}}</p></h5>

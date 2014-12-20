@@ -256,6 +256,24 @@ class OptionsPhotosPhotographersHandler(PageHandler):
 			print data
 			self.response.headers['Content-Type'] = 'text/json'
 			self.response.out.write(json.dumps(data))
+		if action == 'get_unseen_msgs':
+			qry2 = Messages.query(Messages.read == 0, ancestor=self.user.key)
+			unread_msgs = qry2.fetch()
+			count = qry2.count()
+			msg_key_srting = ""
+			print "#############in unread_msgs############"
+			print count
+			print unread_msgs
+			for msg in unread_msgs:
+				key = str(msg.key)
+				msg_key_srting = msg_key_srting + "('" + key + "')"
+				if (count > 1):
+					msg_key_srting = msg_key_srting + ","
+			print msg_key_srting
+			data = {'success': 1, 'unread_msgs': [msg_key_srting]}
+			print data
+			self.response.headers['Content-Type'] = 'text/json'
+			self.response.out.write(json.dumps(data))
 
 
 class UserHomeHandler(PageHandler):
